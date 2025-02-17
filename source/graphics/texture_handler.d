@@ -47,6 +47,15 @@ public: //* BEGIN PUBLIC API.
 
         return output;
     }
+
+    Texture2D* getAtlasPointer() {
+        return atlas;
+    }
+
+    void terminate() {
+        UnloadTexture(*atlas);
+    }
+
 private: //* BEGIN INTERNAL API.
 
     void loadTexture(string location, ref TexturePacker!string database) {
@@ -66,13 +75,5 @@ private: //* BEGIN INTERNAL API.
         }();
 
         database.pack(fileName, location);
-    }
-
-    Texture2D* getAtlasPointer() {
-        return atlas;
-    }
-
-    void terminate() {
-        UnloadTexture(*atlas);
     }
 }
