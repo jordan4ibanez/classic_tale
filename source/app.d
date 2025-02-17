@@ -9,8 +9,11 @@ void main() {
 	SetTargetFPS(60);
 
 	CameraHandler.initialize();
-
+	scope(exit) CameraHandler.terminate();
+	
 	rlDisableBackfaceCulling();
+
+
 
 	while (!WindowShouldClose()) {
 		BeginDrawing();
