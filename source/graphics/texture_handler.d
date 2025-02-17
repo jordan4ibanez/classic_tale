@@ -11,6 +11,8 @@ import std.regex;
 import std.stdio;
 import std.string;
 
+alias TexPoints = const(TexturePoints!Vec2d*);
+
 static final const class TextureHandler {
 static:
 private:
