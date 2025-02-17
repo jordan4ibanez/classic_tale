@@ -20,7 +20,6 @@ struct Quat {
     Quaternion toRaylib() {
         return Quaternion(x, y, z, w);
     }
-
 }
 
 // Add two Quats
