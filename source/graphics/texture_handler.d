@@ -35,6 +35,10 @@ public: //* BEGIN PUBLIC API.
         database.extractTexturePoints(texturePointDatabase);
     }
 
+    bool hasTexture(string textureName) {
+        return (textureName in texturePointDatabase) !is null;
+    }
+
     // void drawTexture(string textureName, Vec2d position, Rect sourceOnTexture, Vec2d size, Vec2d origin = Vec2d(0, 0),
     //     double rotation = 0) {
 
