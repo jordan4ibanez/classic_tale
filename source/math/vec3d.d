@@ -16,69 +16,51 @@ struct Vec3d {
     }
 }
 
-// Vector with components value 0.0f
+// Vector with components value 0.0
 Vec3d vec3dZero() {
-    Vec3d result = {0.0f, 0.0f, 0.0f};
-
-    return result;
+    return Vec3d(0.0, 0.0, 0.0);
 }
 
-// Vector with components value 1.0f
+// Vector with components value 1.0
 Vec3d vec3dOne() {
-    Vec3d result = {1.0f, 1.0f, 1.0f};
-
-    return result;
+    return Vec3d(1.0, 1.0, 1.0);
 }
 
 // Add two vectors
 Vec3d vec3dAdd(Vec3d v1, Vec3d v2) {
-    Vec3d result = {v1.x + v2.x, v1.y + v2.y, v1.z + v2.z};
-
-    return result;
+    return Vec3d(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
 }
 
 // Add vector and double value
 Vec3d vec3dAddValue(Vec3d v, double add) {
-    Vec3d result = {v.x + add, v.y + add, v.z + add};
-
-    return result;
+    return Vec3d(v.x + add, v.y + add, v.z + add);
 }
 
 // Subtract two vectors
 Vec3d vec3dSubtract(Vec3d v1, Vec3d v2) {
-    Vec3d result = {v1.x - v2.x, v1.y - v2.y, v1.z - v2.z};
-
-    return result;
+    return Vec3d(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
 }
 
 // Subtract vector by double value
 Vec3d vec3dSubtractValue(Vec3d v, double sub) {
-    Vec3d result = {v.x - sub, v.y - sub, v.z - sub};
-
-    return result;
+    return Vec3d(v.x - sub, v.y - sub, v.z - sub);
 }
 
 // Multiply vector by scalar
 Vec3d vec3dScale(Vec3d v, double scalar) {
-    Vec3d result = {v.x * scalar, v.y * scalar, v.z * scalar};
-
-    return result;
+    return Vec3d(v.x * scalar, v.y * scalar, v.z * scalar);
 }
 
 // Multiply vector by vector
 Vec3d vec3dMultiply(Vec3d v1, Vec3d v2) {
-    Vec3d result = {v1.x * v2.x, v1.y * v2.y, v1.z * v2.z};
-
-    return result;
+    return Vec3d(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
 }
 
 // Calculate two vectors cross product
 Vec3d vec3dCrossProduct(Vec3d v1, Vec3d v2) {
-    Vec3d result = {
+    return Vec3d(
         v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x
-    };
-
-    return result;
+    );
 }
 
 // Calculate one vector perpendicular vector
@@ -86,16 +68,16 @@ Vec3d vec3dPerpendicular(Vec3d v) {
     Vec3d result;
 
     double min = abs(v.x);
-    Vec3d cardinalAxis = {1.0f, 0.0f, 0.0f};
+    Vec3d cardinalAxis = Vec3d(1.0, 0.0, 0.0);
 
     if (abs(v.y) < min) {
         min = abs(v.y);
-        Vec3d tmp = {0.0f, 1.0f, 0.0f};
+        Vec3d tmp = Vec3d(0.0, 1.0, 0.0);
         cardinalAxis = tmp;
     }
 
     if (abs(v.z) < min) {
-        Vec3d tmp = {0.0f, 0.0f, 1.0f};
+        Vec3d tmp = Vec3d(0.0, 0.0, 1.0);
         cardinalAxis = tmp;
     }
 
@@ -130,7 +112,7 @@ double vec3dDotProduct(Vec3d v1, Vec3d v2) {
 
 // Calculate distance between two vectors
 double vec3dDistance(Vec3d v1, Vec3d v2) {
-    double result = 0.0f;
+    double result = 0.0;
 
     double dx = v2.x - v1.x;
     double dy = v2.y - v1.y;
@@ -142,7 +124,7 @@ double vec3dDistance(Vec3d v1, Vec3d v2) {
 
 // Calculate square distance between two vectors
 double vec3dDistanceSqr(Vec3d v1, Vec3d v2) {
-    double result = 0.0f;
+    double result = 0.0;
 
     double dx = v2.x - v1.x;
     double dy = v2.y - v1.y;
@@ -154,11 +136,11 @@ double vec3dDistanceSqr(Vec3d v1, Vec3d v2) {
 
 // Calculate angle between two vectors
 double vec3dAngle(Vec3d v1, Vec3d v2) {
-    double result = 0.0f;
+    double result = 0.0;
 
-    Vec3d cross = {
+    Vec3d cross = Vec3d(
         v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x
-    };
+    );
     double len = sqrt(cross.x * cross.x + cross.y * cross.y + cross.z * cross.z);
     double dot = (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
     result = atan2(len, dot);
@@ -168,16 +150,12 @@ double vec3dAngle(Vec3d v1, Vec3d v2) {
 
 // Negate provided vector (invert direction)
 Vec3d vec3dNegate(Vec3d v) {
-    Vec3d result = {-v.x, -v.y, -v.z};
-
-    return result;
+    return Vec3d(-v.x, -v.y, -v.z);
 }
 
 // Divide vector by vector
 Vec3d vec3dDivide(Vec3d v1, Vec3d v2) {
-    Vec3d result = {v1.x / v2.x, v1.y / v2.y, v1.z / v2.z};
-
-    return result;
+    return Vec3d(v1.x / v2.x, v1.y / v2.y, v1.z / v2.z);
 }
 
 // Normalize provided vector
@@ -185,8 +163,8 @@ Vec3d vec3dNormalize(Vec3d v) {
     Vec3d result = v;
 
     double length = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-    if (length != 0.0f) {
-        double ilength = 1.0f / length;
+    if (length != 0.0) {
+        double ilength = 1.0 / length;
 
         result.x *= ilength;
         result.y *= ilength;
@@ -232,38 +210,38 @@ Vec3d vec3dReject(Vec3d v1, Vec3d v2) {
 // Makes vectors normalized and orthogonal to each other
 // Gram-Schmidt function implementation
 void vec3dOrthoNormalize(Vec3d* v1, Vec3d* v2) {
-    double length = 0.0f;
-    double ilength = 0.0f;
+    double length = 0.0;
+    double ilength = 0.0;
 
     // Vec3dNormalize(*v1);
     Vec3d v = *v1;
     length = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-    if (length == 0.0f)
-        length = 1.0f;
-    ilength = 1.0f / length;
+    if (length == 0.0)
+        length = 1.0;
+    ilength = 1.0 / length;
     v1.x *= ilength;
     v1.y *= ilength;
     v1.z *= ilength;
 
     // Vec3dCrossProduct(*v1, *v2)
-    Vec3d vn1 = {
+    Vec3d vn1 = Vec3d(
         v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x
-    };
+    );
 
     // Vec3dNormalize(vn1);
     v = vn1;
     length = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-    if (length == 0.0f)
-        length = 1.0f;
-    ilength = 1.0f / length;
+    if (length == 0.0)
+        length = 1.0;
+    ilength = 1.0 / length;
     vn1.x *= ilength;
     vn1.y *= ilength;
     vn1.z *= ilength;
 
     // Vec3dCrossProduct(vn1, *v1)
-    Vec3d vn2 = {
+    Vec3d vn2 = Vec3d(
         vn1.y * v1.z - vn1.z * v1.y, vn1.z * v1.x - vn1.x * v1.z, vn1.x * v1.y - vn1.y * v1.x
-    };
+    );
 
     *v2 = vn2;
 }
@@ -306,28 +284,28 @@ Vec3d vec3dRotateByAxisAngle(Vec3d v, Vec3d axis, double angle) {
 
     // Vec3dNormalize(axis);
     double length = sqrt(axis.x * axis.x + axis.y * axis.y + axis.z * axis.z);
-    if (length == 0.0f)
-        length = 1.0f;
-    double ilength = 1.0f / length;
+    if (length == 0.0)
+        length = 1.0;
+    double ilength = 1.0 / length;
     axis.x *= ilength;
     axis.y *= ilength;
     axis.z *= ilength;
 
-    angle /= 2.0f;
+    angle /= 2.0;
     double a = sin(angle);
     double b = axis.x * a;
     double c = axis.y * a;
     double d = axis.z * a;
     a = cos(angle);
-    Vec3d w = {b, c, d};
+    Vec3d w = Vec3d(b, c, d);
 
     // Vec3dCrossProduct(w, v)
-    Vec3d wv = {w.y * v.z - w.z * v.y, w.z * v.x - w.x * v.z, w.x * v.y - w.y * v.x};
+    Vec3d wv = Vec3d(w.y * v.z - w.z * v.y, w.z * v.x - w.x * v.z, w.x * v.y - w.y * v.x);
 
     // Vec3dCrossProduct(w, wv)
-    Vec3d wwv = {
+    Vec3d wwv = Vec3d(
         w.y * wv.z - w.z * wv.y, w.z * wv.x - w.x * wv.z, w.x * wv.y - w.y * wv.x
-    };
+    );
 
     // Vec3dScale(wv, 2*a)
     a *= 2;
@@ -414,9 +392,9 @@ Vec3d vec3dReflect(Vec3d v, Vec3d normal) {
 
     double dotProduct = (v.x * normal.x + v.y * normal.y + v.z * normal.z);
 
-    result.x = v.x - (2.0f * normal.x) * dotProduct;
-    result.y = v.y - (2.0f * normal.y) * dotProduct;
-    result.z = v.z - (2.0f * normal.z) * dotProduct;
+    result.x = v.x - (2.0 * normal.x) * dotProduct;
+    result.y = v.y - (2.0 * normal.y) * dotProduct;
+    result.z = v.z - (2.0 * normal.z) * dotProduct;
 
     return result;
 }
@@ -448,9 +426,9 @@ Vec3d vec3dMax(Vec3d v1, Vec3d v2) {
 Vec3d vec3dBarycenter(Vec3d p, Vec3d a, Vec3d b, Vec3d c) {
     Vec3d result;
 
-    Vec3d v0 = {b.x - a.x, b.y - a.y, b.z - a.z}; // Vec3dSubtract(b, a)
-    Vec3d v1 = {c.x - a.x, c.y - a.y, c.z - a.z}; // Vec3dSubtract(c, a)
-    Vec3d v2 = {p.x - a.x, p.y - a.y, p.z - a.z}; // Vec3dSubtract(p, a)
+    Vec3d v0 = Vec3d(b.x - a.x, b.y - a.y, b.z - a.z); // Vec3dSubtract(b, a)
+    Vec3d v1 = Vec3d(c.x - a.x, c.y - a.y, c.z - a.z); // Vec3dSubtract(c, a)
+    Vec3d v2 = Vec3d(p.x - a.x, p.y - a.y, p.z - a.z); // Vec3dSubtract(p, a)
     double d00 = (v0.x * v0.x + v0.y * v0.y + v0.z * v0.z); // Vec3dDotProduct(v0, v0)
     double d01 = (v0.x * v1.x + v0.y * v1.y + v0.z * v1.z); // Vec3dDotProduct(v0, v1)
     double d11 = (v1.x * v1.x + v1.y * v1.y + v1.z * v1.z); // Vec3dDotProduct(v1, v1)
@@ -461,7 +439,7 @@ Vec3d vec3dBarycenter(Vec3d p, Vec3d a, Vec3d b, Vec3d c) {
 
     result.y = (d11 * d20 - d01 * d21) / denom;
     result.z = (d00 * d21 - d01 * d20) / denom;
-    result.x = 1.0f - (result.z + result.y);
+    result.x = 1.0 - (result.z + result.y);
 
     return result;
 }
@@ -472,7 +450,7 @@ Vec3d vec3dUnproject(Vec3d source, Matrix projection, Matrix view) {
     Vec3d result;
 
     // Calculate unprojected matrix (multiply view matrix by projection matrix) and invert it
-    Matrix matViewProj = { // MatrixMultiply(view, projection);
+    Matrix matViewProj = Matrix( // MatrixMultiply(view, projection);
         view.m0 * projection.m0 + view.m1 * projection.m4 + view.m2 * projection.m8 + view.m3 * projection.m12,
         view.m0 * projection.m1 + view.m1 * projection.m5 + view.m2 * projection.m9 + view.m3 * projection.m13,
         view.m0 * projection.m2 + view.m1 * projection.m6 + view.m2 * projection.m10 + view.m3 * projection.m14,
@@ -490,7 +468,7 @@ Vec3d vec3dUnproject(Vec3d source, Matrix projection, Matrix view) {
         view.m12 * projection.m2 + view.m13 * projection.m6 + view.m14 * projection.m10 + view.m15 * projection.m14,
         view.m12 * projection.m3 + view.m13 * projection.m7 + view.m14 * projection.m11 + view.m15 * projection
             .m15
-    };
+    );
 
     // Calculate inverted matrix . MatrixInvert(matViewProj);
     // Cache the matrix values (speed optimization)
@@ -514,9 +492,9 @@ Vec3d vec3dUnproject(Vec3d source, Matrix projection, Matrix view) {
     double b11 = a22 * a33 - a23 * a32;
 
     // Calculate the invert determinant (inlined to avoid double-caching)
-    double invDet = 1.0f / (b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06);
+    double invDet = 1.0 / (b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06);
 
-    Matrix matViewProjInv = {
+    Matrix matViewProjInv = Matrix(
         (a11 * b11 - a12 * b10 + a13 * b09) * invDet,
         (-a01 * b11 + a02 * b10 - a03 * b09) * invDet,
         (a31 * b05 - a32 * b04 + a33 * b03) * invDet,
@@ -533,13 +511,13 @@ Vec3d vec3dUnproject(Vec3d source, Matrix projection, Matrix view) {
         (a00 * b09 - a01 * b07 + a02 * b06) * invDet,
         (-a30 * b03 + a31 * b01 - a32 * b00) * invDet,
         (a20 * b03 - a21 * b01 + a22 * b00) * invDet
-    };
+    );
 
     // Create Quat from source point
-    Quat quat = {source.x, source.y, source.z, 1.0f};
+    Quat quat = Quat(source.x, source.y, source.z, 1.0);
 
     // Multiply quat point by unprojecte matrix
-    Quat qtransformed = { // QuatTransform(quat, matViewProjInv)
+    Quat qtransformed = Quat( // QuatTransform(quat, matViewProjInv)
         matViewProjInv.m0 * quat.x + matViewProjInv.m4 * quat.y + matViewProjInv.m8 * quat.z +
             matViewProjInv.m12 * quat.w,
         matViewProjInv.m1 * quat.x + matViewProjInv.m5 * quat.y + matViewProjInv.m9 * quat.z +
@@ -548,7 +526,7 @@ Vec3d vec3dUnproject(Vec3d source, Matrix projection, Matrix view) {
             matViewProjInv.m14 * quat.w,
         matViewProjInv.m3 * quat.x + matViewProjInv.m7 * quat.y + matViewProjInv.m11 * quat.z +
             matViewProjInv.m15 * quat.w
-    };
+    );
 
     // Normalized world points in vectors
     result.x = qtransformed.x / qtransformed.w;
@@ -571,9 +549,7 @@ double[3] vec3dTodoubleV(Vec3d v) {
 
 // Invert the given vector
 Vec3d vec3dInvert(Vec3d v) {
-    Vec3d result = {1.0f / v.x, 1.0f / v.y, 1.0f / v.z};
-
-    return result;
+    return Vec3d(1.0 / v.x, 1.0 / v.y, 1.0 / v.z);
 }
 
 // Clamp the components of the vector between
@@ -593,7 +569,7 @@ Vec3d vec3dClampValue(Vec3d v, double min, double max) {
     Vec3d result = v;
 
     double length = (v.x * v.x) + (v.y * v.y) + (v.z * v.z);
-    if (length > 0.0f) {
+    if (length > 0.0) {
         length = sqrt(length);
 
         double scale = 1; // By default, 1 as the neutral element.
@@ -616,9 +592,9 @@ int vec3dEquals(Vec3d p, Vec3d q) {
 
     static immutable double EPSILON = 0.000001;
 
-    int result = ((abs(p.x - q.x)) <= (EPSILON * max(1.0f, max(abs(p.x), abs(q.x))))) &&
-        ((abs(p.y - q.y)) <= (EPSILON * max(1.0f, max(abs(p.y), abs(q.y))))) &&
-        ((abs(p.z - q.z)) <= (EPSILON * max(1.0f, max(abs(p.z), abs(q.z)))));
+    int result = ((abs(p.x - q.x)) <= (EPSILON * max(1.0, max(abs(p.x), abs(q.x))))) &&
+        ((abs(p.y - q.y)) <= (EPSILON * max(1.0, max(abs(p.y), abs(q.y))))) &&
+        ((abs(p.z - q.z)) <= (EPSILON * max(1.0, max(abs(p.z), abs(q.z)))));
 
     return result;
 }
@@ -632,9 +608,9 @@ Vec3d vec3dRefract(Vec3d v, Vec3d n, double r) {
     Vec3d result;
 
     double dot = v.x * n.x + v.y * n.y + v.z * n.z;
-    double d = 1.0f - r * r * (1.0f - dot * dot);
+    double d = 1.0 - r * r * (1.0 - dot * dot);
 
-    if (d >= 0.0f) {
+    if (d >= 0.0) {
         d = sqrt(d);
         v.x = r * v.x - (r * dot + d) * n.x;
         v.y = r * v.y - (r * dot + d) * n.y;
