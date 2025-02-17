@@ -15,59 +15,60 @@ static final const class TextureHandler {
 static:
 private:
 
-    TexturePacker!string database = TexturePacker!string(1);
     Texture2D atlas;
 
 public: //* BEGIN PUBLIC API.
 
     void initialize() {
 
+        // Playing hot potato with the texture data.
+        // todo: go into the mods folder as well and search each textures folder with span depth!
+
+        TexturePacker!string database = TexturePacker!string(1);
         foreach (string thisFilePathString; dirEntries("textures", "*.png", SpanMode.depth)) {
-            loadTexture(thisFilePathString);
+            loadTexture(thisFilePathString, database);
         }
-
         database.finalize("atlas.png");
-
         atlas = LoadTexture(toStringz("atlas.png"));
     }
 
-    void drawTexture(string textureName, Vec2d position, Rect sourceOnTexture, Vec2d size, Vec2d origin = Vec2d(0, 0),
-        double rotation = 0) {
+    // void drawTexture(string textureName, Vec2d position, Rect sourceOnTexture, Vec2d size, Vec2d origin = Vec2d(0, 0),
+    //     double rotation = 0) {
 
-        Vec2d flippedPosition = Vec2d(position.x, -position.y);
+    //     Vec2d flippedPosition = Vec2d(position.x, -position.y);
 
-        struct OutputRect {
-            int x = 0;
-            int y = 0;
-            int w = 0;
-            int h = 0;
-        }
+    //     struct OutputRect {
+    //         int x = 0;
+    //         int y = 0;
+    //         int w = 0;
+    //         int h = 0;
+    //     }
 
-        OutputRect rawInput;
-        database.getRectangleIntegral(textureName, rawInput);
+    //     OutputRect rawInput;
+    //     database.getRectangleIntegral(textureName, rawInput);
 
-        Rect source = Rect();
-        source.x = rawInput.x + cast(int) sourceOnTexture.x;
-        source.y = rawInput.y + cast(int) sourceOnTexture.y;
-        source.width = sourceOnTexture.width;
-        source.height = sourceOnTexture.height;
+    //     Rect source = Rect();
+    //     source.x = rawInput.x + cast(int) sourceOnTexture.x;
+    //     source.y = rawInput.y + cast(int) sourceOnTexture.y;
+    //     source.width = sourceOnTexture.width;
+    //     source.height = sourceOnTexture.height;
 
-        Rect dest = Rect(
-            flippedPosition.x,
-            flippedPosition.y,
-            size.x,
-            size.y
-        );
+    //     Rect dest = Rect(
+    //         flippedPosition.x,
+    //         flippedPosition.y,
+    //         size.x,
+    //         size.y
+    //     );
 
-        DrawTexturePro(atlas, source.toRaylib(), dest.toRaylib(), origin.toRaylib(), rotation, Colors
-                .WHITE);
-    }
+    //     DrawTexturePro(atlas, source.toRaylib(), dest.toRaylib(), origin.toRaylib(), rotation, Colors
+    //             .WHITE);
+    // }
 
-    bool hasTexture(string name) {
-        return database.contains(name);
-    }
+    // bool hasTexture(string name) {
+    //     return database.contains(name);
+    // }
 
-    void loadTexture(string location) {
+    void loadTexture(string location, ref TexturePacker!string database) {
 
         // Extract the file name from the location.
         string fileName = () {
@@ -86,13 +87,9 @@ public: //* BEGIN PUBLIC API.
         database.pack(fileName, location);
     }
 
-    // Texture2D* getTexturePointer(string textureName) {
-    //     if (textureName !in database) {
-    //         throw new Error("[TextureManager]: Texture does not exist. " ~ textureName);
-    //     }
-
-    //     return database[textureName];
-    // }
+    ref Texture2D getAtlasPointer() {
+        return atlas;
+    }
 
     void terminate() {
         UnloadTexture(atlas);
