@@ -22,11 +22,15 @@ private:
     Model*[string] database;
     bool[string] isCustomDatabase;
     AnimationContainer[string] animationDatabase;
+    Texture2D* textureAtlasPointer;
 
     //* BEGIN PUBLIC API.
 
     public void draw(
         string modelName, Vector3 position, Vector3 rotation = Vector3(0, 0, 0),
+    void initialize() {
+        textureAtlasPointer = TextureHandler.getAtlasPointer();
+    }
         float scale = 1.0, Color color = Colors.WHITE) {
 
         if (modelName !in database) {
