@@ -15,7 +15,7 @@ static final const class TextureHandler {
 static:
 private:
 
-    Texture2D atlas;
+    Texture2D* atlas;
 
 public: //* BEGIN PUBLIC API.
 
@@ -29,7 +29,7 @@ public: //* BEGIN PUBLIC API.
             loadTexture(thisFilePathString, database);
         }
         database.finalize("atlas.png");
-        atlas = LoadTexture(toStringz("atlas.png"));
+        *atlas = LoadTexture(toStringz("atlas.png"));
     }
 
     // void drawTexture(string textureName, Vec2d position, Rect sourceOnTexture, Vec2d size, Vec2d origin = Vec2d(0, 0),
@@ -87,12 +87,12 @@ public: //* BEGIN PUBLIC API.
         database.pack(fileName, location);
     }
 
-    ref Texture2D getAtlasPointer() {
+    Texture2D* getAtlasPointer() {
         return atlas;
     }
 
     void terminate() {
-        UnloadTexture(atlas);
+        UnloadTexture(*atlas);
     }
 
 private: //* BEGIN INTERNAL API.
