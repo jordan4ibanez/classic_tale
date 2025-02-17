@@ -30,6 +30,7 @@ public: //* BEGIN PUBLIC API.
             loadTexture(thisFilePathString, database);
         }
         database.finalize("atlas.png");
+        atlas = new Texture2D();
         *atlas = LoadTexture(toStringz("atlas.png"));
 
         database.extractTexturePoints(texturePointDatabase);
