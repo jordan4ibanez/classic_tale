@@ -75,6 +75,10 @@ public: //* BEGIN PUBLIC API.
 
         database[modelName] = thisModel;
         isCustomDatabase[modelName] = true;
+
+        foreach (index; 0 .. thisModel.materialCount) {
+            thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = *textureAtlasPointer;
+        }
     }
 
     public void loadModelFromFile(string location) {
