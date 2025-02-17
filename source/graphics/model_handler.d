@@ -176,6 +176,7 @@ public: //* BEGIN PUBLIC API.
     }
 
     public void terminate() {
+        textureAtlasPointer = null;
         foreach (modelName, thisModel; database) {
             destroyModel(modelName, thisModel);
         }
