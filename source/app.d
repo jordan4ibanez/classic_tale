@@ -30,22 +30,28 @@ void main() {
 		ModelHandler.terminate();
 	}
 
-
-
 	rlDisableBackfaceCulling();
 
 	float[] vertices = [
-		0.0, 0.0, 0.0,
-		0.0, 1.0, 0.0,
-		1.0, 0.0, 0.0,
+		0.0, 1.0, 0.0, // 0
+		0.0, 0.0, 0.0, // 1
+		1.0, 0.0, 0.0, // 2
+
+		1.0, 0.0, 0.0, // 2
+		1.0, 1.0, 0.0, // 3
+		0.0, 1.0, 0.0, // 0
 	];
 
 	TexPoints blah = TextureHandler.getPoints("default_dirt.png");
 
 	float[] textureCoordinates = [
-		blah.bottomLeft.x, blah.bottomLeft.y,
-		blah.topLeft.x, blah.topLeft.y,
-		blah.bottomRight.x, blah.bottomRight.y
+		blah.topLeft.x, blah.topLeft.y, // 0
+		blah.bottomLeft.x, blah.bottomLeft.y, // 1
+		blah.bottomRight.x, blah.bottomRight.y, // 2
+
+		blah.bottomRight.x, blah.bottomRight.y, // 2
+		blah.topRight.x, blah.topRight.y, // 3
+		blah.topLeft.x, blah.topLeft.y, // 0
 	];
 
 	ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
