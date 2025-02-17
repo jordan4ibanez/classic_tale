@@ -1,6 +1,8 @@
 import graphics.camera_handler;
 import graphics.model_handler;
 import graphics.texture_handler;
+import math.vec2d;
+import math.vec3d;
 import raylib;
 import std.stdio;
 
@@ -23,18 +25,27 @@ void main() {
 		TextureHandler.terminate();
 	}
 
+	ModelHandler.initialize();
+	scope (exit) {
+		ModelHandler.terminate();
+	}
+
+
+
 	rlDisableBackfaceCulling();
 
 	float[] vertices = [
 		0.0, 0.0, 0.0,
-		0.0, 0.0, 0.0,
-		0.0, 0.0, 0.0,
+		0.0, 1.0, 0.0,
+		1.0, 0.0, 0.0,
 	];
 
-	TextureHandler.getPoints("default_stone.png");
+	TexPoints blah = TextureHandler.getPoints("default_dirt.png");
 
 	float[] textureCoordinates = [
-
+		blah.bottomLeft.x, blah.bottomLeft.y,
+		blah.topLeft.x, blah.topLeft.y,
+		blah.bottomRight.x, blah.bottomRight.y
 	];
 
 	ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
@@ -48,6 +59,8 @@ void main() {
 		CameraHandler.begin();
 
 		{
+
+			ModelHandler.draw("triangle", Vec3d(0, 0, 0));
 
 			// DrawCube(Vector3(0, 0, 0), 1, 1, 1, Colors.RED);
 		}
