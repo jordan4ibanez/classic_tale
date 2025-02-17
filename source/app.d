@@ -9,7 +9,7 @@ import std.stdio;
 void main() {
 	// call this before using raylib
 	validateRaylibBinding();
-	InitWindow(800, 600, "Classic Fable Prototyping");
+	InitWindow(1000, 1000, "Classic Fable Prototyping");
 	scope (exit) {
 		CloseWindow();
 	}
@@ -34,6 +34,7 @@ void main() {
 
 	float[] vertices;
 
+	pragma(inline, true)
 	void makeQuad(
 		const Vec3d topLeft, /*0*/
 		const Vec3d bottomLeft, /*1*/
@@ -61,13 +62,48 @@ void main() {
 	So the chunk will generate behind you and to your right.
 	*/
 
+	//? Template.
+	// makeQuad(
+	// 	Vec3d(0, 0, 0),
+	// 	Vec3d(0, 0, 0),
+	// 	Vec3d(0, 0, 0),
+	// 	Vec3d(0, 0, 0)
+	// );
+
 	// This should look inverted with backface culling off.
+	// Front.
 	makeQuad(
 		Vec3d(1, 1, 0),
 		Vec3d(1, 0, 0),
 		Vec3d(0, 0, 0),
 		Vec3d(0, 1, 0)
 	);
+
+	// Back.
+	makeQuad(
+		Vec3d(0, 1, 1),
+		Vec3d(0, 0, 1),
+		Vec3d(1, 0, 1),
+		Vec3d(1, 1, 1)
+	);
+
+	// Left.
+	makeQuad(
+		Vec3d(0, 1, 0),
+		Vec3d(0, 0, 0),
+		Vec3d(0, 0, 1),
+		Vec3d(0, 1, 1)
+	);
+
+	// Right.
+	makeQuad(
+		Vec3d(1, 1, 1),
+		Vec3d(1, 0, 1),
+		Vec3d(1, 0, 0),
+		Vec3d(1, 1, 0)
+	);
+
+	// Top points towards 
 
 	// static immutable Vec3d topLeftBack = Vec3d(0, 1, 0);
 	// static immutable Vec3d topRightBack = Vec3d(1, 1, 0);
@@ -82,6 +118,34 @@ void main() {
 	TexPoints blah = TextureHandler.getPoints("testing.png");
 
 	float[] textureCoordinates = [
+		// Front.
+		blah.topLeft.x, blah.topLeft.y, // 0
+		blah.bottomLeft.x, blah.bottomLeft.y, // 1
+		blah.bottomRight.x, blah.bottomRight.y, // 2
+
+		blah.bottomRight.x, blah.bottomRight.y, // 2
+		blah.topRight.x, blah.topRight.y, // 3
+		blah.topLeft.x, blah.topLeft.y, // 0
+
+		// Back.
+		blah.topLeft.x, blah.topLeft.y, // 0
+		blah.bottomLeft.x, blah.bottomLeft.y, // 1
+		blah.bottomRight.x, blah.bottomRight.y, // 2
+
+		blah.bottomRight.x, blah.bottomRight.y, // 2
+		blah.topRight.x, blah.topRight.y, // 3
+		blah.topLeft.x, blah.topLeft.y, // 0
+
+		// Left.
+		blah.topLeft.x, blah.topLeft.y, // 0
+		blah.bottomLeft.x, blah.bottomLeft.y, // 1
+		blah.bottomRight.x, blah.bottomRight.y, // 2
+
+		blah.bottomRight.x, blah.bottomRight.y, // 2
+		blah.topRight.x, blah.topRight.y, // 3
+		blah.topLeft.x, blah.topLeft.y, // 0
+
+		// Right.
 		blah.topLeft.x, blah.topLeft.y, // 0
 		blah.bottomLeft.x, blah.bottomLeft.y, // 1
 		blah.bottomRight.x, blah.bottomRight.y, // 2
