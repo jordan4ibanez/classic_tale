@@ -26,11 +26,12 @@ private:
 
 public: //* BEGIN PUBLIC API.
 
-    public void draw(
-        string modelName, Vector3 position, Vector3 rotation = Vector3(0, 0, 0),
     void initialize() {
         textureAtlasPointer = TextureHandler.getAtlasPointer();
     }
+
+    void draw(
+        string modelName, Vec3d position, Vec3d rotation = Vec3d(0, 0, 0),
         float scale = 1.0, Color color = Colors.WHITE) {
 
         if (modelName !in database) {
@@ -40,12 +41,13 @@ public: //* BEGIN PUBLIC API.
         Model* thisModel = database[modelName];
 
         // Have to jump through some hoops to rotate the model correctly.
-        Quaternion quat = QuaternionFromEuler(rotation.x, rotation.y, rotation.z);
-        Vector3 axisRotation;
-        float angle;
-        QuaternionToAxisAngle(quat, &axisRotation, &angle);
+        Quat quat = quatFromEuler(rotation.x, rotation.y, rotation.z);
+        Vec3d axisRotation;
+        double angle;
+        quatToAxisAngle(quat, &axisRotation, &angle);
 
-        DrawModelEx(*thisModel, position, axisRotation, RAD2DEG * angle, Vector3(scale, scale, scale), color);
+        DrawModelEx(*thisModel, position.toRaylib(), axisRotation.toRaylib(), RAD2DEG * angle,
+            Vector3(scale, scale, scale), color);
     }
 
     public void newModelFromMesh(string modelName, float[] vertices, float[] textureCoordinates, bool dynamic = false) {
