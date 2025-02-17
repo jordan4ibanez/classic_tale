@@ -32,20 +32,12 @@ public: //* BEGIN PUBLIC API.
     }
 
     void begin() {
-        // Matrix4 matOrigin = MatrixTranslate(-camera.target.x, camera.target.y, 0.0);
-        // Matrix4 matRotation = MatrixRotate(Vector3(0, 0, 1), camera.rotation * DEG2RAD);
-        // Matrix4 matScale = MatrixScale(camera.zoom, camera.zoom, 1.0);
-        // Matrix4 matTranslation = MatrixTranslate(camera.offset.x, camera.offset.y, 0.0);
-        // Matrix4 output = MatrixMultiply(MatrixMultiply(matOrigin, MatrixMultiply(matScale, matRotation)),
-        //     matTranslation);
-
-        // BeginMode2D(*camera);
-        // rlSetMatrixModelview(output);
-        // // rlDisableBackfaceCulling();
+        UpdateCamera(camera, CameraMode.CAMERA_ORBITAL);
+        BeginMode3D(*camera);
     }
 
     void end() {
-        // EndMode2D();
+        EndMode3D();
     }
 
     // void setTarget(const ref Vec3d position) {
