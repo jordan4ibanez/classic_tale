@@ -32,17 +32,40 @@ void main() {
 
 	rlDisableBackfaceCulling();
 
-	float[] vertices = [
-		0.0, 1.0, 0.0, // 0
-		0.0, 0.0, 0.0, // 1
-		1.0, 0.0, 0.0, // 2
+	// static immutable Vec3d topLeftBack = Vec3d(0, 1, 0);
+	// static immutable Vec3d topRightBack = Vec3d(1, 1, 0);
+	// static immutable Vec3d topLeftFront = Vec3d(0, 1, 1);
+	// static immutable Vec3d topRightFront = Vec3d(1, 1, 1);
 
-		1.0, 0.0, 0.0, // 2
-		1.0, 1.0, 0.0, // 3
-		0.0, 1.0, 0.0, // 0
+	float[] vertices = [
+
 	];
 
-	TexPoints blah = TextureHandler.getPoints("default_dirt.png");
+	void makeQuad(
+		const ref Vec3d topLeft, /*0*/
+		const ref Vec3d bottomLeft, /*1*/
+		const ref Vec3d bottomRight, /*2*/
+		const ref Vec3d topRight /*3*/ ) {
+		// Tri 1.
+		vertices ~= topLeft.toFloatArray(); // 0
+		vertices ~= bottomLeft.toFloatArray(); // 1
+		vertices ~= bottomRight.toFloatArray(); // 2
+		// Tri 2.
+		vertices ~= bottomRight.toFloatArray(); // 2
+		vertices ~= topRight.toFloatArray(); // 3
+		vertices ~= topLeft.toFloatArray(); // 0
+
+	}
+
+	// 0.0, 1.0, 0.0, // 0
+	// 	0.0, 0.0, 0.0, // 1
+	// 	1.0, 0.0, 0.0, // 2
+
+	// 	1.0, 0.0, 0.0, // 2
+	// 	1.0, 1.0, 0.0, // 3
+	// 	0.0, 1.0, 0.0, // 0
+
+	TexPoints blah = TextureHandler.getPoints("testing.png");
 
 	float[] textureCoordinates = [
 		blah.topLeft.x, blah.topLeft.y, // 0
@@ -68,7 +91,7 @@ void main() {
 
 			ModelHandler.draw("triangle", Vec3d(0, 0, 0));
 
-			// DrawCube(Vector3(0, 0, 0), 1, 1, 1, Colors.RED);
+			// DrawCube(Vector3(0, 0, -5), 1, 1, 1, Colors.RED);
 		}
 
 		CameraHandler.end();

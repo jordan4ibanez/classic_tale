@@ -11,8 +11,16 @@ struct Vec3d {
     double y = 0;
     double z = 0;
 
-    Vector3 toRaylib() {
+    Vector3 toRaylib() const {
         return Vector3(x, y, z);
+    }
+
+    double[3] toDoubleArray() const {
+        return [x, y, z];
+    }
+
+    float[3] toFloatArray() const {
+        return [x, y, z];
     }
 }
 
