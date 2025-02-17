@@ -1,7 +1,7 @@
 module math.vec3d;
 
 import math.quat;
-import raylib : Matrix;
+import raylib : Matrix, Vector3;
 import std.algorithm.comparison;
 import std.math.algebraic;
 import std.math.trigonometry;
@@ -10,6 +10,10 @@ struct Vec3d {
     double x = 0;
     double y = 0;
     double z = 0;
+
+    Vector3 toRaylib() {
+        return Vector3(x, y, z);
+    }
 }
 
 // Vector with components value 0.0f
