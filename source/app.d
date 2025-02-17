@@ -1,8 +1,6 @@
+import graphics.camera_handler;
 import raylib;
 import std.stdio;
-
-import math.quat;
-import math.vec3d;
 
 void main() {
 	// call this before using raylib
@@ -10,16 +8,23 @@ void main() {
 	InitWindow(800, 600, "Hello, Raylib-D!");
 	SetTargetFPS(60);
 
-	Quat blah = Quat();
+	CameraHandler.initialize();
 
-	writeln(blah);
+	rlDisableBackfaceCulling();
 
-	Vec3d boof = Vec3d();
-	writeln(boof);
 	while (!WindowShouldClose()) {
 		BeginDrawing();
 		ClearBackground(Colors.RAYWHITE);
-		DrawText("Hello, World!", 400, 300, 28, Colors.BLACK);
+
+		CameraHandler.begin();
+
+		{
+			DrawText("Hello, World!", 400, 300, 28, Colors.BLACK);
+
+			DrawCube(Vector3(0, 0, 0), 1, 1, 1, Colors.RED);
+		}
+
+		CameraHandler.end();
 		EndDrawing();
 	}
 	CloseWindow();
