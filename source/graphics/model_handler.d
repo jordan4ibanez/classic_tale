@@ -50,7 +50,7 @@ public: //* BEGIN PUBLIC API.
             Vector3(scale, scale, scale), color);
     }
 
-    public void newModelFromMesh(string modelName, float[] vertices, float[] textureCoordinates, bool dynamic = false) {
+    void newModelFromMesh(string modelName, float[] vertices, float[] textureCoordinates, bool dynamic = false) {
 
         if (modelName in database) {
             throw new Error(
@@ -81,7 +81,7 @@ public: //* BEGIN PUBLIC API.
         }
     }
 
-    public void loadModelFromFile(string location) {
+    void loadModelFromFile(string location) {
         Model* thisModel = new Model();
 
         // Extract the file name from the location.
@@ -113,8 +113,7 @@ public: //* BEGIN PUBLIC API.
         animationDatabase[fileName] = thisModelAnimation;
     }
 
-
-    public void setModelShader(string modelName, string shaderName) {
+    void setModelShader(string modelName, string shaderName) {
 
         if (modelName !in database) {
             throw new Error(
@@ -128,7 +127,7 @@ public: //* BEGIN PUBLIC API.
         }
     }
 
-    public Model* getModelPointer(string modelName) {
+    Model* getModelPointer(string modelName) {
         if (modelName !in database) {
             throw new Error(
                 "[ModelManager]: Tried to set get non-existent model pointer [" ~ modelName ~ "]");
@@ -137,7 +136,7 @@ public: //* BEGIN PUBLIC API.
         return database[modelName];
     }
 
-    public void updateModelPositionsInGPU(string modelName) {
+    void updateModelPositionsInGPU(string modelName) {
         if (modelName !in database) {
             throw new Error(
                 "[ModelManager]: Tried to update non-existent model [" ~ modelName ~ "]");
@@ -161,7 +160,7 @@ public: //* BEGIN PUBLIC API.
         }
     }
 
-    public void destroy(string modelName) {
+    void destroy(string modelName) {
         if (modelName !in database) {
             throw new Error("[ModelManager]: Tried to destroy non-existent model. " ~ modelName);
         }
@@ -175,7 +174,7 @@ public: //* BEGIN PUBLIC API.
         animationDatabase.remove(modelName);
     }
 
-    public void terminate() {
+    void terminate() {
         textureAtlasPointer = null;
         foreach (modelName, thisModel; database) {
             destroyModel(modelName, thisModel);
@@ -185,7 +184,7 @@ public: //* BEGIN PUBLIC API.
         animationDatabase.clear();
     }
 
-    public void playAnimation(string modelName, int index, int frame) {
+    void playAnimation(string modelName, int index, int frame) {
         if (modelName !in database) {
             throw new Error(
                 "[ModelManager]: Tried to play animation on non-existent model. " ~ modelName);
@@ -202,7 +201,7 @@ public: //* BEGIN PUBLIC API.
         UpdateModelAnimation(*thisModel, thisAnimation.animationData[index], frame);
     }
 
-    public AnimationContainer getAnimationContainer(string modelName) {
+    AnimationContainer getAnimationContainer(string modelName) {
         if (modelName !in animationDatabase) {
             throw new Error(
                 "[ModelManager]: Tried to get non-existent animation container. " ~ modelName);
