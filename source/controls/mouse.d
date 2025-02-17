@@ -20,12 +20,12 @@ public:
         return Vec2d(GetMouseDelta());
     }
 
-    Vec2d getWorldPosition() {
-        Vec2d mPosition = Vec2d(GetMousePosition());
-        immutable int windowHeight = Window.getHeight();
-        mPosition.y = windowHeight - mPosition.y;
-        return CameraHandler.screenToWorld(mPosition);
-    }
+    // Vec2d getWorldPosition() {
+    //     Vec2d mPosition = Vec2d(GetMousePosition());
+    //     immutable int windowHeight = Window.getHeight();
+    //     mPosition.y = windowHeight - mPosition.y;
+    //     return CameraHandler.screenToWorld(mPosition);
+    // }
 
     bool isButtonPressed(MouseButton button) {
         return IsMouseButtonPressed(button);
