@@ -2,6 +2,8 @@ module graphics.model_handler;
 
 import graphics.shader_handler;
 import graphics.texture_handler;
+import math.quat;
+import math.vec3d;
 import raylib;
 import std.container;
 import std.stdio;
