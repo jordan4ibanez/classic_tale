@@ -113,20 +113,6 @@ public: //* BEGIN PUBLIC API.
         animationDatabase[fileName] = thisModelAnimation;
     }
 
-    public void setModelTexture(string modelName) {
-
-        if (modelName !in database) {
-            throw new Error(
-                "[ModelManager]: Tried to set texture on non-existent model [" ~ modelName ~ "]");
-        }
-
-        Model* thisModel = database[modelName];
-        Texture2D* thisTexture = TextureHandler.getAtlasPointer();
-
-        foreach (index; 0 .. thisModel.materialCount) {
-            thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = *thisTexture;
-        }
-    }
 
     public void setModelShader(string modelName, string shaderName) {
 
