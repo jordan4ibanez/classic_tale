@@ -101,7 +101,7 @@ private:
         animationDatabase[fileName] = thisModelAnimation;
     }
 
-    public void setModelTexture(string modelName, string textureName) {
+    public void setModelTexture(string modelName) {
 
         if (modelName !in database) {
             throw new Error(
@@ -109,7 +109,7 @@ private:
         }
 
         Model* thisModel = database[modelName];
-        Texture2D* thisTexture = TextureHandler.getTexturePointer(textureName);
+        Texture2D* thisTexture = TextureHandler.getAtlasPointer();
 
         foreach (index; 0 .. thisModel.materialCount) {
             thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = *thisTexture;
