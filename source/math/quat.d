@@ -46,7 +46,7 @@ Quat quatSubtractValue(Quat q, double sub) {
 
 // Get identity Quat
 Quat quatIdentity() {
-    return Quat(0.0f, 0.0f, 0.0f, 1.0f);
+    return Quat(0.0, 0.0, 0.0, 1.0);
 }
 
 // Computes the length of a Quat
@@ -59,9 +59,9 @@ Quat quatNormalize(Quat q) {
     Quat result;
 
     double length = sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
-    if (length == 0.0f)
-        length = 1.0f;
-    double ilength = 1.0f / length;
+    if (length == 0.0)
+        length = 1.0;
+    double ilength = 1.0 / length;
 
     result.x = q.x * ilength;
     result.y = q.y * ilength;
@@ -77,8 +77,8 @@ Quat quatInvert(Quat q) {
 
     double lengthSq = q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w;
 
-    if (lengthSq != 0.0f) {
-        double invLength = 1.0f / lengthSq;
+    if (lengthSq != 0.0) {
+        double invLength = 1.0 / lengthSq;
 
         result.x *= -invLength;
         result.y *= -invLength;
@@ -146,9 +146,9 @@ Quat quatNlerp(Quat q1, Quat q2, double amount) {
     // QuatNormalize(q);
     Quat q = result;
     double length = sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
-    if (length == 0.0f)
-        length = 1.0f;
-    double ilength = 1.0f / length;
+    if (length == 0.0)
+        length = 1.0;
+    double ilength = 1.0 / length;
 
     result.x = q.x * ilength;
     result.y = q.y * ilength;
@@ -172,13 +172,13 @@ Quat quatSlerp(Quat q1, Quat q2, double amount) {
         cosHalfTheta = -cosHalfTheta;
     }
 
-    if (fabs(cosHalfTheta) >= 1.0f)
+    if (fabs(cosHalfTheta) >= 1.0)
         result = q1;
     else if (cosHalfTheta > 0.95f)
         result = quatNlerp(q1, q2, amount);
     else {
         double halfTheta = acos(cosHalfTheta);
-        double sinHalfTheta = sqrt(1.0f - cosHalfTheta * cosHalfTheta);
+        double sinHalfTheta = sqrt(1.0 - cosHalfTheta * cosHalfTheta);
 
         if (fabs(sinHalfTheta) < EPSILON) {
             result.x = (q1.x * 0.5f + q2.x * 0.5f);
@@ -236,15 +236,15 @@ Quat quatFromVec3dToVec3d(Vec3d from, Vec3d to) {
     result.x = cross.x;
     result.y = cross.y;
     result.z = cross.z;
-    result.w = 1.0f + cos2Theta;
+    result.w = 1.0 + cos2Theta;
 
     // QuatNormalize(q);
     // NOTE: Normalize to essentially nlerp the original and identity to 0.5
     Quat q = result;
     double length = sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
-    if (length == 0.0f)
-        length = 1.0f;
-    double ilength = 1.0f / length;
+    if (length == 0.0)
+        length = 1.0;
+    double ilength = 1.0 / length;
 
     result.x = q.x * ilength;
     result.y = q.y * ilength;
@@ -280,7 +280,7 @@ Quat quatFromMatrix(Matrix mat) {
         biggestIndex = 3;
     }
 
-    double biggestVal = sqrt(fourBiggestSquaredMinus1 + 1.0f) * 0.5f;
+    double biggestVal = sqrt(fourBiggestSquaredMinus1 + 1.0) * 0.5f;
     double mult = 0.25f / biggestVal;
 
     final switch (biggestIndex) {
@@ -316,10 +316,10 @@ Quat quatFromMatrix(Matrix mat) {
 // Get a matrix for a given Quat
 Matrix quatToMatrix(Quat q) {
     Matrix result = Matrix(
-        1.0f, 0.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 0.0f, 1.0f
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0
     ); // MatrixIdentity()
 
     double a2 = q.x * q.x;
@@ -350,21 +350,21 @@ Matrix quatToMatrix(Quat q) {
 // Get rotation Quat for an angle and axis
 // NOTE: Angle must be provided in radians
 Quat quatFromAxisAngle(Vec3d axis, double angle) {
-    Quat result = Quat(0.0f, 0.0f, 0.0f, 1.0f);
+    Quat result = Quat(0.0, 0.0, 0.0, 1.0);
 
     double axisLength = sqrt(axis.x * axis.x + axis.y * axis.y + axis.z * axis.z);
 
-    if (axisLength != 0.0f) {
+    if (axisLength != 0.0) {
         angle *= 0.5f;
 
-        double length = 0.0f;
-        double ilength = 0.0f;
+        double length = 0.0;
+        double ilength = 0.0;
 
         // Vec3dNormalize(axis)
         length = axisLength;
-        if (length == 0.0f)
-            length = 1.0f;
-        ilength = 1.0f / length;
+        if (length == 0.0)
+            length = 1.0;
+        ilength = 1.0 / length;
         axis.x *= ilength;
         axis.y *= ilength;
         axis.z *= ilength;
@@ -380,9 +380,9 @@ Quat quatFromAxisAngle(Vec3d axis, double angle) {
         // QuatNormalize(q);
         Quat q = result;
         length = sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
-        if (length == 0.0f)
-            length = 1.0f;
-        ilength = 1.0f / length;
+        if (length == 0.0)
+            length = 1.0;
+        ilength = 1.0 / length;
         result.x = q.x * ilength;
         result.y = q.y * ilength;
         result.z = q.z * ilength;
@@ -394,12 +394,12 @@ Quat quatFromAxisAngle(Vec3d axis, double angle) {
 
 // Get the rotation angle and axis for a given Quat
 void quatToAxisAngle(Quat q, Vec3d* outAxis, double* outAngle) {
-    if (fabs(q.w) > 1.0f) {
+    if (fabs(q.w) > 1.0) {
         // QuatNormalize(q);
         double length = sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
-        if (length == 0.0f)
-            length = 1.0f;
-        double ilength = 1.0f / length;
+        if (length == 0.0)
+            length = 1.0;
+        double ilength = 1.0 / length;
 
         q.x = q.x * ilength;
         q.y = q.y * ilength;
@@ -407,9 +407,9 @@ void quatToAxisAngle(Quat q, Vec3d* outAxis, double* outAngle) {
         q.w = q.w * ilength;
     }
 
-    Vec3d resAxis = Vec3d(0.0f, 0.0f, 0.0f);
-    double resAngle = 2.0f * acos(q.w);
-    double den = sqrt(1.0f - q.w * q.w);
+    Vec3d resAxis = Vec3d(0.0, 0.0, 0.0);
+    double resAngle = 2.0 * acos(q.w);
+    double den = sqrt(1.0 - q.w * q.w);
 
     if (den > EPSILON) {
         resAxis.x = q.x / den;
@@ -418,7 +418,7 @@ void quatToAxisAngle(Quat q, Vec3d* outAxis, double* outAngle) {
     } else {
         // This occurs when the angle is zero.
         // Not a problem: just set an arbitrary normalized axis.
-        resAxis.x = 1.0f;
+        resAxis.x = 1.0;
     }
 
     *outAxis = resAxis;
@@ -451,19 +451,19 @@ Vec3d quatToEuler(Quat q) {
     Vec3d result;
 
     // Roll (x-axis rotation)
-    double x0 = 2.0f * (q.w * q.x + q.y * q.z);
-    double x1 = 1.0f - 2.0f * (q.x * q.x + q.y * q.y);
+    double x0 = 2.0 * (q.w * q.x + q.y * q.z);
+    double x1 = 1.0 - 2.0 * (q.x * q.x + q.y * q.y);
     result.x = atan2(x0, x1);
 
     // Pitch (y-axis rotation)
-    double y0 = 2.0f * (q.w * q.y - q.z * q.x);
-    y0 = y0 > 1.0f ? 1.0f : y0;
-    y0 = y0 < -1.0f ? -1.0f : y0;
+    double y0 = 2.0 * (q.w * q.y - q.z * q.x);
+    y0 = y0 > 1.0 ? 1.0 : y0;
+    y0 = y0 < -1.0 ? -1.0 : y0;
     result.y = asin(y0);
 
     // Yaw (z-axis rotation)
-    double z0 = 2.0f * (q.w * q.z + q.x * q.y);
-    double z1 = 1.0f - 2.0f * (q.y * q.y + q.z * q.z);
+    double z0 = 2.0 * (q.w * q.z + q.x * q.y);
+    double z1 = 1.0 - 2.0 * (q.y * q.y + q.z * q.z);
     result.z = atan2(z0, z1);
 
     return result;
@@ -484,14 +484,14 @@ Quat quatTransform(Quat q, Matrix mat) {
 // Check whether two given Quats are almost equal
 int quatEquals(Quat p, Quat q) {
 
-    int result = (((fabs(p.x - q.x)) <= (EPSILON * max(1.0f, max(fabs(p.x), fabs(q.x))))) &&
-            ((fabs(p.y - q.y)) <= (EPSILON * max(1.0f, max(fabs(p.y), fabs(q.y))))) &&
-            ((fabs(p.z - q.z)) <= (EPSILON * max(1.0f, max(fabs(p.z), fabs(q.z))))) &&
-            ((fabs(p.w - q.w)) <= (EPSILON * max(1.0f, max(fabs(p.w), fabs(q.w)))))) ||
-        (((fabs(p.x + q.x)) <= (EPSILON * max(1.0f, max(fabs(p.x), fabs(q.x))))) &&
-                ((fabs(p.y + q.y)) <= (EPSILON * max(1.0f, max(fabs(p.y), fabs(q.y))))) &&
-                ((fabs(p.z + q.z)) <= (EPSILON * max(1.0f, max(fabs(p.z), fabs(q.z))))) &&
-                ((fabs(p.w + q.w)) <= (EPSILON * max(1.0f, max(fabs(p.w), fabs(q.w))))));
+    int result = (((fabs(p.x - q.x)) <= (EPSILON * max(1.0, max(fabs(p.x), fabs(q.x))))) &&
+            ((fabs(p.y - q.y)) <= (EPSILON * max(1.0, max(fabs(p.y), fabs(q.y))))) &&
+            ((fabs(p.z - q.z)) <= (EPSILON * max(1.0, max(fabs(p.z), fabs(q.z))))) &&
+            ((fabs(p.w - q.w)) <= (EPSILON * max(1.0, max(fabs(p.w), fabs(q.w)))))) ||
+        (((fabs(p.x + q.x)) <= (EPSILON * max(1.0, max(fabs(p.x), fabs(q.x))))) &&
+                ((fabs(p.y + q.y)) <= (EPSILON * max(1.0, max(fabs(p.y), fabs(q.y))))) &&
+                ((fabs(p.z + q.z)) <= (EPSILON * max(1.0, max(fabs(p.z), fabs(q.z))))) &&
+                ((fabs(p.w + q.w)) <= (EPSILON * max(1.0, max(fabs(p.w), fabs(q.w))))));
 
     return result;
 }
