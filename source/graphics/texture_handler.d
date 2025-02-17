@@ -15,6 +15,7 @@ static final const class TextureHandler {
 static:
 private:
 
+    TexturePoints!Vec2d[string] texturePointDatabase;
     Texture2D* atlas;
 
 public: //* BEGIN PUBLIC API.
@@ -30,6 +31,8 @@ public: //* BEGIN PUBLIC API.
         }
         database.finalize("atlas.png");
         *atlas = LoadTexture(toStringz("atlas.png"));
+
+        database.extractTexturePoints(texturePointDatabase);
     }
 
     // void drawTexture(string textureName, Vec2d position, Rect sourceOnTexture, Vec2d size, Vec2d origin = Vec2d(0, 0),
