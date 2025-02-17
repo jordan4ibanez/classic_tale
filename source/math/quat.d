@@ -24,37 +24,29 @@ struct Quat {
 
 // Add two Quats
 Quat quatAdd(Quat q1, Quat q2) {
-    Quat result = {q1.x + q2.x, q1.y + q2.y, q1.z + q2.z, q1.w + q2.w};
-
-    return result;
+    return Quat(q1.x + q2.x, q1.y + q2.y, q1.z + q2.z, q1.w + q2.w);
 }
 
 // Add Quat and double value
 Quat quatAddValue(Quat q, double add) {
-    Quat result = {q.x + add, q.y + add, q.z + add, q.w + add};
-
-    return result;
+    return Quat(q.x + add, q.y + add, q.z + add, q.w + add);
 }
 
 // Subtract two Quats
 Quat quatSubtract(Quat q1, Quat q2) {
-    Quat result = {q1.x - q2.x, q1.y - q2.y, q1.z - q2.z, q1.w - q2.w};
+    return Quat(q1.x - q2.x, q1.y - q2.y, q1.z - q2.z, q1.w - q2.w);
 
-    return result;
 }
 
 // Subtract Quat and double value
 Quat quatSubtractValue(Quat q, double sub) {
-    Quat result = {q.x - sub, q.y - sub, q.z - sub, q.w - sub};
+    return Quat(q.x - sub, q.y - sub, q.z - sub, q.w - sub);
 
-    return result;
 }
 
 // Get identity Quat
 Quat quatIdentity() {
-    Quat result = {0.0f, 0.0f, 0.0f, 1.0f};
-
-    return result;
+    return Quat(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 // Computes the length of a Quat
@@ -126,9 +118,7 @@ Quat quatScale(Quat q, double mul) {
 
 // Divide two Quats
 Quat quatDivide(Quat q1, Quat q2) {
-    Quat result = {q1.x / q2.x, q1.y / q2.y, q1.z / q2.z, q1.w / q2.w};
-
-    return result;
+    return Quat(q1.x / q2.x, q1.y / q2.y, q1.z / q2.z, q1.w / q2.w);
 }
 
 // Calculate linear interpolation between two Quats
@@ -239,9 +229,9 @@ Quat quatFromVec3dToVec3d(Vec3d from, Vec3d to) {
     Quat result;
 
     double cos2Theta = (from.x * to.x + from.y * to.y + from.z * to.z); // Vec3dDotProduct(from, to)
-    Vec3d cross = {
+    Vec3d cross = Vec3d(
         from.y * to.z - from.z * to.y, from.z * to.x - from.x * to.z, from.x * to.y - from.y * to.x
-    }; // Vec3dCrossProduct(from, to)
+    ); // Vec3dCrossProduct(from, to)
 
     result.x = cross.x;
     result.y = cross.y;
@@ -325,12 +315,12 @@ Quat quatFromMatrix(Matrix mat) {
 
 // Get a matrix for a given Quat
 Matrix quatToMatrix(Quat q) {
-    Matrix result = {
+    Matrix result = Matrix(
         1.0f, 0.0f, 0.0f, 0.0f,
         0.0f, 1.0f, 0.0f, 0.0f,
         0.0f, 0.0f, 1.0f, 0.0f,
         0.0f, 0.0f, 0.0f, 1.0f
-    }; // MatrixIdentity()
+    ); // MatrixIdentity()
 
     double a2 = q.x * q.x;
     double b2 = q.y * q.y;
@@ -360,7 +350,7 @@ Matrix quatToMatrix(Quat q) {
 // Get rotation Quat for an angle and axis
 // NOTE: Angle must be provided in radians
 Quat quatFromAxisAngle(Vec3d axis, double angle) {
-    Quat result = {0.0f, 0.0f, 0.0f, 1.0f};
+    Quat result = Quat(0.0f, 0.0f, 0.0f, 1.0f);
 
     double axisLength = sqrt(axis.x * axis.x + axis.y * axis.y + axis.z * axis.z);
 
@@ -417,7 +407,7 @@ void quatToAxisAngle(Quat q, Vec3d* outAxis, double* outAngle) {
         q.w = q.w * ilength;
     }
 
-    Vec3d resAxis = {0.0f, 0.0f, 0.0f};
+    Vec3d resAxis = Vec3d(0.0f, 0.0f, 0.0f);
     double resAngle = 2.0f * acos(q.w);
     double den = sqrt(1.0f - q.w * q.w);
 
