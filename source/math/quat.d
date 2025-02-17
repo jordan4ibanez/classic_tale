@@ -4,7 +4,7 @@ import math.vec3d;
 
 // The reason Matrix is not doubled, is because it's going to be glitchy either way on the gpu if the camera is far out.
 // todo: make the world move around the camera.
-import raylib : Matrix;
+import raylib : Matrix, Quaternion;
 import std.algorithm.comparison;
 import std.math.algebraic;
 import std.math.trigonometry;
@@ -16,6 +16,11 @@ struct Quat {
     double y = 0;
     double z = 0;
     double w = 0;
+
+    Quaternion toRaylib() {
+        return Quaternion(x, y, z, w);
+    }
+
 }
 
 // Add two Quats
