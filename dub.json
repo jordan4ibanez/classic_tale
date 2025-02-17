@@ -1,9 +1,1 @@
-{
-	"authors": [
-		"jordan4ibanez"
-	],
-	"copyright": "Copyright © 2025, jordan4ibanez",
-	"description": "Block game 17.",
-	"license": "GPL-3.0-or-later",
-	"name": "classic_fable"
-}
+{"libs" : ["raylib"], "lflags-posix" : ["-L."], "lflags-osx" : ["-rpath", "@executable_path/"], "lflags-linux" : ["-rpath=$$ORIGIN"], "description" : "Block game 17.", "name" : "classic_fable", "dependencies" : {"raylib-d" : "~>5.5.1", "fast_pack" : "~>5.0.1"}, "authors" : ["jordan4ibanez"], "copyright" : "Copyright © 2025, jordan4ibanez", "license" : "GPL-3.0-or-later"}
