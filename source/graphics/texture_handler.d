@@ -39,6 +39,14 @@ public: //* BEGIN PUBLIC API.
         return (textureName in texturePointDatabase) !is null;
     }
 
+    const(TexturePoints!(Vec2d)*) getPoints(string name) {
+        const TexturePoints!(Vec2d)* output = name in texturePointDatabase;
+        if (output is null) {
+            throw new Error("Tried to get null texture points for " ~ name);
+        }
+
+        return output;
+    }
 private: //* BEGIN INTERNAL API.
 
     void loadTexture(string location, ref TexturePacker!string database) {
