@@ -24,7 +24,7 @@ private:
     AnimationContainer[string] animationDatabase;
     Texture2D* textureAtlasPointer;
 
-    //* BEGIN PUBLIC API.
+public: //* BEGIN PUBLIC API.
 
     public void draw(
         string modelName, Vector3 position, Vector3 rotation = Vector3(0, 0, 0),
