@@ -61,6 +61,7 @@ void main() {
 	So the chunk will generate behind you and to your right.
 	*/
 
+	// This should look inverted with backface culling off.
 	makeQuad(
 		Vec3d(1, 1, 0),
 		Vec3d(1, 0, 0),
