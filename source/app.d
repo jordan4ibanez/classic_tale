@@ -34,7 +34,10 @@ void main() {
 
 	float[] vertices;
 
-	void makeCube() {
+	void makeCube(const Vec3d min, const Vec3d max) {
+
+		assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
+		assert(max.x <= 1 && max.y <= 1 && max.z <= 1, "max is out of bounds");
 
 		pragma(inline, true)
 		void makeQuad(
@@ -66,54 +69,56 @@ void main() {
 
 		// Front.
 		makeQuad(
-			Vec3d(1, 1, 0),
-			Vec3d(1, 0, 0),
-			Vec3d(0, 0, 0),
-			Vec3d(0, 1, 0)
+			Vec3d(1, 1, min.z),
+			Vec3d(1, 0, min.z),
+			Vec3d(0, 0, min.z),
+			Vec3d(0, 1, min.z)
 		);
 
 		// Back.
 		makeQuad(
-			Vec3d(0, 1, 1),
-			Vec3d(0, 0, 1),
-			Vec3d(1, 0, 1),
-			Vec3d(1, 1, 1)
+			Vec3d(0, 1, max.z),
+			Vec3d(0, 0, max.z),
+			Vec3d(1, 0, max.z),
+			Vec3d(1, 1, max.z)
 		);
 
 		// Left.
 		makeQuad(
-			Vec3d(0, 1, 0),
-			Vec3d(0, 0, 0),
-			Vec3d(0, 0, 1),
-			Vec3d(0, 1, 1)
+			Vec3d(0, 1, min.z),
+			Vec3d(0, 0, min.z),
+			Vec3d(0, 0, max.z),
+			Vec3d(0, 1, max.z)
 		);
 
 		// Right.
 		makeQuad(
-			Vec3d(1, 1, 1),
-			Vec3d(1, 0, 1),
-			Vec3d(1, 0, 0),
-			Vec3d(1, 1, 0)
+			Vec3d(1, 1, max.z),
+			Vec3d(1, 0, max.z),
+			Vec3d(1, 0, min.z),
+			Vec3d(1, 1, min.z)
 		);
 
 		// Top of top points towards -Z.
 		// Top.
 		makeQuad(
-			Vec3d(0, 1, 0),
-			Vec3d(0, 1, 1),
-			Vec3d(1, 1, 1),
-			Vec3d(1, 1, 0)
+			Vec3d(0, 1, min.z),
+			Vec3d(0, 1, max.z),
+			Vec3d(1, 1, max.z),
+			Vec3d(1, 1, min.z)
 		);
 
 		// Top of bottom points towards -Z.
 		// Bottom.
 		makeQuad(
-			Vec3d(1, 0, 0),
-			Vec3d(1, 0, 1),
-			Vec3d(0, 0, 1),
-			Vec3d(0, 0, 0)
+			Vec3d(1, 0, min.z),
+			Vec3d(1, 0, max.z),
+			Vec3d(0, 0, max.z),
+			Vec3d(0, 0, min.z)
 		);
 	}
+
+	makeCube(Vec3d(0, 0, 0), Vec3d(1, 1, 1));
 
 	TexPoints blah = TextureHandler.getPoints("testing.png");
 
