@@ -62,15 +62,6 @@ void main() {
 	So the chunk will generate behind you and to your right.
 	*/
 
-	//? Template.
-	// makeQuad(
-	// 	Vec3d(0, 0, 0),
-	// 	Vec3d(0, 0, 0),
-	// 	Vec3d(0, 0, 0),
-	// 	Vec3d(0, 0, 0)
-	// );
-
-	// This should look inverted with backface culling off.
 	// Front.
 	makeQuad(
 		Vec3d(1, 1, 0),
@@ -120,16 +111,6 @@ void main() {
 		Vec3d(0, 0, 1),
 		Vec3d(0, 0, 0)
 	);
-
-	// static immutable Vec3d topLeftBack = Vec3d(0, 1, 0);
-	// static immutable Vec3d topRightBack = Vec3d(1, 1, 0);
-	// static immutable Vec3d topLeftFront = Vec3d(0, 1, 1);
-	// static immutable Vec3d topRightFront = Vec3d(1, 1, 1);
-
-	// 0.0, 1.0, 0.0, // 0
-	// 	0.0, 0.0, 0.0, // 1
-	// 	1.0, 0.0, 0.0, // 2
-	// 	1.0, 0.0, 0.0, // 2
 
 	TexPoints blah = TextureHandler.getPoints("testing.png");
 
