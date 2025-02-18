@@ -19,6 +19,8 @@ private:
 
     TexturePoints!Vec2d[string] texturePointDatabase;
     Texture2D* atlas;
+    int atlasWidth = 0;
+    int atlasHeight = 0;
 
 public: //* BEGIN PUBLIC API.
 
@@ -34,6 +36,9 @@ public: //* BEGIN PUBLIC API.
         database.finalize("atlas.png");
         atlas = new Texture2D();
         *atlas = LoadTexture(toStringz("atlas.png"));
+
+        atlasWidth = atlas.width;
+        atlasHeight = atlas.height;
 
         database.extractTexturePoints(texturePointDatabase);
     }
