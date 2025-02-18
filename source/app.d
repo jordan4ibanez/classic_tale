@@ -112,6 +112,15 @@ void main() {
 		Vec3d(1, 1, 0)
 	);
 
+	// Top of bottom points towards -Z.
+	// Bottom.
+	makeQuad(
+		Vec3d(1, 0, 0),
+		Vec3d(1, 0, 1),
+		Vec3d(0, 0, 1),
+		Vec3d(0, 0, 0)
+	);
+
 	// static immutable Vec3d topLeftBack = Vec3d(0, 1, 0);
 	// static immutable Vec3d topRightBack = Vec3d(1, 1, 0);
 	// static immutable Vec3d topLeftFront = Vec3d(0, 1, 1);
@@ -162,6 +171,15 @@ void main() {
 		blah.topLeft.x, blah.topLeft.y, // 0
 
 		// Top.
+		blah.topLeft.x, blah.topLeft.y, // 0
+		blah.bottomLeft.x, blah.bottomLeft.y, // 1
+		blah.bottomRight.x, blah.bottomRight.y, // 2
+
+		blah.bottomRight.x, blah.bottomRight.y, // 2
+		blah.topRight.x, blah.topRight.y, // 3
+		blah.topLeft.x, blah.topLeft.y, // 0
+
+		// Bottom.
 		blah.topLeft.x, blah.topLeft.y, // 0
 		blah.bottomLeft.x, blah.bottomLeft.y, // 1
 		blah.bottomRight.x, blah.bottomRight.y, // 2
