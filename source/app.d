@@ -69,52 +69,52 @@ void main() {
 
 		// Front.
 		makeQuad(
-			Vec3d(1, 1, min.z),
-			Vec3d(1, 0, min.z),
-			Vec3d(0, 0, min.z),
-			Vec3d(0, 1, min.z)
+			Vec3d(max.x, max.y, min.z),
+			Vec3d(max.x, min.y, min.z),
+			Vec3d(min.x, min.y, min.z),
+			Vec3d(min.x, max.y, min.z)
 		);
 
 		// Back.
 		makeQuad(
-			Vec3d(0, 1, max.z),
-			Vec3d(0, 0, max.z),
-			Vec3d(1, 0, max.z),
-			Vec3d(1, 1, max.z)
+			Vec3d(min.x, max.y, max.z),
+			Vec3d(min.x, min.y, max.z),
+			Vec3d(max.x, min.y, max.z),
+			Vec3d(max.x, max.y, max.z)
 		);
 
 		// Left.
 		makeQuad(
-			Vec3d(0, 1, min.z),
-			Vec3d(0, 0, min.z),
-			Vec3d(0, 0, max.z),
-			Vec3d(0, 1, max.z)
+			Vec3d(min.x, max.y, min.z),
+			Vec3d(min.x, min.y, min.z),
+			Vec3d(min.x, min.y, max.z),
+			Vec3d(min.x, max.y, max.z)
 		);
 
 		// Right.
 		makeQuad(
-			Vec3d(1, 1, max.z),
-			Vec3d(1, 0, max.z),
-			Vec3d(1, 0, min.z),
-			Vec3d(1, 1, min.z)
+			Vec3d(max.x, max.y, max.z),
+			Vec3d(max.x, min.y, max.z),
+			Vec3d(max.x, min.y, min.z),
+			Vec3d(max.x, max.y, min.z)
 		);
 
 		// Top of top points towards -Z.
 		// Top.
 		makeQuad(
-			Vec3d(0, 1, min.z),
-			Vec3d(0, 1, max.z),
-			Vec3d(1, 1, max.z),
-			Vec3d(1, 1, min.z)
+			Vec3d(min.x, max.y, min.z),
+			Vec3d(min.x, max.y, max.z),
+			Vec3d(max.x, max.y, max.z),
+			Vec3d(max.x, max.y, min.z)
 		);
 
 		// Top of bottom points towards -Z.
 		// Bottom.
 		makeQuad(
-			Vec3d(1, 0, min.z),
-			Vec3d(1, 0, max.z),
-			Vec3d(0, 0, max.z),
-			Vec3d(0, 0, min.z)
+			Vec3d(max.x, min.y, min.z),
+			Vec3d(max.x, min.y, max.z),
+			Vec3d(min.x, min.y, max.z),
+			Vec3d(min.x, min.y, min.z)
 		);
 	}
 
