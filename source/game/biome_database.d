@@ -71,29 +71,29 @@ public: //* BEGIN PUBLIC API.
 
     void finalize() {
         foreach (name, ref thisBiome; nameDatabase) {
-            const(BlockDefinition*) grassResult = BlockDatabase.getBlockByName(
+            const(BlockDefinition*) grass = BlockDatabase.getBlockByName(
                 thisBiome.grassLayer);
-            if (grassResult is null) {
+            if (grass is null) {
                 throw new Error(
                     "Biome " ~ thisBiome.name ~ " grass layer " ~ thisBiome.grassLayer ~ " is not a registered block");
             }
 
-            const(BlockDefinition*) dirtResult = BlockDatabase.getBlockByName(thisBiome.dirtLayer);
-            if (dirtResult is null) {
+            const(BlockDefinition*) dirt = BlockDatabase.getBlockByName(thisBiome.dirtLayer);
+            if (dirt is null) {
                 throw new Error(
                     "Biome " ~ thisBiome.name ~ " dirt layer " ~ thisBiome.dirtLayer ~ " is not a registered block");
             }
 
-            const(BlockDefinition*) stoneResult = BlockDatabase.getBlockByName(
+            const(BlockDefinition*) stone = BlockDatabase.getBlockByName(
                 thisBiome.stoneLayer);
-            if (stoneResult is null) {
+            if (stone is null) {
                 throw new Error(
                     "Biome " ~ thisBiome.name ~ " stone layer " ~ thisBiome.stoneLayer ~ " is not a registered block");
             }
 
-            thisBiome.grassLayerID = grassResult.id;
-            thisBiome.dirtLayerID = dirtResult.id;
-            thisBiome.stoneLayerID = stoneResult.id;
+            thisBiome.grassLayerID = grass.id;
+            thisBiome.dirtLayerID = dirt.id;
+            thisBiome.stoneLayerID = stone.id;
 
             // todo: do the match thing below when mongoDB is added in.
             thisBiome.id = nextID();
