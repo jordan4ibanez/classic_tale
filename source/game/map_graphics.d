@@ -258,7 +258,6 @@ private:
             vertices[vertIndex] = topLeft.x;
             vertices[vertIndex + 1] = topLeft.y;
             vertices[vertIndex + 2] = topLeft.z;
-            // vertIndex += 3;
 
             // 1
             vertices[vertIndex + 3] = bottomLeft.x;
