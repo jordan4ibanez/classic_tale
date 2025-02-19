@@ -90,12 +90,33 @@ void main() {
 	// Maybe this can have a numeric AA or array to hash this in immediate mode?
 	void makeCube(const Vec3d position, Vec3d min, Vec3d max, FaceGeneration faceGeneration, FaceTextures textures) {
 
-		// assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
-		// assert(max.x <= 1 && max.y <= 1 && max.z <= 1, "max is out of bounds");
-		// assert(max.x >= min.x && max.y >= min.y && max.z >= min.z, "Inverse axis");
+		assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
+		assert(max.x <= 1 && max.y <= 1 && max.z <= 1, "max is out of bounds");
+		assert(max.x >= min.x && max.y >= min.y && max.z >= min.z, "inverted axis");
 
-		// immutable Vec3d originalMin = min;
-		// immutable Vec3d originalMax = max;
+		// Allow flat faces to be optimized.
+		immutable double width = max.x - min.x;
+		immutable double height = max.y - min.y;
+		immutable double depth = max.z - min.z;
+
+		assert(width > 0 || height > 0 || depth > 0, "this cube is nothing!");
+
+		if (width == 0) {
+			faceGeneration.front = false;
+			faceGeneration.back = false;
+			faceGeneration.top = false;
+			faceGeneration.bottom = false;
+		} else if (height == 0) {
+			faceGeneration.front = false;
+			faceGeneration.back = false;
+			faceGeneration.top = false;
+			faceGeneration.bottom = false;
+		} else if (depth == 0) {
+			faceGeneration.left = false;
+			faceGeneration.right = false;
+			faceGeneration.top = false;
+			faceGeneration.bottom = false;
+		}
 
 		// Shift into position.
 		immutable Vec3d chunkPositionMin = vec3dAdd(position, min);
