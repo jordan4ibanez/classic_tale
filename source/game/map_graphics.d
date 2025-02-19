@@ -150,10 +150,10 @@ private:
                     }
 
                     // 3 [xyz], 6 [2 tris], 6 faces
-                    vertexAllocation += 3 * 6 * 6;
+                    vertexAllocation += 108;
 
                     // 2 [xy], 6 [2 tris], 6 faces
-                    textureCoordAllocation += 2 * 6 * 6;
+                    textureCoordAllocation += 72;
 
                 }
             }
