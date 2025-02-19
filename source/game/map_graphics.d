@@ -1,11 +1,13 @@
 module game.map_graphics;
 
+import game.map;
 import graphics.texture_handler;
 import hashset;
 import math.vec2d;
 import math.vec2i;
 import math.vec3d;
 import std.bitmanip;
+import std.conv;
 import std.meta;
 import std.stdio;
 
@@ -80,6 +82,7 @@ public:
             return;
         }
         writeln(thisResult.data);
+        createChunkMesh(thisResult.data);
     }
 
 private:
@@ -99,10 +102,16 @@ private:
     }
 
     void createChunkMesh(Vec2i chunkKey) {
+        const(Chunk*) thisChunk = Map.getChunkPointer(chunkKey);
+
+        if (thisChunk is null) {
+            writeln("aborting, chunk " ~ to!string(chunkKey.x) ~ " " ~ to!string(
+                    chunkKey.y) ~ " does not exist.");
+            return;
+        }
+
         float[] vertices;
         float[] textureCoordinates;
-        
-
     }
 
     // Maybe this can have a numeric AA or array to hash this in immediate mode?
