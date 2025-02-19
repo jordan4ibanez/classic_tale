@@ -210,7 +210,6 @@ void main() {
 				points.topLeft.x + backTrim, points.topLeft.y + topTrim, // 0
 				points.bottomLeft.x + backTrim, points.bottomLeft.y - bottomTrim, // 1
 				points.bottomRight.x - frontTrim, points.bottomRight.y - bottomTrim, // 2
-
 				points.bottomRight.x - frontTrim, points.bottomRight.y - bottomTrim, // 2
 				points.topRight.x - frontTrim, points.topRight.y + topTrim, // 3
 				points.topLeft.x + backTrim, points.topLeft.y + topTrim, // 0
