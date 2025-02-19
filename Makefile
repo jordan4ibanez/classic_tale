@@ -7,5 +7,9 @@ fast:
 debug:
 	DFLAGS="-g -gc -d-debug" dub build  && gdb -q -ex run ./classic_fable
 
+install:
+	# dub upgrade
+	dub run raylib-d:install
+
 clean:
 	@dub clean
