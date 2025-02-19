@@ -20,11 +20,6 @@ class BiomeDefinition {
     // todo: ores.
 }
 
-struct BiomeDefinitionResult {
-    BiomeDefinition definition = null;
-    bool exists = false;
-}
-
 static final const class BiomeDatabase {
 static:
 private:
