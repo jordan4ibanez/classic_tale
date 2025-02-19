@@ -20,8 +20,8 @@ public: //* BEGIN PUBLIC API.
     void initialize() {
         camera = new Camera3D();
 
-        camera.position = Vector3(0, -3, 3);
-        camera.target = Vector3(0, 0, 0);
+        camera.position = Vector3(0, 200, 22);
+        camera.target = Vector3(0, 32, 0);
         camera.up = Vector3(0, 1, 0);
         camera.fovy = 55;
         camera.projection = CameraProjection.CAMERA_PERSPECTIVE;
