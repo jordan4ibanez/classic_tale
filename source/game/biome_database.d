@@ -61,19 +61,12 @@ public: //* BEGIN PUBLIC API.
         nameDatabase[newBiome.name] = newBiome;
     }
 
-    BiomeDefinitionResult getBiomeByID(int id) {
-        if (id !in idDatabase) {
-            return BiomeDefinitionResult();
-        }
-
-        return BiomeDefinitionResult(idDatabase[id], true);
+    const(BiomeDefinition*) getBiomeByID(int id) {
+        return id in idDatabase;
     }
 
-    BiomeDefinitionResult getBiomeByName(string name) {
-        if (name !in nameDatabase) {
-            return BiomeDefinitionResult();
-        }
-        return BiomeDefinitionResult(nameDatabase[name], true);
+    const(BiomeDefinition*) getBiomeByName(string name) {
+        return name in nameDatabase;
     }
 
     void finalize() {
