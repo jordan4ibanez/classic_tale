@@ -242,47 +242,88 @@ private:
         immutable Vec3d chunkPositionMin = vec3dAdd(position, min);
         immutable Vec3d chunkPositionMax = vec3dAdd(position, max);
 
-        pragma(inline, true)
+        // pragma(inline, true)
         void makeQuad(
             const Vec3d topLeft, /*0*/
             const Vec3d bottomLeft, /*1*/
             const Vec3d bottomRight, /*2*/
             const Vec3d topRight /*3*/ ) {
             // Tri 1.
-            vertices[vertIndex .. vertIndex + 3] = topLeft.toFloatArray(); // 0
-            vertIndex += 3;
-            vertices[vertIndex .. vertIndex + 3] = bottomLeft.toFloatArray(); // 1
-            vertIndex += 3;
-            vertices[vertIndex .. vertIndex + 3] = bottomRight.toFloatArray(); // 2
-            vertIndex += 3;
+
+            // 0
+            vertices[vertIndex] = topLeft.x;
+            vertices[vertIndex + 1] = topLeft.y;
+            vertices[vertIndex + 2] = topLeft.z;
+            // vertIndex += 3;
+
+            // 1
+            vertices[vertIndex + 3] = bottomLeft.x;
+            vertices[vertIndex + 4] = bottomLeft.y;
+            vertices[vertIndex + 5] = bottomLeft.z;
+
+            // 2
+            vertices[vertIndex + 6] = bottomRight.x;
+            vertices[vertIndex + 7] = bottomRight.y;
+            vertices[vertIndex + 8] = bottomRight.z;
+
             // Tri 2.
-            vertices[vertIndex .. vertIndex + 3] = bottomRight.toFloatArray(); // 2
-            vertIndex += 3;
-            vertices[vertIndex .. vertIndex + 3] = topRight.toFloatArray(); // 3
-            vertIndex += 3;
-            vertices[vertIndex .. vertIndex + 3] = topLeft.toFloatArray(); // 0
-            vertIndex += 3;
+
+            // 2
+            vertices[vertIndex + 9] = bottomRight.x;
+            vertices[vertIndex + 10] = bottomRight.y;
+            vertices[vertIndex + 11] = bottomRight.z;
+
+            // 3
+            vertices[vertIndex + 12] = topRight.x;
+            vertices[vertIndex + 13] = topRight.y;
+            vertices[vertIndex + 14] = topRight.z;
+
+            // 0
+            vertices[vertIndex + 15] = topLeft.x;
+            vertices[vertIndex + 16] = topLeft.y;
+            vertices[vertIndex + 17] = topLeft.z;
+
+            vertIndex += 18;
+
         }
 
-        pragma(inline, true)
+        // pragma(inline, true)
         void makeTextureQuad(
             const Vec2d topLeft,
             const Vec2d bottomLeft,
             const Vec2d bottomRight,
             const Vec2d topRight,
         ) {
-            textureCoordinates[textIndex .. textIndex + 2] = topLeft.toFloatArray(); // 0
-            textIndex += 2;
-            textureCoordinates[textIndex .. textIndex + 2] = bottomLeft.toFloatArray(); // 1
-            textIndex += 2;
-            textureCoordinates[textIndex .. textIndex + 2] = bottomRight.toFloatArray(); // 2
-            textIndex += 2;
-            textureCoordinates[textIndex .. textIndex + 2] = bottomRight.toFloatArray(); // 2
-            textIndex += 2;
-            textureCoordinates[textIndex .. textIndex + 2] = topRight.toFloatArray(); // 3
-            textIndex += 2;
-            textureCoordinates[textIndex .. textIndex + 2] = topLeft.toFloatArray(); // 0
-            textIndex += 2;
+
+            // Tri 1.
+
+            // 0
+            textureCoordinates[textIndex] = topLeft.x;
+            textureCoordinates[textIndex + 1] = topLeft.y;
+
+            //1
+            textureCoordinates[textIndex + 2] = bottomLeft.x;
+            textureCoordinates[textIndex + 3] = bottomLeft.y;
+
+            //2
+            textureCoordinates[textIndex + 4] = bottomRight.x;
+            textureCoordinates[textIndex + 5] = bottomRight.y;
+
+            // Tri 2.
+
+            // 2
+            textureCoordinates[textIndex + 6] = bottomRight.x;
+            textureCoordinates[textIndex + 7] = bottomRight.y;
+
+            //3
+            textureCoordinates[textIndex + 8] = topRight.x;
+            textureCoordinates[textIndex + 9] = topRight.y;
+
+            // 0
+            textureCoordinates[textIndex + 10] = topLeft.x;
+            textureCoordinates[textIndex + 11] = topLeft.y;
+
+            textIndex += 12;
         }
 
         /*
