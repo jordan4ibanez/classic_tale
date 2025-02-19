@@ -30,6 +30,10 @@ public: //* BEGIN PUBLIC API.
         textureAtlasPointer = TextureHandler.getAtlasPointer();
     }
 
+    bool modelExists(string name) {
+        return (name in database) !is null;
+    }
+
     void draw(
         string modelName, Vec3d position, Vec3d rotation = Vec3d(0, 0, 0),
         float scale = 1.0, Color color = Colors.WHITE) {
