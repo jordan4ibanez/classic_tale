@@ -19,7 +19,7 @@ import std.stdio;
 import utility.window;
 
 // Width is for X and Z.
-immutable public int CHUNK_WIDTH = 32;
+immutable public int CHUNK_WIDTH = 16;
 immutable public int CHUNK_HEIGHT = 256;
 
 struct BlockData {
