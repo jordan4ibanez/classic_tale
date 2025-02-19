@@ -1,13 +1,11 @@
+import game.map_graphics;
 import graphics.camera_handler;
 import graphics.model_handler;
 import graphics.texture_handler;
 import math.vec2d;
 import math.vec3d;
 import raylib;
-
 import std.stdio;
-
-
 
 void main() {
 	// call this before using raylib
@@ -40,11 +38,9 @@ void main() {
 	float[] vertices;
 	float[] textureCoordinates;
 
-
-
 	FaceTextures tex = "testing.png";
 	FaceGeneration faces = AllFaces;
-	makeCube(Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), faces, tex);
+	makeCube(vertices, textureCoordinates, Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), faces, tex);
 
 	ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
 
