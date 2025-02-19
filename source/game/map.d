@@ -186,30 +186,30 @@ public: //* BEGIN PUBLIC API.
         return database[chunkID].data[xzPosInChunk.x][xzPosInChunk.z][yPosInChunk];
     }
 
-    // void setBlockAtWorldPositionByID(Vec2d position, int id) {
-    //     if (!BlockDatabase.hasBlockID(id)) {
-    //         throw new Error("Cannot set to block ID " ~ to!string(id) ~ ", ID does not exist.");
-    //     }
+    void setBlockAtWorldPositionByID(Vec3d position, int blockID) {
+        if (!BlockDatabase.hasBlockID(blockID)) {
+            throw new Error("Cannot set to block ID " ~ to!string(blockID) ~ ", ID does not exist.");
+        }
 
-    //     int chunkID = calculateChunkAtWorldPosition(position.x);
+        Vec2iXZ chunkID = calculateChunkAtWorldPosition(position);
 
-    //     if (chunkID !in database) {
-    //         // todo: maybe unload the chunk after?
-    //         loadChunk(chunkID);
-    //     }
+        if (chunkID !in database) {
+            // todo: maybe unload the chunk after?
+            // loadChunk(chunkID);
+        }
 
-    //     int xPosInChunk = getXInChunk(position.x);
+        Vec2iXZ xzPosInChunk = getXZInChunk(position);
 
-    //     int yPosInChunk = cast(int) floor(position.y);
+        int yPosInChunk = cast(int) floor(position.y);
 
-    //     // Out of bounds.
-    //     if (yPosInChunk < 0 || yPosInChunk >= CHUNK_HEIGHT) {
-    //         writeln("WARNING! trying to write out of bounds! " ~ to!string(yPosInChunk));
-    //         return;
-    //     }
+        // Out of bounds.
+        if (yPosInChunk < 0 || yPosInChunk >= CHUNK_HEIGHT) {
+            writeln("WARNING! trying to write out of bounds! " ~ to!string(yPosInChunk));
+            return;
+        }
 
-    //     database[chunkID].data[xPosInChunk][yPosInChunk].blockID = id;
-    // }
+        database[chunkID].data[xzPosInChunk.x][xzPosInChunk.z][yPosInChunk].blockID = blockID;
+    }
 
     // void setBlockAtWorldPositionByName(Vec2d position, string name) {
 
