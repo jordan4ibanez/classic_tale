@@ -6,17 +6,16 @@ import math.vec2d;
 import math.vec3d;
 import raylib;
 import std.stdio;
+import utility.window;
 
 void main() {
-	// call this before using raylib
-	SetTraceLogLevel(TraceLogLevel.LOG_ERROR);
-	validateRaylibBinding();
 
-	InitWindow(1000, 1000, "Classic Fable Prototyping");
+	SetTraceLogLevel(TraceLogLevel.LOG_ERROR);
+
+	Window.initialize();
 	scope (exit) {
-		CloseWindow();
+		Window.terminate();
 	}
-	SetTargetFPS(60);
 
 	CameraHandler.initialize();
 	scope (exit) {
@@ -44,11 +43,10 @@ void main() {
 
 	// ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
 
-	while (!WindowShouldClose()) {
+	while (Window.shouldStayOpen()) {
+
 		BeginDrawing();
 		ClearBackground(Colors.RAYWHITE);
-
-		DrawText("Hello, World!", 10, 10, 28, Colors.BLACK);
 
 		CameraHandler.begin();
 
