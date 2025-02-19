@@ -140,13 +140,14 @@ public: //* BEGIN PUBLIC API.
         return database[modelName];
     }
 
-    void updateModelPositionsInGPU(string modelName) {
-        if (modelName !in database) {
+    void updateModelInGPU(string modelName) {
+
+        const Model* thisModel = database[modelName];
+
+        if (thisModel is null) {
             throw new Error(
                 "[ModelManager]: Tried to update non-existent model [" ~ modelName ~ "]");
         }
-
-        const Model* thisModel = database[modelName];
 
         /*
 #define RL_DEFAULT_SHADER_ATTRIB_LOCATION_POSITION    0
@@ -161,6 +162,9 @@ public: //* BEGIN PUBLIC API.
         foreach (i, thisMesh; thisModel.meshes[0 .. thisModel.meshCount]) {
             UpdateMeshBuffer(cast(Mesh) thisMesh, 0, &thisMesh.vertices[0], cast(int)(
                     thisMesh.vertexCount * 3 * float.sizeof), 0);
+
+            UpdateMeshBuffer(cast(Mesh) thisMesh, 1, &thisMesh.texcoords[0], cast(int)(
+                    thisMesh.vertexCount * 2 * float.sizeof), 0);
         }
     }
 
