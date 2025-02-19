@@ -8,8 +8,8 @@ import graphics.camera_handler;
 import graphics.render;
 import graphics.texture_handler;
 import math.rect;
-import math.vec2d;
 import math.vec2i;
+import math.vec3d;
 import std.algorithm.comparison;
 import std.conv;
 import std.math.algebraic;
@@ -45,71 +45,71 @@ public: //* BEGIN PUBLIC API.
         noise.seed = 1_010_010;
     }
 
-    void draw() {
+    // void draw() {
 
-        // //? Screen draws, bottom left to top right.
-        // int windowWidth = Window.getWidth();
-        // int windowHeight = Window.getHeight();
+    // //? Screen draws, bottom left to top right.
+    // int windowWidth = Window.getWidth();
+    // int windowHeight = Window.getHeight();
 
-        // // Vec2d bottomLeft = CameraHandler.screenToWorld(0, 0);
-        // // Vec2d topRight = CameraHandler.screenToWorld(windowWidth, windowHeight);
+    // // Vec2d bottomLeft = CameraHandler.screenToWorld(0, 0);
+    // // Vec2d topRight = CameraHandler.screenToWorld(windowWidth, windowHeight);
 
-        // int minX = cast(int) floor(bottomLeft.x);
-        // int minY = cast(int) floor(bottomLeft.y);
+    // int minX = cast(int) floor(bottomLeft.x);
+    // int minY = cast(int) floor(bottomLeft.y);
 
-        // int maxX = cast(int) floor(topRight.x);
-        // int maxY = cast(int) floor(topRight.y);
+    // int maxX = cast(int) floor(topRight.x);
+    // int maxY = cast(int) floor(topRight.y);
 
-        // // Player has been exploded out of the world.
-        // if (minY > CHUNK_HEIGHT) {
-        //     writeln("exploded");
-        //     return;
-        // }
-        // // Player has fallen out of the world.
-        // if (maxY < 0) {
-        //     writeln("fallen");
-        //     return;
-        // }
+    // // Player has been exploded out of the world.
+    // if (minY > CHUNK_HEIGHT) {
+    //     writeln("exploded");
+    //     return;
+    // }
+    // // Player has fallen out of the world.
+    // if (maxY < 0) {
+    //     writeln("fallen");
+    //     return;
+    // }
 
-        // minY = clamp(minY, 0, CHUNK_HEIGHT);
-        // maxY = clamp(maxY, 0, CHUNK_HEIGHT);
+    // minY = clamp(minY, 0, CHUNK_HEIGHT);
+    // maxY = clamp(maxY, 0, CHUNK_HEIGHT);
 
-        // // todo: cache the chunk. Maybe.
+    // // todo: cache the chunk. Maybe.
 
-        // foreach (x; minX .. maxX + 1) {
+    // foreach (x; minX .. maxX + 1) {
 
-        //     foreach (y; minY .. maxY + 1) {
+    //     foreach (y; minY .. maxY + 1) {
 
-        //         Vec2d position = Vec2d(x, y);
+    //         Vec2d position = Vec2d(x, y);
 
-        //         ChunkData thisData = getBlockAtWorldPosition(position);
+    //         ChunkData thisData = getBlockAtWorldPosition(position);
 
-        //         position.y += 1;
+    //         position.y += 1;
 
-        //         if (thisData.blockID == 0) {
-        //             // Render.rectangleLines(position, Vec2d(1, 1), Colors.WHITE);
-        //             continue;
-        //         }
+    //         if (thisData.blockID == 0) {
+    //             // Render.rectangleLines(position, Vec2d(1, 1), Colors.WHITE);
+    //             continue;
+    //         }
 
-        //         // +1 on Y because it's drawn with the origin at the top left.
+    //         // +1 on Y because it's drawn with the origin at the top left.
 
-        //         // Render.rectangle(position, Vec2d(1, 1), Colors.ORANGE);
+    //         // Render.rectangle(position, Vec2d(1, 1), Colors.ORANGE);
 
-        //         BlockDefinitionResult thisBlockResult = BlockDatabase.getBlockByID(
-        //             thisData.blockID);
+    //         BlockDefinitionResult thisBlockResult = BlockDatabase.getBlockByID(
+    //             thisData.blockID);
 
-        //         if (!thisBlockResult.exists) {
-        //             TextureHandler.drawTexture("unknown.png", position, Rect(0, 0, 16, 16), Vec2d(1, 1));
-        //         } else {
-        //             TextureHandler.drawTexture(thisBlockResult.definition.texture, position,
-        //                 Rect(0, 0, 16.00001, 16.00001), Vec2d(1, 1));
-        //         }
+    //         if (!thisBlockResult.exists) {
+    //             TextureHandler.drawTexture("unknown.png", position, Rect(0, 0, 16, 16), Vec2d(1, 1));
+    //         } else {
+    //             TextureHandler.drawTexture(thisBlockResult.definition.texture, position,
+    //                 Rect(0, 0, 16.00001, 16.00001), Vec2d(1, 1));
+    //         }
 
-        //         // Render.rectangleLines(position, Vec2d(1, 1), Colors.WHITE);
+    //         // Render.rectangleLines(position, Vec2d(1, 1), Colors.WHITE);
 
-        //     }
-        // }
-    }
+    //     }
+    // }
+    // }
 
     double getGravity() {
         return gravity;
@@ -139,17 +139,24 @@ public: //* BEGIN PUBLIC API.
     //     return 0;
     // }
 
-    int calculateChunkAtWorldPosition(double x) {
-        return cast(int) floor(x / CHUNK_WIDTH);
+    Vec2i calculateChunkAtWorldPosition(Vec3d position) {
+        return Vec2i(
+            cast(int) floor(position.x / CHUNK_WIDTH),
+            cast(int) floor(position.z / CHUNK_WIDTH),
+        );
     }
 
-    int getXInChunk(double x) {
-        int result = cast(int) floor(x % CHUNK_WIDTH);
+    Vec2i getXZInChunk(Vec3d position) {
+        int resultX = cast(int) floor(position.x % CHUNK_WIDTH);
+        int resultZ = cast(int) floor(position.z % CHUNK_WIDTH);
         // Account for negatives.
-        if (result < 0) {
-            result += CHUNK_WIDTH;
+        if (resultX < 0) {
+            resultX += CHUNK_WIDTH;
         }
-        return result;
+        if (resultZ < 0) {
+            resultZ += CHUNK_WIDTH;
+        }
+        return Vec2i(resultX, resultZ);
     }
 
     // ChunkData getBlockAtWorldPosition(Vec2d position) {
