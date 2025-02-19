@@ -20,7 +20,7 @@ public: //* BEGIN PUBLIC API.
     void initialize() {
         camera = new Camera3D();
 
-        camera.position = Vector3(0, -2, 3);
+        camera.position = Vector3(0, 0, -3);
         camera.target = Vector3(0, 0, 0);
         camera.up = Vector3(0, 1, 0);
         camera.fovy = 55;
@@ -32,7 +32,7 @@ public: //* BEGIN PUBLIC API.
     }
 
     void begin() {
-        UpdateCamera(camera, CameraMode.CAMERA_ORBITAL);
+        // UpdateCamera(camera, CameraMode.CAMERA_ORBITAL);
         BeginMode3D(*camera);
     }
 

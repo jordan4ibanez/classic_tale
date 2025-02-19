@@ -3,6 +3,7 @@ module graphics.texture_handler;
 import fast_pack;
 import math.rect;
 import math.vec2d;
+import math.vec2i;
 import raylib;
 import std.container;
 import std.file;

@@ -70,13 +70,19 @@ void main() {
 	rlDisableBackfaceCulling();
 
 	float[] vertices;
+	TexPoints blah = TextureHandler.getPoints("testing.png");
+
+	float[] textureCoordinates;
 
 	// Maybe this can have a numeric AA or array to hash this in immediate mode?
-	void makeCube(const Vec3d position, Vec3d min, Vec3d max, FaceGeneration faceGeneration) {
+	void makeCube(const Vec3d position, Vec3d min, Vec3d max, FaceGeneration faceGeneration, string[6] textures) {
 
 		assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
 		assert(max.x <= 1 && max.y <= 1 && max.z <= 1, "max is out of bounds");
 
+		assert(max.x >= min.x && max.y >= min.y && max.z >= min.z, "Inverse axis");
+
+		// Shift into position.
 		min = vec3dAdd(position, min);
 		max = vec3dAdd(position, max);
 
@@ -116,6 +122,19 @@ void main() {
 				Vec3d(min.x, min.y, min.z),
 				Vec3d(min.x, max.y, min.z)
 			);
+
+			TexPoints frontPoints = TextureHandler.getPoints("testing.png");
+
+			textureCoordinates ~= [
+				blah.topLeft.x, blah.topLeft.y,
+				blah.bottomLeft.x, blah.bottomLeft.y,
+				blah.bottomRight.x, blah.bottomRight.y,
+
+				blah.bottomRight.x, blah.bottomRight.y,
+				blah.topRight.x, blah.topRight.y,
+				blah.topLeft.x, blah.topLeft.y,
+			];
+
 		}
 
 		// Back.
@@ -171,65 +190,64 @@ void main() {
 		}
 	}
 
-	makeCube(Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), AllFaces);
+	string[6] tex = "testing";
+	makeCube(Vec3d(0, 0, 0), Vec3d(0, 0.5, 0), Vec3d(1, 1, 1), AllFaces, tex);
 
-	TexPoints blah = TextureHandler.getPoints("testing.png");
+	// float[] textureCoordinates = [
+	// 	// Front.
+	// 	blah.topLeft.x, blah.topLeft.y, // 0
+	// 	blah.bottomLeft.x, blah.bottomLeft.y, // 1
+	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
 
-	float[] textureCoordinates = [
-		// Front.
-		blah.topLeft.x, blah.topLeft.y, // 0
-		blah.bottomLeft.x, blah.bottomLeft.y, // 1
-		blah.bottomRight.x, blah.bottomRight.y, // 2
+	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
+	// 	blah.topRight.x, blah.topRight.y, // 3
+	// 	blah.topLeft.x, blah.topLeft.y, // 0
 
-		blah.bottomRight.x, blah.bottomRight.y, // 2
-		blah.topRight.x, blah.topRight.y, // 3
-		blah.topLeft.x, blah.topLeft.y, // 0
+	// 	// Back.
+	// 	blah.topLeft.x, blah.topLeft.y, // 0
+	// 	blah.bottomLeft.x, blah.bottomLeft.y, // 1
+	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
 
-		// Back.
-		blah.topLeft.x, blah.topLeft.y, // 0
-		blah.bottomLeft.x, blah.bottomLeft.y, // 1
-		blah.bottomRight.x, blah.bottomRight.y, // 2
+	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
+	// 	blah.topRight.x, blah.topRight.y, // 3
+	// 	blah.topLeft.x, blah.topLeft.y, // 0
 
-		blah.bottomRight.x, blah.bottomRight.y, // 2
-		blah.topRight.x, blah.topRight.y, // 3
-		blah.topLeft.x, blah.topLeft.y, // 0
+	// 	// Left.
+	// 	blah.topLeft.x, blah.topLeft.y, // 0
+	// 	blah.bottomLeft.x, blah.bottomLeft.y, // 1
+	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
 
-		// Left.
-		blah.topLeft.x, blah.topLeft.y, // 0
-		blah.bottomLeft.x, blah.bottomLeft.y, // 1
-		blah.bottomRight.x, blah.bottomRight.y, // 2
+	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
+	// 	blah.topRight.x, blah.topRight.y, // 3
+	// 	blah.topLeft.x, blah.topLeft.y, // 0
 
-		blah.bottomRight.x, blah.bottomRight.y, // 2
-		blah.topRight.x, blah.topRight.y, // 3
-		blah.topLeft.x, blah.topLeft.y, // 0
+	// 	// Right.
+	// 	blah.topLeft.x, blah.topLeft.y, // 0
+	// 	blah.bottomLeft.x, blah.bottomLeft.y, // 1
+	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
 
-		// Right.
-		blah.topLeft.x, blah.topLeft.y, // 0
-		blah.bottomLeft.x, blah.bottomLeft.y, // 1
-		blah.bottomRight.x, blah.bottomRight.y, // 2
+	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
+	// 	blah.topRight.x, blah.topRight.y, // 3
+	// 	blah.topLeft.x, blah.topLeft.y, // 0
 
-		blah.bottomRight.x, blah.bottomRight.y, // 2
-		blah.topRight.x, blah.topRight.y, // 3
-		blah.topLeft.x, blah.topLeft.y, // 0
+	// 	// Top.
+	// 	blah.topLeft.x, blah.topLeft.y, // 0
+	// 	blah.bottomLeft.x, blah.bottomLeft.y, // 1
+	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
 
-		// Top.
-		blah.topLeft.x, blah.topLeft.y, // 0
-		blah.bottomLeft.x, blah.bottomLeft.y, // 1
-		blah.bottomRight.x, blah.bottomRight.y, // 2
+	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
+	// 	blah.topRight.x, blah.topRight.y, // 3
+	// 	blah.topLeft.x, blah.topLeft.y, // 0
 
-		blah.bottomRight.x, blah.bottomRight.y, // 2
-		blah.topRight.x, blah.topRight.y, // 3
-		blah.topLeft.x, blah.topLeft.y, // 0
+	// 	// Bottom.
+	// 	blah.topLeft.x, blah.topLeft.y, // 0
+	// 	blah.bottomLeft.x, blah.bottomLeft.y, // 1
+	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
 
-		// Bottom.
-		blah.topLeft.x, blah.topLeft.y, // 0
-		blah.bottomLeft.x, blah.bottomLeft.y, // 1
-		blah.bottomRight.x, blah.bottomRight.y, // 2
-
-		blah.bottomRight.x, blah.bottomRight.y, // 2
-		blah.topRight.x, blah.topRight.y, // 3
-		blah.topLeft.x, blah.topLeft.y, // 0
-	];
+	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
+	// 	blah.topRight.x, blah.topRight.y, // 3
+	// 	blah.topLeft.x, blah.topLeft.y, // 0
+	// ];
 
 	ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
 
