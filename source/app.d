@@ -70,8 +70,6 @@ void main() {
 	rlDisableBackfaceCulling();
 
 	float[] vertices;
-	TexPoints blah = TextureHandler.getPoints("testing.png");
-
 	float[] textureCoordinates;
 
 	// Maybe this can have a numeric AA or array to hash this in immediate mode?
@@ -111,7 +109,7 @@ void main() {
 		But the math is using actual player coordinates so that means that Z is technically inverted.
 		But we math that right out and pretend it's normal.
 
-		So the chunk will generate behind you and to your right.
+		So the chunk will generate behind you and to your right when your yaw is at 0 (facing forwards).
 		*/
 
 		// Front.
@@ -123,16 +121,24 @@ void main() {
 				Vec3d(min.x, max.y, min.z)
 			);
 
-			TexPoints frontPoints = TextureHandler.getPoints("testing.png");
+			TexPoints points = TextureHandler.getPoints(textures[0]);
+
+			Vec2d textureSize = TextureHandler.getSize(textures[0]);
+
+			double bottomTrim = min.y * textureSize.y;
 
 			textureCoordinates ~= [
-				blah.topLeft.x, blah.topLeft.y,
-				blah.bottomLeft.x, blah.bottomLeft.y,
-				blah.bottomRight.x, blah.bottomRight.y,
+				points.topLeft.x, points.topLeft.y,
 
-				blah.bottomRight.x, blah.bottomRight.y,
-				blah.topRight.x, blah.topRight.y,
-				blah.topLeft.x, blah.topLeft.y,
+				points.bottomLeft.x, points.bottomLeft.y - bottomTrim,
+
+				points.bottomRight.x, points.bottomRight.y - bottomTrim,
+
+				points.bottomRight.x, points.bottomRight.y - bottomTrim,
+
+				points.topRight.x, points.topRight.y,
+
+				points.topLeft.x, points.topLeft.y,
 			];
 
 		}
@@ -190,8 +196,8 @@ void main() {
 		}
 	}
 
-	string[6] tex = "testing";
-	makeCube(Vec3d(0, 0, 0), Vec3d(0, 0.5, 0), Vec3d(1, 1, 1), AllFaces, tex);
+	string[6] tex = "testing.png";
+	makeCube(Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 0.5, 1), AllFaces, tex);
 
 	// float[] textureCoordinates = [
 	// 	// Front.
