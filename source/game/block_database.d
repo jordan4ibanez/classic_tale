@@ -78,12 +78,8 @@ public: //* BEGIN PUBLIC API.
         return false;
     }
 
-    BlockDefinitionResult getBlockByID(int id) {
-        if (id !in idDatabase) {
-            return BlockDefinitionResult();
-        }
-
-        return BlockDefinitionResult(idDatabase[id], true);
+    const(BlockDefinition*) getBlockByID(int id) {
+        return id in idDatabase;
     }
 
     BlockDefinitionResult getBlockByName(string name) {
