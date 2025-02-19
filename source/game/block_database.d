@@ -8,7 +8,7 @@ import std.string;
 class BlockDefinition {
     string name = null;
     string modName = null;
-    string texture = null;
+    string[6] textures = null;
     int id = -1;
 }
 
@@ -47,13 +47,18 @@ public: //* BEGIN PUBLIC API.
             throw new Error("Mod name is null for block " ~ newBlock.name);
         }
 
-        if (newBlock.texture is null) {
-            throw new Error("Texture is null for block " ~ newBlock.name);
-        }
+        foreach (index, const string thisTexture; newBlock.textures) {
 
-        if (!TextureHandler.hasTexture(newBlock.texture)) {
-            throw new Error(
-                "Texture " ~ newBlock.texture ~ "for block " ~ newBlock.name ~ " does not exist");
+            if (thisTexture is null) {
+                throw new Error(
+                    "Texture is null for block " ~ newBlock.name ~ " index: " ~ to!string(index));
+            }
+
+            if (!TextureHandler.hasTexture(thisTexture)) {
+                throw new Error(
+                    "Texture " ~ thisTexture ~ "for block " ~ newBlock.name ~ " index: " ~ to!string(
+                        index) ~ " does not exist");
+            }
         }
 
         nameDatabase[newBlock.name] = newBlock;
@@ -114,7 +119,7 @@ private: //* BEGIN INTERNAL API.
         BlockDefinition air = new BlockDefinition();
         air.name = "air";
         air.modName = "engine";
-        air.texture = "air.png";
+        air.textures = "air.png";
         // todo: do the match thing below when mongoDB is added in.
         air.id = 0;
 
@@ -128,7 +133,7 @@ private: //* BEGIN INTERNAL API.
         BlockDefinition bedrock = new BlockDefinition();
         bedrock.name = "bedrock";
         bedrock.modName = "engine";
-        bedrock.texture = "default_bedrock.png";
+        bedrock.textures = "default_bedrock.png";
         // todo: do the match thing below when mongoDB is added in.
         bedrock.id = 1;
 
