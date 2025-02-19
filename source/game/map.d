@@ -8,8 +8,7 @@ import graphics.camera_handler;
 import graphics.render;
 import graphics.texture_handler;
 import math.rect;
-
-// import math.vec2i;
+import math.vec2i;
 import math.vec3d;
 import std.algorithm.comparison;
 import std.conv;
@@ -18,11 +17,6 @@ import std.math.rounding;
 import std.random;
 import std.stdio;
 import utility.window;
-
-private struct Vec2iXZ {
-    int x = 0;
-    int z = 0;
-}
 
 // Width is for X and Z.
 immutable public int CHUNK_WIDTH = 32;
@@ -41,7 +35,9 @@ static final const class Map {
 static:
 private:
 
-    Chunk[Vec2iXZ] database;
+    Chunk[Vec2i] database;
+    string[Vec2i] models;
+
     FNLState noise;
     // Vec2d[] debugDrawPoints = [];
     double gravity = 20.0;
@@ -124,8 +120,8 @@ public: //* BEGIN PUBLIC API.
 
     double getTop(Vec3d position) {
         // todo: this should probably just use a heightmap.
-        Vec2iXZ chunkID = calculateChunkAtWorldPosition(position);
-        Vec2iXZ posInChunk = getXZInChunk(position);
+        Vec2i chunkID = calculateChunkAtWorldPosition(position);
+        Vec2i posInChunk = getXZInChunk(position);
 
         if (chunkID !in database) {
             return 0;
@@ -134,21 +130,21 @@ public: //* BEGIN PUBLIC API.
         Chunk thisChunk = database[chunkID];
 
         foreach_reverse (y; 0 .. CHUNK_HEIGHT) {
-            if (thisChunk.data[posInChunk.x][posInChunk.z][y].blockID != 0) {
+            if (thisChunk.data[posInChunk.x][posInChunk.y][y].blockID != 0) {
                 return y + 1;
             }
         }
         return 0;
     }
 
-    Vec2iXZ calculateChunkAtWorldPosition(Vec3d position) {
-        return Vec2iXZ(
+    Vec2i calculateChunkAtWorldPosition(Vec3d position) {
+        return Vec2i(
             cast(int) floor(position.x / CHUNK_WIDTH),
             cast(int) floor(position.z / CHUNK_WIDTH),
         );
     }
 
-    Vec2iXZ getXZInChunk(Vec3d position) {
+    Vec2i getXZInChunk(Vec3d position) {
         int resultX = cast(int) floor(position.x % CHUNK_WIDTH);
         int resultZ = cast(int) floor(position.z % CHUNK_WIDTH);
         // Account for negatives.
@@ -158,17 +154,17 @@ public: //* BEGIN PUBLIC API.
         if (resultZ < 0) {
             resultZ += CHUNK_WIDTH;
         }
-        return Vec2iXZ(resultX, resultZ);
+        return Vec2i(resultX, resultZ);
     }
 
     ChunkData getBlockAtWorldPosition(Vec3d position) {
-        Vec2iXZ chunkID = calculateChunkAtWorldPosition(position);
+        Vec2i chunkID = calculateChunkAtWorldPosition(position);
 
         if (chunkID !in database) {
             return ChunkData();
         }
 
-        Vec2iXZ xzPosInChunk = getXZInChunk(position);
+        Vec2i xzPosInChunk = getXZInChunk(position);
 
         int yPosInChunk = cast(int) floor(position.y);
 
@@ -178,7 +174,7 @@ public: //* BEGIN PUBLIC API.
             return ChunkData();
         }
 
-        return database[chunkID].data[xzPosInChunk.x][xzPosInChunk.z][yPosInChunk];
+        return database[chunkID].data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk];
     }
 
     void setBlockAtWorldPositionByID(Vec3d position, int blockID) {
@@ -186,14 +182,14 @@ public: //* BEGIN PUBLIC API.
             throw new Error("Cannot set to block ID " ~ to!string(blockID) ~ ", ID does not exist.");
         }
 
-        Vec2iXZ chunkID = calculateChunkAtWorldPosition(position);
+        Vec2i chunkID = calculateChunkAtWorldPosition(position);
 
         if (chunkID !in database) {
             // todo: maybe unload the chunk after?
             // loadChunk(chunkID);
         }
 
-        Vec2iXZ xzPosInChunk = getXZInChunk(position);
+        Vec2i xzPosInChunk = getXZInChunk(position);
 
         int yPosInChunk = cast(int) floor(position.y);
 
@@ -203,19 +199,19 @@ public: //* BEGIN PUBLIC API.
             return;
         }
 
-        database[chunkID].data[xzPosInChunk.x][xzPosInChunk.z][yPosInChunk].blockID = blockID;
+        database[chunkID].data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = blockID;
     }
 
     void setBlockAtWorldPositionByName(Vec3d position, string name) {
 
-        Vec2iXZ chunkID = calculateChunkAtWorldPosition(position);
+        Vec2i chunkID = calculateChunkAtWorldPosition(position);
 
         if (chunkID !in database) {
             // todo: maybe unload the chunk after?
             // loadChunk(chunkID);
         }
 
-        Vec2iXZ xzPosInChunk = getXZInChunk(position);
+        Vec2i xzPosInChunk = getXZInChunk(position);
 
         int yPosInChunk = cast(int) floor(position.y);
 
@@ -231,13 +227,13 @@ public: //* BEGIN PUBLIC API.
             throw new Error("Cannot set to block " ~ name ~ ", does not exist.");
         }
 
-        database[chunkID].data[xzPosInChunk.x][xzPosInChunk.z][yPosInChunk].blockID = result
+        database[chunkID].data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = result
             .definition.id;
     }
 
-    void worldLoad(Vec2iXZ currentPlayerChunk) {
+    void worldLoad(Vec2i currentPlayerChunk) {
         foreach (x; currentPlayerChunk.x - 1 .. currentPlayerChunk.x + 2) {
-            foreach (z; currentPlayerChunk.z - 1 .. currentPlayerChunk.z + 2) {
+            foreach (z; currentPlayerChunk.y - 1 .. currentPlayerChunk.y + 2) {
                 writeln("loading chunk ", x, ",", z);
                 // loadChunk(i);
             }
@@ -328,15 +324,15 @@ private: //* BEGIN INTERNAL API.
     //     return hitGround;
     // }
 
-    void unloadOldChunks(Vec2iXZ currentPlayerChunk) {
+    void unloadOldChunks(Vec2i currentPlayerChunk) {
 
         // todo: save the chunks to mongoDB.
 
-        Vec2iXZ[] keys = [] ~ database.keys;
+        Vec2i[] keys = [] ~ database.keys;
 
-        foreach (Vec2iXZ key; keys) {
+        foreach (Vec2i key; keys) {
             // Todo: make this render distance instead of 1.
-            if (abs(key.x - currentPlayerChunk.x) > 1 || abs(key.z - currentPlayerChunk.z) > 1) {
+            if (abs(key.x - currentPlayerChunk.x) > 1 || abs(key.y - currentPlayerChunk.y) > 1) {
                 database.remove(key);
                 // todo: save the chunks to sqlite.
                 writeln("deleted: " ~ to!string(key));
@@ -344,7 +340,7 @@ private: //* BEGIN INTERNAL API.
         }
     }
 
-    void loadChunk(Vec2iXZ chunkPosition) {
+    void loadChunk(Vec2i chunkPosition) {
         // Already loaded.
         if (chunkPosition in database) {
             return;
@@ -355,7 +351,7 @@ private: //* BEGIN INTERNAL API.
         database[chunkPosition] = newChunk;
     }
 
-    void generateChunkData(Vec2iXZ chunkPosition, ref Chunk thisChunk) {
+    void generateChunkData(Vec2i chunkPosition, ref Chunk thisChunk) {
 
         // todo: the chunk should have a biome.
         BiomeDefinitionResult biomeResult = BiomeDatabase.getBiomeByID(0);
@@ -368,7 +364,7 @@ private: //* BEGIN INTERNAL API.
         immutable double baseHeight = 160;
 
         immutable int basePositionX = chunkPosition.x * CHUNK_WIDTH;
-        immutable int basePositionZ = chunkPosition.z * CHUNK_WIDTH;
+        immutable int basePositionZ = chunkPosition.y * CHUNK_WIDTH;
 
         BlockDefinitionResult bedrockResult = BlockDatabase.getBlockByName("bedrock");
         if (!bedrockResult.exists) {
