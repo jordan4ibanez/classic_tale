@@ -291,18 +291,6 @@ void main() {
 	FaceGeneration faces = FaceGeneration(false, false, false, false, true, false);
 	makeCube(Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), faces, tex);
 
-	// float[] textureCoordinates = [
-
-	// 	// Bottom.
-	// 	points.topLeft.x, points.topLeft.y, // 0
-	// 	points.bottomLeft.x, points.bottomLeft.y, // 1
-	// 	points.bottomRight.x, points.bottomRight.y, // 2
-
-	// 	points.bottomRight.x, points.bottomRight.y, // 2
-	// 	points.topRight.x, points.topRight.y, // 3
-	// 	points.topLeft.x, points.topLeft.y, // 0
-	// ];
-
 	ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
 
 	while (!WindowShouldClose()) {
