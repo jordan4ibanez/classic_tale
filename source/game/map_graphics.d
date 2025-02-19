@@ -137,6 +137,10 @@ private:
         ulong vertexAllocation = 0;
         ulong textureCoordAllocation = 0;
 
+        // Neighbor checks.
+        // const(Chunk*) neighborLeft = Map.getChunkPointer(chunkKey.x -1, chunkKey.y);
+        // immutable bool neighborLeftExists = neighborLeft !is null;
+
         // Preallocation.
         foreach (immutable x; 0 .. CHUNK_WIDTH) {
             foreach (immutable z; 0 .. CHUNK_WIDTH) {
