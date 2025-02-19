@@ -64,6 +64,11 @@ public: //* BEGIN PUBLIC API.
                 rectangle.h
             );
         }
+
+        // Final rehash.
+        texturePointDatabase = texturePointDatabase.rehash();
+        textureRectangleDatabase = textureRectangleDatabase.rehash();
+
         // Then all of this will be GCed. :)
     }
 

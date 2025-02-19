@@ -93,6 +93,9 @@ public: //* BEGIN PUBLIC API.
             debugWrite(thisDefinition);
         }
 
+        // Final rehash.
+        idDatabase = idDatabase.rehash();
+        nameDatabase = nameDatabase.rehash();
     }
 
 private: //* BEGIN INTERNAL API.
