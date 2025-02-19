@@ -111,7 +111,7 @@ public: //* BEGIN PUBLIC API.
 
     int getIDFromName(string name) {
         int* thisID = name in nameToIndexDatabase;
-        
+
         if (thisID is null) {
             throw new Error("Tried to get ID of null texture " ~ name);
         }
@@ -120,14 +120,8 @@ public: //* BEGIN PUBLIC API.
     }
 
     const(TexturePoints!(Vec2d)*) getPointsByID(int id) {
-        // todo: turn off safety check.
-        const TexturePoints!(Vec2d)* output = id in texturePointIndexDatabase;
-
-        if (output is null) {
-            throw new Error("Tried to get null texture points for " ~ to!string(id));
-        }
-
-        return output;
+        //? Note: this is tuned for speed. Don't use this in mods.
+        return id in texturePointIndexDatabase;
     }
 
     Texture2D* getAtlasPointer() {
