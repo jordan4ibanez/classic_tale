@@ -250,12 +250,40 @@ private:
             const Vec3d topRight /*3*/ ) {
             // Tri 1.
             vertices ~= topLeft.toFloatArray(); // 0
-            vertices ~= bottomLeft.toFloatArray(); // 1
-            vertices ~= bottomRight.toFloatArray(); // 2
+            vertices[vertIndex .. vertIndex + 3] = topLeft.toFloatArray(); // 0
+            vertIndex += 3;
+            vertices[vertIndex .. vertIndex + 3] = bottomLeft.toFloatArray(); // 1
+            vertIndex += 3;
+            vertices[vertIndex .. vertIndex + 3] = bottomRight.toFloatArray(); // 2
+            vertIndex += 3;
             // Tri 2.
-            vertices ~= bottomRight.toFloatArray(); // 2
-            vertices ~= topRight.toFloatArray(); // 3
-            vertices ~= topLeft.toFloatArray(); // 0
+            vertices[vertIndex .. vertIndex + 3] = bottomRight.toFloatArray(); // 2
+            vertIndex += 3;
+            vertices[vertIndex .. vertIndex + 3] = topRight.toFloatArray(); // 3
+            vertIndex += 3;
+            vertices[vertIndex .. vertIndex + 3] = topLeft.toFloatArray(); // 0
+            vertIndex += 3;
+        }
+
+        pragma(inline, true)
+        void makeTextureQuad(
+            const Vec2d topLeft,
+            const Vec2d bottomLeft,
+            const Vec2d bottomRight,
+            const Vec2d topRight,
+        ) {
+            textureCoordinates[textIndex .. textIndex + 2] = topLeft.toFloatArray(); // 0
+            textIndex += 2;
+            textureCoordinates[textIndex .. textIndex + 2] = bottomLeft.toFloatArray(); // 1
+            textIndex += 2;
+            textureCoordinates[textIndex .. textIndex + 2] = bottomRight.toFloatArray(); // 2
+            textIndex += 2;
+            textureCoordinates[textIndex .. textIndex + 2] = bottomRight.toFloatArray(); // 2
+            textIndex += 2;
+            textureCoordinates[textIndex .. textIndex + 2] = topRight.toFloatArray(); // 3
+            textIndex += 2;
+            textureCoordinates[textIndex .. textIndex + 2] = topLeft.toFloatArray(); // 0
+            textIndex += 2;
         }
 
         /*
