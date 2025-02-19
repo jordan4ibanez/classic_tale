@@ -155,22 +155,22 @@ private:
                     // Todo: this needs a visual check.
                     // Todo: this needs a neighbor check.
 
-                    if (x - 1 < 0 || thisChunk.data[x - 1][z][y].blockID == 0) {
-                        vertexAllocation += 18;
-                        textureCoordAllocation += 12;
-                    }
-
-                    if (x + 1 >= CHUNK_WIDTH || thisChunk.data[x + 1][z][y].blockID == 0) {
-                        vertexAllocation += 18;
-                        textureCoordAllocation += 12;
-                    }
-
                     if (z - 1 < 0 || thisChunk.data[x][z - 1][y].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
                     }
 
                     if (z + 1 >= CHUNK_WIDTH || thisChunk.data[x][z + 1][y].blockID == 0) {
+                        vertexAllocation += 18;
+                        textureCoordAllocation += 12;
+                    }
+
+                    if (x - 1 < 0 || thisChunk.data[x - 1][z][y].blockID == 0) {
+                        vertexAllocation += 18;
+                        textureCoordAllocation += 12;
+                    }
+
+                    if (x + 1 >= CHUNK_WIDTH || thisChunk.data[x + 1][z][y].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
                     }
@@ -231,22 +231,22 @@ private:
                     faceGen.top = false;
                     faceGen.bottom = false;
 
-                    if (x - 1 < 0 || thisChunk.data[x - 1][z][y].blockID == 0) {
-                        vertexAllocation += 18;
-                        textureCoordAllocation += 12;
-                    }
-
-                    if (x + 1 >= CHUNK_WIDTH || thisChunk.data[x + 1][z][y].blockID == 0) {
-                        vertexAllocation += 18;
-                        textureCoordAllocation += 12;
-                    }
-
                     if (z - 1 < 0 || thisChunk.data[x][z - 1][y].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
                     }
 
                     if (z + 1 >= CHUNK_WIDTH || thisChunk.data[x][z + 1][y].blockID == 0) {
+                        vertexAllocation += 18;
+                        textureCoordAllocation += 12;
+                    }
+
+                    if (x - 1 < 0 || thisChunk.data[x - 1][z][y].blockID == 0) {
+                        vertexAllocation += 18;
+                        textureCoordAllocation += 12;
+                    }
+
+                    if (x + 1 >= CHUNK_WIDTH || thisChunk.data[x + 1][z][y].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
                     }
