@@ -6,6 +6,7 @@ import math.vec2d;
 import math.vec2i;
 import raylib;
 import std.container;
+import std.conv;
 import std.file;
 import std.path;
 import std.regex;
@@ -17,6 +18,10 @@ alias TexPoints = const(TexturePoints!Vec2d*);
 static final const class TextureHandler {
 static:
 private:
+
+    // This is an aggressive micro optimization.
+    TexturePoints!Vec2d[int] texturePointIndexDatabase;
+    int[string] nameToIndexDatabase;
 
     TexturePoints!Vec2d[string] texturePointDatabase;
     Rect[string] textureRectangleDatabase;
@@ -65,9 +70,17 @@ public: //* BEGIN PUBLIC API.
             );
         }
 
+        // Aggressive micro optimization.
+        foreach (index, key; texturePointDatabase.keys) {
+            nameToIndexDatabase[key] = cast(int) index;
+            texturePointIndexDatabase[cast(int) index] = texturePointDatabase[key];
+        }
+
         // Final rehash.
         texturePointDatabase = texturePointDatabase.rehash();
         textureRectangleDatabase = textureRectangleDatabase.rehash();
+        nameToIndexDatabase = nameToIndexDatabase.rehash();
+        texturePointIndexDatabase = texturePointIndexDatabase.rehash();
 
         // Then all of this will be GCed. :)
     }
@@ -88,8 +101,30 @@ public: //* BEGIN PUBLIC API.
 
     const(TexturePoints!(Vec2d)*) getPoints(string name) {
         const TexturePoints!(Vec2d)* output = name in texturePointDatabase;
+
         if (output is null) {
             throw new Error("Tried to get null texture points for " ~ name);
+        }
+
+        return output;
+    }
+
+    int getIDFromName(string name) {
+        int* thisID = name in nameToIndexDatabase;
+        
+        if (thisID is null) {
+            throw new Error("Tried to get ID of null texture " ~ name);
+        }
+
+        return *thisID;
+    }
+
+    const(TexturePoints!(Vec2d)*) getPointsByID(int id) {
+        // todo: turn off safety check.
+        const TexturePoints!(Vec2d)* output = id in texturePointIndexDatabase;
+
+        if (output is null) {
+            throw new Error("Tried to get null texture points for " ~ to!string(id));
         }
 
         return output;
