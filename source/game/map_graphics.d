@@ -249,7 +249,6 @@ private:
             const Vec3d bottomRight, /*2*/
             const Vec3d topRight /*3*/ ) {
             // Tri 1.
-            vertices ~= topLeft.toFloatArray(); // 0
             vertices[vertIndex .. vertIndex + 3] = topLeft.toFloatArray(); // 0
             vertIndex += 3;
             vertices[vertIndex .. vertIndex + 3] = bottomLeft.toFloatArray(); // 1
