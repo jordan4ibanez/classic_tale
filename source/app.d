@@ -61,8 +61,6 @@ void main() {
 
 		// writeln(ModelHandler.modelExists("Chunk:0|0"));
 
-		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 10, 10, 30, Colors.BLACK);
-
 		foreach (_; 0 .. uniform(1_000, 100_000, rand)) {
 			Vec3d target;
 			target.x = uniform(0.0, 16.0, rand);
@@ -77,7 +75,6 @@ void main() {
 		MapGraphics.generate(blah);
 
 		CameraHandler.begin();
-
 		{
 
 			ModelHandler.draw("Chunk:0|0", Vec3d(0, 0, 0));
@@ -86,8 +83,11 @@ void main() {
 
 			// DrawCube(Vector3(0, 0, 0), 0.1, 0.1, 0.1, Colors.RED);
 		}
-
 		CameraHandler.end();
+
+		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 10, 10, 30, Colors.BLACK);
+		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 11, 11, 30, Colors.BLUE);
+
 		EndDrawing();
 	}
 
