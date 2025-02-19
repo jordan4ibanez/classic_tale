@@ -18,6 +18,11 @@ import std.random;
 import std.stdio;
 import utility.window;
 
+private struct Vec2Chunk {
+    int x = 0;
+    int z = 0;
+}
+
 // Width is for X and Z.
 immutable public int CHUNK_WIDTH = 32;
 immutable public int CHUNK_HEIGHT = 256;
