@@ -86,16 +86,16 @@ public: //* BEGIN PUBLIC API.
     }
 
     Vec2i getXZInChunk(Vec3d position) {
-        int resultX = cast(int) floor(position.x % CHUNK_WIDTH);
-        int resultZ = cast(int) floor(position.z % CHUNK_WIDTH);
+        int x = cast(int) floor(position.x % CHUNK_WIDTH);
+        int z = cast(int) floor(position.z % CHUNK_WIDTH);
         // Account for negatives.
-        if (resultX < 0) {
-            resultX += CHUNK_WIDTH;
+        if (x < 0) {
+            x += CHUNK_WIDTH;
         }
-        if (resultZ < 0) {
-            resultZ += CHUNK_WIDTH;
+        if (z < 0) {
+            z += CHUNK_WIDTH;
         }
-        return Vec2i(resultX, resultZ);
+        return Vec2i(x, z);
     }
 
     ChunkData getBlockAtWorldPosition(Vec3d position) {
