@@ -6,6 +6,7 @@ import graphics.texture_handler;
 import math.vec2d;
 import math.vec2i;
 import math.vec3d;
+import mods.api;
 import raylib;
 import std.conv;
 import std.stdio;
@@ -35,6 +36,8 @@ void main() {
 	scope (exit) {
 		ModelHandler.terminate();
 	}
+
+	Api.initialize();
 
 	// FaceTextures tex = "testing.png";
 	// FaceGeneration faces = AllFaces;
