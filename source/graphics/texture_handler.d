@@ -71,7 +71,7 @@ public: //* BEGIN PUBLIC API.
         return (textureName in texturePointDatabase) !is null;
     }
 
-    Vec2d textureSize(string textureName) {
+    Vec2d getSize(string textureName) {
 
         Rect* thisRect = textureName in textureRectangleDatabase;
         if (thisRect is null) {
