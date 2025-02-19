@@ -46,29 +46,6 @@ void main() {
 	SetTraceLogLevel(TraceLogLevel.LOG_ERROR);
 	validateRaylibBinding();
 
-	{
-		auto blah = AllFaces;
-
-		writeln(blah);
-
-		writeln(blah.front);
-		writeln(blah.back);
-		writeln(blah.left);
-		writeln(blah.right);
-		writeln(blah.top);
-		writeln(blah.bottom);
-
-		blah = NoFaces;
-		writeln(blah);
-
-		writeln(blah.front);
-		writeln(blah.back);
-		writeln(blah.left);
-		writeln(blah.right);
-		writeln(blah.top);
-		writeln(blah.bottom);
-	}
-
 	InitWindow(1000, 1000, "Classic Fable Prototyping");
 	scope (exit) {
 		CloseWindow();
