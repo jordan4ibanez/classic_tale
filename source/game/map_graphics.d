@@ -138,9 +138,9 @@ private:
         ulong textureCoordAllocation = 0;
 
         // Preallocation.
-        foreach (x; 0 .. CHUNK_WIDTH) {
-            foreach (z; 0 .. CHUNK_WIDTH) {
-                foreach (y; 0 .. CHUNK_HEIGHT) {
+        foreach (immutable x; 0 .. CHUNK_WIDTH) {
+            foreach (immutable z; 0 .. CHUNK_WIDTH) {
+                foreach (immutable y; 0 .. CHUNK_HEIGHT) {
 
                     // todo: undo this worst case scenario prototyping.
                     const BlockData* thisData = &thisChunk.data[x][z][y];
@@ -169,9 +169,9 @@ private:
 
         FaceGeneration faceGen = AllFaces;
 
-        foreach (x; 0 .. CHUNK_WIDTH) {
-            foreach (z; 0 .. CHUNK_WIDTH) {
-                foreach (y; 0 .. CHUNK_HEIGHT) {
+        foreach (immutable x; 0 .. CHUNK_WIDTH) {
+            foreach (immutable z; 0 .. CHUNK_WIDTH) {
+                foreach (immutable y; 0 .. CHUNK_HEIGHT) {
 
                     const BlockData* thisData = &thisChunk.data[x][z][y];
 
