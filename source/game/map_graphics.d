@@ -169,6 +169,10 @@ private:
 
         FaceGeneration faceGen = AllFaces;
 
+        Vec3d pos;
+        Vec3d min = Vec3d(0, 0, 0);
+        Vec3d max = Vec3d(1, 1, 1);
+
         foreach (immutable x; 0 .. CHUNK_WIDTH) {
             foreach (immutable z; 0 .. CHUNK_WIDTH) {
                 foreach (immutable y; 0 .. CHUNK_HEIGHT) {
@@ -184,10 +188,12 @@ private:
 
                     faceTextures.update(thisDefinition.textureIDs.ptr);
 
-                    const pos = Vec3d(x, y, z);
+                    pos.x = x;
+                    pos.y = y;
+                    pos.z = z;
 
-                    makeCube(vertIndex, textIndex, vertices.ptr, textureCoordinates.ptr, pos, Vec3d(0, 0, 0),
-                        Vec3d(1, 1, 1), &faceGen, &faceTextures);
+                    makeCube(vertIndex, textIndex, vertices.ptr, textureCoordinates.ptr, pos, min,
+                        max, &faceGen, &faceTextures);
 
                 }
             }
