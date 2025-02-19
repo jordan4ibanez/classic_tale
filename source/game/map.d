@@ -398,44 +398,47 @@ private: //* BEGIN INTERNAL API.
             throw new Error("Grass does not exist for biome " ~ biomeResult.definition.name);
         }
 
-        // foreach (x; 0 .. CHUNK_WIDTH) {
+        foreach (x; 0 .. CHUNK_WIDTH) {
+            foreach (z; 0 .. CHUNK_WIDTH) {
 
-        //     immutable double selectedNoise = fnlGetNoise2D(&noise, x + basePositionX, 0);
+                immutable double selectedNoise = fnlGetNoise2D(&noise, x + basePositionX, z + basePositionZ);
 
-        //     immutable double noiseScale = 20;
+                immutable double noiseScale = 20;
 
-        //     immutable int selectedHeight = cast(int) floor(
-        //         baseHeight + (selectedNoise * noiseScale));
+                immutable int selectedHeight = cast(int) floor(
+                    baseHeight + (selectedNoise * noiseScale));
 
-        //     immutable int grassLayer = selectedHeight;
-        //     immutable int dirtLayer = selectedHeight - 3;
+                immutable int grassLayer = selectedHeight;
+                immutable int dirtLayer = selectedHeight - 3;
 
-        //     immutable double bedRockNoise = fnlGetNoise2D(&noise, (x + basePositionX) * 12, 0) * 2;
-        //     immutable int bedRockSelectedHeight = cast(int) round(abs(bedRockNoise));
+                immutable double bedRockNoise = fnlGetNoise2D(&noise, (x + basePositionX) * 12, (
+                        z + basePositionZ) * 12) * 2;
+                immutable int bedRockSelectedHeight = cast(int) round(abs(bedRockNoise));
 
-        //     yStack: foreach (y; 0 .. CHUNK_HEIGHT) {
+                yStack: foreach (y; 0 .. CHUNK_HEIGHT) {
 
-        //         if (y > selectedHeight) {
-        //             break yStack;
-        //         }
+                    if (y > selectedHeight) {
+                        break yStack;
+                    }
 
-        //         if (y == 0) {
-        //             thisChunk.data[x][y].blockID = bedrockResult.definition.id;
-        //         } else if (y <= 2) {
-        //             if (y <= bedRockSelectedHeight) {
-        //                 thisChunk.data[x][y].blockID = bedrockResult.definition.id;
-        //             } else {
-        //                 thisChunk.data[x][y].blockID = stoneResult.definition.id;
-        //             }
-        //         } else if (y < dirtLayer) {
-        //             thisChunk.data[x][y].blockID = stoneResult.definition.id;
-        //         } else if (y < grassLayer) {
-        //             thisChunk.data[x][y].blockID = dirtResult.definition.id;
-        //         } else if (y == grassLayer) {
-        //             thisChunk.data[x][y].blockID = grassResult.definition.id;
-        //         }
-        //     }
-        // }
+                    if (y == 0) {
+                        thisChunk.data[x][z][y].blockID = bedrockResult.definition.id;
+                    } else if (y <= 2) {
+                        if (y <= bedRockSelectedHeight) {
+                            thisChunk.data[x][z][y].blockID = bedrockResult.definition.id;
+                        } else {
+                            thisChunk.data[x][z][y].blockID = stoneResult.definition.id;
+                        }
+                    } else if (y < dirtLayer) {
+                        thisChunk.data[x][z][y].blockID = stoneResult.definition.id;
+                    } else if (y < grassLayer) {
+                        thisChunk.data[x][z][y].blockID = dirtResult.definition.id;
+                    } else if (y == grassLayer) {
+                        thisChunk.data[x][z][y].blockID = grassResult.definition.id;
+                    }
+                }
+            }
+        }
     }
 
 }
