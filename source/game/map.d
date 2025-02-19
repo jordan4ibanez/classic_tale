@@ -9,6 +9,7 @@ import graphics.render;
 import graphics.texture_handler;
 import math.rect;
 import math.vec2d;
+import math.vec2i;
 import std.algorithm.comparison;
 import std.conv;
 import std.math.algebraic;
@@ -33,7 +34,7 @@ static final const class Map {
 static:
 private:
 
-    Chunk[int] database;
+    Chunk[Vec2i] database;
     FNLState noise;
     // Vec2d[] debugDrawPoints = [];
     double gravity = 20.0;
