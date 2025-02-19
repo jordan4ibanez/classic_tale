@@ -75,14 +75,16 @@ void main() {
 	// Maybe this can have a numeric AA or array to hash this in immediate mode?
 	void makeCube(const Vec3d position, Vec3d min, Vec3d max, FaceGeneration faceGeneration, string[6] textures) {
 
-		assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
-		assert(max.x <= 1 && max.y <= 1 && max.z <= 1, "max is out of bounds");
+		// assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
+		// assert(max.x <= 1 && max.y <= 1 && max.z <= 1, "max is out of bounds");
+		// assert(max.x >= min.x && max.y >= min.y && max.z >= min.z, "Inverse axis");
 
-		assert(max.x >= min.x && max.y >= min.y && max.z >= min.z, "Inverse axis");
+		// immutable Vec3d originalMin = min;
+		// immutable Vec3d originalMax = max;
 
 		// Shift into position.
-		min = vec3dAdd(position, min);
-		max = vec3dAdd(position, max);
+		immutable Vec3d chunkPositionMin = vec3dAdd(position, min);
+		immutable Vec3d chunkPositionMax = vec3dAdd(position, max);
 
 		pragma(inline, true)
 		void makeQuad(
@@ -115,30 +117,35 @@ void main() {
 		// Front.
 		if (faceGeneration.front) {
 			makeQuad(
-				Vec3d(max.x, max.y, min.z),
-				Vec3d(max.x, min.y, min.z),
-				Vec3d(min.x, min.y, min.z),
-				Vec3d(min.x, max.y, min.z)
+				Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z),
+				Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
+				Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z),
+				Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z)
 			);
 
 			TexPoints points = TextureHandler.getPoints(textures[0]);
 
-			Vec2d textureSize = TextureHandler.getSize(textures[0]);
+			immutable Vec2d textureSize = TextureHandler.getSize(textures[0]);
 
-			double bottomTrim = min.y * textureSize.y;
+			immutable double bottomTrim = min.y * textureSize.y;
+			immutable double topTrim = (1.0 - max.y) * textureSize.y;
+
+			// These are flipped in application because you're looking at them from the front.
+			immutable double leftTrim = min.x * textureSize.x;
+			immutable double rightTrim = (1.0 - max.x) * textureSize.x;
 
 			textureCoordinates ~= [
-				points.topLeft.x, points.topLeft.y,
+				points.topLeft.x + rightTrim, points.topLeft.y + topTrim,
 
-				points.bottomLeft.x, points.bottomLeft.y - bottomTrim,
+				points.bottomLeft.x + rightTrim, points.bottomLeft.y - bottomTrim,
 
-				points.bottomRight.x, points.bottomRight.y - bottomTrim,
+				points.bottomRight.x - leftTrim, points.bottomRight.y - bottomTrim,
 
-				points.bottomRight.x, points.bottomRight.y - bottomTrim,
+				points.bottomRight.x - leftTrim, points.bottomRight.y - bottomTrim,
 
-				points.topRight.x, points.topRight.y,
+				points.topRight.x - leftTrim, points.topRight.y + topTrim,
 
-				points.topLeft.x, points.topLeft.y,
+				points.topLeft.x + rightTrim, points.topLeft.y + topTrim,
 			];
 
 		}
@@ -146,30 +153,30 @@ void main() {
 		// Back.
 		if (faceGeneration.back) {
 			makeQuad(
-				Vec3d(min.x, max.y, max.z),
-				Vec3d(min.x, min.y, max.z),
-				Vec3d(max.x, min.y, max.z),
-				Vec3d(max.x, max.y, max.z)
+				Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z),
+				Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
+				Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
+				Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z)
 			);
 		}
 
 		// Left.
 		if (faceGeneration.left) {
 			makeQuad(
-				Vec3d(min.x, max.y, min.z),
-				Vec3d(min.x, min.y, min.z),
-				Vec3d(min.x, min.y, max.z),
-				Vec3d(min.x, max.y, max.z)
+				Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z),
+				Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z),
+				Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
+				Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z)
 			);
 		}
 
 		// Right.
 		if (faceGeneration.right) {
 			makeQuad(
-				Vec3d(max.x, max.y, max.z),
-				Vec3d(max.x, min.y, max.z),
-				Vec3d(max.x, min.y, min.z),
-				Vec3d(max.x, max.y, min.z)
+				Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z),
+				Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
+				Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
+				Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z)
 			);
 		}
 
@@ -177,10 +184,10 @@ void main() {
 		// Top.
 		if (faceGeneration.top) {
 			makeQuad(
-				Vec3d(min.x, max.y, min.z),
-				Vec3d(min.x, max.y, max.z),
-				Vec3d(max.x, max.y, max.z),
-				Vec3d(max.x, max.y, min.z)
+				Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z),
+				Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z),
+				Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z),
+				Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z)
 			);
 		}
 
@@ -188,16 +195,16 @@ void main() {
 		// Bottom.
 		if (faceGeneration.bottom) {
 			makeQuad(
-				Vec3d(max.x, min.y, min.z),
-				Vec3d(max.x, min.y, max.z),
-				Vec3d(min.x, min.y, max.z),
-				Vec3d(min.x, min.y, min.z)
+				Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
+				Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
+				Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
+				Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z)
 			);
 		}
 	}
 
 	string[6] tex = "testing.png";
-	makeCube(Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 0.5, 1), AllFaces, tex);
+	makeCube(Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), AllFaces, tex);
 
 	// float[] textureCoordinates = [
 	// 	// Front.
@@ -269,7 +276,7 @@ void main() {
 
 			ModelHandler.draw("triangle", Vec3d(0, 0, 0));
 
-			// DrawCube(Vector3(0, 0, -5), 1, 1, 1, Colors.RED);
+			DrawCube(Vector3(0, 0, 0), 0.1, 0.1, 0.1, Colors.RED);
 		}
 
 		CameraHandler.end();
