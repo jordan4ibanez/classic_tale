@@ -35,14 +35,14 @@ void main() {
 
 	rlDisableBackfaceCulling();
 
-	float[] vertices;
-	float[] textureCoordinates;
+	// float[] vertices;
+	// float[] textureCoordinates;
 
-	FaceTextures tex = "testing.png";
-	FaceGeneration faces = AllFaces;
-	MapGraphics.makeCube(vertices, textureCoordinates, Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), faces, tex);
+	// FaceTextures tex = "testing.png";
+	// FaceGeneration faces = AllFaces;
+	// MapGraphics.makeCube(vertices, textureCoordinates, Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), faces, tex);
 
-	ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
+	// ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
 
 	while (!WindowShouldClose()) {
 		BeginDrawing();
@@ -54,7 +54,7 @@ void main() {
 
 		{
 
-			ModelHandler.draw("triangle", Vec3d(0, 0, 0));
+			// ModelHandler.draw("triangle", Vec3d(0, 0, 0));
 
 			DrawCube(Vector3(0, 0, 0), 0.1, 0.1, 0.1, Colors.RED);
 		}

@@ -1,7 +1,9 @@
 module game.map_graphics;
 
 import graphics.texture_handler;
+import hashset;
 import math.vec2d;
+import math.vec2i;
 import math.vec3d;
 import std.bitmanip;
 import std.meta;
@@ -54,11 +56,28 @@ struct FaceTextures {
     }
 }
 
+private struct PopResult {
+    bool exists = false;
+    Vec2i data;
+}
+
 static final const class MapGraphics {
 static:
 private:
 
+    HashSet!Vec2i generationQueue;
+
 public:
+
+    void generate(Vec2i chunkToGenerate) {
+        generationQueue.insert(chunkToGenerate);
+    }
+
+private:
+
+    PopResult pop() {
+        generationQueue.
+    }
 
     // Maybe this can have a numeric AA or array to hash this in immediate mode?
     void makeCube(ref float[] vertices, ref float[] textureCoordinates, const Vec3d position, Vec3d min, Vec3d max,
