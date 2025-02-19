@@ -102,16 +102,19 @@ void main() {
 		assert(width > 0 || height > 0 || depth > 0, "this cube is nothing!");
 
 		if (width == 0) {
+			writeln("squishing on X axis");
 			faceGeneration.front = false;
 			faceGeneration.back = false;
 			faceGeneration.top = false;
 			faceGeneration.bottom = false;
 		} else if (height == 0) {
+			writeln("squishing on Y axis");
 			faceGeneration.front = false;
 			faceGeneration.back = false;
-			faceGeneration.top = false;
-			faceGeneration.bottom = false;
+			faceGeneration.left = false;
+			faceGeneration.right = false;
 		} else if (depth == 0) {
+			writeln("squishing on Z axis");
 			faceGeneration.left = false;
 			faceGeneration.right = false;
 			faceGeneration.top = false;
