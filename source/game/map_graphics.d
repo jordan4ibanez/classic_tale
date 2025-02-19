@@ -237,32 +237,38 @@ private:
                     faceGen.top = false;
                     faceGen.bottom = false;
 
+                    // Front.
                     if (z - 1 < 0 || thisChunk.data[x][z - 1][y].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
                     }
 
+                    // Back.
                     if (z + 1 >= CHUNK_WIDTH || thisChunk.data[x][z + 1][y].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
                     }
 
+                    // Left.
                     if (x - 1 < 0 || thisChunk.data[x - 1][z][y].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
                     }
 
+                    // Right.
                     if (x + 1 >= CHUNK_WIDTH || thisChunk.data[x + 1][z][y].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
                     }
 
-                    if (y - 1 < 0 || thisChunk.data[x][z][y - 1].blockID == 0) {
+                    // Top.
+                    if (y + 1 >= CHUNK_HEIGHT || thisChunk.data[x][z][y + 1].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
                     }
 
-                    if (y + 1 >= CHUNK_HEIGHT || thisChunk.data[x][z][y + 1].blockID == 0) {
+                    // Bottom.
+                    if (y - 1 < 0 || thisChunk.data[x][z][y - 1].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
                     }
