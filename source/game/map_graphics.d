@@ -77,14 +77,15 @@ private:
 
     PopResult popQueue() {
         PopResult result;
+        if (generationQueue.length == 0) {
+            return result;
+        }
         foreach (Vec2i key; generationQueue) {
             result.data = key;
             result.exists = true;
             break;
         }
-        if (result.exists) {
-            generationQueue.erase(result.data);
-        }
+        generationQueue.erase(result.data);
         return result;
     }
 
