@@ -149,12 +149,12 @@ void main() {
 			immutable double rightTrim = (1.0 - max.x) * textureSize.x;
 
 			textureCoordinates ~= [
-				points.topLeft.x + rightTrim, points.topLeft.y + topTrim,
-				points.bottomLeft.x + rightTrim, points.bottomLeft.y - bottomTrim,
-				points.bottomRight.x - leftTrim, points.bottomRight.y - bottomTrim,
-				points.bottomRight.x - leftTrim, points.bottomRight.y - bottomTrim,
-				points.topRight.x - leftTrim, points.topRight.y + topTrim,
-				points.topLeft.x + rightTrim, points.topLeft.y + topTrim,
+				points.topLeft.x + rightTrim, points.topLeft.y + topTrim, // 0
+				points.bottomLeft.x + rightTrim, points.bottomLeft.y - bottomTrim, // 1
+				points.bottomRight.x - leftTrim, points.bottomRight.y - bottomTrim, // 2
+				points.bottomRight.x - leftTrim, points.bottomRight.y - bottomTrim, // 2
+				points.topRight.x - leftTrim, points.topRight.y + topTrim, // 3
+				points.topLeft.x + rightTrim, points.topLeft.y + topTrim, // 0
 			];
 
 		}
@@ -181,7 +181,6 @@ void main() {
 				points.topLeft.x + leftTrim, points.topLeft.y + topTrim, // 0
 				points.bottomLeft.x + leftTrim, points.bottomLeft.y - bottomTrim, // 1
 				points.bottomRight.x - rightTrim, points.bottomRight.y - bottomTrim, // 2
-
 				points.bottomRight.x - rightTrim, points.bottomRight.y - bottomTrim, // 2
 				points.topRight.x - rightTrim, points.topRight.y + topTrim, // 3
 				points.topLeft.x + leftTrim, points.topLeft.y + topTrim, // 0
