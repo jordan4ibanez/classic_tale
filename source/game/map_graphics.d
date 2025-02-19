@@ -98,6 +98,11 @@ private:
         return result;
     }
 
+    void createChunkMesh(Vec2i chunkKey) {
+        
+        
+    }
+
     // Maybe this can have a numeric AA or array to hash this in immediate mode?
     pragma(inline)
     void makeCube(ref float[] vertices, ref float[] textureCoordinates, const Vec3d position, Vec3d min, Vec3d max,
