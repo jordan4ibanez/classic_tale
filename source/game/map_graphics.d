@@ -7,6 +7,7 @@ import math.vec2i;
 import math.vec3d;
 import std.bitmanip;
 import std.meta;
+import std.stdio;
 
 struct FaceGeneration {
     mixin(bitfields!(
@@ -73,6 +74,14 @@ public:
         generationQueue.insert(chunkToGenerate);
     }
 
+    void __update() {
+        PopResult thisResult = popQueue();
+        if (!thisResult.exists) {
+            return;
+        }
+        writeln(thisResult.data);
+    }
+
 private:
 
     PopResult popQueue() {
@@ -90,6 +99,7 @@ private:
     }
 
     // Maybe this can have a numeric AA or array to hash this in immediate mode?
+    pragma(inline)
     void makeCube(ref float[] vertices, ref float[] textureCoordinates, const Vec3d position, Vec3d min, Vec3d max,
         FaceGeneration faceGeneration, FaceTextures textures) {
 
