@@ -216,7 +216,8 @@ void main() {
 	}
 
 	FaceTextures tex = "testing.png";
-	makeCube(Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), AllFaces, tex);
+	FaceGeneration faces = FaceGeneration(false, true, false, false, false, false);
+	makeCube(Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), faces, tex);
 
 	// float[] textureCoordinates = [
 
