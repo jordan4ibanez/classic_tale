@@ -219,59 +219,51 @@ void main() {
 	makeCube(Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), AllFaces, tex);
 
 	// float[] textureCoordinates = [
-	// 	// Front.
-	// 	blah.topLeft.x, blah.topLeft.y, // 0
-	// 	blah.bottomLeft.x, blah.bottomLeft.y, // 1
-	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
-
-	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
-	// 	blah.topRight.x, blah.topRight.y, // 3
-	// 	blah.topLeft.x, blah.topLeft.y, // 0
 
 	// 	// Back.
-	// 	blah.topLeft.x, blah.topLeft.y, // 0
-	// 	blah.bottomLeft.x, blah.bottomLeft.y, // 1
-	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
+	// 	points.topLeft.x, points.topLeft.y, // 0
+	// 	points.bottomLeft.x, points.bottomLeft.y, // 1
+	// 	points.bottomRight.x, points.bottomRight.y, // 2
 
-	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
-	// 	blah.topRight.x, blah.topRight.y, // 3
-	// 	blah.topLeft.x, blah.topLeft.y, // 0
+	// 	points.bottomRight.x, points.bottomRight.y, // 2
+	// 	points.topRight.x, points.topRight.y, // 3
+	// 	points.topLeft.x, points.topLeft.y, // 0
 
 	// 	// Left.
-	// 	blah.topLeft.x, blah.topLeft.y, // 0
-	// 	blah.bottomLeft.x, blah.bottomLeft.y, // 1
-	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
+	// 	points.topLeft.x, points.topLeft.y, // 0
+	// 	points.bottomLeft.x, points.bottomLeft.y, // 1
+	// 	points.bottomRight.x, points.bottomRight.y, // 2
 
-	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
-	// 	blah.topRight.x, blah.topRight.y, // 3
-	// 	blah.topLeft.x, blah.topLeft.y, // 0
+	// 	points.bottomRight.x, points.bottomRight.y, // 2
+	// 	points.topRight.x, points.topRight.y, // 3
+	// 	points.topLeft.x, points.topLeft.y, // 0
 
 	// 	// Right.
-	// 	blah.topLeft.x, blah.topLeft.y, // 0
-	// 	blah.bottomLeft.x, blah.bottomLeft.y, // 1
-	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
+	// 	points.topLeft.x, points.topLeft.y, // 0
+	// 	points.bottomLeft.x, points.bottomLeft.y, // 1
+	// 	points.bottomRight.x, points.bottomRight.y, // 2
 
-	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
-	// 	blah.topRight.x, blah.topRight.y, // 3
-	// 	blah.topLeft.x, blah.topLeft.y, // 0
+	// 	points.bottomRight.x, points.bottomRight.y, // 2
+	// 	points.topRight.x, points.topRight.y, // 3
+	// 	points.topLeft.x, points.topLeft.y, // 0
 
 	// 	// Top.
-	// 	blah.topLeft.x, blah.topLeft.y, // 0
-	// 	blah.bottomLeft.x, blah.bottomLeft.y, // 1
-	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
+	// 	points.topLeft.x, points.topLeft.y, // 0
+	// 	points.bottomLeft.x, points.bottomLeft.y, // 1
+	// 	points.bottomRight.x, points.bottomRight.y, // 2
 
-	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
-	// 	blah.topRight.x, blah.topRight.y, // 3
-	// 	blah.topLeft.x, blah.topLeft.y, // 0
+	// 	points.bottomRight.x, points.bottomRight.y, // 2
+	// 	points.topRight.x, points.topRight.y, // 3
+	// 	points.topLeft.x, points.topLeft.y, // 0
 
 	// 	// Bottom.
-	// 	blah.topLeft.x, blah.topLeft.y, // 0
-	// 	blah.bottomLeft.x, blah.bottomLeft.y, // 1
-	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
+	// 	points.topLeft.x, points.topLeft.y, // 0
+	// 	points.bottomLeft.x, points.bottomLeft.y, // 1
+	// 	points.bottomRight.x, points.bottomRight.y, // 2
 
-	// 	blah.bottomRight.x, blah.bottomRight.y, // 2
-	// 	blah.topRight.x, blah.topRight.y, // 3
-	// 	blah.topLeft.x, blah.topLeft.y, // 0
+	// 	points.bottomRight.x, points.bottomRight.y, // 2
+	// 	points.topRight.x, points.topRight.y, // 3
+	// 	points.topLeft.x, points.topLeft.y, // 0
 	// ];
 
 	ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
