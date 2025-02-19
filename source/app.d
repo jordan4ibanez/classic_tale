@@ -9,6 +9,7 @@ import math.vec3d;
 import mods.api;
 import raylib;
 import std.conv;
+import std.random;
 import std.stdio;
 import std.string;
 import utility.window;
@@ -49,7 +50,9 @@ void main() {
 	Vec2i blah = Vec2i(0, 0);
 	MapGraphics.generate(blah);
 
-	while (!Window.shouldStayOpen()) {
+	auto rand = Random(unpredictableSeed());
+
+	while (Window.shouldStayOpen()) {
 
 		BeginDrawing();
 		ClearBackground(Colors.RAYWHITE);
@@ -57,6 +60,19 @@ void main() {
 		// writeln(ModelHandler.modelExists("Chunk:0|0"));
 
 		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 10, 10, 30, Colors.BLACK);
+
+		foreach (_; 0 .. uniform(1000, 10000, rand)) {
+			Vec3d target;
+			target.x = uniform(0.0, 16.0, rand);
+			target.z = uniform(0.0, 16.0, rand);
+			target.y = uniform(0.0, 164.0, rand);
+
+			int blockID = uniform(0, 5, rand);
+
+			Map.setBlockAtWorldPositionByID(target, blockID);
+		}
+
+		MapGraphics.generate(blah);
 
 		CameraHandler.begin();
 
