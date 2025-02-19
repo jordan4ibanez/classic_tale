@@ -203,9 +203,9 @@ private:
     }
 
     // Maybe this can have a numeric AA or array to hash this in immediate mode?
-    pragma(inline)
-    void makeCube(ref float[] vertices, ref float[] textureCoordinates, const Vec3d position, Vec3d min, Vec3d max,
-        FaceGeneration faceGeneration, FaceTextures textures) {
+    // pragma(inline)
+    void makeCube(ref ulong vertIndex, ref ulong textIndex, ref float[] vertices, ref float[] textureCoordinates,
+        const Vec3d position, Vec3d min, Vec3d max, FaceGeneration faceGeneration, FaceTextures textures) {
 
         assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
         assert(max.x <= 1 && max.y <= 1 && max.z <= 1, "max is out of bounds");
