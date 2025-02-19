@@ -48,6 +48,12 @@ struct FaceTextures {
 	string right = null;
 	string top = null;
 	string bottom = null;
+
+	this(string allFaces) {
+		foreach (ref component; this.tupleof) {
+			component = allFaces;
+		}
+	}
 }
 
 void main() {
@@ -82,7 +88,7 @@ void main() {
 	float[] textureCoordinates;
 
 	// Maybe this can have a numeric AA or array to hash this in immediate mode?
-	void makeCube(const Vec3d position, Vec3d min, Vec3d max, FaceGeneration faceGeneration, string[6] textures) {
+	void makeCube(const Vec3d position, Vec3d min, Vec3d max, FaceGeneration faceGeneration, FaceTextures textures) {
 
 		// assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
 		// assert(max.x <= 1 && max.y <= 1 && max.z <= 1, "max is out of bounds");
@@ -132,8 +138,8 @@ void main() {
 				Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z)
 			);
 
-			TexPoints points = TextureHandler.getPoints(textures[0]);
-			immutable Vec2d textureSize = TextureHandler.getSize(textures[0]);
+			TexPoints points = TextureHandler.getPoints(textures.front);
+			immutable Vec2d textureSize = TextureHandler.getSize(textures.front);
 
 			immutable double bottomTrim = min.y * textureSize.y;
 			immutable double topTrim = (1.0 - max.y) * textureSize.y;
@@ -162,8 +168,8 @@ void main() {
 				Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z)
 			);
 
-			TexPoints points = TextureHandler.getPoints(textures[1]);
-			immutable Vec2d textureSize = TextureHandler.getSize(textures[1]);
+			TexPoints points = TextureHandler.getPoints(textures.back);
+			immutable Vec2d textureSize = TextureHandler.getSize(textures.back);
 		}
 
 		// Left.
@@ -209,7 +215,7 @@ void main() {
 		}
 	}
 
-	string[6] tex = "testing.png";
+	FaceTextures tex = "testing.png";
 	makeCube(Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), AllFaces, tex);
 
 	// float[] textureCoordinates = [
