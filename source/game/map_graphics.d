@@ -1,5 +1,6 @@
 module game.map_graphics;
 
+import game.block_database;
 import game.map;
 import graphics.texture_handler;
 import hashset;
@@ -130,12 +131,18 @@ private:
         foreach (x; 0 .. CHUNK_WIDTH) {
             foreach (z; 0 .. CHUNK_WIDTH) {
                 foreach (y; 0 .. CHUNK_HEIGHT) {
-                    if (thisChunk.data[x][z][y].blockID == 0) {
+
+                    const BlockData* thisData = &thisChunk.data[x][z][y];
+
+                    if (thisData.blockID == 0) {
                         continue;
                     }
 
+                    const BlockDefinition* thisDefinition = BlockDatabase.getBlockByID(
+                        thisData.blockID);
 
-                    // makeCube(vertices, textureCoordinates, Vec3d(x, y, z), Vec3d(0, 0, 0), Vec3d(1, 1, 1), AllFaces, FaceTextures())
+                    makeCube(vertices, textureCoordinates, Vec3d(x, y, z), Vec3d(0, 0, 0), Vec3d(1, 1, 1), AllFaces,
+                        FaceTextures(thisDefinition.textures));
 
                 }
             }
