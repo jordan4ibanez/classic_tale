@@ -40,6 +40,8 @@ void main() {
 
 	Api.initialize();
 
+	// rlDisableBackfaceCulling();
+
 	// FaceTextures tex = "testing.png";
 	// FaceGeneration faces = AllFaces;
 	// MapGraphics.makeCube(vertices, textureCoordinates, Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), faces, tex);
@@ -61,11 +63,11 @@ void main() {
 
 		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 10, 10, 30, Colors.BLACK);
 
-		foreach (_; 0 .. uniform(1000, 10_000, rand)) {
+		foreach (_; 0 .. uniform(1_000, 100_000, rand)) {
 			Vec3d target;
 			target.x = uniform(0.0, 16.0, rand);
 			target.z = uniform(0.0, 16.0, rand);
-			target.y = uniform(0.0, 164.0, rand);
+			target.y = uniform(0.0, 255.0, rand);
 
 			int blockID = uniform(0, 5, rand);
 
