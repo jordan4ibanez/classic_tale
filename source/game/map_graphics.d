@@ -182,8 +182,8 @@ private:
 
                     faceTextures.update(thisDefinition.textures);
 
-                    makeCube(vertIndex, textIndex, vertices, textureCoordinates, Vec3d(x, y, z), Vec3d(0, 0, 0), Vec3d(
-                            1, 1, 1), AllFaces, faceTextures);
+                    makeCube(vertIndex, textIndex, vertices.ptr, textureCoordinates.ptr, Vec3d(x, y, z), Vec3d(0, 0, 0),
+                        Vec3d(1, 1, 1), AllFaces, faceTextures);
 
                 }
             }
@@ -204,7 +204,7 @@ private:
 
     // Maybe this can have a numeric AA or array to hash this in immediate mode?
     // pragma(inline)
-    void makeCube(ref ulong vertIndex, ref ulong textIndex, ref float[] vertices, ref float[] textureCoordinates,
+    void makeCube(ref ulong vertIndex, ref ulong textIndex, float* vertices, float* textureCoordinates,
         const Vec3d position, Vec3d min, Vec3d max, FaceGeneration faceGeneration, FaceTextures textures) {
 
         assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
