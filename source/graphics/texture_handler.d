@@ -19,6 +19,8 @@ static:
 private:
 
     TexturePoints!Vec2d[string] texturePointDatabase;
+    Rect[string] textureRectangleDatabase;
+
     Texture2D* atlas;
     int atlasWidth = 0;
     int atlasHeight = 0;
@@ -42,6 +44,27 @@ public: //* BEGIN PUBLIC API.
         atlasHeight = atlas.height;
 
         database.extractTexturePoints(texturePointDatabase);
+
+        // This is just a small bolt on to transfer the types over.
+        struct RectTemp {
+            double x = 0;
+            double y = 0;
+            double w = 0;
+            double h = 0;
+        }
+
+        RectTemp[string] tempDatabase;
+        database.extractRectangles(tempDatabase);
+
+        foreach (key, rectangle; tempDatabase) {
+            textureRectangleDatabase[key] = Rect(
+                rectangle.x,
+                rectangle.y,
+                rectangle.w,
+                rectangle.h
+            );
+        }
+        // Then all of this will be GCed. :)
     }
 
     bool hasTexture(string textureName) {
