@@ -38,11 +38,11 @@ public: //* BEGIN PUBLIC API.
         string modelName, Vec3d position, Vec3d rotation = Vec3d(0, 0, 0),
         float scale = 1.0, Color color = Colors.WHITE) {
 
-        if (modelName !in database) {
+        Model* thisModel = database[modelName];
+
+        if (thisModel is null) {
             throw new Error("[ModelManager]: Cannot draw model that does not exist. " ~ modelName);
         }
-
-        Model* thisModel = database[modelName];
 
         // Have to jump through some hoops to rotate the model correctly.
         Quat quat = quatFromEuler(rotation.x, rotation.y, rotation.z);
@@ -119,12 +119,13 @@ public: //* BEGIN PUBLIC API.
 
     void setModelShader(string modelName, string shaderName) {
 
-        if (modelName !in database) {
+        Model* thisModel = database[modelName];
+
+        if (thisModel is null) {
             throw new Error(
                 "[ModelManager]: Tried to set shader on non-existent model [" ~ modelName ~ "]");
         }
 
-        Model* thisModel = database[modelName];
         Shader* thisShader = ShaderHandler.getShaderPointer(shaderName);
         foreach (index; 0 .. thisModel.materialCount) {
             thisModel.materials[index].shader = *thisShader;
@@ -132,12 +133,14 @@ public: //* BEGIN PUBLIC API.
     }
 
     Model* getModelPointer(string modelName) {
-        if (modelName !in database) {
+        Model* thisModel = database[modelName];
+
+        if (thisModel is null) {
             throw new Error(
                 "[ModelManager]: Tried to set get non-existent model pointer [" ~ modelName ~ "]");
         }
 
-        return database[modelName];
+        return thisModel;
     }
 
     void updateModelInGPU(string modelName) {
@@ -169,11 +172,11 @@ public: //* BEGIN PUBLIC API.
     }
 
     void destroy(string modelName) {
-        if (modelName !in database) {
+        Model* thisModel = database[modelName];
+
+        if (thisModel is null) {
             throw new Error("[ModelManager]: Tried to destroy non-existent model. " ~ modelName);
         }
-
-        Model* thisModel = database[modelName];
 
         destroyModel(modelName, thisModel);
 
@@ -193,12 +196,13 @@ public: //* BEGIN PUBLIC API.
     }
 
     void playAnimation(string modelName, int index, int frame) {
-        if (modelName !in database) {
+
+        Model* thisModel = database[modelName];
+
+        if (thisModel is null) {
             throw new Error(
                 "[ModelManager]: Tried to play animation on non-existent model. " ~ modelName);
         }
-
-        Model* thisModel = database[modelName];
 
         AnimationContainer thisAnimation = animationDatabase[modelName];
 
