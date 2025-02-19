@@ -75,7 +75,7 @@ public:
 
 private:
 
-    PopResult pop() {
+    PopResult popQueue() {
         PopResult result;
         foreach (Vec2i key; generationQueue) {
             result.data = key;
