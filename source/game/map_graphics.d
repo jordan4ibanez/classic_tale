@@ -164,27 +164,30 @@ private:
         float[] vertices = uninitializedArray!(float[])(vertexAllocation);
         float[] textureCoordinates = uninitializedArray!(float[])(textureCoordAllocation);
 
-        // foreach (x; 0 .. CHUNK_WIDTH) {
-        //     foreach (z; 0 .. CHUNK_WIDTH) {
-        //         foreach (y; 0 .. CHUNK_HEIGHT) {
+        ulong vertIndex = 0;
+        ulong textIndex = 0;
 
-        //             const BlockData* thisData = &thisChunk.data[x][z][y];
+        foreach (x; 0 .. CHUNK_WIDTH) {
+            foreach (z; 0 .. CHUNK_WIDTH) {
+                foreach (y; 0 .. CHUNK_HEIGHT) {
 
-        //             if (thisData.blockID == 0) {
-        //                 continue;
-        //             }
+                    const BlockData* thisData = &thisChunk.data[x][z][y];
 
-        //             const BlockDefinition* thisDefinition = BlockDatabase.getBlockByID(
-        //                 thisData.blockID);
+                    if (thisData.blockID == 0) {
+                        continue;
+                    }
 
-        //             faceTextures.update(thisDefinition.textures);
+                    const BlockDefinition* thisDefinition = BlockDatabase.getBlockByID(
+                        thisData.blockID);
 
-        //             // makeCube(vertices, textureCoordinates, Vec3d(x, y, z), Vec3d(0, 0, 0), Vec3d(1, 1, 1), AllFaces,
-        //             //     faceTextures);
+                    faceTextures.update(thisDefinition.textures);
 
-        //         }
-        //     }
-        // }
+                    // makeCube(vertices, textureCoordinates, Vec3d(x, y, z), Vec3d(0, 0, 0), Vec3d(1, 1, 1), AllFaces,
+                    //     faceTextures);
+
+                }
+            }
+        }
 
         writeln("took: ", sw.peek().total!"msecs", "ms");
 
