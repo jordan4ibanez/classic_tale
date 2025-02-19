@@ -99,7 +99,7 @@ public:
         if (!thisResult.exists) {
             return;
         }
-        writeln(thisResult.data);
+        // writeln(thisResult.data);
         createChunkMesh(thisResult.data);
     }
 
@@ -128,7 +128,7 @@ private:
             return;
         }
 
-        writeln("Generating chunk mesh " ~ to!string(chunkKey.x) ~ " " ~ to!string(chunkKey.y));
+        // writeln("Generating chunk mesh " ~ to!string(chunkKey.x) ~ " " ~ to!string(chunkKey.y));
 
         FaceTextures faceTextures;
 
@@ -159,7 +159,7 @@ private:
             }
         }
 
-        writeln(vertexAllocation, " ", textureCoordAllocation);
+        // writeln(vertexAllocation, " ", textureCoordAllocation);
 
         float[] vertices = uninitializedArray!(float[])(vertexAllocation);
         float[] textureCoordinates = uninitializedArray!(float[])(textureCoordAllocation);
@@ -199,7 +199,7 @@ private:
             }
         }
 
-        writeln("took: ", sw.peek().total!"msecs", "ms");
+        // writeln("took: ", sw.peek().total!"msecs", "ms");
 
         const string chunkMeshKey = generateKey(chunkKey);
 
