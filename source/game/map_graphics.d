@@ -153,6 +153,7 @@ private:
                         continue;
                     }
                     // Todo: this needs a visual check.
+                    // Todo: this needs a neighbor check.
 
                     if (x - 1 < 0 || thisChunk.data[x - 1][z][y].blockID == 0) {
                         vertexAllocation += 18;
