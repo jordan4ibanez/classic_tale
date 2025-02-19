@@ -41,6 +41,15 @@ struct FaceGeneration {
 alias AllFaces = Alias!(FaceGeneration(true));
 alias NoFaces = Alias!(FaceGeneration(false));
 
+struct FaceTextures {
+	string front = null;
+	string back = null;
+	string left = null;
+	string right = null;
+	string top = null;
+	string bottom = null;
+}
+
 void main() {
 	// call this before using raylib
 	SetTraceLogLevel(TraceLogLevel.LOG_ERROR);
@@ -124,7 +133,6 @@ void main() {
 			);
 
 			TexPoints points = TextureHandler.getPoints(textures[0]);
-
 			immutable Vec2d textureSize = TextureHandler.getSize(textures[0]);
 
 			immutable double bottomTrim = min.y * textureSize.y;
@@ -153,6 +161,9 @@ void main() {
 				Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
 				Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z)
 			);
+
+			TexPoints points = TextureHandler.getPoints(textures[1]);
+			immutable Vec2d textureSize = TextureHandler.getSize(textures[1]);
 		}
 
 		// Left.
