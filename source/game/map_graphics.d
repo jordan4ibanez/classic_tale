@@ -58,6 +58,8 @@ static final const class MapGraphics {
 static:
 private:
 
+public:
+
     // Maybe this can have a numeric AA or array to hash this in immediate mode?
     void makeCube(ref float[] vertices, ref float[] textureCoordinates, const Vec3d position, Vec3d min, Vec3d max,
         FaceGeneration faceGeneration, FaceTextures textures) {
