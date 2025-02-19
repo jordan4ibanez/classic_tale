@@ -195,8 +195,8 @@ void main() {
 				Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z)
 			);
 
-			TexPoints points = TextureHandler.getPoints(textures.back);
-			immutable Vec2d textureSize = TextureHandler.getSize(textures.back);
+			TexPoints points = TextureHandler.getPoints(textures.left);
+			immutable Vec2d textureSize = TextureHandler.getSize(textures.left);
 
 			// Z axis gets kind of weird since it's inverted.
 
