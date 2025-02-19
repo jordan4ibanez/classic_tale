@@ -210,7 +210,7 @@ public: //* BEGIN PUBLIC API.
         return animationDatabase[modelName];
     }
 
-    //* BEGIN INTERNAL API.
+private: //* BEGIN INTERNAL API.
 
     void destroyModel(string modelName, Model* thisModel) {
         // If we were using the D runtime to make this model, we'll customize
