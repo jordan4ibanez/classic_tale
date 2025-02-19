@@ -49,69 +49,10 @@ public: //* BEGIN PUBLIC API.
     }
 
     void draw() {
+    }
 
-        // //? Screen draws, bottom left to top right.
-        // int windowWidth = Window.getWidth();
-        // int windowHeight = Window.getHeight();
-
-        // // Vec2d bottomLeft = CameraHandler.screenToWorld(0, 0);
-        // // Vec2d topRight = CameraHandler.screenToWorld(windowWidth, windowHeight);
-
-        // int minX = cast(int) floor(bottomLeft.x);
-        // int minY = cast(int) floor(bottomLeft.y);
-
-        // int maxX = cast(int) floor(topRight.x);
-        // int maxY = cast(int) floor(topRight.y);
-
-        // // Player has been exploded out of the world.
-        // if (minY > CHUNK_HEIGHT) {
-        //     writeln("exploded");
-        //     return;
-        // }
-        // // Player has fallen out of the world.
-        // if (maxY < 0) {
-        //     writeln("fallen");
-        //     return;
-        // }
-
-        // minY = clamp(minY, 0, CHUNK_HEIGHT);
-        // maxY = clamp(maxY, 0, CHUNK_HEIGHT);
-
-        // // todo: cache the chunk. Maybe.
-
-        // foreach (x; minX .. maxX + 1) {
-
-        //     foreach (y; minY .. maxY + 1) {
-
-        //         Vec2d position = Vec2d(x, y);
-
-        //         ChunkData thisData = getBlockAtWorldPosition(position);
-
-        //         position.y += 1;
-
-        //         if (thisData.blockID == 0) {
-        //             // Render.rectangleLines(position, Vec2d(1, 1), Colors.WHITE);
-        //             continue;
-        //         }
-
-        //         // +1 on Y because it's drawn with the origin at the top left.
-
-        //         // Render.rectangle(position, Vec2d(1, 1), Colors.ORANGE);
-
-        //         BlockDefinitionResult thisBlockResult = BlockDatabase.getBlockByID(
-        //             thisData.blockID);
-
-        //         if (!thisBlockResult.exists) {
-        //             TextureHandler.drawTexture("unknown.png", position, Rect(0, 0, 16, 16), Vec2d(1, 1));
-        //         } else {
-        //             TextureHandler.drawTexture(thisBlockResult.definition.texture, position,
-        //                 Rect(0, 0, 16.00001, 16.00001), Vec2d(1, 1));
-        //         }
-
-        //         // Render.rectangleLines(position, Vec2d(1, 1), Colors.WHITE);
-
-        //     }
-        // }
+    const(Chunk*) getChunkPointer(Vec2i key) {
+        return key in database;
     }
 
     double getGravity() {
