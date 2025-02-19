@@ -55,7 +55,6 @@ void main() {
 		ClearBackground(Colors.RAYWHITE);
 
 		// writeln(ModelHandler.modelExists("Chunk:0|0"));
-		ModelHandler.draw("Chunk:0|0", Vec3d(0, 0, 0));
 
 		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 10, 10, 30, Colors.BLACK);
 
@@ -63,9 +62,11 @@ void main() {
 
 		{
 
+			ModelHandler.draw("Chunk:0|0", Vec3d(0, 0, 0));
+
 			// ModelHandler.draw("triangle", Vec3d(0, 0, 0));
 
-			DrawCube(Vector3(0, 0, 0), 0.1, 0.1, 0.1, Colors.RED);
+			// DrawCube(Vector3(0, 0, 0), 0.1, 0.1, 0.1, Colors.RED);
 		}
 
 		CameraHandler.end();
