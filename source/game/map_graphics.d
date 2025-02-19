@@ -341,14 +341,12 @@ private:
             immutable double leftTrim = min.x * textureSize.x;
             immutable double rightTrim = (1.0 - max.x) * textureSize.x;
 
-            textureCoordinates ~= [
-                points.topLeft.x + leftTrim, points.topLeft.y + topTrim, // 0
-                points.bottomLeft.x + leftTrim, points.bottomLeft.y - bottomTrim, // 1
-                points.bottomRight.x - rightTrim, points.bottomRight.y - bottomTrim, // 2
-                points.bottomRight.x - rightTrim, points.bottomRight.y - bottomTrim, // 2
-                points.topRight.x - rightTrim, points.topRight.y + topTrim, // 3
-                points.topLeft.x + leftTrim, points.topLeft.y + topTrim, // 0
-            ];
+            makeTextureQuad(
+                Vec2d(points.topLeft.x + leftTrim, points.topLeft.y + topTrim),
+                Vec2d(points.bottomLeft.x + leftTrim, points.bottomLeft.y - bottomTrim),
+                Vec2d(points.bottomRight.x - rightTrim, points.bottomRight.y - bottomTrim),
+                Vec2d(points.topRight.x - rightTrim, points.topRight.y + topTrim),
+            );
         }
 
         // Left.
@@ -371,14 +369,12 @@ private:
             immutable double backTrim = min.z * textureSize.x;
             immutable double frontTrim = (1.0 - max.z) * textureSize.x;
 
-            textureCoordinates ~= [
-                points.topLeft.x + backTrim, points.topLeft.y + topTrim, // 0
-                points.bottomLeft.x + backTrim, points.bottomLeft.y - bottomTrim, // 1
-                points.bottomRight.x - frontTrim, points.bottomRight.y - bottomTrim, // 2
-                points.bottomRight.x - frontTrim, points.bottomRight.y - bottomTrim, // 2
-                points.topRight.x - frontTrim, points.topRight.y + topTrim, // 3
-                points.topLeft.x + backTrim, points.topLeft.y + topTrim, // 0
-            ];
+            makeTextureQuad(
+                Vec2d(points.topLeft.x + backTrim, points.topLeft.y + topTrim),
+                Vec2d(points.bottomLeft.x + backTrim, points.bottomLeft.y - bottomTrim),
+                Vec2d(points.bottomRight.x - frontTrim, points.bottomRight.y - bottomTrim),
+                Vec2d(points.topRight.x - frontTrim, points.topRight.y + topTrim),
+            );
         }
 
         // Right.
@@ -399,14 +395,12 @@ private:
             immutable double backTrim = min.z * textureSize.x;
             immutable double frontTrim = (1.0 - max.z) * textureSize.x;
 
-            textureCoordinates ~= [
-                points.topLeft.x + frontTrim, points.topLeft.y + topTrim, // 0
-                points.bottomLeft.x + frontTrim, points.bottomLeft.y - bottomTrim, // 1
-                points.bottomRight.x - backTrim, points.bottomRight.y - bottomTrim, // 2
-                points.bottomRight.x - backTrim, points.bottomRight.y - bottomTrim, // 2
-                points.topRight.x - backTrim, points.topRight.y + topTrim, // 3
-                points.topLeft.x + frontTrim, points.topLeft.y + topTrim, // 0
-            ];
+            makeTextureQuad(
+                Vec2d(points.topLeft.x + frontTrim, points.topLeft.y + topTrim),
+                Vec2d(points.bottomLeft.x + frontTrim, points.bottomLeft.y - bottomTrim),
+                Vec2d(points.bottomRight.x - backTrim, points.bottomRight.y - bottomTrim),
+                Vec2d(points.topRight.x - backTrim, points.topRight.y + topTrim),
+            );
         }
 
         // Top of top points towards -Z.
@@ -428,15 +422,12 @@ private:
             immutable double backTrim = min.z * textureSize.y;
             immutable double frontTrim = (1.0 - max.z) * textureSize.y;
 
-            textureCoordinates ~= [
-                points.topLeft.x + leftTrim, points.topLeft.y + backTrim, // 0
-                points.bottomLeft.x + leftTrim, points.bottomLeft.y - frontTrim, // 1
-                points.bottomRight.x - rightTrim, points.bottomRight.y - frontTrim, // 2
-
-                points.bottomRight.x - rightTrim, points.bottomRight.y - frontTrim, // 2
-                points.topRight.x - rightTrim, points.topRight.y + backTrim, // 3
-                points.topLeft.x + leftTrim, points.topLeft.y + backTrim, // 0
-            ];
+            makeTextureQuad(
+                Vec2d(points.topLeft.x + leftTrim, points.topLeft.y + backTrim),
+                Vec2d(points.bottomLeft.x + leftTrim, points.bottomLeft.y - frontTrim),
+                Vec2d(points.bottomRight.x - rightTrim, points.bottomRight.y - frontTrim),
+                Vec2d(points.topRight.x - rightTrim, points.topRight.y + backTrim),
+            );
 
         }
 
@@ -462,14 +453,12 @@ private:
             immutable double backTrim = min.z * textureSize.y;
             immutable double frontTrim = (1.0 - max.z) * textureSize.y;
 
-            textureCoordinates ~= [
-                points.topLeft.x + rightTrim, points.topLeft.y + backTrim, // 0
-                points.bottomLeft.x + rightTrim, points.bottomLeft.y - frontTrim, // 1
-                points.bottomRight.x - leftTrim, points.bottomRight.y - frontTrim, // 2
-                points.bottomRight.x - leftTrim, points.bottomRight.y - frontTrim, // 2
-                points.topRight.x - leftTrim, points.topRight.y + backTrim, // 3
-                points.topLeft.x + rightTrim, points.topLeft.y + backTrim, // 0
-            ];
+            makeTextureQuad(
+                Vec2d(points.topLeft.x + rightTrim, points.topLeft.y + backTrim),
+                Vec2d(points.bottomLeft.x + rightTrim, points.bottomLeft.y - frontTrim),
+                Vec2d(points.bottomRight.x - leftTrim, points.bottomRight.y - frontTrim),
+                Vec2d(points.topRight.x - leftTrim, points.topRight.y + backTrim),
+            );
         }
     }
 }
