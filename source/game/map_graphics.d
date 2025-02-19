@@ -148,12 +148,43 @@ private:
                     if (thisData.blockID == 0) {
                         continue;
                     }
+                    // Todo: this needs a visual check.
+
+                    if (x - 1 < 0 || thisChunk.data[x - 1][z][y].blockID == 0) {
+                        vertexAllocation += 18;
+                        textureCoordAllocation += 12;
+                    }
+
+                    if (x + 1 >= CHUNK_WIDTH || thisChunk.data[x + 1][z][y].blockID == 0) {
+                        vertexAllocation += 18;
+                        textureCoordAllocation += 12;
+                    }
+
+                    if (z - 1 < 0 || thisChunk.data[x][z - 1][y].blockID == 0) {
+                        vertexAllocation += 18;
+                        textureCoordAllocation += 12;
+                    }
+
+                    if (z + 1 >= CHUNK_WIDTH || thisChunk.data[x][z + 1][y].blockID == 0) {
+                        vertexAllocation += 18;
+                        textureCoordAllocation += 12;
+                    }
+
+                    if (y - 1 < 0 || thisChunk.data[x][z][y - 1].blockID == 0) {
+                        vertexAllocation += 18;
+                        textureCoordAllocation += 12;
+                    }
+
+                    if (y + 1 >= CHUNK_HEIGHT || thisChunk.data[x][z][y + 1].blockID == 0) {
+                        vertexAllocation += 18;
+                        textureCoordAllocation += 12;
+                    }
 
                     // 3 [xyz], 6 [2 tris], 6 faces
-                    vertexAllocation += 108;
+                    // vertexAllocation += 108;
 
                     // 2 [xy], 6 [2 tris], 6 faces
-                    textureCoordAllocation += 72;
+                    // textureCoordAllocation += 72;
 
                 }
             }
