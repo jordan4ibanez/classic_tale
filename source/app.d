@@ -6,7 +6,9 @@ import math.vec2d;
 import math.vec2i;
 import math.vec3d;
 import raylib;
+import std.conv;
 import std.stdio;
+import std.string;
 import utility.window;
 
 void main() {
@@ -50,6 +52,8 @@ void main() {
 
 		BeginDrawing();
 		ClearBackground(Colors.RAYWHITE);
+
+		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 10, 10, 30, Colors.BLACK);
 
 		CameraHandler.begin();
 

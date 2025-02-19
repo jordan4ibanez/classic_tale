@@ -99,8 +99,10 @@ private:
     }
 
     void createChunkMesh(Vec2i chunkKey) {
+        float[] vertices;
+        float[] textureCoordinates;
         
-        
+
     }
 
     // Maybe this can have a numeric AA or array to hash this in immediate mode?
