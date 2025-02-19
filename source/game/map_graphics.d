@@ -351,8 +351,8 @@ private:
                 Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z)
             );
 
-            TexPoints points = TextureHandler.getPoints(textures.front);
-            immutable Vec2d textureSize = TextureHandler.getSize(textures.front);
+            TexPoints points = TextureHandler.getPointsByID(textures.front);
+            const(Vec2d*) textureSize = TextureHandler.getSizeByID(textures.front);
 
             immutable double bottomTrim = min.y * textureSize.y;
             immutable double topTrim = (1.0 - max.y) * textureSize.y;
@@ -377,8 +377,8 @@ private:
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z)
             );
 
-            TexPoints points = TextureHandler.getPoints(textures.back);
-            immutable Vec2d textureSize = TextureHandler.getSize(textures.back);
+            TexPoints points = TextureHandler.getPointsByID(textures.back);
+            const(Vec2d*) textureSize = TextureHandler.getSizeByID(textures.back);
 
             immutable double bottomTrim = min.y * textureSize.y;
             immutable double topTrim = (1.0 - max.y) * textureSize.y;
@@ -403,8 +403,8 @@ private:
                 Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z)
             );
 
-            TexPoints points = TextureHandler.getPoints(textures.left);
-            immutable Vec2d textureSize = TextureHandler.getSize(textures.left);
+            TexPoints points = TextureHandler.getPointsByID(textures.left);
+            const(Vec2d*) textureSize = TextureHandler.getSizeByID(textures.left);
 
             // Z axis gets kind of weird since it's inverted.
 
@@ -431,8 +431,8 @@ private:
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z)
             );
 
-            TexPoints points = TextureHandler.getPoints(textures.right);
-            immutable Vec2d textureSize = TextureHandler.getSize(textures.right);
+            TexPoints points = TextureHandler.getPointsByID(textures.right);
+            const(Vec2d*) textureSize = TextureHandler.getSizeByID(textures.right);
 
             immutable double bottomTrim = min.y * textureSize.y;
             immutable double topTrim = (1.0 - max.y) * textureSize.y;
@@ -458,8 +458,8 @@ private:
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z)
             );
 
-            TexPoints points = TextureHandler.getPoints(textures.top);
-            immutable Vec2d textureSize = TextureHandler.getSize(textures.top);
+            TexPoints points = TextureHandler.getPointsByID(textures.top);
+            const(Vec2d*) textureSize = TextureHandler.getSizeByID(textures.top);
 
             immutable double leftTrim = min.x * textureSize.x;
             immutable double rightTrim = (1.0 - max.x) * textureSize.x;
@@ -489,8 +489,8 @@ private:
             // This face is extremely confusing to visualize because one axis is inverted,
             // and the the whole thing is upside down.
 
-            TexPoints points = TextureHandler.getPoints(textures.bottom);
-            immutable Vec2d textureSize = TextureHandler.getSize(textures.bottom);
+            TexPoints points = TextureHandler.getPointsByID(textures.bottom);
+            const(Vec2d*) textureSize = TextureHandler.getSizeByID(textures.bottom);
 
             immutable double leftTrim = min.x * textureSize.x;
             immutable double rightTrim = (1.0 - max.x) * textureSize.x;

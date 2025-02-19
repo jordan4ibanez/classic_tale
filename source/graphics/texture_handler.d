@@ -21,6 +21,7 @@ private:
 
     // This is an aggressive micro optimization.
     TexturePoints!Vec2d[int] texturePointIndexDatabase;
+    Vec2d[int] textureSizeDatabase;
     int[string] nameToIndexDatabase;
 
     TexturePoints!Vec2d[string] texturePointDatabase;
@@ -74,6 +75,8 @@ public: //* BEGIN PUBLIC API.
         foreach (index, key; texturePointDatabase.keys) {
             nameToIndexDatabase[key] = cast(int) index;
             texturePointIndexDatabase[cast(int) index] = texturePointDatabase[key];
+            Rect thisRect = textureRectangleDatabase[key];
+            textureSizeDatabase[cast(int) index] = Vec2d(thisRect.width, thisRect.height);
         }
 
         // Final rehash.
@@ -97,6 +100,11 @@ public: //* BEGIN PUBLIC API.
         }
 
         return Vec2d(thisRect.width, thisRect.height);
+    }
+
+    const(Vec2d*) getSizeByID(int ID) {
+        //? Note: this is tuned for speed. Don't use this in mods.
+        return ID in textureSizeDatabase;
     }
 
     const(TexturePoints!(Vec2d)*) getPoints(string name) {

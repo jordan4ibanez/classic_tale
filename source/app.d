@@ -49,7 +49,7 @@ void main() {
 	Vec2i blah = Vec2i(0, 0);
 	MapGraphics.generate(blah);
 
-	while (Window.shouldStayOpen()) {
+	while (!Window.shouldStayOpen()) {
 
 		BeginDrawing();
 		ClearBackground(Colors.RAYWHITE);
