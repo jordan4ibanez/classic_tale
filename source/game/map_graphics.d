@@ -10,6 +10,7 @@ import math.vec2i;
 import math.vec3d;
 import std.bitmanip;
 import std.conv;
+import std.datetime.stopwatch;
 import std.meta;
 import std.stdio;
 
@@ -133,6 +134,8 @@ private:
 
         FaceTextures faceTextures;
 
+        auto sw = StopWatch(AutoStart.yes);
+
         foreach (x; 0 .. CHUNK_WIDTH) {
             foreach (z; 0 .. CHUNK_WIDTH) {
                 foreach (y; 0 .. CHUNK_HEIGHT) {
@@ -148,12 +151,14 @@ private:
 
                     faceTextures.update(thisDefinition.textures);
 
-                    makeCube(vertices, textureCoordinates, Vec3d(x, y, z), Vec3d(0, 0, 0), Vec3d(1, 1, 1), NoFaces,
+                    makeCube(vertices, textureCoordinates, Vec3d(x, y, z), Vec3d(0, 0, 0), Vec3d(1, 1, 1), AllFaces,
                         faceTextures);
 
                 }
             }
         }
+
+        writeln("took: ", sw.peek().total!"msecs", "ms");
 
         const string chunkMeshKey = generateKey(chunkKey);
 
@@ -161,7 +166,7 @@ private:
             writeln("exists");
         } else {
             writeln("does not exist, creating");
-            // ModelHandler.newModelFromMesh(chunkMeshKey, vertices, textureCoordinates, true);
+            ModelHandler.newModelFromMesh(chunkMeshKey, vertices, textureCoordinates, true);
         }
 
     }
