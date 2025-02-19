@@ -110,8 +110,21 @@ private:
             return;
         }
 
+        writeln("Generating chunk mesh " ~ to!string(chunkKey.x) ~ " " ~ to!string(chunkKey.y));
+
         float[] vertices;
         float[] textureCoordinates;
+
+        foreach (x; 0 .. CHUNK_WIDTH) {
+            foreach (z; 0 .. CHUNK_WIDTH) {
+                foreach (y; 0 .. CHUNK_HEIGHT) {
+                    if (thisChunk.data[x][z][y].blockID == 0) {
+                        continue;
+                    }
+
+                }
+            }
+        }
     }
 
     // Maybe this can have a numeric AA or array to hash this in immediate mode?
