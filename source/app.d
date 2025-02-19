@@ -4,11 +4,62 @@ import graphics.texture_handler;
 import math.vec2d;
 import math.vec3d;
 import raylib;
+import std.bitmanip;
+import std.meta;
 import std.stdio;
+
+struct BlockFaceGen {
+	mixin(bitfields!(
+			bool, "front", 1,
+			bool, "back", 1,
+			bool, "left", 1,
+			bool, "right", 1,
+			bool, "top", 1,
+			bool, "bottom", 1,
+			bool, "", 2
+	));
+
+	this(bool input) {
+		this.front = input;
+		this.back = input;
+		this.left = input;
+		this.right = input;
+		this.top = input;
+		this.bottom = input;
+	}
+}
+
+alias AllFaces = Alias!(BlockFaceGen(true));
+alias NoFaces = Alias!(BlockFaceGen(false));
 
 void main() {
 	// call this before using raylib
+	SetTraceLogLevel(TraceLogLevel.LOG_ERROR);
 	validateRaylibBinding();
+
+	{
+		auto blah = AllFaces;
+
+		writeln(blah);
+
+		writeln(blah.front);
+		writeln(blah.back);
+		writeln(blah.left);
+		writeln(blah.right);
+		writeln(blah.top);
+		writeln(blah.bottom);
+
+		blah = NoFaces;
+		writeln(blah);
+
+		writeln(blah.front);
+		writeln(blah.back);
+		writeln(blah.left);
+		writeln(blah.right);
+		writeln(blah.top);
+		writeln(blah.bottom);
+	}
+
 	InitWindow(1000, 1000, "Classic Fable Prototyping");
 	scope (exit) {
 		CloseWindow();
@@ -34,6 +85,7 @@ void main() {
 
 	float[] vertices;
 
+	// Maybe this can have a numeric AA or array to hash this in immediate mode?
 	void makeCube(const Vec3d min, const Vec3d max) {
 
 		assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
