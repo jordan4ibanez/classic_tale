@@ -333,7 +333,7 @@ void main() {
 	}
 
 	FaceTextures tex = "testing.png";
-	FaceGeneration faces = FaceGeneration(false, false, false, false, false, true);
+	FaceGeneration faces = AllFaces;
 	makeCube(Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), faces, tex);
 
 	ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
