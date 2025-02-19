@@ -54,62 +54,66 @@ struct FaceTextures {
     }
 }
 
-// Maybe this can have a numeric AA or array to hash this in immediate mode?
-void makeCube(ref float[] vertices, ref float[] textureCoordinates, const Vec3d position, Vec3d min, Vec3d max,
-    FaceGeneration faceGeneration, FaceTextures textures) {
+static final const class MapGraphics {
+static:
+private:
 
-    assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
-    assert(max.x <= 1 && max.y <= 1 && max.z <= 1, "max is out of bounds");
-    assert(max.x >= min.x && max.y >= min.y && max.z >= min.z, "inverted axis");
+    // Maybe this can have a numeric AA or array to hash this in immediate mode?
+    void makeCube(ref float[] vertices, ref float[] textureCoordinates, const Vec3d position, Vec3d min, Vec3d max,
+        FaceGeneration faceGeneration, FaceTextures textures) {
 
-    // Allow flat faces to be optimized.
-    immutable double width = max.x - min.x;
-    immutable double height = max.y - min.y;
-    immutable double depth = max.z - min.z;
+        assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
+        assert(max.x <= 1 && max.y <= 1 && max.z <= 1, "max is out of bounds");
+        assert(max.x >= min.x && max.y >= min.y && max.z >= min.z, "inverted axis");
 
-    assert(width > 0 || height > 0 || depth > 0, "this cube is nothing!");
+        // Allow flat faces to be optimized.
+        immutable double width = max.x - min.x;
+        immutable double height = max.y - min.y;
+        immutable double depth = max.z - min.z;
 
-    if (width == 0) {
-        // writeln("squishing on X axis");
-        faceGeneration.front = false;
-        faceGeneration.back = false;
-        faceGeneration.top = false;
-        faceGeneration.bottom = false;
-    } else if (height == 0) {
-        // writeln("squishing on Y axis");
-        faceGeneration.front = false;
-        faceGeneration.back = false;
-        faceGeneration.left = false;
-        faceGeneration.right = false;
-    } else if (depth == 0) {
-        // writeln("squishing on Z axis");
-        faceGeneration.left = false;
-        faceGeneration.right = false;
-        faceGeneration.top = false;
-        faceGeneration.bottom = false;
-    }
+        assert(width > 0 || height > 0 || depth > 0, "this cube is nothing!");
 
-    // Shift into position.
-    immutable Vec3d chunkPositionMin = vec3dAdd(position, min);
-    immutable Vec3d chunkPositionMax = vec3dAdd(position, max);
+        if (width == 0) {
+            // writeln("squishing on X axis");
+            faceGeneration.front = false;
+            faceGeneration.back = false;
+            faceGeneration.top = false;
+            faceGeneration.bottom = false;
+        } else if (height == 0) {
+            // writeln("squishing on Y axis");
+            faceGeneration.front = false;
+            faceGeneration.back = false;
+            faceGeneration.left = false;
+            faceGeneration.right = false;
+        } else if (depth == 0) {
+            // writeln("squishing on Z axis");
+            faceGeneration.left = false;
+            faceGeneration.right = false;
+            faceGeneration.top = false;
+            faceGeneration.bottom = false;
+        }
 
-    pragma(inline, true)
-    void makeQuad(
-        const Vec3d topLeft, /*0*/
-        const Vec3d bottomLeft, /*1*/
-        const Vec3d bottomRight, /*2*/
-        const Vec3d topRight /*3*/ ) {
-        // Tri 1.
-        vertices ~= topLeft.toFloatArray(); // 0
-        vertices ~= bottomLeft.toFloatArray(); // 1
-        vertices ~= bottomRight.toFloatArray(); // 2
-        // Tri 2.
-        vertices ~= bottomRight.toFloatArray(); // 2
-        vertices ~= topRight.toFloatArray(); // 3
-        vertices ~= topLeft.toFloatArray(); // 0
-    }
+        // Shift into position.
+        immutable Vec3d chunkPositionMin = vec3dAdd(position, min);
+        immutable Vec3d chunkPositionMax = vec3dAdd(position, max);
 
-    /*
+        pragma(inline, true)
+        void makeQuad(
+            const Vec3d topLeft, /*0*/
+            const Vec3d bottomLeft, /*1*/
+            const Vec3d bottomRight, /*2*/
+            const Vec3d topRight /*3*/ ) {
+            // Tri 1.
+            vertices ~= topLeft.toFloatArray(); // 0
+            vertices ~= bottomLeft.toFloatArray(); // 1
+            vertices ~= bottomRight.toFloatArray(); // 2
+            // Tri 2.
+            vertices ~= bottomRight.toFloatArray(); // 2
+            vertices ~= topRight.toFloatArray(); // 3
+            vertices ~= topLeft.toFloatArray(); // 0
+        }
+
+        /*
 		This is kind of weird.
 
 		Right handed means that you're looking forwards pointing at -Z.
@@ -121,181 +125,182 @@ void makeCube(ref float[] vertices, ref float[] textureCoordinates, const Vec3d 
 		So the chunk will generate behind you and to your right when your yaw is at 0 (facing forwards).
 		*/
 
-    // Front.
-    if (faceGeneration.front) {
-        makeQuad(
-            Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z),
-            Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
-            Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z),
-            Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z)
-        );
+        // Front.
+        if (faceGeneration.front) {
+            makeQuad(
+                Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z),
+                Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
+                Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z),
+                Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z)
+            );
 
-        TexPoints points = TextureHandler.getPoints(textures.front);
-        immutable Vec2d textureSize = TextureHandler.getSize(textures.front);
+            TexPoints points = TextureHandler.getPoints(textures.front);
+            immutable Vec2d textureSize = TextureHandler.getSize(textures.front);
 
-        immutable double bottomTrim = min.y * textureSize.y;
-        immutable double topTrim = (1.0 - max.y) * textureSize.y;
-        // These are flipped in application because you're looking at them from the front.
-        immutable double leftTrim = min.x * textureSize.x;
-        immutable double rightTrim = (1.0 - max.x) * textureSize.x;
+            immutable double bottomTrim = min.y * textureSize.y;
+            immutable double topTrim = (1.0 - max.y) * textureSize.y;
+            // These are flipped in application because you're looking at them from the front.
+            immutable double leftTrim = min.x * textureSize.x;
+            immutable double rightTrim = (1.0 - max.x) * textureSize.x;
 
-        textureCoordinates ~= [
-            points.topLeft.x + rightTrim, points.topLeft.y + topTrim, // 0
-            points.bottomLeft.x + rightTrim, points.bottomLeft.y - bottomTrim, // 1
-            points.bottomRight.x - leftTrim, points.bottomRight.y - bottomTrim, // 2
-            points.bottomRight.x - leftTrim, points.bottomRight.y - bottomTrim, // 2
-            points.topRight.x - leftTrim, points.topRight.y + topTrim, // 3
-            points.topLeft.x + rightTrim, points.topLeft.y + topTrim, // 0
-        ];
+            textureCoordinates ~= [
+                points.topLeft.x + rightTrim, points.topLeft.y + topTrim, // 0
+                points.bottomLeft.x + rightTrim, points.bottomLeft.y - bottomTrim, // 1
+                points.bottomRight.x - leftTrim, points.bottomRight.y - bottomTrim, // 2
+                points.bottomRight.x - leftTrim, points.bottomRight.y - bottomTrim, // 2
+                points.topRight.x - leftTrim, points.topRight.y + topTrim, // 3
+                points.topLeft.x + rightTrim, points.topLeft.y + topTrim, // 0
+            ];
 
-    }
+        }
 
-    // Back.
-    if (faceGeneration.back) {
-        makeQuad(
-            Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z),
-            Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
-            Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
-            Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z)
-        );
+        // Back.
+        if (faceGeneration.back) {
+            makeQuad(
+                Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z),
+                Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
+                Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
+                Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z)
+            );
 
-        TexPoints points = TextureHandler.getPoints(textures.back);
-        immutable Vec2d textureSize = TextureHandler.getSize(textures.back);
+            TexPoints points = TextureHandler.getPoints(textures.back);
+            immutable Vec2d textureSize = TextureHandler.getSize(textures.back);
 
-        immutable double bottomTrim = min.y * textureSize.y;
-        immutable double topTrim = (1.0 - max.y) * textureSize.y;
+            immutable double bottomTrim = min.y * textureSize.y;
+            immutable double topTrim = (1.0 - max.y) * textureSize.y;
 
-        immutable double leftTrim = min.x * textureSize.x;
-        immutable double rightTrim = (1.0 - max.x) * textureSize.x;
+            immutable double leftTrim = min.x * textureSize.x;
+            immutable double rightTrim = (1.0 - max.x) * textureSize.x;
 
-        textureCoordinates ~= [
-            points.topLeft.x + leftTrim, points.topLeft.y + topTrim, // 0
-            points.bottomLeft.x + leftTrim, points.bottomLeft.y - bottomTrim, // 1
-            points.bottomRight.x - rightTrim, points.bottomRight.y - bottomTrim, // 2
-            points.bottomRight.x - rightTrim, points.bottomRight.y - bottomTrim, // 2
-            points.topRight.x - rightTrim, points.topRight.y + topTrim, // 3
-            points.topLeft.x + leftTrim, points.topLeft.y + topTrim, // 0
-        ];
-    }
+            textureCoordinates ~= [
+                points.topLeft.x + leftTrim, points.topLeft.y + topTrim, // 0
+                points.bottomLeft.x + leftTrim, points.bottomLeft.y - bottomTrim, // 1
+                points.bottomRight.x - rightTrim, points.bottomRight.y - bottomTrim, // 2
+                points.bottomRight.x - rightTrim, points.bottomRight.y - bottomTrim, // 2
+                points.topRight.x - rightTrim, points.topRight.y + topTrim, // 3
+                points.topLeft.x + leftTrim, points.topLeft.y + topTrim, // 0
+            ];
+        }
 
-    // Left.
-    if (faceGeneration.left) {
-        makeQuad(
-            Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z),
-            Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z),
-            Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
-            Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z)
-        );
+        // Left.
+        if (faceGeneration.left) {
+            makeQuad(
+                Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z),
+                Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z),
+                Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
+                Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z)
+            );
 
-        TexPoints points = TextureHandler.getPoints(textures.left);
-        immutable Vec2d textureSize = TextureHandler.getSize(textures.left);
+            TexPoints points = TextureHandler.getPoints(textures.left);
+            immutable Vec2d textureSize = TextureHandler.getSize(textures.left);
 
-        // Z axis gets kind of weird since it's inverted.
+            // Z axis gets kind of weird since it's inverted.
 
-        immutable double bottomTrim = min.y * textureSize.y;
-        immutable double topTrim = (1.0 - max.y) * textureSize.y;
+            immutable double bottomTrim = min.y * textureSize.y;
+            immutable double topTrim = (1.0 - max.y) * textureSize.y;
 
-        immutable double backTrim = min.z * textureSize.x;
-        immutable double frontTrim = (1.0 - max.z) * textureSize.x;
+            immutable double backTrim = min.z * textureSize.x;
+            immutable double frontTrim = (1.0 - max.z) * textureSize.x;
 
-        textureCoordinates ~= [
-            points.topLeft.x + backTrim, points.topLeft.y + topTrim, // 0
-            points.bottomLeft.x + backTrim, points.bottomLeft.y - bottomTrim, // 1
-            points.bottomRight.x - frontTrim, points.bottomRight.y - bottomTrim, // 2
-            points.bottomRight.x - frontTrim, points.bottomRight.y - bottomTrim, // 2
-            points.topRight.x - frontTrim, points.topRight.y + topTrim, // 3
-            points.topLeft.x + backTrim, points.topLeft.y + topTrim, // 0
-        ];
-    }
+            textureCoordinates ~= [
+                points.topLeft.x + backTrim, points.topLeft.y + topTrim, // 0
+                points.bottomLeft.x + backTrim, points.bottomLeft.y - bottomTrim, // 1
+                points.bottomRight.x - frontTrim, points.bottomRight.y - bottomTrim, // 2
+                points.bottomRight.x - frontTrim, points.bottomRight.y - bottomTrim, // 2
+                points.topRight.x - frontTrim, points.topRight.y + topTrim, // 3
+                points.topLeft.x + backTrim, points.topLeft.y + topTrim, // 0
+            ];
+        }
 
-    // Right.
-    if (faceGeneration.right) {
-        makeQuad(
-            Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z),
-            Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
-            Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
-            Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z)
-        );
+        // Right.
+        if (faceGeneration.right) {
+            makeQuad(
+                Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z),
+                Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
+                Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
+                Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z)
+            );
 
-        TexPoints points = TextureHandler.getPoints(textures.right);
-        immutable Vec2d textureSize = TextureHandler.getSize(textures.right);
+            TexPoints points = TextureHandler.getPoints(textures.right);
+            immutable Vec2d textureSize = TextureHandler.getSize(textures.right);
 
-        immutable double bottomTrim = min.y * textureSize.y;
-        immutable double topTrim = (1.0 - max.y) * textureSize.y;
+            immutable double bottomTrim = min.y * textureSize.y;
+            immutable double topTrim = (1.0 - max.y) * textureSize.y;
 
-        immutable double backTrim = min.z * textureSize.x;
-        immutable double frontTrim = (1.0 - max.z) * textureSize.x;
+            immutable double backTrim = min.z * textureSize.x;
+            immutable double frontTrim = (1.0 - max.z) * textureSize.x;
 
-        textureCoordinates ~= [
-            points.topLeft.x + frontTrim, points.topLeft.y + topTrim, // 0
-            points.bottomLeft.x + frontTrim, points.bottomLeft.y - bottomTrim, // 1
-            points.bottomRight.x - backTrim, points.bottomRight.y - bottomTrim, // 2
-            points.bottomRight.x - backTrim, points.bottomRight.y - bottomTrim, // 2
-            points.topRight.x - backTrim, points.topRight.y + topTrim, // 3
-            points.topLeft.x + frontTrim, points.topLeft.y + topTrim, // 0
-        ];
-    }
+            textureCoordinates ~= [
+                points.topLeft.x + frontTrim, points.topLeft.y + topTrim, // 0
+                points.bottomLeft.x + frontTrim, points.bottomLeft.y - bottomTrim, // 1
+                points.bottomRight.x - backTrim, points.bottomRight.y - bottomTrim, // 2
+                points.bottomRight.x - backTrim, points.bottomRight.y - bottomTrim, // 2
+                points.topRight.x - backTrim, points.topRight.y + topTrim, // 3
+                points.topLeft.x + frontTrim, points.topLeft.y + topTrim, // 0
+            ];
+        }
 
-    // Top of top points towards -Z.
-    // Top.
-    if (faceGeneration.top) {
-        makeQuad(
-            Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z),
-            Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z),
-            Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z),
-            Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z)
-        );
+        // Top of top points towards -Z.
+        // Top.
+        if (faceGeneration.top) {
+            makeQuad(
+                Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z),
+                Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z),
+                Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z),
+                Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z)
+            );
 
-        TexPoints points = TextureHandler.getPoints(textures.top);
-        immutable Vec2d textureSize = TextureHandler.getSize(textures.top);
+            TexPoints points = TextureHandler.getPoints(textures.top);
+            immutable Vec2d textureSize = TextureHandler.getSize(textures.top);
 
-        immutable double leftTrim = min.x * textureSize.x;
-        immutable double rightTrim = (1.0 - max.x) * textureSize.x;
+            immutable double leftTrim = min.x * textureSize.x;
+            immutable double rightTrim = (1.0 - max.x) * textureSize.x;
 
-        immutable double backTrim = min.z * textureSize.y;
-        immutable double frontTrim = (1.0 - max.z) * textureSize.y;
+            immutable double backTrim = min.z * textureSize.y;
+            immutable double frontTrim = (1.0 - max.z) * textureSize.y;
 
-        textureCoordinates ~= [
-            points.topLeft.x + leftTrim, points.topLeft.y + backTrim, // 0
-            points.bottomLeft.x + leftTrim, points.bottomLeft.y - frontTrim, // 1
-            points.bottomRight.x - rightTrim, points.bottomRight.y - frontTrim, // 2
+            textureCoordinates ~= [
+                points.topLeft.x + leftTrim, points.topLeft.y + backTrim, // 0
+                points.bottomLeft.x + leftTrim, points.bottomLeft.y - frontTrim, // 1
+                points.bottomRight.x - rightTrim, points.bottomRight.y - frontTrim, // 2
 
-            points.bottomRight.x - rightTrim, points.bottomRight.y - frontTrim, // 2
-            points.topRight.x - rightTrim, points.topRight.y + backTrim, // 3
-            points.topLeft.x + leftTrim, points.topLeft.y + backTrim, // 0
-        ];
+                points.bottomRight.x - rightTrim, points.bottomRight.y - frontTrim, // 2
+                points.topRight.x - rightTrim, points.topRight.y + backTrim, // 3
+                points.topLeft.x + leftTrim, points.topLeft.y + backTrim, // 0
+            ];
 
-    }
+        }
 
-    // Top of bottom points towards -Z.
-    // Bottom.
-    if (faceGeneration.bottom) {
-        makeQuad(
-            Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
-            Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
-            Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
-            Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z)
-        );
+        // Top of bottom points towards -Z.
+        // Bottom.
+        if (faceGeneration.bottom) {
+            makeQuad(
+                Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
+                Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
+                Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
+                Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z)
+            );
 
-        // This face is extremely confusing to visualize because one axis is inverted,
-        // and the the whole thing is upside down.
+            // This face is extremely confusing to visualize because one axis is inverted,
+            // and the the whole thing is upside down.
 
-        TexPoints points = TextureHandler.getPoints(textures.bottom);
-        immutable Vec2d textureSize = TextureHandler.getSize(textures.bottom);
+            TexPoints points = TextureHandler.getPoints(textures.bottom);
+            immutable Vec2d textureSize = TextureHandler.getSize(textures.bottom);
 
-        immutable double leftTrim = min.x * textureSize.x;
-        immutable double rightTrim = (1.0 - max.x) * textureSize.x;
+            immutable double leftTrim = min.x * textureSize.x;
+            immutable double rightTrim = (1.0 - max.x) * textureSize.x;
 
-        immutable double backTrim = min.z * textureSize.y;
-        immutable double frontTrim = (1.0 - max.z) * textureSize.y;
+            immutable double backTrim = min.z * textureSize.y;
+            immutable double frontTrim = (1.0 - max.z) * textureSize.y;
 
-        textureCoordinates ~= [
-            points.topLeft.x + rightTrim, points.topLeft.y + backTrim, // 0
-            points.bottomLeft.x + rightTrim, points.bottomLeft.y - frontTrim, // 1
-            points.bottomRight.x - leftTrim, points.bottomRight.y - frontTrim, // 2
-            points.bottomRight.x - leftTrim, points.bottomRight.y - frontTrim, // 2
-            points.topRight.x - leftTrim, points.topRight.y + backTrim, // 3
-            points.topLeft.x + rightTrim, points.topLeft.y + backTrim, // 0
-        ];
+            textureCoordinates ~= [
+                points.topLeft.x + rightTrim, points.topLeft.y + backTrim, // 0
+                points.bottomLeft.x + rightTrim, points.bottomLeft.y - frontTrim, // 1
+                points.bottomRight.x - leftTrim, points.bottomRight.y - frontTrim, // 2
+                points.bottomRight.x - leftTrim, points.bottomRight.y - frontTrim, // 2
+                points.topRight.x - leftTrim, points.topRight.y + backTrim, // 3
+                points.topLeft.x + rightTrim, points.topLeft.y + backTrim, // 0
+            ];
+        }
     }
 }
