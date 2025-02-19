@@ -9,6 +9,8 @@ class BlockDefinition {
     string name = null;
     string modName = null;
     string[6] textures = null;
+    // This is reserved.
+    int[6] textureIDs = -1;
     int id = -1;
 }
 
@@ -86,6 +88,10 @@ public: //* BEGIN PUBLIC API.
                 continue;
             }
 
+            foreach (index, textureName; thisDefinition.textures) {
+                thisDefinition.textureIDs[index] = TextureHandler.getIDFromName(textureName);
+            }
+
             // todo: do the match thing below when mongoDB is added in.
             thisDefinition.id = nextID();
             idDatabase[thisDefinition.id] = thisDefinition;
@@ -104,7 +110,9 @@ private: //* BEGIN INTERNAL API.
         BlockDefinition air = new BlockDefinition();
         air.name = "air";
         air.modName = "engine";
-        air.textures = "air.png";
+        // Air doesn't get any textures, it's never rendered.
+        // air.textures = "air.png";
+
         // todo: do the match thing below when mongoDB is added in.
         air.id = 0;
 
@@ -119,6 +127,7 @@ private: //* BEGIN INTERNAL API.
         bedrock.name = "bedrock";
         bedrock.modName = "engine";
         bedrock.textures = "default_bedrock.png";
+        bedrock.textureIDs = TextureHandler.getIDFromName("default_bedrock.png");
         // todo: do the match thing below when mongoDB is added in.
         bedrock.id = 1;
 
