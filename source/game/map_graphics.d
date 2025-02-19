@@ -76,7 +76,9 @@ public:
 private:
 
     PopResult pop() {
-        generationQueue.
+        PopResult result;
+
+        return result;
     }
 
     // Maybe this can have a numeric AA or array to hash this in immediate mode?
