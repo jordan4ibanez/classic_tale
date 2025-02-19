@@ -298,8 +298,8 @@ private: //* BEGIN INTERNAL API.
     void generateChunkData(Vec2i chunkPosition, ref Chunk thisChunk) {
 
         // todo: the chunk should have a biome.
-        BiomeDefinitionResult biomeResult = BiomeDatabase.getBiomeByID(0);
-        if (!biomeResult.exists) {
+        const(BiomeDefinition*) biomeResult = BiomeDatabase.getBiomeByID(0);
+        if (biomeResult is null) {
             import std.conv;
 
             throw new Error("Attempted to get biome " ~ to!string(0) ~ " which does not exist");
@@ -316,21 +316,21 @@ private: //* BEGIN INTERNAL API.
         }
 
         const(BlockDefinition*) stoneResult = BlockDatabase.getBlockByID(
-            biomeResult.definition.stoneLayerID);
+            biomeResult.stoneLayerID);
         if (stoneResult is null) {
-            throw new Error("Stone does not exist for biome " ~ biomeResult.definition.name);
+            throw new Error("Stone does not exist for biome " ~ biomeResult.name);
         }
 
         const(BlockDefinition*) dirtResult = BlockDatabase.getBlockByID(
-            biomeResult.definition.dirtLayerID);
+            biomeResult.dirtLayerID);
         if (dirtResult is null) {
-            throw new Error("Dirt does not exist for biome " ~ biomeResult.definition.name);
+            throw new Error("Dirt does not exist for biome " ~ biomeResult.name);
         }
 
         const(BlockDefinition*) grassResult = BlockDatabase.getBlockByID(
-            biomeResult.definition.grassLayerID);
+            biomeResult.grassLayerID);
         if (grassResult is null) {
-            throw new Error("Grass does not exist for biome " ~ biomeResult.definition.name);
+            throw new Error("Grass does not exist for biome " ~ biomeResult.name);
         }
 
         foreach (x; 0 .. CHUNK_WIDTH) {
