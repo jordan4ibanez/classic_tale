@@ -8,7 +8,7 @@ import std.bitmanip;
 import std.meta;
 import std.stdio;
 
-struct BlockFaceGen {
+struct FaceGeneration {
 	mixin(bitfields!(
 			bool, "front", 1,
 			bool, "back", 1,
@@ -38,8 +38,8 @@ struct BlockFaceGen {
 	}
 }
 
-alias AllFaces = Alias!(BlockFaceGen(true));
-alias NoFaces = Alias!(BlockFaceGen(false));
+alias AllFaces = Alias!(FaceGeneration(true));
+alias NoFaces = Alias!(FaceGeneration(false));
 
 void main() {
 	// call this before using raylib
@@ -95,7 +95,7 @@ void main() {
 	float[] vertices;
 
 	// Maybe this can have a numeric AA or array to hash this in immediate mode?
-	void makeCube(const Vec3d min, const Vec3d max, BlockFaceGen faceGeneration) {
+	void makeCube(const Vec3d min, const Vec3d max, FaceGeneration faceGeneration) {
 
 		assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
 		assert(max.x <= 1 && max.y <= 1 && max.z <= 1, "max is out of bounds");
@@ -129,54 +129,66 @@ void main() {
 		*/
 
 		// Front.
-		makeQuad(
-			Vec3d(max.x, max.y, min.z),
-			Vec3d(max.x, min.y, min.z),
-			Vec3d(min.x, min.y, min.z),
-			Vec3d(min.x, max.y, min.z)
-		);
+		if (faceGeneration.front) {
+			makeQuad(
+				Vec3d(max.x, max.y, min.z),
+				Vec3d(max.x, min.y, min.z),
+				Vec3d(min.x, min.y, min.z),
+				Vec3d(min.x, max.y, min.z)
+			);
+		}
 
 		// Back.
-		makeQuad(
-			Vec3d(min.x, max.y, max.z),
-			Vec3d(min.x, min.y, max.z),
-			Vec3d(max.x, min.y, max.z),
-			Vec3d(max.x, max.y, max.z)
-		);
+		if (faceGeneration.back) {
+			makeQuad(
+				Vec3d(min.x, max.y, max.z),
+				Vec3d(min.x, min.y, max.z),
+				Vec3d(max.x, min.y, max.z),
+				Vec3d(max.x, max.y, max.z)
+			);
+		}
 
 		// Left.
-		makeQuad(
-			Vec3d(min.x, max.y, min.z),
-			Vec3d(min.x, min.y, min.z),
-			Vec3d(min.x, min.y, max.z),
-			Vec3d(min.x, max.y, max.z)
-		);
+		if (faceGeneration.left) {
+			makeQuad(
+				Vec3d(min.x, max.y, min.z),
+				Vec3d(min.x, min.y, min.z),
+				Vec3d(min.x, min.y, max.z),
+				Vec3d(min.x, max.y, max.z)
+			);
+		}
 
 		// Right.
-		makeQuad(
-			Vec3d(max.x, max.y, max.z),
-			Vec3d(max.x, min.y, max.z),
-			Vec3d(max.x, min.y, min.z),
-			Vec3d(max.x, max.y, min.z)
-		);
+		if (faceGeneration.right) {
+			makeQuad(
+				Vec3d(max.x, max.y, max.z),
+				Vec3d(max.x, min.y, max.z),
+				Vec3d(max.x, min.y, min.z),
+				Vec3d(max.x, max.y, min.z)
+			);
+		}
 
 		// Top of top points towards -Z.
 		// Top.
-		makeQuad(
-			Vec3d(min.x, max.y, min.z),
-			Vec3d(min.x, max.y, max.z),
-			Vec3d(max.x, max.y, max.z),
-			Vec3d(max.x, max.y, min.z)
-		);
+		if (faceGeneration.top) {
+			makeQuad(
+				Vec3d(min.x, max.y, min.z),
+				Vec3d(min.x, max.y, max.z),
+				Vec3d(max.x, max.y, max.z),
+				Vec3d(max.x, max.y, min.z)
+			);
+		}
 
 		// Top of bottom points towards -Z.
 		// Bottom.
-		makeQuad(
-			Vec3d(max.x, min.y, min.z),
-			Vec3d(max.x, min.y, max.z),
-			Vec3d(min.x, min.y, max.z),
-			Vec3d(min.x, min.y, min.z)
-		);
+		if (faceGeneration.bottom) {
+			makeQuad(
+				Vec3d(max.x, min.y, min.z),
+				Vec3d(max.x, min.y, max.z),
+				Vec3d(min.x, min.y, max.z),
+				Vec3d(min.x, min.y, min.z)
+			);
+		}
 	}
 
 	makeCube(Vec3d(0, 0, 0), Vec3d(1, 1, 1), AllFaces);
