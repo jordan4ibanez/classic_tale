@@ -62,7 +62,7 @@ struct FaceTextures {
         }
     }
 
-    void update(const ref int[6] newTextures) {
+    void update(const int* newTextures) {
         this.front = newTextures[0];
         this.back = newTextures[1];
         this.left = newTextures[2];
@@ -167,6 +167,8 @@ private:
         ulong vertIndex = 0;
         ulong textIndex = 0;
 
+        FaceGeneration faceGen = AllFaces;
+
         foreach (x; 0 .. CHUNK_WIDTH) {
             foreach (z; 0 .. CHUNK_WIDTH) {
                 foreach (y; 0 .. CHUNK_HEIGHT) {
@@ -180,10 +182,12 @@ private:
                     const BlockDefinition* thisDefinition = BlockDatabase.getBlockByID(
                         thisData.blockID);
 
-                    faceTextures.update(thisDefinition.textures);
+                    faceTextures.update(thisDefinition.textureIDs.ptr);
 
-                    makeCube(vertIndex, textIndex, vertices.ptr, textureCoordinates.ptr, Vec3d(x, y, z), Vec3d(0, 0, 0),
-                        Vec3d(1, 1, 1), AllFaces, faceTextures);
+                    const pos = Vec3d(x, y, z);
+
+                    makeCube(vertIndex, textIndex, vertices.ptr, textureCoordinates.ptr, pos, Vec3d(0, 0, 0),
+                        Vec3d(1, 1, 1), &faceGen, &faceTextures);
 
                 }
             }
