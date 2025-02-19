@@ -122,29 +122,24 @@ public: //* BEGIN PUBLIC API.
         return gravity;
     }
 
-    // void drawDebugPoints() {
-    //     foreach (point; debugDrawPoints) {
-    //         Render.circle(point, 0.1, Colors.ORANGE);
-    //     }
-    // }
+    double getTop(Vec3d position) {
+        // todo: this should probably just use a heightmap.
+        Vec2iXZ chunkID = calculateChunkAtWorldPosition(position);
+        Vec2iXZ posInChunk = getXZInChunk(position);
 
-    // double getTop(double xPosition) {
-    //     int chunkID = calculateChunkAtWorldPosition(xPosition);
-    //     int xPosInChunk = getXInChunk(xPosition);
+        if (chunkID !in database) {
+            return 0;
+        }
 
-    //     if (chunkID !in database) {
-    //         return 0;
-    //     }
+        Chunk thisChunk = database[chunkID];
 
-    //     Chunk thisChunk = database[chunkID];
-
-    //     foreach_reverse (y; 0 .. CHUNK_HEIGHT) {
-    //         if (thisChunk.data[xPosInChunk][y].blockID != 0) {
-    //             return y + 1;
-    //         }
-    //     }
-    //     return 0;
-    // }
+        foreach_reverse (y; 0 .. CHUNK_HEIGHT) {
+            if (thisChunk.data[posInChunk.x][posInChunk.z][y].blockID != 0) {
+                return y + 1;
+            }
+        }
+        return 0;
+    }
 
     Vec2iXZ calculateChunkAtWorldPosition(Vec3d position) {
         return Vec2iXZ(
