@@ -33,7 +33,7 @@ void main() {
 		ModelHandler.terminate();
 	}
 
-	rlDisableBackfaceCulling();
+	// rlDisableBackfaceCulling();
 
 	// float[] vertices;
 	// float[] textureCoordinates;
