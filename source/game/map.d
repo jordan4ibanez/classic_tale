@@ -211,33 +211,34 @@ public: //* BEGIN PUBLIC API.
         database[chunkID].data[xzPosInChunk.x][xzPosInChunk.z][yPosInChunk].blockID = blockID;
     }
 
-    // void setBlockAtWorldPositionByName(Vec2d position, string name) {
+    void setBlockAtWorldPositionByName(Vec3d position, string name) {
 
-    //     int chunkID = calculateChunkAtWorldPosition(position.x);
+        Vec2iXZ chunkID = calculateChunkAtWorldPosition(position);
 
-    //     if (chunkID !in database) {
-    //         // todo: maybe unload the chunk after?
-    //         loadChunk(chunkID);
-    //     }
+        if (chunkID !in database) {
+            // todo: maybe unload the chunk after?
+            // loadChunk(chunkID);
+        }
 
-    //     int xPosInChunk = getXInChunk(position.x);
+        Vec2iXZ xzPosInChunk = getXZInChunk(position);
 
-    //     int yPosInChunk = cast(int) floor(position.y);
+        int yPosInChunk = cast(int) floor(position.y);
 
-    //     // Out of bounds.
-    //     if (yPosInChunk < 0 || yPosInChunk >= CHUNK_HEIGHT) {
-    //         writeln("WARNING! trying to write out of bounds! " ~ to!string(yPosInChunk));
-    //         return;
-    //     }
+        // Out of bounds.
+        if (yPosInChunk < 0 || yPosInChunk >= CHUNK_HEIGHT) {
+            writeln("WARNING! trying to write out of bounds! " ~ to!string(yPosInChunk));
+            return;
+        }
 
-    //     BlockDefinitionResult result = BlockDatabase.getBlockByName(name);
+        BlockDefinitionResult result = BlockDatabase.getBlockByName(name);
 
-    //     if (!result.exists) {
-    //         throw new Error("Cannot set to block " ~ name ~ ", does not exist.");
-    //     }
+        if (!result.exists) {
+            throw new Error("Cannot set to block " ~ name ~ ", does not exist.");
+        }
 
-    //     database[chunkID].data[xPosInChunk][yPosInChunk].blockID = result.definition.id;
-    // }
+        database[chunkID].data[xzPosInChunk.x][xzPosInChunk.z][yPosInChunk].blockID = result
+            .definition.id;
+    }
 
     // void worldLoad(int currentPlayerChunk) {
     //     foreach (i; currentPlayerChunk - 1 .. currentPlayerChunk + 2) {
