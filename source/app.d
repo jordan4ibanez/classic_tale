@@ -224,6 +224,25 @@ void main() {
 				Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
 				Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z)
 			);
+
+			TexPoints points = TextureHandler.getPoints(textures.right);
+			immutable Vec2d textureSize = TextureHandler.getSize(textures.right);
+
+			immutable double bottomTrim = min.y * textureSize.y;
+			immutable double topTrim = (1.0 - max.y) * textureSize.y;
+
+			immutable double backTrim = min.z * textureSize.x;
+			immutable double frontTrim = (1.0 - max.z) * textureSize.x;
+
+			textureCoordinates ~= [
+				points.topLeft.x + frontTrim, points.topLeft.y + topTrim, // 0
+				points.bottomLeft.x + frontTrim, points.bottomLeft.y - bottomTrim, // 1
+				points.bottomRight.x - backTrim, points.bottomRight.y - bottomTrim, // 2
+				points.bottomRight.x - backTrim, points.bottomRight.y - bottomTrim, // 2
+				points.topRight.x - backTrim, points.topRight.y + topTrim, // 3
+				points.topLeft.x + frontTrim, points.topLeft.y + topTrim, // 0
+
+			];
 		}
 
 		// Top of top points towards -Z.
@@ -250,19 +269,10 @@ void main() {
 	}
 
 	FaceTextures tex = "testing.png";
-	FaceGeneration faces = FaceGeneration(false, false, true, false, false, false);
+	FaceGeneration faces = FaceGeneration(false, false, false, true, false, false);
 	makeCube(Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), faces, tex);
 
 	// float[] textureCoordinates = [
-
-	// 	// Right.
-	// 	points.topLeft.x, points.topLeft.y, // 0
-	// 	points.bottomLeft.x, points.bottomLeft.y, // 1
-	// 	points.bottomRight.x, points.bottomRight.y, // 2
-
-	// 	points.bottomRight.x, points.bottomRight.y, // 2
-	// 	points.topRight.x, points.topRight.y, // 3
-	// 	points.topLeft.x, points.topLeft.y, // 0
 
 	// 	// Top.
 	// 	points.topLeft.x, points.topLeft.y, // 0
