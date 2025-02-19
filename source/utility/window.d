@@ -1,5 +1,6 @@
 module utility.window;
 
+import game.map_graphics;
 import graphics.camera_handler;
 import graphics.font_handler;
 import graphics.gui;
@@ -97,6 +98,7 @@ private: //* BEGIN INTERNAL API.
     void updateSystem() {
         Delta.__calculateDelta();
         GUI.__update(getSize());
+        MapGraphics.__update();
         CameraHandler.__update();
         // FontHandler.__update();
     }
