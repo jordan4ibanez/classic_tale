@@ -8,6 +8,7 @@ import hashset;
 import math.vec2d;
 import math.vec2i;
 import math.vec3d;
+import std.array;
 import std.bitmanip;
 import std.conv;
 import std.datetime.stopwatch;
@@ -160,8 +161,8 @@ private:
 
         writeln(vertexAllocation, " ", textureCoordAllocation);
 
-        float[] vertices; //= new float[vertexAllocation];
-        float[] textureCoordinates; // = new float[textureCoordAllocation];
+        float[] vertices = uninitializedArray!(float[])(vertexAllocation);
+        float[] textureCoordinates = uninitializedArray!(float[])(textureCoordAllocation);
 
         // foreach (x; 0 .. CHUNK_WIDTH) {
         //     foreach (z; 0 .. CHUNK_WIDTH) {
