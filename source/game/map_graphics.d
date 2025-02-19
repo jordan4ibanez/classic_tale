@@ -57,6 +57,18 @@ struct FaceTextures {
             component = allFaces;
         }
     }
+
+    //FIXME: //todo: This will yield extremely bad performance.
+    this(string[6] data) {
+        this.front = data[0];
+        this.back = data[0];
+
+        this.left = data[0];
+        this.right = data[0];
+
+        this.top = data[0];
+        this.bottom = data[0];
+    }
 }
 
 private struct PopResult {
@@ -121,6 +133,8 @@ private:
                     if (thisChunk.data[x][z][y].blockID == 0) {
                         continue;
                     }
+
+                    makeCube(vertices, textureCoordinates, Vec3d(x, y, z), Vec3d(0, 0, 0), Vec3d(1, 1, 1), AllFaces)
 
                 }
             }
