@@ -61,7 +61,7 @@ void main() {
 
 		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 10, 10, 30, Colors.BLACK);
 
-		foreach (_; 0 .. uniform(1000, 10000, rand)) {
+		foreach (_; 0 .. uniform(1000, 10_000, rand)) {
 			Vec3d target;
 			target.x = uniform(0.0, 16.0, rand);
 			target.z = uniform(0.0, 16.0, rand);
