@@ -54,6 +54,9 @@ void main() {
 		BeginDrawing();
 		ClearBackground(Colors.RAYWHITE);
 
+		// writeln(ModelHandler.modelExists("Chunk:0|0"));
+		ModelHandler.draw("Chunk:0|0", Vec3d(0, 0, 0));
+
 		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 10, 10, 30, Colors.BLACK);
 
 		CameraHandler.begin();

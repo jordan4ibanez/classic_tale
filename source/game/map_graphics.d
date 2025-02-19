@@ -155,10 +155,13 @@ private:
             }
         }
 
-        if (ModelHandler.modelExists(generateKey(chunkKey))) {
+        const string chunkMeshKey = generateKey(chunkKey);
+
+        if (ModelHandler.modelExists(chunkMeshKey)) {
             writeln("exists");
         } else {
-            writeln("does not exist");
+            writeln("does not exist, creating");
+            ModelHandler.newModelFromMesh(chunkMeshKey, vertices, textureCoordinates, true);
         }
 
     }
