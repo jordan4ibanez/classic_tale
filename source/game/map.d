@@ -190,6 +190,10 @@ public: //* BEGIN PUBLIC API.
     //     return collision(entityPosition, entitySize, entityVelocity, axis);
     // }
 
+    void debugGenerate(int x, int z) {
+        loadChunk(Vec2i(x, z));
+    }
+
 private: //* BEGIN INTERNAL API.
 
     // bool collision(ref Vec2d entityPosition, Vec2d entitySize, ref Vec2d entityVelocity, CollisionAxis axis) {
