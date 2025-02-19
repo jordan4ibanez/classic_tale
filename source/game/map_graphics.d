@@ -2,6 +2,7 @@ module game.map_graphics;
 
 import game.block_database;
 import game.map;
+import graphics.model_handler;
 import graphics.texture_handler;
 import hashset;
 import math.vec2d;
@@ -74,6 +75,11 @@ private struct PopResult {
     Vec2i data;
 }
 
+pragma(inline, true)
+string generateKey(const ref Vec2i input) {
+    return "Chunk:" ~ to!string(input.x) ~ "|" ~ to!string(input.y);
+}
+
 static final const class MapGraphics {
 static:
 private:
@@ -82,7 +88,7 @@ private:
 
 public:
 
-    void generate(Vec2i chunkToGenerate) {
+    void generate(const ref Vec2i chunkToGenerate) {
         generationQueue.insert(chunkToGenerate);
     }
 
@@ -111,7 +117,7 @@ private:
         return result;
     }
 
-    void createChunkMesh(Vec2i chunkKey) {
+    void createChunkMesh(const ref Vec2i chunkKey) {
         const(Chunk*) thisChunk = Map.getChunkPointer(chunkKey);
 
         if (thisChunk is null) {
@@ -148,6 +154,13 @@ private:
                 }
             }
         }
+
+        if (ModelHandler.modelExists(generateKey(chunkKey))) {
+            writeln("exists");
+        } else {
+            writeln("does not exist");
+        }
+
     }
 
     // Maybe this can have a numeric AA or array to hash this in immediate mode?
