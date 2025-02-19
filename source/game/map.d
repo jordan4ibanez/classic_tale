@@ -349,92 +349,93 @@ private: //* BEGIN INTERNAL API.
         }
     }
 
-    // void loadChunk(int chunkPosition) {
-    //     // Already loaded.
-    //     if (chunkPosition in database) {
-    //         return;
-    //     }
-    //     // todo: try to read from mongoDB.
-    //     Chunk newChunk = new Chunk();
-    //     generateChunkData(chunkPosition, newChunk);
-    //     database[chunkPosition] = newChunk;
-    // }
+    void loadChunk(Vec2iXZ chunkPosition) {
+        // Already loaded.
+        if (chunkPosition in database) {
+            return;
+        }
+        // todo: try to read from mongoDB.
+        Chunk newChunk = new Chunk();
+        generateChunkData(chunkPosition, newChunk);
+        database[chunkPosition] = newChunk;
+    }
 
-    // void generateChunkData(int chunkPosition, ref Chunk thisChunk) {
+    void generateChunkData(Vec2iXZ chunkPosition, ref Chunk thisChunk) {
 
-    //     // todo: the chunk should have a biome.
-    //     BiomeDefinitionResult biomeResult = BiomeDatabase.getBiomeByID(0);
-    //     if (!biomeResult.exists) {
-    //         import std.conv;
+        // todo: the chunk should have a biome.
+        BiomeDefinitionResult biomeResult = BiomeDatabase.getBiomeByID(0);
+        if (!biomeResult.exists) {
+            import std.conv;
 
-    //         throw new Error("Attempted to get biome " ~ to!string(0) ~ " which does not exist");
-    //     }
+            throw new Error("Attempted to get biome " ~ to!string(0) ~ " which does not exist");
+        }
 
-    //     immutable double baseHeight = 160;
+        immutable double baseHeight = 160;
 
-    //     immutable int basePositionX = chunkPosition * CHUNK_WIDTH;
+        immutable int basePositionX = chunkPosition.x * CHUNK_WIDTH;
+        immutable int basePositionZ = chunkPosition.z * CHUNK_WIDTH;
 
-    //     BlockDefinitionResult bedrockResult = BlockDatabase.getBlockByName("bedrock");
-    //     if (!bedrockResult.exists) {
-    //         throw new Error("Please do not remove bedrock from the engine.");
-    //     }
+        BlockDefinitionResult bedrockResult = BlockDatabase.getBlockByName("bedrock");
+        if (!bedrockResult.exists) {
+            throw new Error("Please do not remove bedrock from the engine.");
+        }
 
-    //     BlockDefinitionResult stoneResult = BlockDatabase.getBlockByID(
-    //         biomeResult.definition.stoneLayerID);
-    //     if (!stoneResult.exists) {
-    //         throw new Error("Stone does not exist for biome " ~ biomeResult.definition.name);
-    //     }
+        BlockDefinitionResult stoneResult = BlockDatabase.getBlockByID(
+            biomeResult.definition.stoneLayerID);
+        if (!stoneResult.exists) {
+            throw new Error("Stone does not exist for biome " ~ biomeResult.definition.name);
+        }
 
-    //     BlockDefinitionResult dirtResult = BlockDatabase.getBlockByID(
-    //         biomeResult.definition.dirtLayerID);
-    //     if (!dirtResult.exists) {
-    //         throw new Error("Dirt does not exist for biome " ~ biomeResult.definition.name);
-    //     }
+        BlockDefinitionResult dirtResult = BlockDatabase.getBlockByID(
+            biomeResult.definition.dirtLayerID);
+        if (!dirtResult.exists) {
+            throw new Error("Dirt does not exist for biome " ~ biomeResult.definition.name);
+        }
 
-    //     BlockDefinitionResult grassResult = BlockDatabase.getBlockByID(
-    //         biomeResult.definition.grassLayerID);
-    //     if (!grassResult.exists) {
-    //         throw new Error("Grass does not exist for biome " ~ biomeResult.definition.name);
-    //     }
+        BlockDefinitionResult grassResult = BlockDatabase.getBlockByID(
+            biomeResult.definition.grassLayerID);
+        if (!grassResult.exists) {
+            throw new Error("Grass does not exist for biome " ~ biomeResult.definition.name);
+        }
 
-    //     foreach (x; 0 .. CHUNK_WIDTH) {
+        // foreach (x; 0 .. CHUNK_WIDTH) {
 
-    //         immutable double selectedNoise = fnlGetNoise2D(&noise, x + basePositionX, 0);
+        //     immutable double selectedNoise = fnlGetNoise2D(&noise, x + basePositionX, 0);
 
-    //         immutable double noiseScale = 20;
+        //     immutable double noiseScale = 20;
 
-    //         immutable int selectedHeight = cast(int) floor(
-    //             baseHeight + (selectedNoise * noiseScale));
+        //     immutable int selectedHeight = cast(int) floor(
+        //         baseHeight + (selectedNoise * noiseScale));
 
-    //         immutable int grassLayer = selectedHeight;
-    //         immutable int dirtLayer = selectedHeight - 3;
+        //     immutable int grassLayer = selectedHeight;
+        //     immutable int dirtLayer = selectedHeight - 3;
 
-    //         immutable double bedRockNoise = fnlGetNoise2D(&noise, (x + basePositionX) * 12, 0) * 2;
-    //         immutable int bedRockSelectedHeight = cast(int) round(abs(bedRockNoise));
+        //     immutable double bedRockNoise = fnlGetNoise2D(&noise, (x + basePositionX) * 12, 0) * 2;
+        //     immutable int bedRockSelectedHeight = cast(int) round(abs(bedRockNoise));
 
-    //         yStack: foreach (y; 0 .. CHUNK_HEIGHT) {
+        //     yStack: foreach (y; 0 .. CHUNK_HEIGHT) {
 
-    //             if (y > selectedHeight) {
-    //                 break yStack;
-    //             }
+        //         if (y > selectedHeight) {
+        //             break yStack;
+        //         }
 
-    //             if (y == 0) {
-    //                 thisChunk.data[x][y].blockID = bedrockResult.definition.id;
-    //             } else if (y <= 2) {
-    //                 if (y <= bedRockSelectedHeight) {
-    //                     thisChunk.data[x][y].blockID = bedrockResult.definition.id;
-    //                 } else {
-    //                     thisChunk.data[x][y].blockID = stoneResult.definition.id;
-    //                 }
-    //             } else if (y < dirtLayer) {
-    //                 thisChunk.data[x][y].blockID = stoneResult.definition.id;
-    //             } else if (y < grassLayer) {
-    //                 thisChunk.data[x][y].blockID = dirtResult.definition.id;
-    //             } else if (y == grassLayer) {
-    //                 thisChunk.data[x][y].blockID = grassResult.definition.id;
-    //             }
-    //         }
-    //     }
-    // }
+        //         if (y == 0) {
+        //             thisChunk.data[x][y].blockID = bedrockResult.definition.id;
+        //         } else if (y <= 2) {
+        //             if (y <= bedRockSelectedHeight) {
+        //                 thisChunk.data[x][y].blockID = bedrockResult.definition.id;
+        //             } else {
+        //                 thisChunk.data[x][y].blockID = stoneResult.definition.id;
+        //             }
+        //         } else if (y < dirtLayer) {
+        //             thisChunk.data[x][y].blockID = stoneResult.definition.id;
+        //         } else if (y < grassLayer) {
+        //             thisChunk.data[x][y].blockID = dirtResult.definition.id;
+        //         } else if (y == grassLayer) {
+        //             thisChunk.data[x][y].blockID = grassResult.definition.id;
+        //         }
+        //     }
+        // }
+    }
 
 }
