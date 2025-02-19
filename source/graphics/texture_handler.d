@@ -71,6 +71,16 @@ public: //* BEGIN PUBLIC API.
         return (textureName in texturePointDatabase) !is null;
     }
 
+    Vec2d textureSize(string textureName) {
+
+        Rect* thisRect = textureName in textureRectangleDatabase;
+        if (thisRect is null) {
+            throw new Error("Tried to get null texture size of " ~ textureName);
+        }
+
+        return Vec2d(thisRect.width, thisRect.height);
+    }
+
     const(TexturePoints!(Vec2d)*) getPoints(string name) {
         const TexturePoints!(Vec2d)* output = name in texturePointDatabase;
         if (output is null) {
