@@ -249,7 +249,7 @@ public: //* BEGIN PUBLIC API.
         }
 
         // This can get very laggy if old chunks are not unloaded. :)
-        // unloadOldChunks(currentPlayerChunk);
+        unloadOldChunks(currentPlayerChunk);
     }
 
     // bool collideEntityToWorld(ref Vec2d entityPosition, Vec2d entitySize, ref Vec2d entityVelocity,
@@ -333,20 +333,21 @@ private: //* BEGIN INTERNAL API.
     //     return hitGround;
     // }
 
-    // void unloadOldChunks(int currentPlayerChunk) {
+    void unloadOldChunks(Vec2iXZ currentPlayerChunk) {
 
-    //     // todo: save the chunks to mongoDB.
+        // todo: save the chunks to mongoDB.
 
-    //     int[] keys = [] ~ database.keys;
+        Vec2iXZ[] keys = [] ~ database.keys;
 
-    //     foreach (int key; keys) {
-    //         if (abs(key - currentPlayerChunk) > 1) {
-    //             database.remove(key);
-    //             // todo: save the chunks to mongoDB.
-    //             // writeln("deleted: " ~ to!string(key));
-    //         }
-    //     }
-    // }
+        foreach (Vec2iXZ key; keys) {
+            // Todo: make this render distance instead of 1.
+            if (abs(key.x - currentPlayerChunk.x) > 1 || abs(key.z - currentPlayerChunk.z) > 1) {
+                database.remove(key);
+                // todo: save the chunks to sqlite.
+                writeln("deleted: " ~ to!string(key));
+            }
+        }
+    }
 
     // void loadChunk(int chunkPosition) {
     //     // Already loaded.
