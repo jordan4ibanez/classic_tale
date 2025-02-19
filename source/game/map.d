@@ -162,14 +162,13 @@ public: //* BEGIN PUBLIC API.
             return;
         }
 
-        BlockDefinitionResult result = BlockDatabase.getBlockByName(name);
+        const(BlockDefinition*) result = BlockDatabase.getBlockByName(name);
 
-        if (!result.exists) {
+        if (result is null) {
             throw new Error("Cannot set to block " ~ name ~ ", does not exist.");
         }
 
-        database[chunkID].data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = result
-            .definition.id;
+        database[chunkID].data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = result.id;
     }
 
     void worldLoad(Vec2i currentPlayerChunk) {
@@ -311,26 +310,26 @@ private: //* BEGIN INTERNAL API.
         immutable int basePositionX = chunkPosition.x * CHUNK_WIDTH;
         immutable int basePositionZ = chunkPosition.y * CHUNK_WIDTH;
 
-        BlockDefinitionResult bedrockResult = BlockDatabase.getBlockByName("bedrock");
-        if (!bedrockResult.exists) {
+        const(BlockDefinition*) bedrockResult = BlockDatabase.getBlockByName("bedrock");
+        if (bedrockResult is null) {
             throw new Error("Please do not remove bedrock from the engine.");
         }
 
-        BlockDefinitionResult stoneResult = BlockDatabase.getBlockByID(
+        const(BlockDefinition*) stoneResult = BlockDatabase.getBlockByID(
             biomeResult.definition.stoneLayerID);
-        if (!stoneResult.exists) {
+        if (stoneResult is null) {
             throw new Error("Stone does not exist for biome " ~ biomeResult.definition.name);
         }
 
-        BlockDefinitionResult dirtResult = BlockDatabase.getBlockByID(
+        const(BlockDefinition*) dirtResult = BlockDatabase.getBlockByID(
             biomeResult.definition.dirtLayerID);
-        if (!dirtResult.exists) {
+        if (dirtResult is null) {
             throw new Error("Dirt does not exist for biome " ~ biomeResult.definition.name);
         }
 
-        BlockDefinitionResult grassResult = BlockDatabase.getBlockByID(
+        const(BlockDefinition*) grassResult = BlockDatabase.getBlockByID(
             biomeResult.definition.grassLayerID);
-        if (!grassResult.exists) {
+        if (grassResult is null) {
             throw new Error("Grass does not exist for biome " ~ biomeResult.definition.name);
         }
 
@@ -358,19 +357,19 @@ private: //* BEGIN INTERNAL API.
                     }
 
                     if (y == 0) {
-                        thisChunk.data[x][z][y].blockID = bedrockResult.definition.id;
+                        thisChunk.data[x][z][y].blockID = bedrockResult.id;
                     } else if (y <= 2) {
                         if (y <= bedRockSelectedHeight) {
-                            thisChunk.data[x][z][y].blockID = bedrockResult.definition.id;
+                            thisChunk.data[x][z][y].blockID = bedrockResult.id;
                         } else {
-                            thisChunk.data[x][z][y].blockID = stoneResult.definition.id;
+                            thisChunk.data[x][z][y].blockID = stoneResult.id;
                         }
                     } else if (y < dirtLayer) {
-                        thisChunk.data[x][z][y].blockID = stoneResult.definition.id;
+                        thisChunk.data[x][z][y].blockID = stoneResult.id;
                     } else if (y < grassLayer) {
-                        thisChunk.data[x][z][y].blockID = dirtResult.definition.id;
+                        thisChunk.data[x][z][y].blockID = dirtResult.id;
                     } else if (y == grassLayer) {
-                        thisChunk.data[x][z][y].blockID = grassResult.definition.id;
+                        thisChunk.data[x][z][y].blockID = grassResult.id;
                     }
                 }
             }
