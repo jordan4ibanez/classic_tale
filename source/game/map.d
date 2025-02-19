@@ -55,6 +55,10 @@ public: //* BEGIN PUBLIC API.
         return key in database;
     }
 
+    const(Chunk*) getChunkPointer(immutable int keyX, immutable int keyZ) {
+        return Vec2i(keyX, keyZ) in database;
+    }
+
     double getGravity() {
         return gravity;
     }
