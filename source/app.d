@@ -170,6 +170,22 @@ void main() {
 
 			TexPoints points = TextureHandler.getPoints(textures.back);
 			immutable Vec2d textureSize = TextureHandler.getSize(textures.back);
+
+			immutable double bottomTrim = min.y * textureSize.y;
+			immutable double topTrim = (1.0 - max.y) * textureSize.y;
+
+			// immutable double leftTrim = min.x * textureSize.x;
+			// immutable double rightTrim = (1.0 - max.x) * textureSize.x;
+
+			textureCoordinates ~= [
+				points.topLeft.x, points.topLeft.y + topTrim, // 0
+				points.bottomLeft.x, points.bottomLeft.y - bottomTrim, // 1
+				points.bottomRight.x, points.bottomRight.y - bottomTrim, // 2
+
+				points.bottomRight.x, points.bottomRight.y - bottomTrim, // 2
+				points.topRight.x, points.topRight.y + topTrim, // 3
+				points.topLeft.x, points.topLeft.y + topTrim, // 0
+			];
 		}
 
 		// Left.
