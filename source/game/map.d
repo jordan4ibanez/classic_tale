@@ -22,13 +22,13 @@ import utility.window;
 immutable public int CHUNK_WIDTH = 32;
 immutable public int CHUNK_HEIGHT = 256;
 
-struct ChunkData {
+struct BlockData {
     int blockID = 0;
 }
 
 final class Chunk {
     // Y, Z, X
-    ChunkData[CHUNK_HEIGHT][CHUNK_WIDTH][CHUNK_WIDTH] data;
+    BlockData[CHUNK_HEIGHT][CHUNK_WIDTH][CHUNK_WIDTH] data;
 }
 
 static final const class Map {
@@ -98,11 +98,11 @@ public: //* BEGIN PUBLIC API.
         return Vec2i(x, z);
     }
 
-    ChunkData getBlockAtWorldPosition(Vec3d position) {
+    BlockData getBlockAtWorldPosition(Vec3d position) {
         Vec2i chunkID = calculateChunkAtWorldPosition(position);
 
         if (chunkID !in database) {
-            return ChunkData();
+            return BlockData();
         }
 
         Vec2i xzPosInChunk = getXZInChunk(position);
@@ -112,7 +112,7 @@ public: //* BEGIN PUBLIC API.
         // Out of bounds.
         if (yPosInChunk < 0 || yPosInChunk >= CHUNK_HEIGHT) {
             writeln("WARNING! trying to read out of bounds! " ~ to!string(yPosInChunk));
-            return ChunkData();
+            return BlockData();
         }
 
         return database[chunkID].data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk];
