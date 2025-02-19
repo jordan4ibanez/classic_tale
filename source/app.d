@@ -284,11 +284,32 @@ void main() {
 				Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
 				Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z)
 			);
+
+			// This face is extremely confusing to visualize because one axis is inverted,
+			// and the the whole thing is upside down.
+
+			TexPoints points = TextureHandler.getPoints(textures.bottom);
+			immutable Vec2d textureSize = TextureHandler.getSize(textures.bottom);
+
+			immutable double leftTrim = min.x * textureSize.x;
+			immutable double rightTrim = (1.0 - max.x) * textureSize.x;
+
+			immutable double backTrim = min.z * textureSize.y;
+			immutable double frontTrim = (1.0 - max.z) * textureSize.y;
+
+			textureCoordinates ~= [
+				points.topLeft.x + rightTrim, points.topLeft.y + backTrim, // 0
+				points.bottomLeft.x + rightTrim, points.bottomLeft.y - frontTrim, // 1
+				points.bottomRight.x - leftTrim, points.bottomRight.y - frontTrim, // 2
+				points.bottomRight.x - leftTrim, points.bottomRight.y - frontTrim, // 2
+				points.topRight.x - leftTrim, points.topRight.y + backTrim, // 3
+				points.topLeft.x + rightTrim, points.topLeft.y + backTrim, // 0
+			];
 		}
 	}
 
 	FaceTextures tex = "testing.png";
-	FaceGeneration faces = FaceGeneration(false, false, false, false, true, false);
+	FaceGeneration faces = FaceGeneration(false, false, false, false, false, true);
 	makeCube(Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), faces, tex);
 
 	ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
