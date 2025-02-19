@@ -18,7 +18,7 @@ import std.random;
 import std.stdio;
 import utility.window;
 
-private struct Vec2Chunk {
+private struct ChunkKey {
     int x = 0;
     int z = 0;
 }
