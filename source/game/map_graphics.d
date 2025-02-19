@@ -283,19 +283,11 @@ private:
         const string chunkMeshKey = generateKey(chunkKey);
 
         if (ModelHandler.modelExists(chunkMeshKey)) {
-
-            Model* thisModel = ModelHandler.getModelPointer(chunkMeshKey);
-
-            thisModel.meshes[0].vertices = &vertices[0];
-            thisModel.meshes[0].texcoords = textureCoordinates.ptr;
-
-            ModelHandler.updateModelInGPU(chunkMeshKey);
-
-            // writeln("exists");
-        } else {
-            // writeln("does not exist, creating");
-            ModelHandler.newModelFromMesh(chunkMeshKey, vertices, textureCoordinates, true);
+            ModelHandler.destroy(chunkMeshKey);
         }
+
+        // writeln("does not exist, creating");
+        ModelHandler.newModelFromMesh(chunkMeshKey, vertices, textureCoordinates, true);
 
     }
 
