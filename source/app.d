@@ -143,7 +143,6 @@ void main() {
 
 			immutable double bottomTrim = min.y * textureSize.y;
 			immutable double topTrim = (1.0 - max.y) * textureSize.y;
-
 			// These are flipped in application because you're looking at them from the front.
 			immutable double leftTrim = min.x * textureSize.x;
 			immutable double rightTrim = (1.0 - max.x) * textureSize.x;
@@ -195,6 +194,27 @@ void main() {
 				Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
 				Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z)
 			);
+
+			TexPoints points = TextureHandler.getPoints(textures.back);
+			immutable Vec2d textureSize = TextureHandler.getSize(textures.back);
+
+			// Z axis gets kind of weird since it's inverted.
+
+			immutable double bottomTrim = min.y * textureSize.y;
+			immutable double topTrim = (1.0 - max.y) * textureSize.y;
+
+			immutable double backTrim = min.z * textureSize.x;
+			immutable double frontTrim = (1.0 - max.z) * textureSize.x;
+
+			textureCoordinates ~= [
+				points.topLeft.x + backTrim, points.topLeft.y + topTrim, // 0
+				points.bottomLeft.x + backTrim, points.bottomLeft.y - bottomTrim, // 1
+				points.bottomRight.x - frontTrim, points.bottomRight.y - bottomTrim, // 2
+
+				points.bottomRight.x - frontTrim, points.bottomRight.y - bottomTrim, // 2
+				points.topRight.x - frontTrim, points.topRight.y + topTrim, // 3
+				points.topLeft.x + backTrim, points.topLeft.y + topTrim, // 0
+			];
 		}
 
 		// Right.
@@ -231,28 +251,10 @@ void main() {
 	}
 
 	FaceTextures tex = "testing.png";
-	FaceGeneration faces = FaceGeneration(false, true, false, false, false, false);
-	makeCube(Vec3d(0, 0, 0), Vec3d(0.25, 0, 0), Vec3d(0.5, 1, 1), faces, tex);
+	FaceGeneration faces = FaceGeneration(false, false, true, false, false, false);
+	makeCube(Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), faces, tex);
 
 	// float[] textureCoordinates = [
-
-	// 	// Back.
-	// 	points.topLeft.x, points.topLeft.y, // 0
-	// 	points.bottomLeft.x, points.bottomLeft.y, // 1
-	// 	points.bottomRight.x, points.bottomRight.y, // 2
-
-	// 	points.bottomRight.x, points.bottomRight.y, // 2
-	// 	points.topRight.x, points.topRight.y, // 3
-	// 	points.topLeft.x, points.topLeft.y, // 0
-
-	// 	// Left.
-	// 	points.topLeft.x, points.topLeft.y, // 0
-	// 	points.bottomLeft.x, points.bottomLeft.y, // 1
-	// 	points.bottomRight.x, points.bottomRight.y, // 2
-
-	// 	points.bottomRight.x, points.bottomRight.y, // 2
-	// 	points.topRight.x, points.topRight.y, // 3
-	// 	points.topLeft.x, points.topLeft.y, // 0
 
 	// 	// Right.
 	// 	points.topLeft.x, points.topLeft.y, // 0
