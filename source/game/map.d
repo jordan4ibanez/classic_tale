@@ -240,15 +240,17 @@ public: //* BEGIN PUBLIC API.
             .definition.id;
     }
 
-    // void worldLoad(int currentPlayerChunk) {
-    //     foreach (i; currentPlayerChunk - 1 .. currentPlayerChunk + 2) {
-    //         writeln("loading chunk ", i);
-    //         loadChunk(i);
-    //     }
+    void worldLoad(Vec2iXZ currentPlayerChunk) {
+        foreach (x; currentPlayerChunk.x - 1 .. currentPlayerChunk.x + 2) {
+            foreach (z; currentPlayerChunk.z - 1 .. currentPlayerChunk.z + 2) {
+                writeln("loading chunk ", x, ",", z);
+                // loadChunk(i);
+            }
+        }
 
-    //     // This can get very laggy if old chunks are not unloaded. :)
-    //     unloadOldChunks(currentPlayerChunk);
-    // }
+        // This can get very laggy if old chunks are not unloaded. :)
+        // unloadOldChunks(currentPlayerChunk);
+    }
 
     // bool collideEntityToWorld(ref Vec2d entityPosition, Vec2d entitySize, ref Vec2d entityVelocity,
     //     CollisionAxis axis) {
