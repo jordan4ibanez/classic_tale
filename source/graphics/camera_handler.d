@@ -32,7 +32,7 @@ public: //* BEGIN PUBLIC API.
     }
 
     void begin() {
-        UpdateCamera(camera, CameraMode.CAMERA_ORBITAL);
+        // UpdateCamera(camera, CameraMode.CAMERA_ORBITAL);
         BeginMode3D(*camera);
     }
 
