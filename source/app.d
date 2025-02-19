@@ -136,15 +136,10 @@ void main() {
 
 			textureCoordinates ~= [
 				points.topLeft.x + rightTrim, points.topLeft.y + topTrim,
-
 				points.bottomLeft.x + rightTrim, points.bottomLeft.y - bottomTrim,
-
 				points.bottomRight.x - leftTrim, points.bottomRight.y - bottomTrim,
-
 				points.bottomRight.x - leftTrim, points.bottomRight.y - bottomTrim,
-
 				points.topRight.x - leftTrim, points.topRight.y + topTrim,
-
 				points.topLeft.x + rightTrim, points.topLeft.y + topTrim,
 			];
 
