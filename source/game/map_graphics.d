@@ -148,7 +148,7 @@ private:
 
                     faceTextures.update(thisDefinition.textures);
 
-                    makeCube(vertices, textureCoordinates, Vec3d(x, y, z), Vec3d(0, 0, 0), Vec3d(1, 1, 1), AllFaces,
+                    makeCube(vertices, textureCoordinates, Vec3d(x, y, z), Vec3d(0, 0, 0), Vec3d(1, 1, 1), NoFaces,
                         faceTextures);
 
                 }
