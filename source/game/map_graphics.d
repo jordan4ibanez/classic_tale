@@ -129,34 +129,61 @@ private:
 
         writeln("Generating chunk mesh " ~ to!string(chunkKey.x) ~ " " ~ to!string(chunkKey.y));
 
-        float[] vertices;
-        float[] textureCoordinates;
-
         FaceTextures faceTextures;
 
         auto sw = StopWatch(AutoStart.yes);
 
+        ulong vertexAllocation = 0;
+        ulong textureCoordAllocation = 0;
+
+        // Preallocation.
         foreach (x; 0 .. CHUNK_WIDTH) {
             foreach (z; 0 .. CHUNK_WIDTH) {
                 foreach (y; 0 .. CHUNK_HEIGHT) {
 
+                    // todo: undo this worst case scenario prototyping.
                     const BlockData* thisData = &thisChunk.data[x][z][y];
 
                     if (thisData.blockID == 0) {
                         continue;
                     }
 
-                    const BlockDefinition* thisDefinition = BlockDatabase.getBlockByID(
-                        thisData.blockID);
+                    // 3 [xyz], 6 [2 tris], 6 faces
+                    vertexAllocation += 3 * 6 * 6;
 
-                    faceTextures.update(thisDefinition.textures);
-
-                    makeCube(vertices, textureCoordinates, Vec3d(x, y, z), Vec3d(0, 0, 0), Vec3d(1, 1, 1), AllFaces,
-                        faceTextures);
+                    // 2 [xy], 6 [2 tris], 6 faces
+                    textureCoordAllocation += 2 * 6 * 6;
 
                 }
             }
         }
+
+        writeln(vertexAllocation, " ", textureCoordAllocation);
+
+        float[] vertices; //= new float[vertexAllocation];
+        float[] textureCoordinates; // = new float[textureCoordAllocation];
+
+        // foreach (x; 0 .. CHUNK_WIDTH) {
+        //     foreach (z; 0 .. CHUNK_WIDTH) {
+        //         foreach (y; 0 .. CHUNK_HEIGHT) {
+
+        //             const BlockData* thisData = &thisChunk.data[x][z][y];
+
+        //             if (thisData.blockID == 0) {
+        //                 continue;
+        //             }
+
+        //             const BlockDefinition* thisDefinition = BlockDatabase.getBlockByID(
+        //                 thisData.blockID);
+
+        //             faceTextures.update(thisDefinition.textures);
+
+        //             // makeCube(vertices, textureCoordinates, Vec3d(x, y, z), Vec3d(0, 0, 0), Vec3d(1, 1, 1), AllFaces,
+        //             //     faceTextures);
+
+        //         }
+        //     }
+        // }
 
         writeln("took: ", sw.peek().total!"msecs", "ms");
 
