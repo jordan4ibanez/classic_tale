@@ -27,6 +27,15 @@ struct BlockFaceGen {
 		this.top = input;
 		this.bottom = input;
 	}
+
+	this(bool front, bool back, bool left, bool right, bool top, bool bottom) {
+		this.front = front;
+		this.back = back;
+		this.left = left;
+		this.right = right;
+		this.top = top;
+		this.bottom = bottom;
+	}
 }
 
 alias AllFaces = Alias!(BlockFaceGen(true));
@@ -86,7 +95,7 @@ void main() {
 	float[] vertices;
 
 	// Maybe this can have a numeric AA or array to hash this in immediate mode?
-	void makeCube(const Vec3d min, const Vec3d max) {
+	void makeCube(const Vec3d min, const Vec3d max, BlockFaceGen faceGeneration) {
 
 		assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
 		assert(max.x <= 1 && max.y <= 1 && max.z <= 1, "max is out of bounds");
@@ -170,7 +179,7 @@ void main() {
 		);
 	}
 
-	makeCube(Vec3d(0, 0, 0), Vec3d(1, 1, 1));
+	makeCube(Vec3d(0, 0, 0), Vec3d(1, 1, 1), AllFaces);
 
 	TexPoints blah = TextureHandler.getPoints("testing.png");
 
