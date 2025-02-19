@@ -315,15 +315,12 @@ private:
             immutable double leftTrim = min.x * textureSize.x;
             immutable double rightTrim = (1.0 - max.x) * textureSize.x;
 
-            textureCoordinates ~= [
-                points.topLeft.x + rightTrim, points.topLeft.y + topTrim, // 0
-                points.bottomLeft.x + rightTrim, points.bottomLeft.y - bottomTrim, // 1
-                points.bottomRight.x - leftTrim, points.bottomRight.y - bottomTrim, // 2
-                points.bottomRight.x - leftTrim, points.bottomRight.y - bottomTrim, // 2
-                points.topRight.x - leftTrim, points.topRight.y + topTrim, // 3
-                points.topLeft.x + rightTrim, points.topLeft.y + topTrim, // 0
-            ];
-
+            makeTextureQuad(
+                Vec2d(points.topLeft.x + rightTrim, points.topLeft.y + topTrim),
+                Vec2d(points.bottomLeft.x + rightTrim, points.bottomLeft.y - bottomTrim),
+                Vec2d(points.bottomRight.x - leftTrim, points.bottomRight.y - bottomTrim),
+                Vec2d(points.topRight.x - leftTrim, points.topRight.y + topTrim),
+            );
         }
 
         // Back.
