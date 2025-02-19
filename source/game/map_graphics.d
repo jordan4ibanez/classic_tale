@@ -49,20 +49,20 @@ alias AllFaces = Alias!(FaceGeneration(true));
 alias NoFaces = Alias!(FaceGeneration(false));
 
 struct FaceTextures {
-    string front = null;
-    string back = null;
-    string left = null;
-    string right = null;
-    string top = null;
-    string bottom = null;
+    int front = -1;
+    int back = -1;
+    int left = -1;
+    int right = -1;
+    int top = -1;
+    int bottom = -1;
 
-    this(string allFaces) {
+    this(int allFaces) {
         foreach (ref component; this.tupleof) {
             component = allFaces;
         }
     }
 
-    void update(const ref string[6] newTextures) {
+    void update(const ref int[6] newTextures) {
         this.front = newTextures[0];
         this.back = newTextures[1];
         this.left = newTextures[2];
