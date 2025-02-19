@@ -224,6 +224,43 @@ private:
 
                     faceTextures.update(thisDefinition.textureIDs.ptr);
 
+                    faceGen.front = false;
+                    faceGen.back = false;
+                    faceGen.left = false;
+                    faceGen.right = false;
+                    faceGen.top = false;
+                    faceGen.bottom = false;
+
+                    if (x - 1 < 0 || thisChunk.data[x - 1][z][y].blockID == 0) {
+                        vertexAllocation += 18;
+                        textureCoordAllocation += 12;
+                    }
+
+                    if (x + 1 >= CHUNK_WIDTH || thisChunk.data[x + 1][z][y].blockID == 0) {
+                        vertexAllocation += 18;
+                        textureCoordAllocation += 12;
+                    }
+
+                    if (z - 1 < 0 || thisChunk.data[x][z - 1][y].blockID == 0) {
+                        vertexAllocation += 18;
+                        textureCoordAllocation += 12;
+                    }
+
+                    if (z + 1 >= CHUNK_WIDTH || thisChunk.data[x][z + 1][y].blockID == 0) {
+                        vertexAllocation += 18;
+                        textureCoordAllocation += 12;
+                    }
+
+                    if (y - 1 < 0 || thisChunk.data[x][z][y - 1].blockID == 0) {
+                        vertexAllocation += 18;
+                        textureCoordAllocation += 12;
+                    }
+
+                    if (y + 1 >= CHUNK_HEIGHT || thisChunk.data[x][z][y + 1].blockID == 0) {
+                        vertexAllocation += 18;
+                        textureCoordAllocation += 12;
+                    }
+
                     pos.x = x;
                     pos.y = y;
                     pos.z = z;
