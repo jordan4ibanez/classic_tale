@@ -12,11 +12,6 @@ class BlockDefinition {
     int id = -1;
 }
 
-struct BlockDefinitionResult {
-    BlockDefinition definition = null;
-    bool exists = false;
-}
-
 static final const class BlockDatabase {
 static:
 private:
@@ -65,28 +60,19 @@ public: //* BEGIN PUBLIC API.
     }
 
     bool hasBlockID(int id) {
-        if (id in idDatabase) {
-            return true;
-        }
-        return false;
+        return (id in idDatabase) !is null;
     }
 
     bool hasBlockName(string name) {
-        if (name in nameDatabase) {
-            return true;
-        }
-        return false;
+        return (name in nameDatabase) !is null;
     }
 
     const(BlockDefinition*) getBlockByID(int id) {
         return id in idDatabase;
     }
 
-    BlockDefinitionResult getBlockByName(string name) {
-        if (name !in nameDatabase) {
-            return BlockDefinitionResult();
-        }
-        return BlockDefinitionResult(nameDatabase[name], true);
+    const(BlockDefinition*) getBlockByName(string name) {
+        return name in nameDatabase;
     }
 
     void finalize() {
