@@ -4,6 +4,7 @@ public import utility.collision_functions : CollisionAxis;
 import fast_noise;
 import game.biome_database;
 import game.block_database;
+import game.map_graphics;
 import graphics.camera_handler;
 import graphics.render;
 import graphics.texture_handler;
@@ -145,6 +146,9 @@ public: //* BEGIN PUBLIC API.
         }
 
         database[chunkID].data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = blockID;
+
+        // This gets put into a HashSetQueue so it can keep doing it over and over.
+        MapGraphics.generate(chunkID);
     }
 
     void setBlockAtWorldPositionByName(Vec3d position, string name) {
@@ -173,6 +177,9 @@ public: //* BEGIN PUBLIC API.
         }
 
         database[chunkID].data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = thisBlock.id;
+
+        // This gets put into a HashSetQueue so it can keep doing it over and over.
+        MapGraphics.generate(chunkID);
     }
 
     void worldLoad(Vec2i currentPlayerChunk) {
