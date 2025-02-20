@@ -13,7 +13,7 @@ static:
 private:
 
     bool maximized = false;
-    bool mouseLocked = false;
+    
 
 public: //* BEGIN PUBLIC API.
 
@@ -69,28 +69,6 @@ public: //* BEGIN PUBLIC API.
         } else {
             maximize();
         }
-    }
-
-    void lockMouse() {
-        mouseLocked = true;
-        DisableCursor();
-    }
-
-    void unlockMouse() {
-        mouseLocked = false;
-        EnableCursor();
-    }
-
-    void toggleMouseLock() {
-        if (mouseLocked) {
-            unlockMouse();
-        } else {
-            lockMouse();
-        }
-    }
-
-    bool isMouseLocked() {
-        return mouseLocked;
     }
 
 private: //* BEGIN INTERNAL API.

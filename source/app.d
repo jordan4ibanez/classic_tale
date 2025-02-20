@@ -45,7 +45,7 @@ void main() {
 
 	rlDisableBackfaceCulling();
 
-	Window.lockMouse();
+	Mouse.lockMouse();
 
 	// FaceTextures tex = "testing.png";
 	// FaceGeneration faces = AllFaces;

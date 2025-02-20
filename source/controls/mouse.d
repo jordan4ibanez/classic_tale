@@ -10,11 +10,11 @@ static final const class Mouse {
 static:
 private:
 
-public:
+    bool mouseLocked = false;
 
     //? I like to have specific modules for things.
 
-    //* BEGIN PUBLIC API.
+public: //* BEGIN PUBLIC API.
 
     Vec2d getDelta() {
         return Vec2d(GetMouseDelta());
@@ -35,6 +35,28 @@ public:
         return IsMouseButtonDown(button);
     }
 
-    //* BEGIN INTERNAL API.
+    void lock() {
+        mouseLocked = true;
+        DisableCursor();
+    }
+
+    void unlock() {
+        mouseLocked = false;
+        EnableCursor();
+    }
+
+    void toggleLock() {
+        if (mouseLocked) {
+            unlock();
+        } else {
+            lock();
+        }
+    }
+
+    bool isLocked() {
+        return mouseLocked;
+    }
+
+private: //* BEGIN INTERNAL API.
 
 }
