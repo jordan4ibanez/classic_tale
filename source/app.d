@@ -63,6 +63,8 @@ void main() {
 	double[averager] GCcollection = 0;
 	ulong index = 0;
 
+	bool trigger = false;
+
 	while (Window.shouldStayOpen()) {
 
 		BeginDrawing();
@@ -70,35 +72,39 @@ void main() {
 
 		// writeln(ModelHandler.modelExists("Chunk:0|0"));
 
-		// foreach (_; 0 .. uniform(1_000, 100_000, rand)) {
-		// 	Vec3d target;
-		// 	target.x = uniform(0.0, 16.0, rand);
-		// 	target.z = uniform(0.0, 16.0, rand);
-		// 	target.y = uniform(0.0, 256.0, rand);
+		if (trigger) {
+			foreach (_; 0 .. uniform(1_000, 100_000, rand)) {
+				Vec3d target;
+				target.x = uniform(0.0, 16.0, rand);
+				target.z = uniform(0.0, 16.0, rand);
+				target.y = uniform(0.0, 256.0, rand);
 
-		// 	int blockID = uniform(0, 5, rand);
+				int blockID = uniform(0, 5, rand);
 
-		// 	Map.setBlockAtWorldPositionByID(target, blockID);
-		// }
+				Map.setBlockAtWorldPositionByID(target, blockID);
+			}
+		}
 
 		// MapGraphics.generate(blah);
 
 		CameraHandler.begin();
 		{
+			Map.draw();
 
-			if (ModelHandler.modelExists("Chunk:0|0")) {
-				ModelHandler.draw("Chunk:0|0", Vec3d(0, 0, 0));
-			}
-			if (ModelHandler.modelExists("Chunk:1|0")) {
+			// if (ModelHandler.modelExists("Chunk:0|0")) {
+			// 	ModelHandler.draw("Chunk:0|0", Vec3d(0, 0, 0));
+			// }
+			// if (ModelHandler.modelExists("Chunk:1|0")) {
 
-				ModelHandler.draw("Chunk:1|0", Vec3d(CHUNK_WIDTH * 1, 0, 0));
-			}
-			if (ModelHandler.modelExists("Chunk:2|0")) {
+			// 	ModelHandler.draw("Chunk:1|0", Vec3d(CHUNK_WIDTH * 1, 0, 0));
+			// }
+			// if (ModelHandler.modelExists("Chunk:2|0")) {
 
-				ModelHandler.draw("Chunk:2|0", Vec3d(CHUNK_WIDTH * 2, 0, 0));
-			}
-			if (ModelHandler.modelExists("Chunk:3|0")) {
-				ModelHandler.draw("Chunk:3|0", Vec3d(CHUNK_WIDTH * 3, 0, 0));
+			// 	ModelHandler.draw("Chunk:2|0", Vec3d(CHUNK_WIDTH * 2, 0, 0));
+			// }
+
+			if (!trigger) {
+				trigger = true;
 			}
 
 			// ModelHandler.draw("triangle", Vec3d(0, 0, 0));
