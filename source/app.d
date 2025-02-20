@@ -54,8 +54,9 @@ void main() {
 
 	// ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
 
-	foreach (immutable x; 0 .. 2) {
-		foreach (immutable z; 0 .. 2) {
+	immutable int renderDistance = 16;
+	foreach (immutable x; -renderDistance .. renderDistance) {
+		foreach (immutable z; -renderDistance .. renderDistance) {
 			Map.debugGenerate(x, z);
 		}
 	}
