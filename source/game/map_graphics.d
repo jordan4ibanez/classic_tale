@@ -126,13 +126,13 @@ private:
 
         // Neighbor checks.
         const(Chunk*) neighborLeft = Map.getChunkPointer(chunkKey.x - 1, chunkKey.y);
-        immutable bool neighborLeftExists = neighborLeft !is null;
+        // immutable bool neighborLeftExists = neighborLeft !is null;
 
         const(Chunk*) neighborRight = Map.getChunkPointer(chunkKey.x + 1, chunkKey.y);
-        immutable bool neighborRightExists = neighborRight !is null;
+        // immutable bool neighborRightExists = neighborRight !is null;
 
         const(Chunk*) neighborFront = Map.getChunkPointer(chunkKey.x, chunkKey.y - 1);
-        immutable bool neighborFrontExists = neighborFront !is null;
+        // immutable bool neighborFrontExists = neighborFront !is null;
 
         const(Chunk*) neighborBack = Map.getChunkPointer(chunkKey.x, chunkKey.y + 1);
         // immutable bool neighborBackExists = neighborBack !is null;
