@@ -1,3 +1,4 @@
+import controls.mouse;
 import core.memory;
 import game.map;
 import game.map_graphics;
@@ -43,6 +44,8 @@ void main() {
 	Api.initialize();
 
 	rlDisableBackfaceCulling();
+
+	Window.lockMouse();
 
 	// FaceTextures tex = "testing.png";
 	// FaceGeneration faces = AllFaces;
