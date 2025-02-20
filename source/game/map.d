@@ -257,10 +257,10 @@ private: //* BEGIN INTERNAL API.
     }
 
     void updateAllNeighbors(Vec2i chunkKey) {
-        Vec2i left = Vec2i(chunkKey.x - 1, chunkKey.y);
-        Vec2i right = Vec2i(chunkKey.x + 1, chunkKey.y);
-        Vec2i front = Vec2i(chunkKey.x, chunkKey.y - 1);
-        Vec2i back = Vec2i(chunkKey.x, chunkKey.y + 1);
+        const Vec2i left = Vec2i(chunkKey.x - 1, chunkKey.y);
+        const Vec2i right = Vec2i(chunkKey.x + 1, chunkKey.y);
+        const Vec2i front = Vec2i(chunkKey.x, chunkKey.y - 1);
+        const Vec2i back = Vec2i(chunkKey.x, chunkKey.y + 1);
         if (left in database) {
             MapGraphics.generate(left);
         }
