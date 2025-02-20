@@ -48,26 +48,14 @@ void main() {
 
 	Mouse.lock();
 
-	// FaceTextures tex = "testing.png";
-	// FaceGeneration faces = AllFaces;
-	// MapGraphics.makeCube(vertices, textureCoordinates, Vec3d(0, 0, 0), Vec3d(0, 0, 0), Vec3d(1, 1, 1), faces, tex);
-
-	// ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
-
 	immutable int renderDistance = 16;
-	int x = -renderDistance;
-	int z = -renderDistance;
-	bool keepGenerating = true;
-	// foreach (immutable x; -renderDistance .. renderDistance) {
-	// 	foreach (immutable z; -renderDistance .. renderDistance) {
-	// 		if (vec2dDistance(Vec2d(), Vec2d(x, z)) <= renderDistance) {
-	// 			Map.debugGenerate(x, z);
-	// 		}
-	// 	}
-	// }
-
-	// Vec2i blah = Vec2i(0, 0);
-	// MapGraphics.generate(blah);
+	foreach (immutable x; -renderDistance .. renderDistance) {
+		foreach (immutable z; -renderDistance .. renderDistance) {
+			if (vec2dDistance(Vec2d(), Vec2d(x, z)) <= renderDistance) {
+				Map.debugGenerate(x, z);
+			}
+		}
+	}
 
 	auto rand = Random(unpredictableSeed());
 
@@ -75,23 +63,7 @@ void main() {
 	double[averager] GCcollection = 0;
 	ulong index = 0;
 
-	bool trigger = false;
-
 	while (Window.shouldStayOpen()) {
-
-		if (keepGenerating) {
-			Map.debugGenerate(x, z);
-			x++;
-			if (x >= renderDistance) {
-				x = -renderDistance;
-				z++;
-				if (z >= renderDistance) {
-					keepGenerating = false;
-				}
-			}
-		}
-
-		// writeln(ModelHandler.modelExists("Chunk:0|0"));
 
 		foreach (_; 0 .. uniform(1_000, 100_000, rand)) {
 			Vec3d target;
@@ -104,28 +76,12 @@ void main() {
 			Map.setBlockAtWorldPositionByID(target, blockID);
 		}
 
-		// MapGraphics.generate(blah);
-
 		BeginDrawing();
 		ClearBackground(Colors.RAYWHITE);
 
 		CameraHandler.begin();
 		{
 			Map.draw();
-
-			// if (ModelHandler.modelExists("Chunk:0|0")) {
-			// 	ModelHandler.draw("Chunk:0|0", Vec3d(0, 0, 0));
-			// }
-			// if (ModelHandler.modelExists("Chunk:1|0")) {
-
-			// 	ModelHandler.draw("Chunk:1|0", Vec3d(CHUNK_WIDTH * 1, 0, 0));
-			// }
-			// if (ModelHandler.modelExists("Chunk:2|0")) {
-
-			// 	ModelHandler.draw("Chunk:2|0", Vec3d(CHUNK_WIDTH * 2, 0, 0));
-			// }
-
-			// ModelHandler.draw("triangle", Vec3d(0, 0, 0));
 
 			// DrawCube(Vector3(0, 0, 0), 0.1, 0.1, 0.1, Colors.RED);
 		}
