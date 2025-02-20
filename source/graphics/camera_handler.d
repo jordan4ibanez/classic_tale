@@ -58,21 +58,10 @@ public: //* BEGIN PUBLIC API.
             pitch = -HALF_PI;
         }
 
+        // https://stackoverflow.com/a/1568687 Thanks, Beta! https://creativecommons.org/licenses/by-sa/4.0/
         camera.target.x = camera.position.x + (cos(yaw) * cos(pitch));
         camera.target.y = camera.position.y + sin(pitch);
         camera.target.z = camera.position.z + (sin(yaw) * cos(pitch));
-
-        // camera.target.x = camera.position.x + sin(yaw);
-        // camera.target.z = camera.position.z + cos(yaw);
-        // camera.target.y = camera.position.y;
-
-        //           movement%x = sin(camera_rotation%y) * movement_speed
-        //   movement%z = cos(camera_rotation%y) * movement_speed
-
-        // CameraYaw(&camera, uniform(0.0, 360.0, rnd), false);
-
-        // CameraPitch(&camera, uniform(-90.0, 90.0, rnd), true, false, false);
-
     }
 
     void begin() {
