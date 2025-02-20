@@ -82,6 +82,7 @@ void main() {
 		CameraHandler.begin();
 		{
 			Map.draw();
+			Player.draw();
 
 			// DrawCube(Vector3(0, 0, 0), 0.1, 0.1, 0.1, Colors.RED);
 		}

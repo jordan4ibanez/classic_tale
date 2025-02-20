@@ -87,6 +87,17 @@ public: //* BEGIN PUBLIC API.
         velocity = newVelocity;
     }
 
+    void draw() {
+        import raylib;
+
+        Vec3d collisionBoxLocation = position;
+        collisionBoxLocation.y += size.y / 2.0;
+
+        DrawCubeWires(collisionBoxLocation.toRaylib(), size.x, size.y, size.x, Colors.BLACK);
+
+        DrawSphere(position.toRaylib(), 0.01, Colors.RED);
+    }
+
     void doControls() {
         immutable double delta = Delta.getDelta();
         immutable double yaw = CameraHandler.getYaw();
