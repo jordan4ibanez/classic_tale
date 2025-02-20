@@ -1,5 +1,6 @@
 module game.map_graphics;
 
+import core.memory;
 import game.block_database;
 import game.map;
 import graphics.model_handler;
@@ -203,8 +204,8 @@ private:
 
         // writeln(vertexAllocation, " ", textureCoordAllocation);
 
-        float[] vertices = uninitializedArray!(float[])(vertexAllocation);
-        float[] textureCoordinates = uninitializedArray!(float[])(textureCoordAllocation);
+        float* vertices = cast(float*) GC.malloc(float.sizeof * vertexAllocation); //uninitializedArray!(float[])(vertexAllocation);
+        float* textureCoordinates = cast(float*) GC.malloc(float.sizeof * textureCoordAllocation); //uninitializedArray!(float[])(textureCoordAllocation);
 
         ulong vertIndex = 0;
         ulong textIndex = 0;
@@ -271,7 +272,7 @@ private:
                     pos.y = y;
                     pos.z = z;
 
-                    makeCube(vertIndex, textIndex, vertices.ptr, textureCoordinates.ptr, pos, min,
+                    makeCube(vertIndex, textIndex, vertices, textureCoordinates, pos, min,
                         max, &faceGen, &faceTextures);
 
                 }
@@ -287,7 +288,8 @@ private:
         }
 
         // writeln("does not exist, creating");
-        ModelHandler.newModelFromMesh(chunkMeshKey, vertices, textureCoordinates);
+        ModelHandler.newModelFromMeshPointers(chunkMeshKey, vertices, vertexAllocation, textureCoordinates,
+            textureCoordAllocation);
 
     }
 
