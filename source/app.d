@@ -74,9 +74,11 @@ void main() {
 
 		CameraHandler.firstPersonControls();
 
+		Player.doControls();
+
 		BeginDrawing();
 		ClearBackground(Colors.RAYWHITE);
-
+		CameraHandler.updateToPlayerPosition();
 		CameraHandler.begin();
 		{
 			Map.draw();
