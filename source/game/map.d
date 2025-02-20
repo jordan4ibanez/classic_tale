@@ -322,12 +322,26 @@ private: //* BEGIN INTERNAL API.
         database[chunkPosition] = newChunk;
 
         MapGraphics.generate(chunkPosition);
-        updateNeighbors(chunkPosition);
+        updateAllNeighbors(chunkPosition);
     }
 
-    void updateNeighbors(Vec2i chunkPosition) {
-        // todo: only update if the neighbor exists.
-
+    void updateAllNeighbors(Vec2i p) {
+        Vec2i left = Vec2i(p.x - 1, p.y);
+        Vec2i right = Vec2i(p.x + 1, p.y);
+        Vec2i front = Vec2i(p.x, p.y - 1);
+        Vec2i back = Vec2i(p.x, p.y + 1);
+        if (left in database) {
+            MapGraphics.generate(left);
+        }
+        if (right in database) {
+            MapGraphics.generate(right);
+        }
+        if (front in database) {
+            MapGraphics.generate(front);
+        }
+        if (back in database) {
+            MapGraphics.generate(back);
+        }
     }
 
     void generateChunkData(Vec2i chunkPosition, ref Chunk thisChunk) {
