@@ -287,7 +287,7 @@ private:
         }
 
         // writeln("does not exist, creating");
-        ModelHandler.newModelFromMesh(chunkMeshKey, vertices, textureCoordinates, true);
+        ModelHandler.newModelFromMesh(chunkMeshKey, vertices, textureCoordinates);
 
     }
 

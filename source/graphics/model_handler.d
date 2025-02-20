@@ -1,5 +1,6 @@
 module graphics.model_handler;
 
+public import raylib : Model;
 import graphics.shader_handler;
 import graphics.texture_handler;
 import math.quat;
@@ -8,7 +9,6 @@ import raylib;
 import std.container;
 import std.stdio;
 import std.string;
-public import raylib : Model;
 
 class AnimationContainer {
     int animationCount = 0;
