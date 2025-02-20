@@ -28,7 +28,7 @@ private:
 public: //* BEGIN PUBLIC API.
 
     void initialize() {
-        textureAtlasPointer = TextureHandler.getAtlasPointer();
+        textureAtlasPointer = cast(Texture2D*) TextureHandler.getAtlasPointer();
     }
 
     bool modelExists(string name) {

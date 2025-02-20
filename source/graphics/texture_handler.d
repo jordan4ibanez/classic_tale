@@ -27,7 +27,7 @@ private:
     TexturePoints!Vec2d[string] texturePointDatabase;
     Rect[string] textureRectangleDatabase;
 
-    Texture2D* atlas;
+    Texture2D atlas;
     int atlasWidth = 0;
     int atlasHeight = 0;
 
@@ -43,8 +43,8 @@ public: //* BEGIN PUBLIC API.
             loadTexture(thisFilePathString, database);
         }
         database.finalize("atlas.png");
-        atlas = new Texture2D();
-        *atlas = LoadTexture(toStringz("atlas.png"));
+        atlas = Texture2D();
+        atlas = LoadTexture(toStringz("atlas.png"));
 
         atlasWidth = atlas.width;
         atlasHeight = atlas.height;
@@ -132,12 +132,12 @@ public: //* BEGIN PUBLIC API.
         return id in texturePointIndexDatabase;
     }
 
-    Texture2D* getAtlasPointer() {
-        return atlas;
+    const(Texture2D*) getAtlasPointer() {
+        return &atlas;
     }
 
     void terminate() {
-        UnloadTexture(*atlas);
+        UnloadTexture(atlas);
     }
 
 private: //* BEGIN INTERNAL API.
