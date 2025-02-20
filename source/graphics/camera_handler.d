@@ -50,12 +50,20 @@ public: //* BEGIN PUBLIC API.
         yaw += mouseDelta.x / (750.0 / cameraSensitivity);
         pitch -= mouseDelta.y / (750.0 / cameraSensitivity);
 
-        immutable double HALF_PI = PI * 0.5;
+        static immutable double HALF_PI = PI * 0.5;
 
         if (pitch > HALF_PI) {
             pitch = HALF_PI;
         } else if (pitch < -HALF_PI) {
             pitch = -HALF_PI;
+        }
+
+        static immutable double DOUBLE_PI = PI * 2.0;
+
+        if (yaw > DOUBLE_PI) {
+            yaw -= DOUBLE_PI;
+        } else if (yaw < 0.0) {
+            yaw += DOUBLE_PI;
         }
 
         // https://stackoverflow.com/a/1568687 Thanks, Beta! https://creativecommons.org/licenses/by-sa/4.0/
