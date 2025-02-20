@@ -149,6 +149,8 @@ public: //* BEGIN PUBLIC API.
         if (chunkID !in database) {
             // todo: maybe unload the chunk after?
             // loadChunk(chunkID);
+            writeln("remember to load up chunks!");
+            return;
         }
 
         Vec2i xzPosInChunk = getXZInChunk(position);
@@ -174,6 +176,8 @@ public: //* BEGIN PUBLIC API.
         if (chunkID !in database) {
             // todo: maybe unload the chunk after?
             // loadChunk(chunkID);
+            writeln("remember to load up chunks!");
+            return;
         }
 
         Vec2i xzPosInChunk = getXZInChunk(position);
