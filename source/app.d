@@ -102,9 +102,8 @@ void main() {
 		}
 		total /= averager;
 
-		immutable string output = "Heap:" ~ format("%.2f", total);
-		DrawText(toStringz(output), 11, 41, 30, Colors.BLUE);
-		DrawText(toStringz("mb"), 62 + (cast(int) output.length * 10), 41, 30, Colors.BLUE);
+		DrawText(toStringz("Heap:" ~ format("%.2f", total) ~ "mb"), 10, 40, 30, Colors.BLACK);
+		DrawText(toStringz("Heap:" ~ format("%.2f", total) ~ "mb"), 11, 41, 30, Colors.BLUE);
 
 		index++;
 		if (index >= averager) {
