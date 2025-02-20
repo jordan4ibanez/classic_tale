@@ -48,7 +48,7 @@ public: //* BEGIN PUBLIC API.
 
         // When it hits exactly half pi, the camera's matrix flips out.
         // This is exactly why you don't use direction for this.  
-        static immutable double HALF_PI_ALMOST = PI * 0.499999;
+        static immutable double HALF_PI_ALMOST = PI * 0.496;
 
         if (pitch > HALF_PI_ALMOST) {
             pitch = HALF_PI_ALMOST;
