@@ -149,7 +149,7 @@ public: //* BEGIN PUBLIC API.
         if (chunkID !in database) {
             // todo: maybe unload the chunk after?
             // loadChunk(chunkID);
-            writeln("remember to load up chunks!");
+            // writeln("remember to load up chunks!");
             return;
         }
 
@@ -177,7 +177,7 @@ public: //* BEGIN PUBLIC API.
         if (chunkID !in database) {
             // todo: maybe unload the chunk after?
             // loadChunk(chunkID);
-            writeln("remember to load up chunks!");
+            // writeln("remember to load up chunks!");
             return;
         }
 
