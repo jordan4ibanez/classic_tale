@@ -46,12 +46,14 @@ public: //* BEGIN PUBLIC API.
         yaw += mouseDelta.x / (750.0 / cameraSensitivity);
         pitch -= mouseDelta.y / (750.0 / cameraSensitivity);
 
-        static immutable double HALF_PI = PI * 0.5;
+        // When it hits exactly half pi, the camera's matrix flips out.
+        // This is exactly why you don't use direction for this.  
+        static immutable double HALF_PI_ALMOST = PI * 0.499999;
 
-        if (pitch > HALF_PI) {
-            pitch = HALF_PI;
-        } else if (pitch < -HALF_PI) {
-            pitch = -HALF_PI;
+        if (pitch > HALF_PI_ALMOST) {
+            pitch = HALF_PI_ALMOST;
+        } else if (pitch < -HALF_PI_ALMOST) {
+            pitch = -HALF_PI_ALMOST;
         }
 
         static immutable double DOUBLE_PI = PI * 2.0;
