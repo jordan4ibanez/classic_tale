@@ -88,6 +88,8 @@ void main() {
 		}
 		CameraHandler.end();
 
+		// TODO: MAKE THAT FONT LIBRARY FUNCTION AGAIN OR SO HELP ME
+
 		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 10, 10, 30, Colors.BLACK);
 		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 11, 11, 30, Colors.BLUE);
 
