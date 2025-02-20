@@ -125,8 +125,17 @@ private:
         ulong textureCoordAllocation = 0;
 
         // Neighbor checks.
-        // const(Chunk*) neighborLeft = Map.getChunkPointer(chunkKey.x -1, chunkKey.y);
-        // immutable bool neighborLeftExists = neighborLeft !is null;
+        const(Chunk*) neighborLeft = Map.getChunkPointer(chunkKey.x - 1, chunkKey.y);
+        immutable bool neighborLeftExists = neighborLeft !is null;
+
+        const(Chunk*) neighborRight = Map.getChunkPointer(chunkKey.x + 1, chunkKey.y);
+        immutable bool neighborRightExists = neighborRight !is null;
+
+        const(Chunk*) neighborFront = Map.getChunkPointer(chunkKey.x, chunkKey.y - 1);
+        immutable bool neighborFrontExists = neighborFront !is null;
+
+        const(Chunk*) neighborBack = Map.getChunkPointer(chunkKey.x, chunkKey.y - 1);
+        immutable bool neighborBackExists = neighborBack !is null;
 
         // Preallocation.
         foreach (immutable x; 0 .. CHUNK_WIDTH) {
@@ -143,37 +152,49 @@ private:
                     // Todo: this needs a neighbor check.
 
                     // Front.
-                    if (z - 1 < 0 || thisChunk.data[x][z - 1][y].blockID == 0) {
+                    if (z - 1 < 0) {
+
+                    } else if (thisChunk.data[x][z - 1][y].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
                     }
 
                     // Back.
-                    if (z + 1 >= CHUNK_WIDTH || thisChunk.data[x][z + 1][y].blockID == 0) {
+                    if (z + 1 >= CHUNK_WIDTH) {
+
+                    } else if (thisChunk.data[x][z + 1][y].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
                     }
 
                     // Left.
-                    if (x - 1 < 0 || thisChunk.data[x - 1][z][y].blockID == 0) {
+                    if (x - 1 < 0) {
+
+                    } else if (thisChunk.data[x - 1][z][y].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
                     }
 
                     // Right.
-                    if (x + 1 >= CHUNK_WIDTH || thisChunk.data[x + 1][z][y].blockID == 0) {
+                    if (x + 1 >= CHUNK_WIDTH) {
+
+                    } else if (thisChunk.data[x + 1][z][y].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
                     }
 
                     // Top.
-                    if (y + 1 >= CHUNK_HEIGHT || thisChunk.data[x][z][y + 1].blockID == 0) {
+                    if (y + 1 >= CHUNK_HEIGHT) {
+
+                    } else if (thisChunk.data[x][z][y + 1].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
                     }
 
                     // Bottom.
-                    if (y - 1 < 0 || thisChunk.data[x][z][y - 1].blockID == 0) {
+                    if (y - 1 < 0) {
+
+                    } else if (thisChunk.data[x][z][y - 1].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
                     }
@@ -226,32 +247,44 @@ private:
                     faceGen.bottom = false;
 
                     // Front.
-                    if (z - 1 < 0 || thisChunk.data[x][z - 1][y].blockID == 0) {
+                    if (z - 1 < 0) {
+
+                    } else if (thisChunk.data[x][z - 1][y].blockID == 0) {
                         faceGen.front = true;
                     }
 
                     // Back.
-                    if (z + 1 >= CHUNK_WIDTH || thisChunk.data[x][z + 1][y].blockID == 0) {
+                    if (z + 1 >= CHUNK_WIDTH) {
+
+                    } else if (thisChunk.data[x][z + 1][y].blockID == 0) {
                         faceGen.back = true;
                     }
 
                     // Left.
-                    if (x - 1 < 0 || thisChunk.data[x - 1][z][y].blockID == 0) {
+                    if (x - 1 < 0) {
+
+                    } else if (thisChunk.data[x - 1][z][y].blockID == 0) {
                         faceGen.left = true;
                     }
 
                     // Right.
-                    if (x + 1 >= CHUNK_WIDTH || thisChunk.data[x + 1][z][y].blockID == 0) {
+                    if (x + 1 >= CHUNK_WIDTH) {
+
+                    } else if (thisChunk.data[x + 1][z][y].blockID == 0) {
                         faceGen.right = true;
                     }
 
                     // Top.
-                    if (y + 1 >= CHUNK_HEIGHT || thisChunk.data[x][z][y + 1].blockID == 0) {
+                    if (y + 1 >= CHUNK_HEIGHT) {
+
+                    } else if (thisChunk.data[x][z][y + 1].blockID == 0) {
                         faceGen.top = true;
                     }
 
                     // Bottom.
-                    if (y - 1 < 0 || thisChunk.data[x][z][y - 1].blockID == 0) {
+                    if (y - 1 < 0) {
+
+                    } else if (thisChunk.data[x][z][y - 1].blockID == 0) {
                         faceGen.bottom = true;
                     }
 
