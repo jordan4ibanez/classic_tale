@@ -95,12 +95,12 @@ public:
     }
 
     void __update() {
-        Option!Vec2i thisResult = generationQueue.popBack();
+        Option!Vec2i thisResult = generationQueue.popFront();
 
         if (thisResult.isNone()) {
             return;
         }
-        writeln(thisResult.unwrap);
+        // writeln(thisResult.unwrap);
         createChunkMesh(thisResult.unwrap);
     }
 
