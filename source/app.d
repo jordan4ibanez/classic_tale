@@ -15,6 +15,7 @@ import std.format;
 import std.random;
 import std.stdio;
 import std.string;
+import utility.garbage_collector;
 import utility.window;
 
 void main() {
@@ -85,8 +86,10 @@ void main() {
 		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 10, 10, 30, Colors.BLACK);
 		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 11, 11, 30, Colors.BLUE);
 
-		DrawText(toStringz("Heap:" ~ format("%.2f", total) ~ "mb"), 10, 40, 30, Colors.BLACK);
-		DrawText(toStringz("Heap:" ~ format("%.2f", total) ~ "mb"), 11, 41, 30, Colors.BLUE);
+		const double gcHeapTotal = GarbageCollector.getHeapInfo();
+
+		DrawText(toStringz("Heap:" ~ format("%.2f", gcHeapTotal) ~ "mb"), 10, 40, 30, Colors.BLACK);
+		DrawText(toStringz("Heap:" ~ format("%.2f", gcHeapTotal) ~ "mb"), 11, 41, 30, Colors.BLUE);
 
 		Vec3d pos = CameraHandler.getPosition();
 
