@@ -10,7 +10,7 @@ import std.container;
 import std.stdio;
 import std.string;
 
-class AnimationContainer {
+struct AnimationContainer {
     int animationCount = 0;
     bool hasAnimation = false;
     ModelAnimation* animationData = null;
@@ -164,7 +164,7 @@ public: //* BEGIN PUBLIC API.
 
         int animationCount;
         ModelAnimation* thisAnimationData = LoadModelAnimations(toStringz(location), &animationCount);
-        AnimationContainer thisModelAnimation = new AnimationContainer();
+        AnimationContainer thisModelAnimation = AnimationContainer();
         thisModelAnimation.animationCount = animationCount;
         thisModelAnimation.animationData = thisAnimationData;
         thisModelAnimation.hasAnimation = thisAnimationData != null;
@@ -233,7 +233,7 @@ public: //* BEGIN PUBLIC API.
                 "[ModelManager]: Tried to play animation on non-existent model. " ~ modelName);
         }
 
-        AnimationContainer thisAnimation = animationDatabase[modelName];
+        AnimationContainer* thisAnimation = modelName in animationDatabase;
 
         if (thisAnimation is null) {
             throw new Error(
@@ -268,7 +268,7 @@ private: //* BEGIN INTERNAL API.
         } else {
             UnloadModel(*thisModel);
 
-            AnimationContainer thisAnimations = animationDatabase[modelName];
+            AnimationContainer* thisAnimations = modelName in animationDatabase;
             if (thisAnimations !is null && thisAnimations.hasAnimation) {
                 UnloadModelAnimation(*thisAnimations.animationData);
             }
