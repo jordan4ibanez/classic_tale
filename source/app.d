@@ -42,7 +42,7 @@ void main() {
 
 	Api.initialize();
 
-	// rlDisableBackfaceCulling();
+	rlDisableBackfaceCulling();
 
 	// FaceTextures tex = "testing.png";
 	// FaceGeneration faces = AllFaces;
@@ -50,10 +50,12 @@ void main() {
 
 	// ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
 
-	Map.debugGenerate(0, 0);
-	Map.debugGenerate(1, 0);
-	Map.debugGenerate(2, 0);
-	Map.debugGenerate(3, 0);
+	foreach (immutable x; -8 .. 8) {
+		foreach (immutable z; -8 .. 8) {
+			Map.debugGenerate(x, z);
+		}
+	}
+
 	// Vec2i blah = Vec2i(0, 0);
 	// MapGraphics.generate(blah);
 
@@ -72,18 +74,16 @@ void main() {
 
 		// writeln(ModelHandler.modelExists("Chunk:0|0"));
 
-		if (trigger) {
-			foreach (_; 0 .. uniform(1_000, 100_000, rand)) {
-				Vec3d target;
-				target.x = uniform(0.0, 16.0, rand);
-				target.z = uniform(0.0, 16.0, rand);
-				target.y = uniform(0.0, 256.0, rand);
+		// foreach (_; 0 .. uniform(1_000, 100_000, rand)) {
+		// 	Vec3d target;
+		// 	target.x = uniform(0.0, 48.0, rand);
+		// 	target.z = uniform(0.0, 16.0, rand);
+		// 	target.y = uniform(0.0, 256.0, rand);
 
-				int blockID = uniform(0, 5, rand);
+		// 	int blockID = uniform(0, 5, rand);
 
-				Map.setBlockAtWorldPositionByID(target, blockID);
-			}
-		}
+		// 	Map.setBlockAtWorldPositionByID(target, blockID);
+		// }
 
 		// MapGraphics.generate(blah);
 
@@ -102,10 +102,6 @@ void main() {
 
 			// 	ModelHandler.draw("Chunk:2|0", Vec3d(CHUNK_WIDTH * 2, 0, 0));
 			// }
-
-			if (!trigger) {
-				trigger = true;
-			}
 
 			// ModelHandler.draw("triangle", Vec3d(0, 0, 0));
 
