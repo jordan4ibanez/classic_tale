@@ -304,6 +304,7 @@ private: //* BEGIN INTERNAL API.
         Chunk newChunk = new Chunk();
         generateChunkData(chunkPosition, newChunk);
         database[chunkPosition] = newChunk;
+        MapGraphics.generate(chunkPosition);
     }
 
     void generateChunkData(Vec2i chunkPosition, ref Chunk thisChunk) {
