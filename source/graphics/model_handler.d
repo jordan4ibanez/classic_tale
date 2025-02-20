@@ -55,7 +55,11 @@ public: //* BEGIN PUBLIC API.
             Vector3(scale, scale, scale), color);
     }
 
-    void newModelFromMesh(string modelName, float[] vertices, float[] textureCoordinates) {
+    /*
+    Immediate wipe will instantly replace the mesh data with null pointers so the
+    GC can work it's magic.
+    */
+    void newModelFromMesh(string modelName, float[] vertices, float[] textureCoordinates, bool immediateWipe = true) {
 
         if (modelName in database) {
             throw new Error(
@@ -83,6 +87,14 @@ public: //* BEGIN PUBLIC API.
 
         foreach (index; 0 .. thisModel.materialCount) {
             thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = *textureAtlasPointer;
+        }
+
+        if (immediateWipe) {
+            // This looks a bit silly, because it is. I just like to double check. :)
+            thisMesh.vertices = null;
+            thisMesh.texcoords = null;
+            thisModel.meshes[0].vertices = null;
+            thisModel.meshes[0].texcoords = null;
         }
     }
 
