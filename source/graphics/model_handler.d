@@ -55,6 +55,25 @@ public: //* BEGIN PUBLIC API.
             Vector3(scale, scale, scale), color);
     }
 
+    void drawIgnoreMissing(string modelName, Vec3d position, Vec3d rotation = Vec3d(0, 0, 0),
+        float scale = 1.0, Color color = Colors.WHITE) {
+        Model* thisModel = modelName in database;
+
+        if (thisModel is null) {
+            writeln("missing " ~ modelName ~ ", aborting");
+            return;
+        }
+
+        // Have to jump through some hoops to rotate the model correctly.
+        Quat quat = quatFromEuler(rotation.x, rotation.y, rotation.z);
+        Vec3d axisRotation;
+        double angle;
+        quatToAxisAngle(quat, &axisRotation, &angle);
+
+        DrawModelEx(*thisModel, position.toRaylib(), axisRotation.toRaylib(), RAD2DEG * angle,
+            Vector3(scale, scale, scale), color);
+    }
+
     /*
     Immediate wipe will instantly replace the mesh data with null pointers so the
     GC can work it's magic.
