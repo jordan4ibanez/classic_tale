@@ -51,8 +51,8 @@ void main() {
 	// ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
 
 	Map.debugGenerate(0, 0);
-	Vec2i blah = Vec2i(0, 0);
-	MapGraphics.generate(blah);
+	// Vec2i blah = Vec2i(0, 0);
+	// MapGraphics.generate(blah);
 
 	auto rand = Random(unpredictableSeed());
 
