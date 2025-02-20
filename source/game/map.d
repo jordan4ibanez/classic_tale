@@ -27,7 +27,7 @@ struct BlockData {
     int blockID = 0;
 }
 
-final class Chunk {
+struct Chunk {
     // Y, Z, X
     BlockData[CHUNK_HEIGHT][CHUNK_WIDTH][CHUNK_WIDTH] data;
 }
@@ -301,7 +301,7 @@ private: //* BEGIN INTERNAL API.
             return;
         }
         // todo: try to read from mongoDB.
-        Chunk newChunk = new Chunk();
+        Chunk newChunk = Chunk();
         generateChunkData(chunkPosition, newChunk);
         database[chunkPosition] = newChunk;
         MapGraphics.generate(chunkPosition);
