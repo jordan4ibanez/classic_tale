@@ -78,7 +78,7 @@ void main() {
 			Map.setBlockAtWorldPositionByID(target, blockID);
 		}
 
-		MapGraphics.generate(blah);
+		// MapGraphics.generate(blah);
 
 		CameraHandler.begin();
 		{
