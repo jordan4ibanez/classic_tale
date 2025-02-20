@@ -55,7 +55,7 @@ public: //* BEGIN PUBLIC API.
             Vector3(scale, scale, scale), color);
     }
 
-    void newModelFromMesh(string modelName, float[] vertices, float[] textureCoordinates, bool dynamic = false) {
+    void newModelFromMesh(string modelName, float[] vertices, float[] textureCoordinates) {
 
         if (modelName in database) {
             throw new Error(
@@ -69,7 +69,7 @@ public: //* BEGIN PUBLIC API.
         thisMesh.vertices = vertices.ptr;
         thisMesh.texcoords = textureCoordinates.ptr;
 
-        UploadMesh(thisMesh, dynamic);
+        UploadMesh(thisMesh, false);
 
         Model* thisModel = new Model();
         *thisModel = LoadModelFromMesh(*thisMesh);
