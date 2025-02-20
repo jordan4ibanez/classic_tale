@@ -1,3 +1,4 @@
+import core.memory;
 import game.map;
 import game.map_graphics;
 import graphics.camera_handler;
@@ -9,6 +10,7 @@ import math.vec3d;
 import mods.api;
 import raylib;
 import std.conv;
+import std.format;
 import std.random;
 import std.stdio;
 import std.string;
@@ -54,6 +56,10 @@ void main() {
 
 	auto rand = Random(unpredictableSeed());
 
+	immutable ulong averager = 200;
+	double[averager] GCcollection = 0;
+	ulong index = 0;
+
 	while (Window.shouldStayOpen()) {
 
 		BeginDrawing();
@@ -87,6 +93,24 @@ void main() {
 
 		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 10, 10, 30, Colors.BLACK);
 		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 11, 11, 30, Colors.BLUE);
+
+		GCcollection[index] = cast(double) GC.stats().usedSize / 1_000_000.0;
+
+		double total = 0;
+		foreach (size; GCcollection) {
+			total += size;
+		}
+		total /= averager;
+
+		immutable string output = "Heap:" ~ format("%.2f", total);
+		DrawText(toStringz(output), 11, 41, 30, Colors.BLUE);
+		DrawText(toStringz("mb"), 62 + (cast(int) output.length * 10), 41, 30, Colors.BLUE);
+
+		index++;
+		if (index >= averager) {
+			index = 0;
+		}
+		// GC.disable();
 
 		EndDrawing();
 	}
