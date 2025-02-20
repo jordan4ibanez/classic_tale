@@ -38,10 +38,6 @@ public: //* BEGIN PUBLIC API.
     }
 
     void firstPersonControls() {
-        import std.random;
-        import utility.delta;
-
-        double delta = Delta.getDelta();
 
         const Vec2d mouseDelta = Mouse.getDelta();
 
