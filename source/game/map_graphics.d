@@ -87,6 +87,8 @@ static:
 private:
 
     LinkedHashQueue!Vec2i generationQueue;
+    // How many chunks can generate per frame.
+    int generationLevel = 1;
 
 public:
 
@@ -95,13 +97,16 @@ public:
     }
 
     void __update() {
-        Option!Vec2i thisResult = generationQueue.popFront();
 
-        if (thisResult.isNone()) {
-            return;
+        foreach (_; 0 .. generationLevel) {
+            Option!Vec2i thisResult = generationQueue.popFront();
+
+            if (thisResult.isNone()) {
+                return;
+            }
+            // writeln(thisResult.unwrap);
+            createChunkMesh(thisResult.unwrap);
         }
-        // writeln(thisResult.unwrap);
-        createChunkMesh(thisResult.unwrap);
     }
 
 private:
