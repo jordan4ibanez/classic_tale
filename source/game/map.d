@@ -6,6 +6,7 @@ import game.biome_database;
 import game.block_database;
 import game.map_graphics;
 import graphics.camera_handler;
+import graphics.model_handler;
 import graphics.render;
 import graphics.texture_handler;
 import math.rect;
@@ -60,9 +61,10 @@ public: //* BEGIN PUBLIC API.
     }
 
     void draw() {
-        // todo: this should probably order by distance.
-        foreach (const ref thisChunk; database) {
-
+        // todo: this should probably order by distance. Lucky D has that built in. :D
+        foreach (const chunkPos, const ref thisChunk; database) {
+            Vec3d position = Vec3d(chunkPos.x * CHUNK_WIDTH, 0, chunkPos.y * CHUNK_WIDTH);
+            ModelHandler.drawIgnoreMissing(thisChunk.meshKey, position);
         }
     }
 
