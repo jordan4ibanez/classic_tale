@@ -164,10 +164,11 @@ public: //* BEGIN PUBLIC API.
         */
 
         foreach (i, thisMesh; thisModel.meshes[0 .. thisModel.meshCount]) {
-            UpdateMeshBuffer(cast(Mesh) thisMesh, 0, &thisMesh.vertices[0], cast(int)(
+            writeln("updating ", i);
+            UpdateMeshBuffer(cast(Mesh) thisMesh, 0, thisMesh.vertices, cast(int)(
                     thisMesh.vertexCount * 3 * float.sizeof), 0);
 
-            UpdateMeshBuffer(cast(Mesh) thisMesh, 1, &thisMesh.texcoords[0], cast(int)(
+            UpdateMeshBuffer(cast(Mesh) thisMesh, 1, thisMesh.texcoords, cast(int)(
                     thisMesh.vertexCount * 2 * float.sizeof), 0);
         }
     }
