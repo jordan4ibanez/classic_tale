@@ -67,16 +67,16 @@ void main() {
 
 		// writeln(ModelHandler.modelExists("Chunk:0|0"));
 
-		foreach (_; 0 .. uniform(1_000, 100_000, rand)) {
-			Vec3d target;
-			target.x = uniform(0.0, 16.0, rand);
-			target.z = uniform(0.0, 16.0, rand);
-			target.y = uniform(0.0, 256.0, rand);
+		// foreach (_; 0 .. uniform(1_000, 100_000, rand)) {
+		// 	Vec3d target;
+		// 	target.x = uniform(0.0, 16.0, rand);
+		// 	target.z = uniform(0.0, 16.0, rand);
+		// 	target.y = uniform(0.0, 256.0, rand);
 
-			int blockID = uniform(0, 5, rand);
+		// 	int blockID = uniform(0, 5, rand);
 
-			Map.setBlockAtWorldPositionByID(target, blockID);
-		}
+		// 	Map.setBlockAtWorldPositionByID(target, blockID);
+		// }
 
 		// MapGraphics.generate(blah);
 

@@ -104,7 +104,7 @@ public:
         if (!thisResult.exists) {
             return;
         }
-        // writeln(thisResult.data);
+        writeln(thisResult.data);
         createChunkMesh(thisResult.data);
     }
 
