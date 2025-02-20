@@ -50,8 +50,8 @@ void main() {
 
 	// ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
 
-	foreach (immutable x; -8 .. 8) {
-		foreach (immutable z; -8 .. 8) {
+	foreach (immutable x; 0 .. 2) {
+		foreach (immutable z; 0 .. 2) {
 			Map.debugGenerate(x, z);
 		}
 	}
