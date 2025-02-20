@@ -2,6 +2,7 @@ import controls.mouse;
 import core.memory;
 import game.map;
 import game.map_graphics;
+import game.player;
 import graphics.camera_handler;
 import graphics.model_handler;
 import graphics.texture_handler;
@@ -131,6 +132,11 @@ void main() {
 			index = 0;
 		}
 		// GC.disable();
+
+		Vec3d pos = CameraHandler.getPosition();
+
+		DrawText(toStringz("X:" ~ format("%.2f", pos.x)), 10, 70, 30, Colors.BLACK);
+		DrawText(toStringz("X:" ~ format("%.2f", pos.x)), 11, 71, 30, Colors.BLUE);
 
 		EndDrawing();
 	}

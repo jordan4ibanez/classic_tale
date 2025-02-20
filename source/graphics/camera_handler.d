@@ -3,6 +3,7 @@ module graphics.camera_handler;
 import game.player;
 import graphics.gui;
 import math.vec2d;
+import math.vec3d;
 import raylib;
 import std.stdio;
 import utility.window;
@@ -38,6 +39,10 @@ public: //* BEGIN PUBLIC API.
 
     void end() {
         EndMode3D();
+    }
+
+    Vec3d getPosition() {
+        return Vec3d(camera.position);
     }
 
     // void setTarget(const ref Vec3d position) {

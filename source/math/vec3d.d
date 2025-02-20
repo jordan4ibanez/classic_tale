@@ -11,6 +11,18 @@ struct Vec3d {
     double y = 0;
     double z = 0;
 
+    this(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    this(Vector3 fromRaylib) {
+        this.x = fromRaylib.x;
+        this.y = fromRaylib.y;
+        this.z = fromRaylib.z;
+    }
+
     Vector3 toRaylib() const {
         return Vector3(x, y, z);
     }

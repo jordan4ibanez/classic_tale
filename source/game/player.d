@@ -41,7 +41,7 @@ private:
 
     Vec2d size = Vec2d(0.6, 1.8);
     Vec3d position = Vec3d(0, 0, 0);
-    Vec3d velocity = Vec3d(0, 0);
+    Vec3d velocity = Vec3d(0, 0, 0);
     int inChunk = int.max;
     bool firstGen = true;
     bool jumpQueued = false;
