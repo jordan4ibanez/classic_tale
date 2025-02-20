@@ -222,79 +222,6 @@ public: //* BEGIN PUBLIC API.
 
 private: //* BEGIN INTERNAL API.
 
-    // bool collision(ref Vec2d entityPosition, Vec2d entitySize, ref Vec2d entityVelocity, CollisionAxis axis) {
-    //     import utility.collision_functions;
-
-    //     int oldX = int.min;
-    //     int oldY = int.min;
-    //     int currentX = int.min;
-    //     int currentY = int.min;
-
-    //     // debugDrawPoints = [];
-
-    //     bool hitGround = false;
-
-    //     foreach (double xOnRect; 0 .. ceil(entitySize.x) + 1) {
-    //         double thisXPoint = (xOnRect > entitySize.x) ? entitySize.x : xOnRect;
-    //         thisXPoint += entityPosition.x - (entitySize.x * 0.5);
-    //         oldX = currentX;
-    //         currentX = cast(int) floor(thisXPoint);
-
-    //         if (oldX == currentX) {
-    //             // writeln("skip X ", currentY);
-    //             continue;
-    //         }
-
-    //         foreach (double yOnRect; 0 .. ceil(entitySize.y) + 1) {
-    //             double thisYPoint = (yOnRect > entitySize.y) ? entitySize.y : yOnRect;
-    //             thisYPoint += entityPosition.y;
-
-    //             oldY = currentY;
-    //             currentY = cast(int) floor(thisYPoint);
-
-    //             if (currentY == oldY) {
-    //                 // writeln("skip Y ", currentY);
-    //                 continue;
-    //             }
-
-    //             // debugDrawPoints ~= Vec2d(currentX, currentY);
-
-    //             ChunkData data = getBlockAtWorldPosition(Vec2d(currentX, currentY));
-
-    //             // todo: if solid block collide.
-    //             // todo: probably custom blocks one day.
-
-    //             if (data.blockID == 0) {
-    //                 continue;
-    //             }
-
-    //             if (axis == CollisionAxis.X) {
-    //                 CollisionResult result = collideXToBlock(entityPosition, entitySize, entityVelocity,
-    //                     Vec2d(currentX, currentY), Vec2d(1, 1));
-
-    //                 if (result.collides) {
-    //                     entityPosition.x = result.newPosition;
-    //                     entityVelocity.x = 0;
-    //                 }
-    //             } else {
-
-    //                 CollisionResult result = collideYToBlock(entityPosition, entitySize, entityVelocity,
-    //                     Vec2d(currentX, currentY), Vec2d(1, 1));
-
-    //                 if (result.collides) {
-    //                     entityPosition.y = result.newPosition;
-    //                     entityVelocity.y = 0;
-    //                     if (result.hitGround) {
-    //                         hitGround = true;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     return hitGround;
-    // }
-
     void unloadOldChunks(Vec2i currentPlayerChunk) {
 
         // todo: save the chunks to mongoDB.
@@ -424,5 +351,78 @@ private: //* BEGIN INTERNAL API.
             }
         }
     }
+
+    // bool collision(ref Vec2d entityPosition, Vec2d entitySize, ref Vec2d entityVelocity, CollisionAxis axis) {
+    //     import utility.collision_functions;
+
+    //     int oldX = int.min;
+    //     int oldY = int.min;
+    //     int currentX = int.min;
+    //     int currentY = int.min;
+
+    //     // debugDrawPoints = [];
+
+    //     bool hitGround = false;
+
+    //     foreach (double xOnRect; 0 .. ceil(entitySize.x) + 1) {
+    //         double thisXPoint = (xOnRect > entitySize.x) ? entitySize.x : xOnRect;
+    //         thisXPoint += entityPosition.x - (entitySize.x * 0.5);
+    //         oldX = currentX;
+    //         currentX = cast(int) floor(thisXPoint);
+
+    //         if (oldX == currentX) {
+    //             // writeln("skip X ", currentY);
+    //             continue;
+    //         }
+
+    //         foreach (double yOnRect; 0 .. ceil(entitySize.y) + 1) {
+    //             double thisYPoint = (yOnRect > entitySize.y) ? entitySize.y : yOnRect;
+    //             thisYPoint += entityPosition.y;
+
+    //             oldY = currentY;
+    //             currentY = cast(int) floor(thisYPoint);
+
+    //             if (currentY == oldY) {
+    //                 // writeln("skip Y ", currentY);
+    //                 continue;
+    //             }
+
+    //             // debugDrawPoints ~= Vec2d(currentX, currentY);
+
+    //             ChunkData data = getBlockAtWorldPosition(Vec2d(currentX, currentY));
+
+    //             // todo: if solid block collide.
+    //             // todo: probably custom blocks one day.
+
+    //             if (data.blockID == 0) {
+    //                 continue;
+    //             }
+
+    //             if (axis == CollisionAxis.X) {
+    //                 CollisionResult result = collideXToBlock(entityPosition, entitySize, entityVelocity,
+    //                     Vec2d(currentX, currentY), Vec2d(1, 1));
+
+    //                 if (result.collides) {
+    //                     entityPosition.x = result.newPosition;
+    //                     entityVelocity.x = 0;
+    //                 }
+    //             } else {
+
+    //                 CollisionResult result = collideYToBlock(entityPosition, entitySize, entityVelocity,
+    //                     Vec2d(currentX, currentY), Vec2d(1, 1));
+
+    //                 if (result.collides) {
+    //                     entityPosition.y = result.newPosition;
+    //                     entityVelocity.y = 0;
+    //                     if (result.hitGround) {
+    //                         hitGround = true;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     return hitGround;
+    // }
 
 }
