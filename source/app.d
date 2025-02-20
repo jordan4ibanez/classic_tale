@@ -76,8 +76,6 @@ void main() {
 
 	while (Window.shouldStayOpen()) {
 
-		BeginDrawing();
-		ClearBackground(Colors.RAYWHITE);
 
 		// writeln(ModelHandler.modelExists("Chunk:0|0"));
 
@@ -93,6 +91,9 @@ void main() {
 		// }
 
 		// MapGraphics.generate(blah);
+
+		BeginDrawing();
+		ClearBackground(Colors.RAYWHITE);
 
 		CameraHandler.begin();
 		{
