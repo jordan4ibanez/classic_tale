@@ -72,6 +72,8 @@ void main() {
 		// 	Map.setBlockAtWorldPositionByID(target, blockID);
 		// }
 
+		CameraHandler.firstPersonControls();
+
 		BeginDrawing();
 		ClearBackground(Colors.RAYWHITE);
 

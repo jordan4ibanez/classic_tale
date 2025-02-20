@@ -5,6 +5,7 @@ import graphics.gui;
 import math.vec2d;
 import math.vec3d;
 import raylib;
+import raylib.rcamera;
 import std.stdio;
 import utility.window;
 
@@ -12,29 +13,40 @@ static final const class CameraHandler {
 static:
 private:
 
-    Camera3D* camera;
+    Camera3D camera;
 
 public: //* BEGIN PUBLIC API.
 
     double realZoom = 100.0;
 
     void initialize() {
-        camera = new Camera3D();
+        camera = Camera3D();
 
-        camera.position = Vector3(0, 170, 22);
-        camera.target = Vector3(0, 32, 0);
+        camera.position = Vector3(0, 170, 0);
+        camera.target = Vector3(0, 170, -1);
         camera.up = Vector3(0, 1, 0);
         camera.fovy = 55;
         camera.projection = CameraProjection.CAMERA_PERSPECTIVE;
     }
 
     void terminate() {
-        camera = null;
+
+    }
+
+    void firstPersonControls() {
+        import std.random;
+
+        auto rnd = Random(unpredictableSeed());
+
+        CameraYaw(&camera, uniform(0.0, 360.0, rnd), false);
+
+        CameraPitch(&camera, uniform(-90.0, 90.0, rnd), true, false, false);
+
     }
 
     void begin() {
-        UpdateCamera(camera, CameraMode.CAMERA_FREE);
-        BeginMode3D(*camera);
+        UpdateCamera(&camera, CameraMode.CAMERA_CUSTOM);
+        BeginMode3D(camera);
     }
 
     void end() {
