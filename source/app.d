@@ -57,7 +57,9 @@ void main() {
 	immutable int renderDistance = 16;
 	foreach (immutable x; -renderDistance .. renderDistance) {
 		foreach (immutable z; -renderDistance .. renderDistance) {
-			Map.debugGenerate(x, z);
+			if (vec2dDistance(Vec2d(), Vec2d(x, z)) <= renderDistance) {
+				Map.debugGenerate(x, z);
+			}
 		}
 	}
 
