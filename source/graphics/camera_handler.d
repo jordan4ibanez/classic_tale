@@ -20,7 +20,7 @@ public: //* BEGIN PUBLIC API.
     void initialize() {
         camera = new Camera3D();
 
-        camera.position = Vector3(0, 150, 22);
+        camera.position = Vector3(0, 170, 22);
         camera.target = Vector3(0, 32, 0);
         camera.up = Vector3(0, 1, 0);
         camera.fovy = 55;
