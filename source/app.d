@@ -55,13 +55,16 @@ void main() {
 	// ModelHandler.newModelFromMesh("triangle", vertices, textureCoordinates);
 
 	immutable int renderDistance = 16;
-	foreach (immutable x; -renderDistance .. renderDistance) {
-		foreach (immutable z; -renderDistance .. renderDistance) {
-			if (vec2dDistance(Vec2d(), Vec2d(x, z)) <= renderDistance) {
-				Map.debugGenerate(x, z);
-			}
-		}
-	}
+	int x = -renderDistance;
+	int z = -renderDistance;
+	bool keepGenerating = true;
+	// foreach (immutable x; -renderDistance .. renderDistance) {
+	// 	foreach (immutable z; -renderDistance .. renderDistance) {
+	// 		if (vec2dDistance(Vec2d(), Vec2d(x, z)) <= renderDistance) {
+	// 			Map.debugGenerate(x, z);
+	// 		}
+	// 	}
+	// }
 
 	// Vec2i blah = Vec2i(0, 0);
 	// MapGraphics.generate(blah);
@@ -76,6 +79,17 @@ void main() {
 
 	while (Window.shouldStayOpen()) {
 
+		if (keepGenerating) {
+			Map.debugGenerate(x, z);
+			x++;
+			if (x >= renderDistance) {
+				x = -renderDistance;
+				z++;
+				if (z >= renderDistance) {
+					keepGenerating = false;
+				}
+			}
+		}
 
 		// writeln(ModelHandler.modelExists("Chunk:0|0"));
 
