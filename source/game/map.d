@@ -320,7 +320,14 @@ private: //* BEGIN INTERNAL API.
         Chunk newChunk = Chunk(generateKey(chunkPosition));
         generateChunkData(chunkPosition, newChunk);
         database[chunkPosition] = newChunk;
+
         MapGraphics.generate(chunkPosition);
+        updateNeighbors(chunkPosition);
+    }
+
+    void updateNeighbors(Vec2i chunkPosition) {
+        // todo: only update if the neighbor exists.
+
     }
 
     void generateChunkData(Vec2i chunkPosition, ref Chunk thisChunk) {
