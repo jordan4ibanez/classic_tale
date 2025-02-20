@@ -134,8 +134,8 @@ private:
         const(Chunk*) neighborFront = Map.getChunkPointer(chunkKey.x, chunkKey.y - 1);
         immutable bool neighborFrontExists = neighborFront !is null;
 
-        const(Chunk*) neighborBack = Map.getChunkPointer(chunkKey.x, chunkKey.y - 1);
-        immutable bool neighborBackExists = neighborBack !is null;
+        const(Chunk*) neighborBack = Map.getChunkPointer(chunkKey.x, chunkKey.y + 1);
+        // immutable bool neighborBackExists = neighborBack !is null;
 
         // Preallocation.
         foreach (immutable x; 0 .. CHUNK_WIDTH) {
