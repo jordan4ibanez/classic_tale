@@ -6,6 +6,7 @@ import graphics.camera_handler;
 import graphics.colors;
 import graphics.render;
 import graphics.texture_handler;
+import math.constants;
 import math.rect;
 import math.vec2d;
 import math.vec3d;
@@ -43,6 +44,7 @@ private:
     Vec2d size = Vec2d(0.6, 1.8);
     Vec3d position = Vec3d(0, 170, 0);
     Vec3d velocity = Vec3d(0, 0, 0);
+    double eyeHeight = 1.625;
     int inChunk = int.max;
     bool firstGen = true;
     bool jumpQueued = false;
@@ -69,6 +71,10 @@ public: //* BEGIN PUBLIC API.
         return size.x * 0.5;
     }
 
+    double getEyeHeight() {
+        return eyeHeight;
+    }
+
     Vec3d getVelocity() {
         return velocity;
     }
@@ -82,24 +88,42 @@ public: //* BEGIN PUBLIC API.
     }
 
     void doControls() {
-        double delta = Delta.getDelta();
+        immutable double delta = Delta.getDelta();
         immutable double yaw = CameraHandler.getYaw();
 
         static immutable double speed = 10.0;
 
         if (Keyboard.isDown(KeyboardKey.KEY_W)) {
-            double dirX = cos(yaw);
-            double dirZ = sin(yaw);
+            immutable double dirX = cos(yaw);
+            immutable double dirZ = sin(yaw);
             position.x += dirX * delta * speed;
             position.z += dirZ * delta * speed;
         }
         if (Keyboard.isDown(KeyboardKey.KEY_S)) {
-            double dirX = cos(-yaw);
-            double dirZ = sin(-yaw);
+            immutable double dirX = cos(yaw + PI);
+            immutable double dirZ = sin(yaw + PI);
+            position.x += dirX * delta * speed;
+            position.z += dirZ * delta * speed;
+        }
+        if (Keyboard.isDown(KeyboardKey.KEY_A)) {
+            immutable double dirX = cos(yaw - HALF_PI);
+            immutable double dirZ = sin(yaw - HALF_PI);
+            position.x += dirX * delta * speed;
+            position.z += dirZ * delta * speed;
+        }
+        if (Keyboard.isDown(KeyboardKey.KEY_D)) {
+            immutable double dirX = cos(yaw + HALF_PI);
+            immutable double dirZ = sin(yaw + HALF_PI);
             position.x += dirX * delta * speed;
             position.z += dirZ * delta * speed;
         }
 
+        if (Keyboard.isDown(KeyboardKey.KEY_LEFT_SHIFT)) {
+            position.y -= delta * speed;
+        }
+        if (Keyboard.isDown(KeyboardKey.KEY_SPACE)) {
+            position.y += delta * speed;
+        }
     }
 
     // Rect getRectangle() {
