@@ -5,6 +5,7 @@ import raylib : Matrix, Vector3;
 import std.algorithm.comparison;
 import std.math.algebraic;
 import std.math.trigonometry;
+import std.math.rounding;
 
 struct Vec3d {
     double x = 0;
@@ -74,6 +75,11 @@ Vec3d vec3dScale(Vec3d v, double scalar) {
 // Multiply vector by vector
 Vec3d vec3dMultiply(Vec3d v1, Vec3d v2) {
     return Vec3d(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
+}
+
+// Floor a vector.
+Vec3d vec3dFloor(Vec3d v) {
+    return Vec3d(floor(v.x), floor(v.y), floor(v.z));
 }
 
 // Calculate two vectors cross product
