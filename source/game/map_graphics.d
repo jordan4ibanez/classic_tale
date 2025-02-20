@@ -5,7 +5,7 @@ import game.block_database;
 import game.map;
 import graphics.model_handler;
 import graphics.texture_handler;
-import hashset;
+import linked_hash_queue;
 import math.vec2d;
 import math.vec2i;
 import math.vec3d;
@@ -86,40 +86,27 @@ static final const class MapGraphics {
 static:
 private:
 
-    HashSet!Vec2i generationQueue;
+    LinkedHashQueue!Vec2i generationQueue;
 
 public:
 
     void generate(const ref Vec2i chunkToGenerate) {
-        generationQueue.insert(chunkToGenerate);
+        generationQueue.pushBack(chunkToGenerate);
     }
 
     void __update() {
-        PopResult thisResult = popQueue();
-        if (!thisResult.exists) {
+        Option!Vec2i thisResult = generationQueue.popBack();
+
+        if (thisResult.isNone()) {
             return;
         }
-        writeln(thisResult.data);
-        createChunkMesh(thisResult.data);
+        writeln(thisResult.unwrap);
+        createChunkMesh(thisResult.unwrap);
     }
 
 private:
 
-    PopResult popQueue() {
-        PopResult result;
-        if (generationQueue.length == 0) {
-            return result;
-        }
-        foreach (Vec2i key; generationQueue) {
-            result.data = key;
-            result.exists = true;
-            break;
-        }
-        generationQueue.erase(result.data);
-        return result;
-    }
-
-    void createChunkMesh(const ref Vec2i chunkKey) {
+    void createChunkMesh(Vec2i chunkKey) {
         const(Chunk*) thisChunk = Map.getChunkPointer(chunkKey);
 
         if (thisChunk is null) {
