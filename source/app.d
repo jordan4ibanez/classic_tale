@@ -1,5 +1,4 @@
 import controls.mouse;
-import core.memory;
 import game.map;
 import game.map_graphics;
 import game.player;
@@ -59,10 +58,6 @@ void main() {
 
 	auto rand = Random(unpredictableSeed());
 
-	immutable ulong averager = 200;
-	double[averager] GCcollection = 0;
-	ulong index = 0;
-
 	while (Window.shouldStayOpen()) {
 
 		foreach (_; 0 .. uniform(1_000, 100_000, rand)) {
@@ -90,22 +85,8 @@ void main() {
 		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 10, 10, 30, Colors.BLACK);
 		DrawText(toStringz("FPS:" ~ to!string(GetFPS())), 11, 11, 30, Colors.BLUE);
 
-		GCcollection[index] = cast(double) GC.stats().usedSize / 1_000_000.0;
-
-		double total = 0;
-		foreach (size; GCcollection) {
-			total += size;
-		}
-		total /= averager;
-
 		DrawText(toStringz("Heap:" ~ format("%.2f", total) ~ "mb"), 10, 40, 30, Colors.BLACK);
 		DrawText(toStringz("Heap:" ~ format("%.2f", total) ~ "mb"), 11, 41, 30, Colors.BLUE);
-
-		index++;
-		if (index >= averager) {
-			index = 0;
-		}
-		// GC.disable();
 
 		Vec3d pos = CameraHandler.getPosition();
 
