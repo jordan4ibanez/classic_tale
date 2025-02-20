@@ -82,11 +82,6 @@ private struct PopResult {
     Vec2i data;
 }
 
-pragma(inline, true)
-string generateKey(const ref Vec2i input) {
-    return "Chunk:" ~ to!string(input.x) ~ "|" ~ to!string(input.y);
-}
-
 static final const class MapGraphics {
 static:
 private:
@@ -298,14 +293,12 @@ private:
 
         // writeln("took: ", sw.peek().total!"msecs", "ms");
 
-        const string chunkMeshKey = generateKey(chunkKey);
-
-        if (ModelHandler.modelExists(chunkMeshKey)) {
-            ModelHandler.destroy(chunkMeshKey);
+        if (ModelHandler.modelExists(thisChunk.meshKey)) {
+            ModelHandler.destroy(thisChunk.meshKey);
         }
 
         // writeln("does not exist, creating");
-        ModelHandler.newModelFromMeshPointers(chunkMeshKey, vertices, vertexAllocation, textureCoordinates,
+        ModelHandler.newModelFromMeshPointers(thisChunk.meshKey, vertices, vertexAllocation, textureCoordinates,
             textureCoordAllocation);
 
     }

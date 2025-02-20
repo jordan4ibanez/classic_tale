@@ -23,13 +23,23 @@ import utility.window;
 immutable public int CHUNK_WIDTH = 16;
 immutable public int CHUNK_HEIGHT = 256;
 
+pragma(inline, true)
+private string generateKey(const ref Vec2i input) {
+    return "Chunk:" ~ to!string(input.x) ~ "|" ~ to!string(input.y);
+}
+
 struct BlockData {
     int blockID = 0;
 }
 
 struct Chunk {
+    string meshKey = null;
     // Y, Z, X
     BlockData[CHUNK_HEIGHT][CHUNK_WIDTH][CHUNK_WIDTH] data;
+
+    this(const string meshKey) {
+        this.meshKey = meshKey;
+    }
 }
 
 static final const class Map {
@@ -50,6 +60,10 @@ public: //* BEGIN PUBLIC API.
     }
 
     void draw() {
+        // todo: this should probably order by distance.
+        foreach (const ref thisChunk; database) {
+
+        }
     }
 
     const(Chunk*) getChunkPointer(Vec2i key) {
@@ -301,7 +315,7 @@ private: //* BEGIN INTERNAL API.
             return;
         }
         // todo: try to read from mongoDB.
-        Chunk newChunk = Chunk();
+        Chunk newChunk = Chunk(generateKey(chunkPosition));
         generateChunkData(chunkPosition, newChunk);
         database[chunkPosition] = newChunk;
         MapGraphics.generate(chunkPosition);
