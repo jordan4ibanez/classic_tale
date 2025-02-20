@@ -137,7 +137,7 @@ private:
 
         FaceTextures faceTextures;
 
-        auto sw = StopWatch(AutoStart.yes);
+        // auto sw = StopWatch(AutoStart.yes);
 
         ulong vertexAllocation = 0;
         ulong textureCoordAllocation = 0;
@@ -283,6 +283,18 @@ private:
                 }
             }
         }
+
+        // timer[timerIndex] = cast(double) sw.peek().total!"msecs";
+        // double total = 0;
+        // foreach (size; timer) {
+        //     total += size;
+        // }
+        // total /= averager;
+        // timerIndex++;
+        // if (timerIndex >= averager) {
+        //     timerIndex = 0;
+        // }
+        // writeln("took: ", total, "ms average");
 
         // writeln("took: ", sw.peek().total!"msecs", "ms");
 
