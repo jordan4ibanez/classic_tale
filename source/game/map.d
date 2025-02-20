@@ -276,6 +276,33 @@ private: //* BEGIN INTERNAL API.
         }
     }
 
+    // I named this like this so it's very obvious when it's used.
+    void updateAdjacentNeighborToPositionInChunk(const ref Vec2i chunkKey, const ref Vec2i xzPosInChunk) {
+        if (xzPosInChunk.x == 0) {
+            const Vec2i left = Vec2i(chunkKey.x - 1, chunkKey.y);
+            if (left in database) {
+                MapGraphics.generate(left);
+            }
+        } else if (xzPosInChunk.x == CHUNK_WIDTH - 1) {
+            const Vec2i right = Vec2i(chunkKey.x + 1, chunkKey.y);
+            if (right in database) {
+                MapGraphics.generate(right);
+            }
+        }
+
+        if (xzPosInChunk.y == 0) {
+            const Vec2i front = Vec2i(chunkKey.x, chunkKey.y - 1);
+            if (front in database) {
+                MapGraphics.generate(front);
+            }
+        } else if (xzPosInChunk.y == CHUNK_WIDTH - 1) {
+            const Vec2i back = Vec2i(chunkKey.x, chunkKey.y + 1);
+            if (back in database) {
+                MapGraphics.generate(back);
+            }
+        }
+    }
+
     void generateChunkData(Vec2i chunkPosition, ref Chunk thisChunk) {
 
         // todo: the chunk should have a biome.
