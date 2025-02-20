@@ -34,7 +34,7 @@ public: //* BEGIN PUBLIC API.
     }
 
     void terminate() {
-
+        // I'm sure I'll find something to put in here.
     }
 
     void firstPersonControls() {
