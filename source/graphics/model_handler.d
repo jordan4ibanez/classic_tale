@@ -164,7 +164,6 @@ public: //* BEGIN PUBLIC API.
         */
 
         foreach (i, thisMesh; thisModel.meshes[0 .. thisModel.meshCount]) {
-            writeln("updating ", i);
             UpdateMeshBuffer(cast(Mesh) thisMesh, 0, thisMesh.vertices, cast(int)(
                     thisMesh.vertexCount * 3 * float.sizeof), 0);
 
