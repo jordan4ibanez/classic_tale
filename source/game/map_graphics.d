@@ -154,12 +154,7 @@ private:
                                 vertexAllocation += 18;
                                 textureCoordAllocation += 12;
                             }
-                        }  // this is debug
-                        else {
-                            vertexAllocation += 18;
-                            textureCoordAllocation += 12;
                         }
-
                     } else if (thisChunk.data[x][z - 1][y].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
@@ -172,12 +167,7 @@ private:
                                 vertexAllocation += 18;
                                 textureCoordAllocation += 12;
                             }
-                        }  // this is debug
-                        else {
-                            vertexAllocation += 18;
-                            textureCoordAllocation += 12;
                         }
-
                     } else if (thisChunk.data[x][z + 1][y].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
@@ -190,10 +180,6 @@ private:
                                 vertexAllocation += 18;
                                 textureCoordAllocation += 12;
                             }
-                        }  // this is debug
-                        else {
-                            vertexAllocation += 18;
-                            textureCoordAllocation += 12;
                         }
                     } else if (thisChunk.data[x - 1][z][y].blockID == 0) {
                         vertexAllocation += 18;
@@ -207,12 +193,7 @@ private:
                                 vertexAllocation += 18;
                                 textureCoordAllocation += 12;
                             }
-                        }  // this is debug
-                        else {
-                            vertexAllocation += 18;
-                            textureCoordAllocation += 12;
                         }
-
                     } else if (thisChunk.data[x + 1][z][y].blockID == 0) {
                         vertexAllocation += 18;
                         textureCoordAllocation += 12;
@@ -290,11 +271,7 @@ private:
                             if (neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID == 0) {
                                 faceGen.front = true;
                             }
-                        }  // this is debug
-                        else {
-                            faceGen.front = true;
                         }
-
                     } else if (thisChunk.data[x][z - 1][y].blockID == 0) {
                         faceGen.front = true;
                     }
@@ -305,25 +282,17 @@ private:
                             if (neighborBack.data[x][0][y].blockID == 0) {
                                 faceGen.back = true;
                             }
-                        }  // this is debug
-                        else {
-                            faceGen.back = true;
                         }
-
                     } else if (thisChunk.data[x][z + 1][y].blockID == 0) {
                         faceGen.back = true;
                     }
 
                     // Left.
                     if (x - 1 < 0) {
-
                         if (neighborLeft) {
                             if (neighborLeft.data[CHUNK_WIDTH - 1][z][y].blockID == 0) {
                                 faceGen.left = true;
                             }
-                        }  // this is debug
-                        else {
-                            faceGen.left = true;
                         }
                     } else if (thisChunk.data[x - 1][z][y].blockID == 0) {
                         faceGen.left = true;
@@ -335,9 +304,6 @@ private:
                             if (neighborRight.data[0][z][y].blockID == 0) {
                                 faceGen.right = true;
                             }
-                        }  // this is debug
-                        else {
-                            faceGen.right = true;
                         }
                     } else if (thisChunk.data[x + 1][z][y].blockID == 0) {
                         faceGen.right = true;
