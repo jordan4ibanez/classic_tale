@@ -2,6 +2,7 @@ module game.player;
 
 import controls.keyboard;
 import game.map;
+import graphics.camera_handler;
 import graphics.colors;
 import graphics.render;
 import graphics.texture_handler;
@@ -40,7 +41,7 @@ private:
     */
 
     Vec2d size = Vec2d(0.6, 1.8);
-    Vec3d position = Vec3d(0, 0, 0);
+    Vec3d position = Vec3d(0, 170, 0);
     Vec3d velocity = Vec3d(0, 0, 0);
     int inChunk = int.max;
     bool firstGen = true;
@@ -78,6 +79,27 @@ public: //* BEGIN PUBLIC API.
 
     void setVelocity(const ref Vec3d newVelocity) {
         velocity = newVelocity;
+    }
+
+    void doControls() {
+        double delta = Delta.getDelta();
+        immutable double yaw = CameraHandler.getYaw();
+
+        static immutable double speed = 10.0;
+
+        if (Keyboard.isDown(KeyboardKey.KEY_W)) {
+            double dirX = cos(yaw);
+            double dirZ = sin(yaw);
+            position.x += dirX * delta * speed;
+            position.z += dirZ * delta * speed;
+        }
+        if (Keyboard.isDown(KeyboardKey.KEY_S)) {
+            double dirX = cos(-yaw);
+            double dirZ = sin(-yaw);
+            position.x += dirX * delta * speed;
+            position.z += dirZ * delta * speed;
+        }
+
     }
 
     // Rect getRectangle() {
