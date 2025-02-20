@@ -66,7 +66,7 @@ void main() {
 	// Vec2i blah = Vec2i(0, 0);
 	// MapGraphics.generate(blah);
 
-	auto rand = Random(unpredictableSeed());
+	// auto rand = Random(unpredictableSeed());
 
 	immutable ulong averager = 200;
 	double[averager] GCcollection = 0;
