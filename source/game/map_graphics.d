@@ -16,6 +16,10 @@ import std.datetime.stopwatch;
 import std.meta;
 import std.stdio;
 
+// immutable ulong averager = 200;
+// double[averager] timer = 0;
+// ulong timerIndex = 0;
+
 struct FaceGeneration {
     mixin(bitfields!(
             bool, "front", 1,
@@ -203,9 +207,10 @@ private:
         }
 
         // writeln(vertexAllocation, " ", textureCoordAllocation);
-
-        float* vertices = cast(float*) GC.malloc(float.sizeof * vertexAllocation); //uninitializedArray!(float[])(vertexAllocation);
-        float* textureCoordinates = cast(float*) GC.malloc(float.sizeof * textureCoordAllocation); //uninitializedArray!(float[])(textureCoordAllocation);
+        float* vertices = cast(float*) GC.malloc(float.sizeof * vertexAllocation);
+        // float[] vertices = uninitializedArray!(float[])(vertexAllocation);
+        float* textureCoordinates = cast(float*) GC.malloc(float.sizeof * textureCoordAllocation);
+        // float[] textureCoordinates = uninitializedArray!(float[])(textureCoordAllocation);
 
         ulong vertIndex = 0;
         ulong textIndex = 0;
