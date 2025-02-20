@@ -1,11 +1,13 @@
 module graphics.camera_handler;
 
+import controls.mouse;
 import game.player;
 import graphics.gui;
 import math.vec2d;
 import math.vec3d;
 import raylib;
 import raylib.rcamera;
+import std.math.trigonometry;
 import std.stdio;
 import utility.window;
 
@@ -18,12 +20,14 @@ private:
 public: //* BEGIN PUBLIC API.
 
     double realZoom = 100.0;
+    double yaw = 0;
+    double pitch = 0;
+    double cameraSensitivity = 1.0;
 
     void initialize() {
         camera = Camera3D();
 
         camera.position = Vector3(0, 170, 0);
-        camera.target = Vector3(0, 170, -1);
         camera.up = Vector3(0, 1, 0);
         camera.fovy = 55;
         camera.projection = CameraProjection.CAMERA_PERSPECTIVE;
@@ -35,12 +39,39 @@ public: //* BEGIN PUBLIC API.
 
     void firstPersonControls() {
         import std.random;
+        import utility.delta;
 
-        auto rnd = Random(unpredictableSeed());
+        double delta = Delta.getDelta();
 
-        CameraYaw(&camera, uniform(0.0, 360.0, rnd), false);
+        const Vec2d mouseDelta = Mouse.getDelta();
 
-        CameraPitch(&camera, uniform(-90.0, 90.0, rnd), true, false, false);
+        camera.position = Player.getPosition().toRaylib();
+
+        yaw += mouseDelta.x / (750.0 / cameraSensitivity);
+        pitch -= mouseDelta.y / (750.0 / cameraSensitivity);
+
+        immutable double HALF_PI = PI * 0.5;
+
+        if (pitch > HALF_PI) {
+            pitch = HALF_PI;
+        } else if (pitch < -HALF_PI) {
+            pitch = -HALF_PI;
+        }
+
+        camera.target.x = camera.position.x + (cos(yaw) * cos(pitch));
+        camera.target.y = camera.position.y + sin(pitch);
+        camera.target.z = camera.position.z + (sin(yaw) * cos(pitch));
+
+        // camera.target.x = camera.position.x + sin(yaw);
+        // camera.target.z = camera.position.z + cos(yaw);
+        // camera.target.y = camera.position.y;
+
+        //           movement%x = sin(camera_rotation%y) * movement_speed
+        //   movement%z = cos(camera_rotation%y) * movement_speed
+
+        // CameraYaw(&camera, uniform(0.0, 360.0, rnd), false);
+
+        // CameraPitch(&camera, uniform(-90.0, 90.0, rnd), true, false, false);
 
     }
 
