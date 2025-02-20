@@ -3,6 +3,7 @@ module graphics.camera_handler;
 import controls.mouse;
 import game.player;
 import graphics.gui;
+import math.constants;
 import math.vec2d;
 import math.vec3d;
 import raylib;
@@ -56,8 +57,6 @@ public: //* BEGIN PUBLIC API.
             pitch = -HALF_PI_ALMOST;
         }
 
-        static immutable double DOUBLE_PI = PI * 2.0;
-
         if (yaw > DOUBLE_PI) {
             yaw -= DOUBLE_PI;
         } else if (yaw < 0.0) {
@@ -66,6 +65,13 @@ public: //* BEGIN PUBLIC API.
     }
 
     void updateToPlayerPosition() {
+        immutable Vec3d playerPosition = Player.getPosition();
+        immutable double eyeHeight = Player.getEyeHeight();
+
+        camera.position.x = playerPosition.x;
+        camera.position.y = playerPosition.y + eyeHeight;
+        camera.position.z = playerPosition.z;
+
         // https://stackoverflow.com/a/1568687 Thanks, Beta! https://creativecommons.org/licenses/by-sa/4.0/
         camera.target.x = camera.position.x + (cos(yaw) * cos(pitch));
         camera.target.y = camera.position.y + sin(pitch);
