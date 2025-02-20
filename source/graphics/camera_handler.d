@@ -63,11 +63,17 @@ public: //* BEGIN PUBLIC API.
         } else if (yaw < 0.0) {
             yaw += DOUBLE_PI;
         }
+    }
 
+    void updateToPlayerPosition() {
         // https://stackoverflow.com/a/1568687 Thanks, Beta! https://creativecommons.org/licenses/by-sa/4.0/
         camera.target.x = camera.position.x + (cos(yaw) * cos(pitch));
         camera.target.y = camera.position.y + sin(pitch);
         camera.target.z = camera.position.z + (sin(yaw) * cos(pitch));
+    }
+
+    double getYaw() {
+        return yaw;
     }
 
     void begin() {
