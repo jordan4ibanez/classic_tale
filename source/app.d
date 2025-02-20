@@ -65,7 +65,7 @@ void main() {
 			Vec3d target;
 			target.x = uniform(0.0, 16.0, rand);
 			target.z = uniform(0.0, 16.0, rand);
-			target.y = uniform(0.0, 255.0, rand);
+			target.y = uniform(0.0, 256.0, rand);
 
 			int blockID = uniform(0, 5, rand);
 
