@@ -20,7 +20,7 @@ static final const class ModelHandler {
 static:
 private:
 
-    Model*[string] database;
+    Model[string] database;
     bool[string] isCustomDatabase;
     AnimationContainer[string] animationDatabase;
     Texture2D* textureAtlasPointer;
@@ -39,7 +39,7 @@ public: //* BEGIN PUBLIC API.
         string modelName, Vec3d position, Vec3d rotation = Vec3d(0, 0, 0),
         float scale = 1.0, Color color = Colors.WHITE) {
 
-        Model* thisModel = database[modelName];
+        Model* thisModel = modelName in database;
 
         if (thisModel is null) {
             throw new Error("[ModelManager]: Cannot draw model that does not exist. " ~ modelName);
@@ -66,19 +66,19 @@ public: //* BEGIN PUBLIC API.
                 "[ModelManager]: Tried to overwrite mesh [" ~ modelName ~ "]. Delete it first.");
         }
 
-        Mesh* thisMesh = new Mesh();
+        Mesh thisMesh = Mesh();
 
         thisMesh.vertexCount = cast(int) vertices.length / 3;
         thisMesh.triangleCount = thisMesh.vertexCount / 3;
         thisMesh.vertices = vertices.ptr;
         thisMesh.texcoords = textureCoordinates.ptr;
 
-        UploadMesh(thisMesh, false);
+        UploadMesh(&thisMesh, false);
 
-        Model* thisModel = new Model();
-        *thisModel = LoadModelFromMesh(*thisMesh);
+        Model thisModel = Model();
+        thisModel = LoadModelFromMesh(thisMesh);
 
-        if (!IsModelValid(*thisModel)) {
+        if (!IsModelValid(thisModel)) {
             throw new Error("[ModelHandler]: Invalid model loaded from mesh. " ~ modelName);
         }
 
@@ -110,19 +110,19 @@ public: //* BEGIN PUBLIC API.
                 "[ModelManager]: Tried to overwrite mesh [" ~ modelName ~ "]. Delete it first.");
         }
 
-        Mesh* thisMesh = new Mesh();
+        Mesh thisMesh = Mesh();
 
         thisMesh.vertexCount = cast(int) verticesLength / 3;
         thisMesh.triangleCount = thisMesh.vertexCount / 3;
         thisMesh.vertices = vertices;
         thisMesh.texcoords = textureCoordinates;
 
-        UploadMesh(thisMesh, false);
+        UploadMesh(&thisMesh, false);
 
-        Model* thisModel = new Model();
-        *thisModel = LoadModelFromMesh(*thisMesh);
+        Model thisModel = Model();
+        thisModel = LoadModelFromMesh(thisMesh);
 
-        if (!IsModelValid(*thisModel)) {
+        if (!IsModelValid(thisModel)) {
             throw new Error("[ModelHandler]: Invalid model loaded from mesh. " ~ modelName);
         }
 
@@ -143,7 +143,7 @@ public: //* BEGIN PUBLIC API.
     }
 
     void loadModelFromFile(string location) {
-        Model* thisModel = new Model();
+        Model thisModel = Model();
 
         // Extract the file name from the location.
         string fileName = () {
@@ -156,9 +156,9 @@ public: //* BEGIN PUBLIC API.
             return outputFileName;
         }();
 
-        *thisModel = LoadModel(toStringz(location));
+        thisModel = LoadModel(toStringz(location));
 
-        if (!IsModelValid(*thisModel)) {
+        if (!IsModelValid(thisModel)) {
             throw new Error("[ModelHandler]: Invalid model loaded from file. " ~ location);
         }
 
@@ -176,7 +176,7 @@ public: //* BEGIN PUBLIC API.
 
     void setModelShader(string modelName, string shaderName) {
 
-        Model* thisModel = database[modelName];
+        Model* thisModel = modelName in database;
 
         if (thisModel is null) {
             throw new Error(
@@ -190,7 +190,7 @@ public: //* BEGIN PUBLIC API.
     }
 
     Model* getModelPointer(string modelName) {
-        Model* thisModel = database[modelName];
+        Model* thisModel = modelName in database;
 
         if (thisModel is null) {
             throw new Error(
@@ -201,7 +201,7 @@ public: //* BEGIN PUBLIC API.
     }
 
     void destroy(string modelName) {
-        Model* thisModel = database[modelName];
+        Model* thisModel = modelName in database;
 
         if (thisModel is null) {
             throw new Error("[ModelManager]: Tried to destroy non-existent model. " ~ modelName);
@@ -217,7 +217,7 @@ public: //* BEGIN PUBLIC API.
     void terminate() {
         textureAtlasPointer = null;
         foreach (modelName, thisModel; database) {
-            destroyModel(modelName, thisModel);
+            destroyModel(modelName, &thisModel);
         }
         database.clear();
         isCustomDatabase.clear();
@@ -226,7 +226,7 @@ public: //* BEGIN PUBLIC API.
 
     void playAnimation(string modelName, int index, int frame) {
 
-        Model* thisModel = database[modelName];
+        Model* thisModel = modelName in database;
 
         if (thisModel is null) {
             throw new Error(
@@ -242,13 +242,13 @@ public: //* BEGIN PUBLIC API.
         UpdateModelAnimation(*thisModel, thisAnimation.animationData[index], frame);
     }
 
-    AnimationContainer getAnimationContainer(string modelName) {
-        if (modelName !in animationDatabase) {
+    const(AnimationContainer*) getAnimationContainer(string modelName) {
+        AnimationContainer* thisAnimation = modelName in animationDatabase;
+        if (thisAnimation is null) {
             throw new Error(
                 "[ModelManager]: Tried to get non-existent animation container. " ~ modelName);
         }
-
-        return animationDatabase[modelName];
+        return thisAnimation;
     }
 
 private: //* BEGIN INTERNAL API.
