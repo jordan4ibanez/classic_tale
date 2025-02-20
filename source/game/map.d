@@ -256,11 +256,11 @@ private: //* BEGIN INTERNAL API.
         updateAllNeighbors(chunkPosition);
     }
 
-    void updateAllNeighbors(Vec2i p) {
-        Vec2i left = Vec2i(p.x - 1, p.y);
-        Vec2i right = Vec2i(p.x + 1, p.y);
-        Vec2i front = Vec2i(p.x, p.y - 1);
-        Vec2i back = Vec2i(p.x, p.y + 1);
+    void updateAllNeighbors(Vec2i chunkKey) {
+        Vec2i left = Vec2i(chunkKey.x - 1, chunkKey.y);
+        Vec2i right = Vec2i(chunkKey.x + 1, chunkKey.y);
+        Vec2i front = Vec2i(chunkKey.x, chunkKey.y - 1);
+        Vec2i back = Vec2i(chunkKey.x, chunkKey.y + 1);
         if (left in database) {
             MapGraphics.generate(left);
         }
