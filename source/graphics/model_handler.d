@@ -60,7 +60,7 @@ public: //* BEGIN PUBLIC API.
         Model* thisModel = modelName in database;
 
         if (thisModel is null) {
-            writeln("missing " ~ modelName ~ ", aborting");
+            // writeln("missing " ~ modelName ~ ", aborting");
             return;
         }
 
