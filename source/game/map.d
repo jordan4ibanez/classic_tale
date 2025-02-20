@@ -167,6 +167,7 @@ public: //* BEGIN PUBLIC API.
 
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
+        updateAdjacentNeighborToPositionInChunk(chunkID, xzPosInChunk);
     }
 
     void setBlockAtWorldPositionByName(Vec3d position, string name) {
@@ -200,6 +201,7 @@ public: //* BEGIN PUBLIC API.
 
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
+        updateAdjacentNeighborToPositionInChunk(chunkID, xzPosInChunk);
     }
 
     void worldLoad(Vec2i currentPlayerChunk) {
