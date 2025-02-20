@@ -256,6 +256,7 @@ private: //* BEGIN INTERNAL API.
         updateAllNeighbors(chunkPosition);
     }
 
+    // This is only used when generating a new chunk.
     void updateAllNeighbors(Vec2i chunkKey) {
         const Vec2i left = Vec2i(chunkKey.x - 1, chunkKey.y);
         const Vec2i right = Vec2i(chunkKey.x + 1, chunkKey.y);
