@@ -80,8 +80,6 @@ private static immutable double magicAdjustment = 0.0001;
 CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d entityVelocity,
     Vec3d blockMin, Vec3d blockMax, CollisionAxis axis) {
 
-    // TODO: Use AABB to construct a box every iteration.
-
     CollisionResult result;
 
     immutable dir = (axis == CollisionAxis.X) ? cast(int) sgn(entityVelocity.x) : cast(
