@@ -60,8 +60,7 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
         // Entity position is on the bottom center of the collisionbox.
         immutable double entityHalfWidth = entitySize.x * 0.5;
 
-        immutable AABB entityAABB = AABB(entityPosition.x - entityHalfWidth, entityPosition.y,
-            entitySize.x, entitySize.y);
+        immutable AABB entityAABB = AABB(entityPosition, entitySize);
 
         immutable AABB blockAABB = AABB(blockPosition.x, blockPosition.y, blockSize.x, blockSize
                 .y);
