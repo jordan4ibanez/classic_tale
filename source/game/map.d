@@ -440,7 +440,7 @@ private: //* BEGIN INTERNAL API.
                     import raylib;
 
                     // These are literal positions in 3D space.
-                    DrawSphere(Vector3(thisXPoint, thisYPoint, thisZPoint), 0.01, Colors.BLUE);
+                    DrawSphere(Vector3(thisXPoint, thisYPoint, thisZPoint), 0.01, Colors.ORANGE);
 
                     // These are floored, it will look completely wrong.
                     // I assure you it is correct.
