@@ -76,7 +76,6 @@ void main() {
 		CameraHandler.firstPersonControls();
 
 		Player.doControls();
-		Player.move();
 
 		BeginDrawing();
 		ClearBackground(Colors.RAYWHITE);
@@ -85,6 +84,8 @@ void main() {
 		{
 			Map.draw();
 			Player.draw();
+
+			Player.move();
 
 			Vec3d playerPos = Player.getPosition();
 			BlockData thisBlock = Map.getBlockAtWorldPosition(playerPos);
