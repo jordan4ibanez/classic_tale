@@ -33,13 +33,13 @@ struct AABB {
 
     /// Entity constructor.
     this(const ref Vec3d position, const ref Vec2d size) {
-        this.min.x = position.x - size.x;
+        this.min.x = position.x - size.x / 2;
         this.min.y = position.y;
-        this.min.z = position.z - size.x;
+        this.min.z = position.z - size.x / 2;
 
-        this.max.x = position.x + size.x;
+        this.max.x = position.x + size.x / 2;
         this.max.y = position.y + size.y;
-        this.max.z = position.z + size.x;
+        this.max.z = position.z + size.x / 2;
     }
 }
 
