@@ -1,3 +1,4 @@
+import controls.keyboard;
 import controls.mouse;
 import game.block_database;
 import game.map;
@@ -61,6 +62,10 @@ void main() {
 	auto rand = Random(unpredictableSeed());
 
 	while (Window.shouldStayOpen()) {
+
+		if (Keyboard.isPressed(KeyboardKey.KEY_F1)) {
+			Window.toggleMaximize();
+		}
 
 		// foreach (_; 0 .. uniform(1_000, 100_000, rand)) {
 		// 	Vec3d target;
