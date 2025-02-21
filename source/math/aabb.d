@@ -50,6 +50,7 @@ struct AABB {
 pragma(inline)
 bool aabbCollision(AABB a, AABB b) {
     // Inverted exclusion detection because I'm weird.
+    // "the entity knows where it is because it knows where it isn't"
     if (a.max.x < b.min.x || a.min.x > b.max.x) {
         return false;
     }
