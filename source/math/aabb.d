@@ -81,7 +81,6 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
     Vec3d blockMin, Vec3d blockMax, CollisionAxis axis) {
 
     // TODO: Use AABB to construct a box every iteration.
-    // TODO: This should probably just be part of the AABB module?
 
     CollisionResult result;
 
