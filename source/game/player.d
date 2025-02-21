@@ -44,6 +44,7 @@ private:
     Vec2d size = Vec2d(0.6, 1.8);
     Vec3d position = Vec3d(0, 170, 0);
     Vec3d velocity = Vec3d(0, 0, 0);
+
     double eyeHeight = 1.625;
     int inChunk = int.max;
     bool firstGen = true;
@@ -104,37 +105,48 @@ public: //* BEGIN PUBLIC API.
 
         static immutable double speed = 10.0;
 
+        // velocity.x = 0;
+        // velocity.y = 0;
+        // velocity.z = 0;
+
         if (Keyboard.isDown(KeyboardKey.KEY_W)) {
             immutable double dirX = cos(yaw);
             immutable double dirZ = sin(yaw);
-            position.x += dirX * delta * speed;
-            position.z += dirZ * delta * speed;
+            velocity.x += dirX * delta * speed;
+            velocity.z += dirZ * delta * speed;
         }
         if (Keyboard.isDown(KeyboardKey.KEY_S)) {
             immutable double dirX = cos(yaw + PI);
             immutable double dirZ = sin(yaw + PI);
-            position.x += dirX * delta * speed;
-            position.z += dirZ * delta * speed;
+            velocity.x += dirX * delta * speed;
+            velocity.z += dirZ * delta * speed;
         }
         if (Keyboard.isDown(KeyboardKey.KEY_A)) {
             immutable double dirX = cos(yaw - HALF_PI);
             immutable double dirZ = sin(yaw - HALF_PI);
-            position.x += dirX * delta * speed;
-            position.z += dirZ * delta * speed;
+            velocity.x += dirX * delta * speed;
+            velocity.z += dirZ * delta * speed;
         }
         if (Keyboard.isDown(KeyboardKey.KEY_D)) {
             immutable double dirX = cos(yaw + HALF_PI);
             immutable double dirZ = sin(yaw + HALF_PI);
-            position.x += dirX * delta * speed;
-            position.z += dirZ * delta * speed;
+            velocity.x += dirX * delta * speed;
+            velocity.z += dirZ * delta * speed;
         }
 
         if (Keyboard.isDown(KeyboardKey.KEY_LEFT_SHIFT)) {
-            position.y -= delta * speed;
+            velocity.y -= delta * speed;
         }
         if (Keyboard.isDown(KeyboardKey.KEY_SPACE)) {
-            position.y += delta * speed;
+            velocity.y += delta * speed;
         }
+    }
+
+    void move() {
+        double delta = Delta.getDelta();
+
+        position.y += velocity.y * delta;
+
     }
 
     // Rect getRectangle() {
