@@ -101,11 +101,13 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
     immutable AABB entityAABB = AABB(entityPosition, entitySize);
     immutable AABB blockAABB = AABB(blockMin, blockMax);
 
-    if (axis == CollisionAxis.X) {
+    if (aabbCollision(entityAABB, blockAABB)) {
 
-        if (aabbCollision(entityAABB, blockAABB)) {
-            // This doesn't kick out in a specific direction on dir 0 because the Y axis check will kick them up as a safety.
-            result.collides = true;
+        result.collides = true;
+
+        // This doesn't kick out in a specific direction on dir 0 because the Y axis check will kick them up as a safety.
+
+        if (axis == CollisionAxis.X) {
             if (dir > 0) {
                 // Kick left.
                 result.newPosition = blockAABB.min.x - entityHalfWidth - magicAdjustment;
@@ -113,14 +115,8 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
                 // Kick right.
                 result.newPosition = blockAABB.max.x + entityHalfWidth + magicAdjustment;
             }
-        }
-    } else {
-
-        //? Remember: -Z is forwards.
-
-        if (aabbCollision(entityAABB, blockAABB)) {
-            // This doesn't kick out in a specific direction on dir 0 because the Y axis check will kick them up as a safety.
-            result.collides = true;
+        } else {
+            //? Remember: -Z is forwards.
             if (dir > 0) {
                 // Kick forward.
                 result.newPosition = blockAABB.min.z - entityHalfWidth - magicAdjustment;
@@ -129,7 +125,6 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
                 result.newPosition = blockAABB.max.z + entityHalfWidth + magicAdjustment;
             }
         }
-
     }
 
     return result;
