@@ -11,6 +11,7 @@ import graphics.render;
 import graphics.texture_handler;
 import math.aabb;
 import math.rect;
+import math.vec2d;
 import math.vec2i;
 import math.vec3d;
 import std.algorithm.comparison;
@@ -217,11 +218,10 @@ public: //* BEGIN PUBLIC API.
         unloadOldChunks(currentPlayerChunk);
     }
 
-    bool collideEntityToWorld(ref Vec3d entityPosition, Vec3d entitySize, ref Vec3d entityVelocity,
+    bool collideEntityToWorld(ref Vec3d entityPosition, const ref Vec2d entitySize, ref Vec3d entityVelocity,
         CollisionAxis axis) {
 
-        // return collision(entityPosition, entitySize, entityVelocity, axis);
-        return true;
+        return collision(entityPosition, entitySize, entityVelocity, axis);
     }
 
     void debugGenerate(int x, int z) {
@@ -388,77 +388,104 @@ private: //* BEGIN INTERNAL API.
         }
     }
 
-    // bool collision(ref Vec2d entityPosition, Vec2d entitySize, ref Vec2d entityVelocity, CollisionAxis axis) {
-    //     import utility.collision_functions;
+    bool collision(ref Vec3d entityPosition, Vec2d entitySize, ref Vec3d entityVelocity, CollisionAxis axis) {
 
-    //     int oldX = int.min;
-    //     int oldY = int.min;
-    //     int currentX = int.min;
-    //     int currentY = int.min;
+        int oldX = int.min;
+        int oldY = int.min;
+        int oldZ = int.min;
 
-    //     // debugDrawPoints = [];
+        int currentX = int.min;
+        int currentY = int.min;
+        int currentZ = int.min;
 
-    //     bool hitGround = false;
+        bool hitGround = false;
 
-    //     foreach (double xOnRect; 0 .. ceil(entitySize.x) + 1) {
-    //         double thisXPoint = (xOnRect > entitySize.x) ? entitySize.x : xOnRect;
-    //         thisXPoint += entityPosition.x - (entitySize.x * 0.5);
-    //         oldX = currentX;
-    //         currentX = cast(int) floor(thisXPoint);
+        // Entity position is on the bottom center of the collisionbox.
+        immutable double entityHalfWidth = entitySize.x * 0.5;
 
-    //         if (oldX == currentX) {
-    //             // writeln("skip X ", currentY);
-    //             continue;
-    //         }
+        foreach (double xOnRect; 0 .. ceil(entitySize.x) + 1) {
 
-    //         foreach (double yOnRect; 0 .. ceil(entitySize.y) + 1) {
-    //             double thisYPoint = (yOnRect > entitySize.y) ? entitySize.y : yOnRect;
-    //             thisYPoint += entityPosition.y;
+            double thisXPoint = (xOnRect > entitySize.x) ? entitySize.x : xOnRect;
 
-    //             oldY = currentY;
-    //             currentY = cast(int) floor(thisYPoint);
+            thisXPoint += entityPosition.x - entityHalfWidth;
 
-    //             if (currentY == oldY) {
-    //                 // writeln("skip Y ", currentY);
-    //                 continue;
-    //             }
+            oldX = currentX;
+            currentX = cast(int) floor(thisXPoint);
 
-    //             // debugDrawPoints ~= Vec2d(currentX, currentY);
+            if (oldX == currentX) {
+                continue;
+            }
 
-    //             ChunkData data = getBlockAtWorldPosition(Vec2d(currentX, currentY));
+            foreach (double yOnRect; 0 .. ceil(entitySize.y) + 1) {
+                double thisYPoint = (yOnRect > entitySize.y) ? entitySize.y : yOnRect;
+                thisYPoint += entityPosition.y;
 
-    //             // todo: if solid block collide.
-    //             // todo: probably custom blocks one day.
+                oldY = currentY;
+                currentY = cast(int) floor(thisYPoint);
 
-    //             if (data.blockID == 0) {
-    //                 continue;
-    //             }
+                if (currentY == oldY) {
+                    continue;
+                }
 
-    //             if (axis == CollisionAxis.X) {
-    //                 CollisionResult result = collideXToBlock(entityPosition, entitySize, entityVelocity,
-    //                     Vec2d(currentX, currentY), Vec2d(1, 1));
+                foreach (double zOnRect; 0 .. ceil(entitySize.x) + 1) {
+                    double thisZPoint = (zOnRect > entitySize.x) ? entitySize.x : zOnRect;
+                    thisZPoint += entityPosition.z - entityHalfWidth;
+                    oldZ = currentZ;
+                    currentZ = cast(int) floor(thisZPoint);
 
-    //                 if (result.collides) {
-    //                     entityPosition.x = result.newPosition;
-    //                     entityVelocity.x = 0;
-    //                 }
-    //             } else {
+                    if (oldZ == currentZ) {
+                        continue;
+                    }
 
-    //                 CollisionResult result = collideYToBlock(entityPosition, entitySize, entityVelocity,
-    //                     Vec2d(currentX, currentY), Vec2d(1, 1));
+                    // debugDrawPoints ~= Vec2d(currentX, currentY);
 
-    //                 if (result.collides) {
-    //                     entityPosition.y = result.newPosition;
-    //                     entityVelocity.y = 0;
-    //                     if (result.hitGround) {
-    //                         hitGround = true;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
+                    BlockData data = getBlockAtWorldPosition(Vec3d(currentX, currentY, currentZ));
 
-    //     return hitGround;
-    // }
+                    // todo: if solid block collide.
+                    // todo: probably custom blocks one day.
+
+                    import raylib;
+
+                    
+                    // These are literal positions in 3D space.
+                    DrawSphere(Vector3(thisXPoint, thisYPoint, thisZPoint), 0.01, Colors.BLUE);
+
+                    // These are floored, it will look completely wrong.
+                    // I assure you it is correct.
+                    DrawSphere(Vector3(currentX, currentY, currentZ), 0.01, Colors.BLUE);
+
+                    // writeln(thisXPoint, " ", thisYPoint, " ", thisZPoint);
+
+                    if (data.blockID == 0) {
+                        continue;
+                    }
+
+                    // if (axis == CollisionAxis.X) {
+                    //     CollisionResult result = collideXToBlock(entityPosition, entitySize, entityVelocity,
+                    //         Vec2d(currentX, currentY), Vec2d(1, 1));
+
+                    //     if (result.collides) {
+                    //         entityPosition.x = result.newPosition;
+                    //         entityVelocity.x = 0;
+                    //     }
+                    // } else {
+
+                    //     CollisionResult result = collideYToBlock(entityPosition, entitySize, entityVelocity,
+                    //         Vec2d(currentX, currentY), Vec2d(1, 1));
+
+                    //     if (result.collides) {
+                    //         entityPosition.y = result.newPosition;
+                    //         entityVelocity.y = 0;
+                    //         if (result.hitGround) {
+                    //             hitGround = true;
+                    //         }
+                    //     }
+                    // }
+                }
+            }
+        }
+
+        return hitGround;
+    }
 
 }
