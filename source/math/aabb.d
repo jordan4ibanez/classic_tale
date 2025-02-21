@@ -98,10 +98,10 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
         return result;
     }
 
-    if (axis == CollisionAxis.X) {
+    immutable AABB entityAABB = AABB(entityPosition, entitySize);
+    immutable AABB blockAABB = AABB(blockMin, blockMax);
 
-        immutable AABB entityAABB = AABB(entityPosition, entitySize);
-        immutable AABB blockAABB = AABB(blockMin, blockMax);
+    if (axis == CollisionAxis.X) {
 
         if (aabbCollision(entityAABB, blockAABB)) {
             // This doesn't kick out in a specific direction on dir 0 because the Y axis check will kick them up as a safety.
@@ -117,9 +117,6 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
     } else {
 
         //? Remember: -Z is forwards.
-
-        immutable AABB entityAABB = AABB(entityPosition, entitySize);
-        immutable AABB blockAABB = AABB(blockMin, blockMax);
 
         if (aabbCollision(entityAABB, blockAABB)) {
             // This doesn't kick out in a specific direction on dir 0 because the Y axis check will kick them up as a safety.
