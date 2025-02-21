@@ -88,6 +88,9 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
     immutable dir = (axis == CollisionAxis.X) ? cast(int) sgn(entityVelocity.x) : cast(
         int) sgn(entityVelocity.z);
 
+    // Entity position is on the bottom center of the collisionbox.
+    immutable double entityHalfWidth = entitySize.x * 0.5;
+
     if (axis == CollisionAxis.X) {
 
         result.newPosition = entityPosition.x;
@@ -96,9 +99,6 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
         if (dir == 0) {
             return result;
         }
-
-        // Entity position is on the bottom center of the collisionbox.
-        immutable double entityHalfWidth = entitySize.x * 0.5;
 
         immutable AABB entityAABB = AABB(entityPosition, entitySize);
         immutable AABB blockAABB = AABB(blockMin, blockMax);
@@ -124,9 +124,6 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
         if (dir == 0) {
             return result;
         }
-
-        // Entity position is on the bottom center of the collisionbox.
-        immutable double entityHalfWidth = entitySize.x * 0.5;
 
         immutable AABB entityAABB = AABB(entityPosition, entitySize);
         immutable AABB blockAABB = AABB(blockMin, blockMax);
