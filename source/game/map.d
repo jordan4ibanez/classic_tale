@@ -450,6 +450,25 @@ private: //* BEGIN INTERNAL API.
                         continue;
                     }
 
+                    if (axis is CollisionAxis.Y) {
+                        // writeln("Y ");
+
+                        Vec3d blockMin = Vector3(currentX, currentY, currentZ);
+                        Vec3d blockMax = Vector3(currentX + 1, currentY + 1, currentZ + 1);
+
+                        import raylib;
+
+                        DrawCube(blockMin.toRaylib(), 0.1, 0.1, 0.1, Colors.DARKPURPLE);
+
+                        CollisionResult result = collideEntityToBlock(entityPosition, entitySize, entityVelocity,
+                            blockMin, blockMax, axis);
+
+                        if (result.collides) {
+                            entityPosition.y = result.newPosition;
+                            entityVelocity.y = 0;
+                        }
+                    }
+
                     // if (axis == CollisionAxis.X) {
                     //     CollisionResult result = collideXToBlock(entityPosition, entitySize, entityVelocity,
                     //         Vec2d(currentX, currentY), Vec2d(1, 1));
