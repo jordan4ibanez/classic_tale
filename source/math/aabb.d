@@ -79,7 +79,7 @@ struct CollisionResult {
 //? Note: This will have issues extremely far out.
 private static immutable double magicAdjustment = 0.0001;
 
-CollisionResult collideEntityToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d entityVelocity,
+CollisionResult collideEntityToBlock(Vec3d entityPosition, Vec2d entitySize, Vec3d entityVelocity,
     Vec3d blockMin, Vec3d blockMax, CollisionAxis axis) {
 
     CollisionResult result;
