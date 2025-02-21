@@ -59,13 +59,14 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
 
         // Entity position is on the bottom center of the collisionbox.
         immutable double entityHalfWidth = entitySize.x * 0.5;
-        immutable Rect entityRectangle = Rect(entityPosition.x - entityHalfWidth, entityPosition.y,
+
+        immutable AABB entityAABB = AABB(entityPosition.x - entityHalfWidth, entityPosition.y,
             entitySize.x, entitySize.y);
 
-        immutable Rect blockRectangle = Rect(blockPosition.x, blockPosition.y, blockSize.x, blockSize
+        immutable AABB blockAABB = AABB(blockPosition.x, blockPosition.y, blockSize.x, blockSize
                 .y);
 
-        if (checkCollisionRecs(entityRectangle, blockRectangle)) {
+        if (checkCollisionRecs(entityAABB, blockRectangle)) {
             // This doesn't kick out in a specific direction on dir 0 because the Y axis check will kick them up as a safety.
             result.collides = true;
             if (dir > 0) {
@@ -78,34 +79,34 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
         }
     } else {
 
-        result.newPosition = entityPosition.x;
+        // result.newPosition = entityPosition.x;
 
-        int dir = cast(int) sgn(entityVelocity.x);
+        // int dir = cast(int) sgn(entityVelocity.x);
 
-        // This thing isn't moving.
-        if (dir == 0) {
-            return result;
-        }
+        // // This thing isn't moving.
+        // if (dir == 0) {
+        //     return result;
+        // }
 
-        // Entity position is on the bottom center of the collisionbox.
-        immutable double entityHalfWidth = entitySize.x * 0.5;
-        immutable Rect entityRectangle = Rect(entityPosition.x - entityHalfWidth, entityPosition.y,
-            entitySize.x, entitySize.y);
+        // // Entity position is on the bottom center of the collisionbox.
+        // immutable double entityHalfWidth = entitySize.x * 0.5;
+        // immutable Rect entityRectangle = Rect(entityPosition.x - entityHalfWidth, entityPosition.y,
+        //     entitySize.x, entitySize.y);
 
-        immutable Rect blockRectangle = Rect(blockPosition.x, blockPosition.y, blockSize.x, blockSize
-                .y);
+        // immutable Rect blockRectangle = Rect(blockPosition.x, blockPosition.y, blockSize.x, blockSize
+        //         .y);
 
-        if (checkCollisionRecs(entityRectangle, blockRectangle)) {
-            // This doesn't kick out in a specific direction on dir 0 because the Y axis check will kick them up as a safety.
-            result.collides = true;
-            if (dir > 0) {
-                // Kick left.
-                result.newPosition = blockPosition.x - entityHalfWidth - magicAdjustment;
-            } else if (dir < 0) {
-                // Kick right.
-                result.newPosition = blockPosition.x + blockSize.x + entityHalfWidth + magicAdjustment;
-            }
-        }
+        // if (checkCollisionRecs(entityRectangle, blockRectangle)) {
+        //     // This doesn't kick out in a specific direction on dir 0 because the Y axis check will kick them up as a safety.
+        //     result.collides = true;
+        //     if (dir > 0) {
+        //         // Kick left.
+        //         result.newPosition = blockPosition.x - entityHalfWidth - magicAdjustment;
+        //     } else if (dir < 0) {
+        //         // Kick right.
+        //         result.newPosition = blockPosition.x + blockSize.x + entityHalfWidth + magicAdjustment;
+        //     }
+        // }
 
     }
 
