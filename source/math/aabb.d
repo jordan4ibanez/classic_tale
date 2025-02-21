@@ -93,12 +93,12 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
 
     result.newPosition = (axis == CollisionAxis.X) ? entityPosition.x : entityPosition.z;
 
-    if (axis == CollisionAxis.X) {
+    // This thing isn't moving.
+    if (dir == 0) {
+        return result;
+    }
 
-        // This thing isn't moving.
-        if (dir == 0) {
-            return result;
-        }
+    if (axis == CollisionAxis.X) {
 
         immutable AABB entityAABB = AABB(entityPosition, entitySize);
         immutable AABB blockAABB = AABB(blockMin, blockMax);
@@ -117,11 +117,6 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
     } else {
 
         //? Remember: -Z is forwards.
-
-        // This thing isn't moving.
-        if (dir == 0) {
-            return result;
-        }
 
         immutable AABB entityAABB = AABB(entityPosition, entitySize);
         immutable AABB blockAABB = AABB(blockMin, blockMax);
