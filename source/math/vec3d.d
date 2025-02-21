@@ -4,8 +4,8 @@ import math.quat;
 import raylib : Matrix, Vector3;
 import std.algorithm.comparison;
 import std.math.algebraic;
-import std.math.trigonometry;
 import std.math.rounding;
+import std.math.trigonometry;
 
 struct Vec3d {
     double x = 0;
