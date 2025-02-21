@@ -120,7 +120,7 @@ CollisionResult collideEntityToBlock(Vec3d entityPosition, Vec3d entitySize, Vec
 
         result.collides = true;
 
-        // This doesn't kick out in a specific direction on dir 0 because the Y axis check will kick them up as a safety.
+        //? X and Z doesn't kick out in a specific direction on dir 0 because the Y axis check will kick entity up as a safety.
 
         if (axis == CollisionAxis.X) {
             if (dir > 0) {
