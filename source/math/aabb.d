@@ -152,7 +152,6 @@ CollisionResult collideEntityToBlock(Vec3d entityPosition, Vec3d entitySize, Vec
     }
 
     return result;
-
 }
 
 CollisionResult collideYToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d entityVelocity,
