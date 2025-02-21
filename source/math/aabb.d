@@ -122,7 +122,8 @@ CollisionResult collideEntityToBlock(Vec3d entityPosition, Vec3d entitySize, Vec
 
         //? X and Z doesn't kick out in a specific direction on dir 0 because the Y axis check will kick entity up as a safety.
 
-        if (axis == CollisionAxis.X) {
+        final switch (axis) {
+        case CollisionAxis.X:
             if (dir > 0) {
                 // Kick left.
                 result.newPosition = blockAABB.min.x - entityHalfWidth - magicAdjustment;
@@ -130,7 +131,8 @@ CollisionResult collideEntityToBlock(Vec3d entityPosition, Vec3d entitySize, Vec
                 // Kick right.
                 result.newPosition = blockAABB.max.x + entityHalfWidth + magicAdjustment;
             }
-        } else if (axis == CollisionAxis.Y) {
+            break;
+        case CollisionAxis.Y:
             if (dir <= 0) {
                 // Kick up. This is the safety default.
                 result.newPosition = blockAABB.max.y + magicAdjustment;
@@ -139,7 +141,8 @@ CollisionResult collideEntityToBlock(Vec3d entityPosition, Vec3d entitySize, Vec
                 // Kick down.
                 result.newPosition = blockAABB.min.y - entitySize.y - magicAdjustment;
             }
-        } else {
+            break;
+        case CollisionAxis.Z:
             //? Remember: -Z is forwards.
             if (dir > 0) {
                 // Kick forward.
