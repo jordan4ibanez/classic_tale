@@ -216,11 +216,12 @@ public: //* BEGIN PUBLIC API.
         unloadOldChunks(currentPlayerChunk);
     }
 
-    // bool collideEntityToWorld(ref Vec2d entityPosition, Vec2d entitySize, ref Vec2d entityVelocity,
-    //     CollisionAxis axis) {
+    bool collideEntityToWorld(ref Vec3d entityPosition, Vec3d entitySize, ref Vec3d entityVelocity,
+        CollisionAxis axis) {
 
-    //     return collision(entityPosition, entitySize, entityVelocity, axis);
-    // }
+        // return collision(entityPosition, entitySize, entityVelocity, axis);
+        return true;
+    }
 
     void debugGenerate(int x, int z) {
         loadChunk(Vec2i(x, z));
