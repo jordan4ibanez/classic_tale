@@ -5,6 +5,25 @@ import math.vec3d;
 import std.math.traits : sgn;
 import std.stdio;
 
+//? Note: Entities position is at the bottom center of the collision box.
+
+/*
+AABB Min
+v
+|------------|
+|            |
+|            |
+|            |
+|            |
+|            |
+|            |
+|            |
+|            |
+|------X-----| < AABB Max
+        ^
+        |-------- Actual position
+*/
+
 enum CollisionAxis {
     X,
     Z
