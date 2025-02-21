@@ -404,14 +404,10 @@ private: //* BEGIN INTERNAL API.
         immutable double entityHalfWidth = entitySize.x * 0.5;
 
         foreach (double xOnRect; 0 .. ceil(entitySize.x) + 1) {
-
             double thisXPoint = (xOnRect > entitySize.x) ? entitySize.x : xOnRect;
-
             thisXPoint += entityPosition.x - entityHalfWidth;
-
             oldX = currentX;
             currentX = cast(int) floor(thisXPoint);
-
             if (oldX == currentX) {
                 continue;
             }
@@ -419,10 +415,8 @@ private: //* BEGIN INTERNAL API.
             foreach (double yOnRect; 0 .. ceil(entitySize.y) + 1) {
                 double thisYPoint = (yOnRect > entitySize.y) ? entitySize.y : yOnRect;
                 thisYPoint += entityPosition.y;
-
                 oldY = currentY;
                 currentY = cast(int) floor(thisYPoint);
-
                 if (currentY == oldY) {
                     continue;
                 }
@@ -432,7 +426,6 @@ private: //* BEGIN INTERNAL API.
                     thisZPoint += entityPosition.z - entityHalfWidth;
                     oldZ = currentZ;
                     currentZ = cast(int) floor(thisZPoint);
-
                     if (oldZ == currentZ) {
                         continue;
                     }
@@ -446,7 +439,6 @@ private: //* BEGIN INTERNAL API.
 
                     import raylib;
 
-                    
                     // These are literal positions in 3D space.
                     DrawSphere(Vector3(thisXPoint, thisYPoint, thisZPoint), 0.01, Colors.BLUE);
 
