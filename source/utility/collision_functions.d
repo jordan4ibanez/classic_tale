@@ -7,7 +7,6 @@ import std.stdio;
 
 enum CollisionAxis {
     X,
-    Y,
     Z
 }
 
@@ -19,10 +18,10 @@ struct CollisionResult {
 
 // This basically shoves the entity out of the block.
 //? Note: This will have issues extremely far out.
-private immutable double magicAdjustment = 0.0001;
+private static immutable double magicAdjustment = 0.0001;
 
-CollisionResult collideXToBlock(Vec2d entityPosition, Vec2d entitySize, Vec2d entityVelocity,
-    Vec2d blockPosition, Vec2d blockSize) {
+CollisionResult collideXZToBlock(Vec2d entityPosition, Vec2d entitySize, Vec2d entityVelocity,
+    Vec2d blockPosition, Vec2d blockSize, CollisionAxis axis) {
 
     CollisionResult result;
     result.newPosition = entityPosition.x;
@@ -91,5 +90,3 @@ CollisionResult collideYToBlock(Vec2d entityPosition, Vec2d entitySize, Vec2d en
 
     return result;
 }
-
-// TODO: needs Z
