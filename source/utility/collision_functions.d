@@ -7,7 +7,8 @@ import std.stdio;
 
 enum CollisionAxis {
     X,
-    Y
+    Y,
+    Z
 }
 
 struct CollisionResult {
