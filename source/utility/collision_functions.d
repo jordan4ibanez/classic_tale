@@ -39,7 +39,7 @@ struct CollisionResult {
 private static immutable double magicAdjustment = 0.0001;
 
 CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d entityVelocity,
-    Vec3d blockPosition, Vec3d blockSize, CollisionAxis axis) {
+    Vec3d blockMin, Vec3d blockMax, CollisionAxis axis) {
 
     // TODO: Use AABB to construct a box every iteration.
     // TODO: This should probably just be part of the AABB module?
@@ -62,8 +62,7 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
 
         immutable AABB entityAABB = AABB(entityPosition, entitySize);
 
-        immutable AABB blockAABB = AABB(blockPosition.x, blockPosition.y, blockSize.x, blockSize
-                .y);
+        immutable AABB blockAABB = AABB(blockMin, blockMax);
 
         if (checkCollisionRecs(entityAABB, blockRectangle)) {
             // This doesn't kick out in a specific direction on dir 0 because the Y axis check will kick them up as a safety.
