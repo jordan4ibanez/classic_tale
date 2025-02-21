@@ -146,6 +146,8 @@ public: //* BEGIN PUBLIC API.
 
         position.y += velocity.y * delta;
 
+        Map.collideEntityToWorld(position, size, velocity, CollisionAxis.Y);
+
     }
 
     // Rect getRectangle() {
