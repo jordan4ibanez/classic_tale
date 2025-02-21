@@ -42,6 +42,9 @@ private static immutable double magicAdjustment = 0.0001;
 CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d entityVelocity,
     Vec3d blockPosition, Vec3d blockSize, CollisionAxis axis) {
 
+    // TODO: Use AABB to construct a box every iteration.
+    // TODO: This should probably just be part of the AABB module?
+
     CollisionResult result;
 
     if (axis == CollisionAxis.X) {
