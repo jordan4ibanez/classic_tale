@@ -34,7 +34,6 @@ struct AABB {
         this.max.x = position.x + size.x;
         this.max.y = position.y + size.y;
         this.max.z = position.z + size.x;
-
     }
 }
 

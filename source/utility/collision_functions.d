@@ -19,8 +19,8 @@ import std.stdio;
           |            |
           |            |
 AABB Min> |------X-----| 
-          ^
-          |-------- Actual position
+                 ^
+                 |-------- Actual position
 */
 
 enum CollisionAxis {
