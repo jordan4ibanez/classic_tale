@@ -97,13 +97,13 @@ void main() {
 
 			if (thisBlock.blockID != 0) {
 
-				writeln(BlockDatabase.getBlockByID(thisBlock.blockID).name);
+				// writeln(BlockDatabase.getBlockByID(thisBlock.blockID).name);
 
 				Vec3d blockOutline = vec3dAdd(vec3dFloor(playerPos), Vec3d(0.5, 0.5, 0.5));
 
 				DrawCubeWires(blockOutline.toRaylib(), 1.01, 1.01, 1.01, Colors.BLACK);
 
-				writeln("yep");
+				// writeln("yep");
 			}
 
 			// DrawCube(Vector3(0, 0, 0), 0.1, 0.1, 0.1, Colors.RED);
