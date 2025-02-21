@@ -8,18 +8,17 @@ import std.stdio;
 //? Note: Entities position is at the bottom center of the collision box.
 
 /*
-AABB Min
-v
-|------------|
-|            |
-|            |
-|            |
-|            |
-|            |
-|            |
-|            |
-|            |
-|------X-----| < AABB Max
+
+          |------------|< AABB Max
+          |            |
+          |            |
+          |            |
+          |            |
+          |            |
+          |            |
+          |            |
+          |            |
+AABB Min> |------X-----| 
        ^
        |-------- Actual position
 */
