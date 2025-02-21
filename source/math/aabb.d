@@ -7,6 +7,8 @@ import math.vec3d;
 
 /*
 
+          <------|-----> total width
+
           |------------|< AABB Max
           |            |
           |            |
