@@ -85,11 +85,12 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
 
     CollisionResult result;
 
+    immutable dir = (axis == CollisionAxis.X) ? cast(int) sgn(entityVelocity.x) : cast(
+        int) sgn(entityVelocity.z);
+
     if (axis == CollisionAxis.X) {
 
         result.newPosition = entityPosition.x;
-
-        immutable int dir = cast(int) sgn(entityVelocity.x);
 
         // This thing isn't moving.
         if (dir == 0) {
@@ -116,8 +117,6 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
     } else {
 
         result.newPosition = entityPosition.z;
-
-        immutable int dir = cast(int) sgn(entityVelocity.z);
 
         //? Remember: -Z is forwards.
 
