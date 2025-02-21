@@ -20,8 +20,8 @@ v
 |            |
 |            |
 |------X-----| < AABB Max
-        ^
-        |-------- Actual position
+       ^
+       |-------- Actual position
 */
 
 enum CollisionAxis {
