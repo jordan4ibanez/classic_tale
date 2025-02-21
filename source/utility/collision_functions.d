@@ -1,7 +1,7 @@
 module utility.collision_functions;
 
 import math.rect;
-import math.vec2d;
+import math.vec3d;
 import std.math.traits : sgn;
 import std.stdio;
 
@@ -20,8 +20,8 @@ struct CollisionResult {
 //? Note: This will have issues extremely far out.
 private static immutable double magicAdjustment = 0.0001;
 
-CollisionResult collideXZToBlock(Vec2d entityPosition, Vec2d entitySize, Vec2d entityVelocity,
-    Vec2d blockPosition, Vec2d blockSize, CollisionAxis axis) {
+CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d entityVelocity,
+    Vec3d blockPosition, Vec3d blockSize, CollisionAxis axis) {
 
     CollisionResult result;
 
@@ -63,8 +63,8 @@ CollisionResult collideXZToBlock(Vec2d entityPosition, Vec2d entitySize, Vec2d e
 
 }
 
-CollisionResult collideYToBlock(Vec2d entityPosition, Vec2d entitySize, Vec2d entityVelocity,
-    Vec2d blockPosition, Vec2d blockSize) {
+CollisionResult collideYToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d entityVelocity,
+    Vec3d blockPosition, Vec3d blockSize) {
 
     CollisionResult result;
     result.newPosition = entityPosition.y;
