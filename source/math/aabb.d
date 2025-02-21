@@ -8,9 +8,9 @@ import std.stdio;
 //? Note: Entities position is at the bottom center of the collision box.
 
 /*
-          <------> width applied from center (half width)
+          <------> width applied from center (half width)(entity X width / 2.0)
 
-          <------|-----> total width
+          <------|-----> total width (entity X width)
           |------|-----|< AABB Max
           |            |
           |            |
