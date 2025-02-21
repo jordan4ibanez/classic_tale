@@ -64,7 +64,7 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
 
         immutable AABB blockAABB = AABB(blockMin, blockMax);
 
-        if (checkCollisionRecs(entityAABB, blockRectangle)) {
+        if (aabbCollision(entityAABB, blockAABB)) {
             // This doesn't kick out in a specific direction on dir 0 because the Y axis check will kick them up as a safety.
             result.collides = true;
             if (dir > 0) {
