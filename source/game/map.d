@@ -446,8 +446,6 @@ private: //* BEGIN INTERNAL API.
                     // I assure you it is correct.
                     DrawSphere(Vector3(currentX, currentY, currentZ), 0.01, Colors.BLUE);
 
-                    // writeln(thisXPoint, " ", thisYPoint, " ", thisZPoint);
-
                     if (data.blockID == 0) {
                         continue;
                     }
