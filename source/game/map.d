@@ -1,6 +1,6 @@
 module game.map;
 
-public import utility.collision_functions : CollisionAxis;
+public import math.aabb : CollisionAxis;
 import fast_noise;
 import game.biome_database;
 import game.block_database;
@@ -9,6 +9,7 @@ import graphics.camera_handler;
 import graphics.model_handler;
 import graphics.render;
 import graphics.texture_handler;
+import math.aabb;
 import math.rect;
 import math.vec2i;
 import math.vec3d;
