@@ -76,6 +76,7 @@ void main() {
 		CameraHandler.firstPersonControls();
 
 		Player.doControls();
+		Player.move();
 
 		BeginDrawing();
 		ClearBackground(Colors.RAYWHITE);
