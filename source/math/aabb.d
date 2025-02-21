@@ -83,8 +83,16 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
 
     CollisionResult result;
 
-    immutable dir = (axis == CollisionAxis.X) ? cast(int) sgn(entityVelocity.x) : cast(
-        int) sgn(entityVelocity.z);
+    immutable int dir = () {
+        final switch (axis) {
+        case (CollisionAxis.X):
+            return cast(int) sgn(entityVelocity.x);
+        case (CollisionAxis.Y):
+            return cast(int) sgn(entityVelocity.y);
+        case (CollisionAxis.Z):
+            return cast(int) sgn(entityVelocity.z);
+        }
+    }();
 
     // Entity position is on the bottom center of the collisionbox.
     immutable double entityHalfWidth = entitySize.x * 0.5;
