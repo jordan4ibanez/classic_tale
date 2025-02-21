@@ -97,7 +97,6 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
         }
 
         // Entity position is on the bottom center of the collisionbox.
-        // todo: I don't think should be a thing, use the AABB.
         immutable double entityHalfWidth = entitySize.x * 0.5;
 
         immutable AABB entityAABB = AABB(entityPosition, entitySize);
@@ -108,10 +107,10 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
             result.collides = true;
             if (dir > 0) {
                 // Kick left.
-                result.newPosition = blockPosition.x - entityHalfWidth - magicAdjustment;
+                result.newPosition = blockAABB.min.x - entityHalfWidth - magicAdjustment;
             } else if (dir < 0) {
                 // Kick right.
-                result.newPosition = blockPosition.x + blockSize.x + entityHalfWidth + magicAdjustment;
+                result.newPosition = blockAABB.max.x + entityHalfWidth + magicAdjustment;
             }
         }
     } else {

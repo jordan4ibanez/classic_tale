@@ -16,7 +16,6 @@ import std.math.rounding;
 import std.math.traits : sgn;
 import std.math.trigonometry;
 import std.stdio;
-import utility.collision_functions;
 import utility.delta;
 import utility.drawing_functions;
 
