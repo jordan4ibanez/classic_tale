@@ -25,6 +25,12 @@ struct AABB {
     Vec3d min;
     Vec3d max;
 
+    /// Block constructor.
+    this(const ref Vec3d min, const ref Vec3d max) {
+        this.min = min;
+        this.max = max;
+    }
+
     /// Entity constructor.
     this(const ref Vec3d position, const ref Vec2d size) {
         this.min.x = position.x - size.x;
