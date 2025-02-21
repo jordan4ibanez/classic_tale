@@ -97,7 +97,16 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
     // Entity position is on the bottom center of the collisionbox.
     immutable double entityHalfWidth = entitySize.x * 0.5;
 
-    result.newPosition = (axis == CollisionAxis.X) ? entityPosition.x : entityPosition.z;
+    result.newPosition = () {
+        final switch (axis) {
+        case (CollisionAxis.X):
+            return entityPosition.x;
+        case (CollisionAxis.Y):
+            return entityPosition.y;
+        case (CollisionAxis.Z):
+            return entityPosition.z;
+        }
+    }();
 
     // This thing isn't moving.
     if (dir == 0) {
