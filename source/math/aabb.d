@@ -130,6 +130,15 @@ CollisionResult collideEntityToBlock(Vec3d entityPosition, Vec3d entitySize, Vec
                 // Kick right.
                 result.newPosition = blockAABB.max.x + entityHalfWidth + magicAdjustment;
             }
+        } else if (axis == CollisionAxis.Y) {
+            if (dir <= 0) {
+                // Kick up. This is the safety default.
+                result.newPosition = blockAABB.max.y + magicAdjustment;
+                result.hitGround = true;
+            } else {
+                // Kick down.
+                result.newPosition = blockAABB.min.y - entitySize.y - magicAdjustment;
+            }
         } else {
             //? Remember: -Z is forwards.
             if (dir > 0) {
