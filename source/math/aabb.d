@@ -89,7 +89,7 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
 
         result.newPosition = entityPosition.x;
 
-        int dir = cast(int) sgn(entityVelocity.x);
+        immutable int dir = cast(int) sgn(entityVelocity.x);
 
         // This thing isn't moving.
         if (dir == 0) {
@@ -115,34 +115,34 @@ CollisionResult collideXZToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d e
         }
     } else {
 
-        // result.newPosition = entityPosition.x;
+        result.newPosition = entityPosition.z;
 
-        // int dir = cast(int) sgn(entityVelocity.x);
+        immutable int dir = cast(int) sgn(entityVelocity.z);
 
-        // // This thing isn't moving.
-        // if (dir == 0) {
-        //     return result;
-        // }
+        //? Remember: -Z is forwards.
 
-        // // Entity position is on the bottom center of the collisionbox.
-        // immutable double entityHalfWidth = entitySize.x * 0.5;
-        // immutable Rect entityRectangle = Rect(entityPosition.x - entityHalfWidth, entityPosition.y,
-        //     entitySize.x, entitySize.y);
+        // This thing isn't moving.
+        if (dir == 0) {
+            return result;
+        }
 
-        // immutable Rect blockRectangle = Rect(blockPosition.x, blockPosition.y, blockSize.x, blockSize
-        //         .y);
+        // Entity position is on the bottom center of the collisionbox.
+        immutable double entityHalfWidth = entitySize.x * 0.5;
 
-        // if (checkCollisionRecs(entityRectangle, blockRectangle)) {
-        //     // This doesn't kick out in a specific direction on dir 0 because the Y axis check will kick them up as a safety.
-        //     result.collides = true;
-        //     if (dir > 0) {
-        //         // Kick left.
-        //         result.newPosition = blockPosition.x - entityHalfWidth - magicAdjustment;
-        //     } else if (dir < 0) {
-        //         // Kick right.
-        //         result.newPosition = blockPosition.x + blockSize.x + entityHalfWidth + magicAdjustment;
-        //     }
-        // }
+        immutable AABB entityAABB = AABB(entityPosition, entitySize);
+        immutable AABB blockAABB = AABB(blockMin, blockMax);
+
+        if (aabbCollision(entityAABB, blockAABB)) {
+            // This doesn't kick out in a specific direction on dir 0 because the Y axis check will kick them up as a safety.
+            result.collides = true;
+            if (dir > 0) {
+                // Kick forward.
+                result.newPosition = blockAABB.min.z - entityHalfWidth - magicAdjustment;
+            } else if (dir < 0) {
+                // Kick backward.
+                result.newPosition = blockAABB.max.z + entityHalfWidth + magicAdjustment;
+            }
+        }
 
     }
 
