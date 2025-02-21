@@ -153,39 +153,3 @@ CollisionResult collideEntityToBlock(Vec3d entityPosition, Vec3d entitySize, Vec
 
     return result;
 }
-
-CollisionResult collideYToBlock(Vec3d entityPosition, Vec3d entitySize, Vec3d entityVelocity,
-    Vec3d blockPosition, Vec3d blockSize) {
-
-    CollisionResult result;
-    result.newPosition = entityPosition.y;
-
-    int dir = cast(int) sgn(entityVelocity.y);
-
-    // This thing isn't moving.
-    if (dir == 0) {
-        return result;
-    }
-
-    // Entity position is on the bottom center of the collisionbox.
-    immutable double entityHalfWidth = entitySize.x * 0.5;
-    immutable Rect entityRectangle = Rect(entityPosition.x - entityHalfWidth, entityPosition.y,
-        entitySize.x, entitySize.y);
-
-    immutable Rect blockRectangle = Rect(blockPosition.x, blockPosition.y, blockSize.x, blockSize.y);
-
-    if (checkCollisionRecs(entityRectangle, blockRectangle)) {
-
-        result.collides = true;
-        if (dir <= 0) {
-            // Kick up. This is the safety default.
-            result.newPosition = blockPosition.y + blockSize.y + magicAdjustment;
-            result.hitGround = true;
-        } else {
-            // Kick down.
-            result.newPosition = blockPosition.y - entitySize.y - magicAdjustment;
-        }
-    }
-
-    return result;
-}
