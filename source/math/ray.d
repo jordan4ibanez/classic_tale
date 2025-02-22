@@ -1,5 +1,6 @@
 module math.ray;
 
+import hashset;
 import math.aabb;
 import math.vec3d;
 import math.vec3i;
@@ -23,26 +24,28 @@ void ray(const Vec3d startingPoint, Vec3d endingPoint) {
     start = vec3dFloor(start);
     end = vec3dFloor(end);
 
-    Vec3d d = vec3dAbs(vec3dSubtract(start, end));
+    //? Bresenhams algorithm in an ultra wideband.
 
-    Vec3d s;
+    immutable Vec3d direction = vec3dAbs(vec3dSubtract(start, end));
+
+    Vec3d step;
 
     if (end.x > start.x) {
-        s.x = 1;
+        step.x = 1;
     } else {
-        s.x = -1;
+        step.x = -1;
     }
 
     if (end.y > start.y) {
-        s.y = 1;
+        step.y = 1;
     } else {
-        s.y = -1;
+        step.y = -1;
     }
 
     if (end.z > start.z) {
-        s.z = 1;
+        step.z = 1;
     } else {
-        s.z = -1;
+        step.z = -1;
     }
 
     void drawIt(Vec3d input) {
@@ -59,26 +62,26 @@ void ray(const Vec3d startingPoint, Vec3d endingPoint) {
     Vec3d[] points;
 
     // Driving axis is X-axis"
-    if (d.x >= d.y && d.x >= d.z) {
+    if (direction.x >= direction.y && direction.x >= direction.z) {
 
-        double p1 = 2 * d.y - d.x;
-        double p2 = 2 * d.z - d.x;
+        double p1 = 2 * direction.y - direction.x;
+        double p2 = 2 * direction.z - direction.x;
 
         while (start.x != end.x) {
 
-            start.x += s.x;
+            start.x += step.x;
 
             if (p1 >= 0) {
-                start.y += s.y;
-                p1 -= 2 * d.x;
+                start.y += step.y;
+                p1 -= 2 * direction.x;
             }
             if (p2 >= 0) {
-                start.z += s.z;
-                p2 -= 2 * d.x;
+                start.z += step.z;
+                p2 -= 2 * direction.x;
             }
 
-            p1 += 2 * d.y;
-            p2 += 2 * d.z;
+            p1 += 2 * direction.y;
+            p2 += 2 * direction.z;
 
             points ~= Vec3d(start.x, start.y, start.z);
 
@@ -86,27 +89,27 @@ void ray(const Vec3d startingPoint, Vec3d endingPoint) {
         }
 
         // Driving axis is Y-axis"
-    } else if (d.y >= d.x && d.y >= d.z) {
+    } else if (direction.y >= direction.x && direction.y >= direction.z) {
 
-        double p1 = 2 * d.x - d.y;
-        double p2 = 2 * d.z - d.y;
+        double p1 = 2 * direction.x - direction.y;
+        double p2 = 2 * direction.z - direction.y;
 
         while (start.y != end.y) {
-            start.y += s.y;
+            start.y += step.y;
             if (p1 >= 0) {
                 // Think of this as rounding down.
 
-                start.x += s.x;
-                p1 -= 2 * d.y;
+                start.x += step.x;
+                p1 -= 2 * direction.y;
             }
 
             if (p2 >= 0) {
 
-                start.z += s.z;
-                p2 -= 2 * d.y;
+                start.z += step.z;
+                p2 -= 2 * direction.y;
             }
-            p1 += 2 * d.x;
-            p2 += 2 * d.z;
+            p1 += 2 * direction.x;
+            p2 += 2 * direction.z;
 
             points ~= Vec3d(start.x, start.y, start.z);
             // drawIt(Vec3d(start.x, start.y, start.z));
@@ -116,29 +119,44 @@ void ray(const Vec3d startingPoint, Vec3d endingPoint) {
         // Driving axis is Z-axis"
     } else {
 
-        double p1 = 2 * d.y - d.z;
+        double p1 = 2 * direction.y - direction.z;
 
-        double p2 = 2 * d.x - d.z;
+        double p2 = 2 * direction.x - direction.z;
 
         while (start.z != end.z) {
-            start.z += s.z;
+            start.z += step.z;
 
             if (p1 >= 0) {
 
-                start.y += s.y;
-                p1 -= 2 * d.z;
+                start.y += step.y;
+                p1 -= 2 * direction.z;
             }
             if (p2 >= 0) {
 
-                start.x += s.x;
-                p2 -= 2 * d.z;
+                start.x += step.x;
+                p2 -= 2 * direction.z;
             }
-            p1 += 2 * d.y;
-            p2 += 2 * d.x;
+            p1 += 2 * direction.y;
+            p2 += 2 * direction.x;
 
             points ~= Vec3d(start.x, start.y, start.z);
             // drawIt(Vec3d(start.x, start.y, start.z));
         }
+    }
+
+    HashSet!Vec3d realPoints;
+
+    foreach (Vec3d key; points) {
+
+        AABB thisBox = AABB(
+            key.x, key.y, key.z,
+            key.x + 1, key.y + 1, key.z + 1
+        );
+
+        if (testRayAab(startingPoint, direction, thisBox)) {
+            drawIt(key);
+        }
+
     }
 
     writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
