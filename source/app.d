@@ -105,11 +105,11 @@ void main() {
 
 			lookDir = vec3dMultiply(lookDir, Vec3d(20, 20, 20));
 			lookDir.x -= 10;
-			lookDir.y += 160;
+			lookDir.y += 155;
 
 			// writeln(lookDir);
 
-			ray(Vec3d(-10, 160, 0), lookDir);
+			ray(Vec3d(-10, 155, 0), lookDir);
 
 			if (thisBlock.blockID != 0) {
 
