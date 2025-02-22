@@ -103,6 +103,10 @@ void main() {
 
 				DrawCubeWires(blockOutline.toRaylib(), 1.01, 1.01, 1.01, Colors.BLACK);
 
+				import math.ray;
+
+				ray(Vec3d(0, 160, 0), Vec3d(10, 170, 0));
+
 				// writeln("yep");
 			}
 
