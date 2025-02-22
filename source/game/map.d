@@ -489,6 +489,7 @@ private: //* BEGIN INTERNAL API.
                         }
                         break;
                     case CollisionAxis.Z:
+                    
                         Vec3d blockMin = Vector3(currentX, currentY, currentZ);
                         Vec3d blockMax = Vector3(currentX + 1, currentY + 1, currentZ + 1);
 

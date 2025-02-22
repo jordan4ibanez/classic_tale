@@ -147,6 +147,9 @@ public: //* BEGIN PUBLIC API.
         position.x += velocity.x * delta;
         Map.collideEntityToWorld(position, size, velocity, CollisionAxis.X);
 
+        position.z += velocity.z * delta;
+        Map.collideEntityToWorld(position, size, velocity, CollisionAxis.Z);
+
         position.y += velocity.y * delta;
         Map.collideEntityToWorld(position, size, velocity, CollisionAxis.Y);
 
