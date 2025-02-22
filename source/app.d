@@ -107,7 +107,7 @@ void main() {
 			lookDir.x -= 10;
 			lookDir.y += 160;
 
-			writeln(lookDir);
+			// writeln(lookDir);
 
 			ray(Vec3d(-10, 160, 0), lookDir);
 
