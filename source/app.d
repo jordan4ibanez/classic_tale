@@ -66,6 +66,9 @@ void main() {
 		if (Keyboard.isPressed(KeyboardKey.KEY_F1)) {
 			Window.toggleMaximize();
 		}
+		if (Keyboard.isPressed(KeyboardKey.KEY_F2)) {
+			Mouse.toggleLock();
+		}
 
 		// foreach (_; 0 .. uniform(1_000, 100_000, rand)) {
 		// 	Vec3d target;
@@ -78,7 +81,9 @@ void main() {
 		// 	Map.setBlockAtWorldPositionByID(target, blockID);
 		// }
 
-		CameraHandler.firstPersonControls();
+		if (Mouse.isLocked()) {
+			CameraHandler.firstPersonControls();
+		}
 
 		Player.doControls();
 
