@@ -78,7 +78,7 @@ void ray(const Vec3d startingPoint, Vec3d endingPoint) {
 
     double thisDistance = 0.01;
 
-    while (thisDistance < distance) {
+    while (thisDistance < (distance + 0.01)) {
 
         Vec3d floatingPosition = vec3dAdd(vec3dMultiply(direction, Vec3d(thisDistance, thisDistance, thisDistance)),
             start);
