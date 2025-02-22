@@ -82,6 +82,10 @@ public: //* BEGIN PUBLIC API.
         return yaw;
     }
 
+    double getPitch() {
+        return pitch;
+    }
+
     void begin() {
         // UpdateCamera(&camera, CameraMode.CAMERA_CUSTOM);
         BeginMode3D(camera);
