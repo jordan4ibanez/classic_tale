@@ -450,8 +450,25 @@ private: //* BEGIN INTERNAL API.
                         continue;
                     }
 
+                    // todo: this needs to iterate through the block sizes on custom blocks.
                     final switch (axis) {
                     case CollisionAxis.X:
+
+                        Vec3d blockMin = Vector3(currentX, currentY, currentZ);
+                        Vec3d blockMax = Vector3(currentX + 1, currentY + 1, currentZ + 1);
+
+                        import raylib;
+
+                        DrawCube(blockMin.toRaylib(), 0.1, 0.1, 0.1, Colors.DARKPURPLE);
+
+                        CollisionResult result = collideEntityToBlock(entityPosition, entitySize, entityVelocity,
+                            blockMin, blockMax, axis);
+
+                        if (result.collides) {
+                            entityPosition.x = result.newPosition;
+                            entityVelocity.x = 0;
+                        }
+
                         break;
                     case CollisionAxis.Y:
                         // writeln("Y ");
@@ -472,6 +489,21 @@ private: //* BEGIN INTERNAL API.
                         }
                         break;
                     case CollisionAxis.Z:
+                        Vec3d blockMin = Vector3(currentX, currentY, currentZ);
+                        Vec3d blockMax = Vector3(currentX + 1, currentY + 1, currentZ + 1);
+
+                        import raylib;
+
+                        DrawCube(blockMin.toRaylib(), 0.1, 0.1, 0.1, Colors.DARKPURPLE);
+
+                        CollisionResult result = collideEntityToBlock(entityPosition, entitySize, entityVelocity,
+                            blockMin, blockMax, axis);
+
+                        if (result.collides) {
+                            entityPosition.z = result.newPosition;
+                            entityVelocity.z = 0;
+                        }
+
                         break;
                     }
 
