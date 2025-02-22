@@ -1,5 +1,6 @@
 module math.ray;
 
+import math.aabb;
 import math.vec3d;
 import math.vec3i;
 import std.datetime.stopwatch;
@@ -47,4 +48,41 @@ void ray(Vec3d startingPoint, Vec3d endingPoint) {
     drawIt(end);
 
     writeln("took: ", cast(double) sw.peek().total!"usecs");
+}
+
+// https://github.com/JOML-CI/joml-primitives/blob/main/src/org/joml/primitives/Intersectionf.java#L2732 MIT
+bool testRayAab(const ref Vec3d origin, const ref Vec3d dir, const ref AABB aabb) {
+
+    float invDirX = 1.0 / dir.x, invDirY = 1.0 / dir.y, invDirZ = 1.0 / dir.z;
+    float tNear, tFar, tymin, tymax, tzmin, tzmax;
+    if (invDirX >= 0.0) {
+        tNear = (aabb.min.x - origin.x) * invDirX;
+        tFar = (aabb.max.x - origin.x) * invDirX;
+    } else {
+        tNear = (aabb.max.x - origin.x) * invDirX;
+        tFar = (aabb.min.x - origin.x) * invDirX;
+    }
+    if (invDirY >= 0.0) {
+        tymin = (aabb.min.y - origin.y) * invDirY;
+        tymax = (aabb.max.y - origin.y) * invDirY;
+    } else {
+        tymin = (aabb.max.y - origin.y) * invDirY;
+        tymax = (aabb.min.y - origin.y) * invDirY;
+    }
+    if (tNear > tymax || tymin > tFar)
+        return false;
+    if (invDirZ >= 0.0) {
+        tzmin = (aabb.min.z - origin.z) * invDirZ;
+        tzmax = (aabb.max.z - origin.z) * invDirZ;
+    } else {
+        tzmin = (aabb.max.z - origin.z) * invDirZ;
+        tzmax = (aabb.min.z - origin.z) * invDirZ;
+    }
+    if (tNear > tzmax || tzmin > tFar)
+        return false;
+    tNear = tymin > tNear || isNaN(tNear) ? tymin : tNear;
+    tFar = tymax < tFar || isNaN(tFar) ? tymax : tFar;
+    tNear = tzmin > tNear ? tzmin : tNear;
+    tFar = tzmax < tFar ? tzmax : tFar;
+    return tNear < tFar && tFar >= 0.0;
 }
