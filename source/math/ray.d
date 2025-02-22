@@ -4,197 +4,158 @@ import hashset;
 import math.aabb;
 import math.vec3d;
 import math.vec3i;
+import raylib;
 import std.datetime.stopwatch;
 import std.math;
 import std.stdio;
 
 void ray(const Vec3d startingPoint, Vec3d endingPoint) {
 
+    //? This might be one of the strangest and overcomplicated collision voxel raycasting algorithms ever created.
+
     // https://www.geeksforgeeks.org/bresenhams-algorithm-for-3-d-line-drawing/
     // http://www.cse.yorku.ca/~amana/research/grid.pdf
     // https://en.wikipedia.org/wiki/Bresenham's_line_algorithm
     // https://stackoverflow.com/a/28786538
     // https://deepnight.net/tutorial/bresenham-magic-raycasting-line-of-sight-pathfinding/
+    // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html
 
     Vec3d start = startingPoint;
     Vec3d end = endingPoint;
+
+    // Bump it out of strange floating point issues.
+    if (start.x % 1.0 == 0) {
+        // writeln("bump 1");
+        start.x += 0.00001;
+    }
+    if (start.y % 1.0 == 0) {
+        // writeln("bump 2");
+        start.y += 0.00001;
+    }
+    if (start.z % 1.0 == 0) {
+        // writeln("bump 3");
+        start.z += 0.00001;
+    }
+
+    if (end.x % 1.0 == 0) {
+        // writeln("bump 4");
+        end.x += 0.00001;
+    }
+    if (end.y % 1.0 == 0) {
+        // writeln("bump 5");
+        end.y += 0.00001;
+    }
+    if (end.z % 1.0 == 0) {
+        // writeln("bump 6");
+        end.z += 0.00001;
+    }
+
+    double distance = vec3dDistance(start, end);
 
     auto sw = StopWatch(AutoStart.yes);
 
     start = vec3dFloor(start);
     end = vec3dFloor(end);
 
-    //? Bresenhams algorithm in an ultra wideband.
+    immutable Vec3d direction = vec3dNormalize(vec3dSubtract(end, start));
 
-    immutable Vec3d direction = vec3dAbs(vec3dSubtract(start, end));
+    static immutable Vec3i[7] dirs = [
 
-    Vec3d step;
+        // Include self.
+        Vec3i(0, 0, 0),
 
-    if (end.x > start.x) {
-        step.x = 1;
-    } else {
-        step.x = -1;
-    }
+        Vec3i(-1, 0, 0),
+        Vec3i(1, 0, 0),
 
-    if (end.y > start.y) {
-        step.y = 1;
-    } else {
-        step.y = -1;
-    }
+        Vec3i(0, -1, 0),
+        Vec3i(0, 1, 0),
 
-    if (end.z > start.z) {
-        step.z = 1;
-    } else {
-        step.z = -1;
-    }
+        Vec3i(0, 0, -1),
+        Vec3i(0, 0, 1),
+    ];
 
-    void drawIt(Vec3d input) {
-        // writeln(input);
+    HashSet!Vec3i points;
 
-        import raylib;
+    double thisDistance = 0.01;
 
-        DrawCube(vec3dAdd(input, Vec3d(0.5, 0.5, 0.5)).toRaylib(), 1, 1, 1, Colors.BLUE);
+    while (thisDistance < distance) {
 
-        DrawCubeWires(vec3dAdd(input, Vec3d(0.5, 0.5, 0.5)).toRaylib(), 1, 1, 1, Colors
-                .BLACK);
-    }
+        Vec3d floatingPosition = vec3dAdd(vec3dMultiply(direction, Vec3d(thisDistance, thisDistance, thisDistance)),
+            start);
 
-    Vec3d[] points;
+        Vec3i thisPosition = Vec3i(
+            cast(int) floor(floatingPosition.x),
+            cast(int) floor(floatingPosition.y),
+            cast(int) floor(floatingPosition.z)
+        );
 
-    // Driving axis is X-axis"
-    if (direction.x >= direction.y && direction.x >= direction.z) {
+        double pointDistance = vec3dDistance(Vec3d(thisPosition.x, thisPosition.y, thisPosition.z), endingPoint);
 
-        double p1 = 2 * direction.y - direction.x;
-        double p2 = 2 * direction.z - direction.x;
+        foreach (Vec3i key; dirs) {
+            Vec3i thisLocal = vec3iAdd(thisPosition, key);
 
-        while (start.x != end.x) {
-
-            start.x += step.x;
-
-            if (p1 >= 0) {
-                start.y += step.y;
-                p1 -= 2 * direction.x;
-            }
-            if (p2 >= 0) {
-                start.z += step.z;
-                p2 -= 2 * direction.x;
+            double localDistance = vec3dDistance(Vec3d(thisLocal.x, thisLocal.y, thisLocal.z), endingPoint);
+            if (localDistance > pointDistance) {
+                continue;
             }
 
-            p1 += 2 * direction.y;
-            p2 += 2 * direction.z;
-
-            points ~= Vec3d(start.x, start.y, start.z);
-
-            // drawIt(Vec3d(start.x, start.y, start.z));
+            points.insert(thisLocal);
         }
 
-        // Driving axis is Y-axis"
-    } else if (direction.y >= direction.x && direction.y >= direction.z) {
-
-        double p1 = 2 * direction.x - direction.y;
-        double p2 = 2 * direction.z - direction.y;
-
-        while (start.y != end.y) {
-            start.y += step.y;
-            if (p1 >= 0) {
-                // Think of this as rounding down.
-
-                start.x += step.x;
-                p1 -= 2 * direction.y;
-            }
-
-            if (p2 >= 0) {
-
-                start.z += step.z;
-                p2 -= 2 * direction.y;
-            }
-            p1 += 2 * direction.x;
-            p2 += 2 * direction.z;
-
-            points ~= Vec3d(start.x, start.y, start.z);
-            // drawIt(Vec3d(start.x, start.y, start.z));
-
-        }
-
-        // Driving axis is Z-axis"
-    } else {
-
-        double p1 = 2 * direction.y - direction.z;
-
-        double p2 = 2 * direction.x - direction.z;
-
-        while (start.z != end.z) {
-            start.z += step.z;
-
-            if (p1 >= 0) {
-
-                start.y += step.y;
-                p1 -= 2 * direction.z;
-            }
-            if (p2 >= 0) {
-
-                start.x += step.x;
-                p2 -= 2 * direction.z;
-            }
-            p1 += 2 * direction.y;
-            p2 += 2 * direction.x;
-
-            points ~= Vec3d(start.x, start.y, start.z);
-            // drawIt(Vec3d(start.x, start.y, start.z));
-        }
+        thisDistance += 1.0;
     }
 
-    HashSet!Vec3d realPoints;
-
-    foreach (Vec3d key; points) {
+    foreach (Vec3i key; points) {
 
         AABB thisBox = AABB(
             key.x, key.y, key.z,
-            key.x + 1, key.y + 1, key.z + 1
+            key.x + 1.0, key.y + 1.0, key.z + 1.0
         );
 
-        if (testRayAab(startingPoint, direction, thisBox)) {
-            drawIt(key);
+        if (raycastBool(start, direction, thisBox)) {
+
+            // DrawCube(Vec3d(cast(float) key.x + 0.5, cast(float) key.y + 0.5, cast(float) key.z + 0.5)
+            //         .toRaylib(), 1, 1, 1, Colors.ORANGE);
+
+            DrawCubeWires(Vec3d(cast(float) key.x + 0.5, cast(float) key.y + 0.5, cast(float) key.z + 0.5)
+                    .toRaylib(), 1, 1, 1, Colors.BLACK);
         }
 
     }
+
+    //? Ultra wideband.
+
+    HashSet!Vec3d testedPoints;
+
+    import raylib;
+
+    DrawLine3D(start.toRaylib(), end.toRaylib(), Colors.BLUE);
 
     writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
 }
 
-// https://github.com/JOML-CI/joml-primitives/blob/main/src/org/joml/primitives/Intersectionf.java#L2732 MIT
-bool testRayAab(const ref Vec3d origin, const ref Vec3d dir, const ref AABB aabb) {
+import std.algorithm;
 
-    float invDirX = 1.0 / dir.x, invDirY = 1.0 / dir.y, invDirZ = 1.0 / dir.z;
-    float tNear, tFar, tymin, tymax, tzmin, tzmax;
-    if (invDirX >= 0.0) {
-        tNear = (aabb.min.x - origin.x) * invDirX;
-        tFar = (aabb.max.x - origin.x) * invDirX;
-    } else {
-        tNear = (aabb.max.x - origin.x) * invDirX;
-        tFar = (aabb.min.x - origin.x) * invDirX;
-    }
-    if (invDirY >= 0.0) {
-        tymin = (aabb.min.y - origin.y) * invDirY;
-        tymax = (aabb.max.y - origin.y) * invDirY;
-    } else {
-        tymin = (aabb.max.y - origin.y) * invDirY;
-        tymax = (aabb.min.y - origin.y) * invDirY;
-    }
-    if (tNear > tymax || tymin > tFar)
+// https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html 
+bool raycastBool(Vec3d origin, const ref Vec3d dir, const ref AABB aabb) {
+    immutable float t1 = (aabb.min.x - origin.x) / dir.x;
+    immutable float t2 = (aabb.max.x - origin.x) / dir.x;
+    immutable float t3 = (aabb.min.y - origin.y) / dir.y;
+    immutable float t4 = (aabb.max.y - origin.y) / dir.y;
+    immutable float t5 = (aabb.min.z - origin.z) / dir.z;
+    immutable float t6 = (aabb.max.z - origin.z) / dir.z;
+
+    immutable float tmin = max(max(min(t1, t2), min(t3, t4)), min(t5, t6));
+    immutable float tmax = min(min(max(t1, t2), max(t3, t4)), max(t5, t6));
+
+    // if tmax < 0, ray (line) is intersecting AABB, but whole AABB is behing us
+    if (tmax < 0) {
         return false;
-    if (invDirZ >= 0.0) {
-        tzmin = (aabb.min.z - origin.z) * invDirZ;
-        tzmax = (aabb.max.z - origin.z) * invDirZ;
-    } else {
-        tzmin = (aabb.max.z - origin.z) * invDirZ;
-        tzmax = (aabb.min.z - origin.z) * invDirZ;
     }
-    if (tNear > tzmax || tzmin > tFar)
+    // if tmin > tmax, ray doesn't intersect AABB
+    if (tmin > tmax) {
         return false;
-    tNear = tymin > tNear || isNaN(tNear) ? tymin : tNear;
-    tFar = tymax < tFar || isNaN(tFar) ? tymax : tFar;
-    tNear = tzmin > tNear ? tzmin : tNear;
-    tFar = tzmax < tFar ? tzmax : tFar;
-    return tNear < tFar && tFar >= 0.0;
+    }
+
+    return true;
 }
