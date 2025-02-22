@@ -92,6 +92,19 @@ public: //* BEGIN PUBLIC API.
         velocity = newVelocity;
     }
 
+    Vec3d getLookVector() {
+        Vec3d look;
+
+        immutable double yaw = CameraHandler.getYaw();
+        immutable double pitch = CameraHandler.getPitch();
+        // https://stackoverflow.com/a/1568687 Thanks, Beta! https://creativecommons.org/licenses/by-sa/4.0/
+        look.x = (cos(yaw) * cos(pitch));
+        look.y = sin(pitch);
+        look.z = (sin(yaw) * cos(pitch));
+
+        return look;
+    }
+
     void draw() {
         import raylib;
 
