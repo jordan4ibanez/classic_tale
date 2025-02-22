@@ -144,8 +144,10 @@ public: //* BEGIN PUBLIC API.
     void move() {
         double delta = Delta.getDelta();
 
-        position.y += velocity.y * delta;
+        position.x += velocity.x * delta;
+        Map.collideEntityToWorld(position, size, velocity, CollisionAxis.X);
 
+        position.y += velocity.y * delta;
         Map.collideEntityToWorld(position, size, velocity, CollisionAxis.Y);
 
     }
