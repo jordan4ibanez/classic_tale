@@ -94,6 +94,17 @@ void main() {
 
 			Vec3d playerPos = Player.getPosition();
 			BlockData thisBlock = Map.getBlockAtWorldPosition(playerPos);
+			import math.ray;
+
+			Vec3d lookDir = Player.getLookVector();
+
+			lookDir = vec3dMultiply(lookDir, Vec3d(20, 20, 20));
+			lookDir.x -= 10;
+			lookDir.y += 160;
+
+			writeln(lookDir);
+
+			ray(Vec3d(-10, 160, 0), lookDir);
 
 			if (thisBlock.blockID != 0) {
 
@@ -102,10 +113,6 @@ void main() {
 				Vec3d blockOutline = vec3dAdd(vec3dFloor(playerPos), Vec3d(0.5, 0.5, 0.5));
 
 				DrawCubeWires(blockOutline.toRaylib(), 1.01, 1.01, 1.01, Colors.BLACK);
-
-				import math.ray;
-
-				ray(Vec3d(0, 160, 0), Vec3d(10, 170, 0));
 
 				// writeln("yep");
 			}
