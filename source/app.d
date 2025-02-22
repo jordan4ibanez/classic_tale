@@ -46,7 +46,7 @@ void main() {
 
 	Api.initialize();
 
-	rlDisableBackfaceCulling();
+	// rlDisableBackfaceCulling();
 
 	Mouse.lock();
 
