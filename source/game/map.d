@@ -450,7 +450,10 @@ private: //* BEGIN INTERNAL API.
                         continue;
                     }
 
-                    if (axis is CollisionAxis.Y) {
+                    final switch (axis) {
+                    case CollisionAxis.X:
+                        break;
+                    case CollisionAxis.Y:
                         // writeln("Y ");
 
                         Vec3d blockMin = Vector3(currentX, currentY, currentZ);
@@ -467,6 +470,9 @@ private: //* BEGIN INTERNAL API.
                             entityPosition.y = result.newPosition;
                             entityVelocity.y = 0;
                         }
+                        break;
+                    case CollisionAxis.Z:
+                        break;
                     }
 
                     // if (axis == CollisionAxis.X) {
