@@ -141,6 +141,7 @@ public: //* BEGIN PUBLIC API.
             moving = true;
         }
 
+        // Friction.
         if (!moving) {
             Vec2d horizontalMovement = Vec2d(velocity.x, velocity.z);
             double horizontalSpeed = vec2dLength(horizontalMovement);
