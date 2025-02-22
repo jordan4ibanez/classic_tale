@@ -11,6 +11,7 @@ import math.rect;
 import math.vec2d;
 import math.vec3d;
 import raylib : DEG2RAD, PI, RAD2DEG;
+import std.concurrency;
 import std.math.algebraic : abs;
 import std.math.rounding;
 import std.math.traits : isFinite, sgn;
@@ -47,11 +48,15 @@ private:
     double eyeHeight = 1.625;
     int inChunk = int.max;
     bool firstGen = true;
+
+    // Jump logic.
     bool jumpQueued = false;
-    bool inJump = false;
+    double jumpQueueTimeout = 0.0;
+
     double rotation = 0;
     bool moving = false;
     bool skidding = false;
+    bool onGround = false;
 
 public: //* BEGIN PUBLIC API.
 
@@ -170,8 +175,7 @@ public: //* BEGIN PUBLIC API.
         {
             Vec2d horizontalMovement = Vec2d(velocity.x, velocity.z);
             double horizontalSpeed = vec2dLength(horizontalMovement);
-
-            writeln(horizontalSpeed);
+            // writeln(horizontalSpeed);
 
             if (horizontalSpeed > maxSpeed) {
                 horizontalMovement = vec2dMultiply(vec2dNormalize(horizontalMovement),
@@ -188,6 +192,42 @@ public: //* BEGIN PUBLIC API.
         }
 
         // Jumping things.
+
+        // I don't really know if I should put gravity into the controls or move().
+        // It is here for now, but if you read this and you have an opinion on it,
+        // tell me in the Discord.
+
+        velocity.y -= Map.getGravity() * delta;
+
+        //? The following logic is ordered like this with very specific intent to maximize
+        //? the fun/satisfying nature of jumping around the map. Please do not reorder this.
+        //? This allows you to jump right before you hit the ground and gives a less rigid
+        //? feeling to the implementation.
+
+        // Do not want the player hitting space 3 blocks off the ground and jumping when they hit it.
+        // The jump window is 1/20th of a second from hitting space.
+        if (jumpQueued) {
+            jumpQueueTimeout -= delta;
+            if (jumpQueueTimeout <= 0) {
+                jumpQueued = false;
+            }
+        }
+
+        // This can go multiple frames without hitting the ground at very
+        // high FPS. The jump must be queued. But it is also possible it happens immediately.
+        if (Keyboard.isDown(KeyboardKey.KEY_SPACE)) {
+            jumpQueued = true;
+            static immutable double jumpTimeout = 1.0 / 20.0;
+            jumpQueueTimeout = jumpTimeout;
+        }
+
+        if (onGround && jumpQueued) {
+            velocity.y = 7;
+            jumpQueued = false;
+        }
+
+        // todo: sneaking, somehow. Can probably just check if the player begins to fall through
+        // todo: the current block face or something, not sure.
 
         // if (Keyboard.isDown(KeyboardKey.KEY_LEFT_SHIFT)) {
         //     velocity.y -= delta * magicAdjustment;
@@ -207,8 +247,7 @@ public: //* BEGIN PUBLIC API.
         Map.collideEntityToWorld(position, size, velocity, CollisionAxis.Z);
 
         position.y += velocity.y * delta;
-        Map.collideEntityToWorld(position, size, velocity, CollisionAxis.Y);
-
+        onGround = Map.collideEntityToWorld(position, size, velocity, CollisionAxis.Y);
     }
 
     // Rect getRectangle() {
