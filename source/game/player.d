@@ -102,43 +102,59 @@ public: //* BEGIN PUBLIC API.
         immutable double delta = Delta.getDelta();
         immutable double yaw = CameraHandler.getYaw();
 
-        static immutable double speed = 10.0;
+        // This is just to move this into a sane scale.
+        static immutable double magicAdjustment = 10.0;
 
-        // velocity.x = 0;
-        // velocity.y = 0;
-        // velocity.z = 0;
+        //? For now, this code will assume every block has friction coefficient of 1.
+        immutable double friction = 1.0;
+
+        moving = false;
 
         if (Keyboard.isDown(KeyboardKey.KEY_W)) {
             immutable double dirX = cos(yaw);
             immutable double dirZ = sin(yaw);
-            velocity.x += dirX * delta * speed;
-            velocity.z += dirZ * delta * speed;
+            velocity.x += dirX * delta * magicAdjustment * friction;
+            velocity.z += dirZ * delta * magicAdjustment * friction;
+            moving = true;
         }
         if (Keyboard.isDown(KeyboardKey.KEY_S)) {
             immutable double dirX = cos(yaw + PI);
             immutable double dirZ = sin(yaw + PI);
-            velocity.x += dirX * delta * speed;
-            velocity.z += dirZ * delta * speed;
+            velocity.x += dirX * delta * magicAdjustment * friction;
+            velocity.z += dirZ * delta * magicAdjustment * friction;
+            moving = true;
         }
         if (Keyboard.isDown(KeyboardKey.KEY_A)) {
             immutable double dirX = cos(yaw - HALF_PI);
             immutable double dirZ = sin(yaw - HALF_PI);
-            velocity.x += dirX * delta * speed;
-            velocity.z += dirZ * delta * speed;
+            velocity.x += dirX * delta * magicAdjustment * friction;
+            velocity.z += dirZ * delta * magicAdjustment * friction;
+            moving = true;
         }
         if (Keyboard.isDown(KeyboardKey.KEY_D)) {
             immutable double dirX = cos(yaw + HALF_PI);
             immutable double dirZ = sin(yaw + HALF_PI);
-            velocity.x += dirX * delta * speed;
-            velocity.z += dirZ * delta * speed;
+            velocity.x += dirX * delta * magicAdjustment * friction;
+            velocity.z += dirZ * delta * magicAdjustment * friction;
+            moving = true;
         }
 
-        if (Keyboard.isDown(KeyboardKey.KEY_LEFT_SHIFT)) {
-            velocity.y -= delta * speed;
+        if (!moving) {
+            Vec2d horizontalMovement = Vec2d(velocity.x, velocity.z);
+            double horizontalSpeed = vec2dLength(horizontalMovement);
+            horizontalSpeed /= delta * friction;
+
+            writeln("slowing down");
         }
-        if (Keyboard.isDown(KeyboardKey.KEY_SPACE)) {
-            velocity.y += delta * speed;
-        }
+
+        // Jumping things.
+        
+        // if (Keyboard.isDown(KeyboardKey.KEY_LEFT_SHIFT)) {
+        //     velocity.y -= delta * magicAdjustment;
+        // }
+        // if (Keyboard.isDown(KeyboardKey.KEY_SPACE)) {
+        //     velocity.y += delta * magicAdjustment;
+        // }
     }
 
     void move() {
