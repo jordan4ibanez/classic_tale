@@ -408,9 +408,6 @@ private: //* BEGIN INTERNAL API.
             thisXPoint += entityPosition.x - entityHalfWidth;
             oldX = currentX;
             currentX = cast(int) floor(thisXPoint);
-            if (oldX == currentX) {
-                continue;
-            }
 
             foreach (double yOnRect; 0 .. ceil(entitySize.y) + 1) {
                 double thisYPoint = (yOnRect > entitySize.y) ? entitySize.y : yOnRect;
