@@ -13,7 +13,7 @@ import math.vec3d;
 import raylib : DEG2RAD, PI, RAD2DEG;
 import std.math.algebraic : abs;
 import std.math.rounding;
-import std.math.traits : sgn;
+import std.math.traits : isFinite, sgn;
 import std.math.trigonometry;
 import std.stdio;
 import utility.delta;
@@ -107,6 +107,8 @@ public: //* BEGIN PUBLIC API.
 
         //? For now, this code will assume every block has friction coefficient of 1.
         immutable double friction = 1.0;
+        //? Same with maxSpeed. Maybe some blocks can get creative with this in mods.
+        immutable double maxSpeed = 3.0;
 
         moving = false;
 
@@ -142,13 +144,50 @@ public: //* BEGIN PUBLIC API.
         if (!moving) {
             Vec2d horizontalMovement = Vec2d(velocity.x, velocity.z);
             double horizontalSpeed = vec2dLength(horizontalMovement);
-            horizontalSpeed /= delta * friction;
+            horizontalSpeed -= friction * delta * magicAdjustment;
+            if (horizontalSpeed < 0) {
+                horizontalSpeed = 0;
+            }
+            if (!isFinite(horizontalSpeed)) {
+                horizontalSpeed = 0.0;
+            }
+            horizontalMovement = vec2dMultiply(vec2dNormalize(horizontalMovement),
+                Vec2d(horizontalSpeed, horizontalSpeed));
 
-            writeln("slowing down");
+            if (!isFinite(horizontalMovement.x)) {
+                horizontalMovement.x = 0.0;
+            }
+            if (!isFinite(horizontalMovement.y)) {
+                horizontalMovement.y = 0.0;
+            }
+            velocity.x = horizontalMovement.x;
+            velocity.z = horizontalMovement.y;
+            // writeln("slowing down ", horizontalSpeed);
+        }
+
+        // Speed limit.
+        {
+            Vec2d horizontalMovement = Vec2d(velocity.x, velocity.z);
+            double horizontalSpeed = vec2dLength(horizontalMovement);
+
+            writeln(horizontalSpeed);
+
+            if (horizontalSpeed > maxSpeed) {
+                horizontalMovement = vec2dMultiply(vec2dNormalize(horizontalMovement),
+                    Vec2d(maxSpeed, maxSpeed));
+                if (!isFinite(horizontalMovement.x)) {
+                    horizontalMovement.x = 0.0;
+                }
+                if (!isFinite(horizontalMovement.y)) {
+                    horizontalMovement.y = 0.0;
+                }
+                velocity.x = horizontalMovement.x;
+                velocity.z = horizontalMovement.y;
+            }
         }
 
         // Jumping things.
-        
+
         // if (Keyboard.isDown(KeyboardKey.KEY_LEFT_SHIFT)) {
         //     velocity.y -= delta * magicAdjustment;
         // }
