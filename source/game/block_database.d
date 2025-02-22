@@ -17,8 +17,8 @@ class BlockDefinition {
     bool clear = false;
 
     // Physical properties.
-    double friction = 1.0;
-    double maxSpeed = 1.0;
+    double friction = 2.0;
+    double maxSpeed = 3.0;
 }
 
 static final const class BlockDatabase {
