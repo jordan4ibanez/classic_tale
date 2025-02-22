@@ -12,6 +12,14 @@ class BlockDefinition {
     // This is reserved.
     int[6] textureIDs = -1;
     int id = -1;
+
+    // Visual properties.
+    bool clear = false;
+
+    // Physical properties.
+    double friction = 1.0;
+    double maxSpeed = 1.0;
+
 }
 
 static final const class BlockDatabase {
