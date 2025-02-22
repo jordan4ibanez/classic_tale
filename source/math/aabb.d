@@ -35,6 +35,17 @@ struct AABB {
         this.max = max;
     }
 
+    /// Generic constructor.
+    this(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+        this.min.x = minX;
+        this.min.y = minY;
+        this.min.z = minZ;
+
+        this.max.x = maxX;
+        this.max.y = maxY;
+        this.max.z = maxZ;
+    }
+
     /// Entity constructor.
     this(const ref Vec3d position, const ref Vec2d size) {
         this.min.x = position.x - size.x / 2;
