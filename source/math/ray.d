@@ -7,7 +7,7 @@ import std.datetime.stopwatch;
 import std.math;
 import std.stdio;
 
-void ray(Vec3d startingPoint, Vec3d endingPoint) {
+void ray(const Vec3d startingPoint, Vec3d endingPoint) {
 
     // https://www.geeksforgeeks.org/bresenhams-algorithm-for-3-d-line-drawing/
     // http://www.cse.yorku.ca/~amana/research/grid.pdf
@@ -15,39 +15,133 @@ void ray(Vec3d startingPoint, Vec3d endingPoint) {
     // https://stackoverflow.com/a/28786538
     // https://deepnight.net/tutorial/bresenham-magic-raycasting-line-of-sight-pathfinding/
 
+    Vec3d start = startingPoint;
+    Vec3d end = endingPoint;
+
     auto sw = StopWatch(AutoStart.yes);
 
-    Vec3i start = Vec3i(
-        cast(int) floor(startingPoint.x),
-        cast(int) floor(startingPoint.y),
-        cast(int) floor(startingPoint.z)
-    );
+    start = vec3dFloor(start);
+    end = vec3dFloor(end);
 
-    Vec3i end = Vec3i(
-        cast(int) floor(endingPoint.x),
-        cast(int) floor(endingPoint.y),
-        cast(int) floor(endingPoint.z)
-    );
+    Vec3d d = vec3dAbs(vec3dSubtract(start, end));
 
-    void drawIt(Vec3i input) {
+    Vec3d s;
+
+    if (end.x > start.x) {
+        s.x = 1;
+    } else {
+        s.x = -1;
+    }
+
+    if (end.y > start.y) {
+        s.y = 1;
+    } else {
+        s.y = -1;
+    }
+
+    if (end.z > start.z) {
+        s.z = 1;
+    } else {
+        s.z = -1;
+    }
+
+    void drawIt(Vec3d input) {
         // writeln(input);
 
         import raylib;
 
-        Vec3d pos = Vec3d(
-            input.x, input.y, input.z
-        );
+        DrawCube(vec3dAdd(input, Vec3d(0.5, 0.5, 0.5)).toRaylib(), 1, 1, 1, Colors.BLUE);
 
-        DrawCube(vec3dAdd(pos, Vec3d(0.5, 0.5, 0.5)).toRaylib(), 1, 1, 1, Colors.BLUE);
-
-        DrawCubeWires(vec3dAdd(pos, Vec3d(0.5, 0.5, 0.5)).toRaylib(), 1, 1, 1, Colors
+        DrawCubeWires(vec3dAdd(input, Vec3d(0.5, 0.5, 0.5)).toRaylib(), 1, 1, 1, Colors
                 .BLACK);
     }
 
-    drawIt(start);
-    drawIt(end);
+    Vec3d[] points;
 
-    writeln("took: ", cast(double) sw.peek().total!"usecs");
+    // Driving axis is X-axis"
+    if (d.x >= d.y && d.x >= d.z) {
+
+        double p1 = 2 * d.y - d.x;
+        double p2 = 2 * d.z - d.x;
+
+        while (start.x != end.x) {
+
+            start.x += s.x;
+
+            if (p1 >= 0) {
+                start.y += s.y;
+                p1 -= 2 * d.x;
+            }
+            if (p2 >= 0) {
+                start.z += s.z;
+                p2 -= 2 * d.x;
+            }
+
+            p1 += 2 * d.y;
+            p2 += 2 * d.z;
+
+            points ~= Vec3d(start.x, start.y, start.z);
+
+            // drawIt(Vec3d(start.x, start.y, start.z));
+        }
+
+        // Driving axis is Y-axis"
+    } else if (d.y >= d.x && d.y >= d.z) {
+
+        double p1 = 2 * d.x - d.y;
+        double p2 = 2 * d.z - d.y;
+
+        while (start.y != end.y) {
+            start.y += s.y;
+            if (p1 >= 0) {
+                // Think of this as rounding down.
+
+                start.x += s.x;
+                p1 -= 2 * d.y;
+            }
+
+            if (p2 >= 0) {
+
+                start.z += s.z;
+                p2 -= 2 * d.y;
+            }
+            p1 += 2 * d.x;
+            p2 += 2 * d.z;
+
+            points ~= Vec3d(start.x, start.y, start.z);
+            // drawIt(Vec3d(start.x, start.y, start.z));
+
+        }
+
+        // Driving axis is Z-axis"
+    } else {
+
+        double p1 = 2 * d.y - d.z;
+
+        double p2 = 2 * d.x - d.z;
+
+        while (start.z != end.z) {
+            start.z += s.z;
+
+            if (p1 >= 0) {
+
+                start.y += s.y;
+                p1 -= 2 * d.z;
+            }
+            if (p2 >= 0) {
+
+                start.x += s.x;
+                p2 -= 2 * d.z;
+            }
+            p1 += 2 * d.y;
+            p2 += 2 * d.x;
+
+            points ~= Vec3d(start.x, start.y, start.z);
+            // drawIt(Vec3d(start.x, start.y, start.z));
+        }
+    }
+
+    writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
 }
 
 // https://github.com/JOML-CI/joml-primitives/blob/main/src/org/joml/primitives/Intersectionf.java#L2732 MIT
