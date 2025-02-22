@@ -47,6 +47,14 @@ Vec3d vec3dOne() {
     return Vec3d(1.0, 1.0, 1.0);
 }
 
+Vec3d vec3dAbs(Vec3d input) {
+    return Vec3d(
+        abs(input.x),
+        abs(input.y),
+        abs(input.z),
+    );
+}
+
 // Add two vectors
 Vec3d vec3dAdd(Vec3d v1, Vec3d v2) {
     return Vec3d(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
