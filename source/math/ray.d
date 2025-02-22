@@ -54,25 +54,7 @@ void ray(const Vec3d startingPoint, Vec3d endingPoint) {
 
     auto sw = StopWatch(AutoStart.yes);
 
-    start = vec3dFloor(start);
-    end = vec3dFloor(end);
-
     immutable Vec3d direction = vec3dNormalize(vec3dSubtract(end, start));
-
-    static immutable Vec3i[7] dirs = [
-
-        // Include self.
-        Vec3i(0, 0, 0),
-
-        Vec3i(-1, 0, 0),
-        Vec3i(1, 0, 0),
-
-        Vec3i(0, -1, 0),
-        Vec3i(0, 1, 0),
-
-        Vec3i(0, 0, -1),
-        Vec3i(0, 0, 1),
-    ];
 
     HashSet!Vec3i points;
 
@@ -91,15 +73,21 @@ void ray(const Vec3d startingPoint, Vec3d endingPoint) {
 
         double pointDistance = vec3dDistance(Vec3d(thisPosition.x, thisPosition.y, thisPosition.z), endingPoint);
 
-        foreach (Vec3i key; dirs) {
-            Vec3i thisLocal = vec3iAdd(thisPosition, key);
+        foreach (x; -1 .. 2) {
+            foreach (y; -1 .. 2) {
+                foreach (z; -1 .. 2) {
+                    // foreach (Vec3i key; dirs) {
+                    Vec3i thisLocal = vec3iAdd(thisPosition, Vec3i(x, y, z));
 
-            double localDistance = vec3dDistance(Vec3d(thisLocal.x, thisLocal.y, thisLocal.z), endingPoint);
-            if (localDistance > pointDistance) {
-                continue;
+                    double localDistance = vec3dDistance(Vec3d(thisLocal.x, thisLocal.y, thisLocal
+                            .z), endingPoint);
+                    if (localDistance > pointDistance) {
+                        continue;
+                    }
+
+                    points.insert(thisLocal);
+                }
             }
-
-            points.insert(thisLocal);
         }
 
         thisDistance += 1.0;
@@ -114,10 +102,10 @@ void ray(const Vec3d startingPoint, Vec3d endingPoint) {
 
         if (raycastBool(start, direction, thisBox)) {
 
-            // DrawCube(Vec3d(cast(float) key.x + 0.5, cast(float) key.y + 0.5, cast(float) key.z + 0.5)
-            //         .toRaylib(), 1, 1, 1, Colors.ORANGE);
+            DrawCube(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
+                    .toRaylib(), 1, 1, 1, Colors.ORANGE);
 
-            DrawCubeWires(Vec3d(cast(float) key.x + 0.5, cast(float) key.y + 0.5, cast(float) key.z + 0.5)
+            DrawCubeWires(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
                     .toRaylib(), 1, 1, 1, Colors.BLACK);
         }
 
@@ -129,7 +117,7 @@ void ray(const Vec3d startingPoint, Vec3d endingPoint) {
 
     import raylib;
 
-    DrawLine3D(start.toRaylib(), end.toRaylib(), Colors.BLUE);
+    DrawLine3D(startingPoint.toRaylib(), endingPoint.toRaylib(), Colors.BLUE);
 
     writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
 }
@@ -138,17 +126,17 @@ import std.algorithm;
 
 // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html 
 bool raycastBool(Vec3d origin, const ref Vec3d dir, const ref AABB aabb) {
-    immutable float t1 = (aabb.min.x - origin.x) / dir.x;
-    immutable float t2 = (aabb.max.x - origin.x) / dir.x;
-    immutable float t3 = (aabb.min.y - origin.y) / dir.y;
-    immutable float t4 = (aabb.max.y - origin.y) / dir.y;
-    immutable float t5 = (aabb.min.z - origin.z) / dir.z;
-    immutable float t6 = (aabb.max.z - origin.z) / dir.z;
+    immutable double t1 = (aabb.min.x - origin.x) / dir.x;
+    immutable double t2 = (aabb.max.x - origin.x) / dir.x;
+    immutable double t3 = (aabb.min.y - origin.y) / dir.y;
+    immutable double t4 = (aabb.max.y - origin.y) / dir.y;
+    immutable double t5 = (aabb.min.z - origin.z) / dir.z;
+    immutable double t6 = (aabb.max.z - origin.z) / dir.z;
 
-    immutable float tmin = max(max(min(t1, t2), min(t3, t4)), min(t5, t6));
-    immutable float tmax = min(min(max(t1, t2), max(t3, t4)), max(t5, t6));
+    immutable double tmin = max(max(min(t1, t2), min(t3, t4)), min(t5, t6));
+    immutable double tmax = min(min(max(t1, t2), max(t3, t4)), max(t5, t6));
 
-    // if tmax < 0, ray (line) is intersecting AABB, but whole AABB is behing us
+    // if tmax < 0, ray (line) is intersecting AABB, but whole AABB is behind us
     if (tmax < 0) {
         return false;
     }
