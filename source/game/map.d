@@ -409,21 +409,19 @@ private: //* BEGIN INTERNAL API.
             oldX = currentX;
             currentX = cast(int) floor(thisXPoint);
 
-            foreach (double yOnRect; 0 .. ceil(entitySize.y) + 1) {
-                double thisYPoint = (yOnRect > entitySize.y) ? entitySize.y : yOnRect;
-                thisYPoint += entityPosition.y;
-                oldY = currentY;
-                currentY = cast(int) floor(thisYPoint);
-                if (currentY == oldY) {
-                    continue;
-                }
+            foreach (double zOnRect; 0 .. ceil(entitySize.x) + 1) {
+                double thisZPoint = (zOnRect > entitySize.x) ? entitySize.x : zOnRect;
+                thisZPoint += entityPosition.z - entityHalfWidth;
+                oldZ = currentZ;
+                currentZ = cast(int) floor(thisZPoint);
 
-                foreach (double zOnRect; 0 .. ceil(entitySize.x) + 1) {
-                    double thisZPoint = (zOnRect > entitySize.x) ? entitySize.x : zOnRect;
-                    thisZPoint += entityPosition.z - entityHalfWidth;
-                    oldZ = currentZ;
-                    currentZ = cast(int) floor(thisZPoint);
-                    if (oldZ == currentZ) {
+                foreach (double yOnRect; 0 .. ceil(entitySize.y) + 1) {
+                    double thisYPoint = (yOnRect > entitySize.y) ? entitySize.y : yOnRect;
+                    thisYPoint += entityPosition.y;
+                    oldY = currentY;
+                    currentY = cast(int) floor(thisYPoint);
+
+                    if (currentY == oldY) {
                         continue;
                     }
 
@@ -486,7 +484,7 @@ private: //* BEGIN INTERNAL API.
                         }
                         break;
                     case CollisionAxis.Z:
-                    
+
                         Vec3d blockMin = Vector3(currentX, currentY, currentZ);
                         Vec3d blockMax = Vector3(currentX + 1, currentY + 1, currentZ + 1);
 
