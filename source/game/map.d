@@ -481,6 +481,7 @@ private: //* BEGIN INTERNAL API.
                         if (result.collides) {
                             entityPosition.y = result.newPosition;
                             entityVelocity.y = 0;
+                            hitGround = result.hitGround;
                         }
                         break;
                     case CollisionAxis.Z:
