@@ -68,6 +68,7 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     Vec3i thisPosition;
     Vec3d floatingPosition;
+    Vec3i thisLocal;
     while (thisDistance < (distance + 0.01)) {
 
         floatingPosition.x = (direction.x * thisDistance) + start.x;
@@ -84,7 +85,10 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
             foreach (y; -1 .. 2) {
                 foreach (z; -1 .. 2) {
                     // foreach (Vec3i key; dirs) {
-                    immutable Vec3i thisLocal = vec3iAdd(thisPosition, Vec3i(x, y, z));
+
+                    thisLocal.x = thisPosition.x + x;
+                    thisLocal.y = thisPosition.y + y;
+                    thisLocal.z = thisPosition.z + z;
 
                     immutable double localDistance = vec3dDistance(Vec3d(thisLocal.x, thisLocal.y, thisLocal
                             .z), endingPoint);
