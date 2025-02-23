@@ -5,6 +5,7 @@ import math.aabb;
 import math.vec3d;
 import math.vec3i;
 import raylib;
+import std.algorithm;
 import std.datetime.stopwatch;
 import std.math;
 import std.stdio;
@@ -138,8 +139,6 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
 }
-
-import std.algorithm;
 
 // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html 
 bool raycastBool(const ref Vec3d origin, const ref Vec3d dir, const ref AABB aabb) {
