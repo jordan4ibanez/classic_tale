@@ -232,6 +232,44 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     continue;
                 }
 
+                double result = (tmin < tmax) ? tmax : tmin;
+
+                import game.map;
+
+                Vec3d inSpace = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
+                        Vec3d(result, result, result)), startingPoint);
+
+                if (!hit && Map.getBlockAtWorldPosition(inSpace).blockID != 0) {
+
+                    import raylib;
+
+                    //! X AXIS IN RED.
+                    Vec3d AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
+                            Vec3d(aMin, aMin, aMin)), startingPoint);
+                    DrawSphereWires(AAA.toRaylib(), 0.05, 5, 5, Colors.RED);
+                    AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
+                            Vec3d(aMax, aMax, aMax)), startingPoint);
+                    DrawSphereWires(AAA.toRaylib(), 0.05, 5, 5, Colors.RED);
+
+                    //? Y AXIS IN BLUE.
+                    AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
+                            Vec3d(bMin, bMin, bMin)), startingPoint);
+                    DrawSphereWires(AAA.toRaylib(), 0.05, 5, 5, Colors.BLUE);
+                    AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
+                            Vec3d(bMax, bMax, bMax)), startingPoint);
+                    DrawSphereWires(AAA.toRaylib(), 0.05, 5, 5, Colors.BLUE);
+
+                    //* Z AXIS IN GREEN.
+                    AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
+                            Vec3d(cMin, cMin, cMin)), startingPoint);
+                    DrawSphereWires(AAA.toRaylib(), 0.05, 5, 5, Colors.GREEN);
+                    AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
+                            Vec3d(cMax, cMax, cMax)), startingPoint);
+                    DrawSphereWires(AAA.toRaylib(), 0.05, 5, 5, Colors.GREEN);
+
+                    hit = true;
+                }
+
                 // DrawCube(Vec3d(cast(double) thisLocalX + 0.5, cast(double) thisLocalY + 0.5, cast(
                 //         double) thisLocalZ + 0.5).toRaylib(), 1, 1, 1, Colors.ORANGE);
 
