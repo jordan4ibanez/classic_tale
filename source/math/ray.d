@@ -415,8 +415,12 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         Vec3d collisionPoint = Vec3d(rayOriginX + dirX * collisionDistance,
                             rayOriginY + dirY * collisionDistance, rayOriginZ + dirZ * collisionDistance);
 
-                        DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
-                                .BLUE);
+                        if (collisionPoint.x >= xMin && collisionPoint.x <= xMax &&
+                            collisionPoint.y >= yMin && collisionPoint.y <= yMax) {
+                            DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
+                                    .BLUE);
+                            collisionZMin = true;
+                        }
                     }
 
                     //? Z max.
@@ -443,8 +447,12 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         Vec3d collisionPoint = Vec3d(rayOriginX + dirX * collisionDistance,
                             rayOriginY + dirY * collisionDistance, rayOriginZ + dirZ * collisionDistance);
 
-                        DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
-                                .BLUE);
+                        if (collisionPoint.x >= xMin && collisionPoint.x <= xMax &&
+                            collisionPoint.y >= yMin && collisionPoint.y <= yMax) {
+                            DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
+                                    .BLUE);
+                            collisionZMax = true;
+                        }
                     }
 
                 }
