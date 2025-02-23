@@ -146,7 +146,7 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
         thisPositionX = cast(int) floor(floatingPositionX);
         thisPositionY = cast(int) floor(floatingPositionY);
-        thisPositionX = cast(int) floor(floatingPositionZ);
+        thisPositionZ = cast(int) floor(floatingPositionZ);
 
         pointDistX = endingPoint.x - thisPositionX;
         pointDistY = endingPoint.y - thisPositionY;
