@@ -88,12 +88,11 @@ void main() {
 
 		Player.doControls();
 		CameraHandler.updateToPlayerPosition();
-		Player.raycast();
 
 		const Vec3i playerBlockSelection = Player.getBlockSelection();
 
 		if (playerBlockSelection.y != -1) {
-			if (Mouse.isButtonDown(MouseButton.MOUSE_BUTTON_LEFT)) {
+			if (Mouse.isButtonPressed(MouseButton.MOUSE_BUTTON_LEFT)) {
 				Map.setBlockAtWorldPositionByID(Vec3d(playerBlockSelection.x, playerBlockSelection.y, playerBlockSelection
 						.z), 0);
 			}
@@ -106,6 +105,8 @@ void main() {
 			Map.draw();
 			Player.draw();
 			Player.move();
+
+			Player.raycast();
 
 			if (playerBlockSelection.y != -1) {
 				DrawCubeWires(vec3dAdd(Vec3d(playerBlockSelection.x, playerBlockSelection.y, playerBlockSelection
