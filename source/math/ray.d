@@ -99,12 +99,20 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         thisDistance += 1.0;
     }
 
-    foreach (Vec3i key; wideBandPoints) {
+    AABB thisBox = AABB();
+    foreach (const key; wideBandPoints) {
 
-        AABB thisBox = AABB(
-            key.x, key.y, key.z,
-            key.x + 1.0, key.y + 1.0, key.z + 1.0
-        );
+        thisBox.min.x = key.x;
+        thisBox.min.y = key.y;
+        thisBox.min.z = key.z;
+
+        thisBox.max.x = key.x + 1.0;
+        thisBox.max.y = key.y + 1.0;
+        thisBox.max.z = key.z + 1.0;
+
+        // key.x, key.y, key.z,
+        // key.x + 1.0, key.y + 1.0, key.z + 1.0
+        // );
 
         if (raycastBool(start, direction, thisBox)) {
 
