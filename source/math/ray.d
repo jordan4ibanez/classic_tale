@@ -171,7 +171,7 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
                 cache.x = thisLocalX;
                 cache.y = thisLocalY;
                 cache.z = thisLocalZ;
-                wideBandPoints[cache] = false;
+                wideBandPoints[cache] = true;
             }
         }
 
