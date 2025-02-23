@@ -86,41 +86,43 @@ void main() {
 		}
 
 		Player.doControls();
+		CameraHandler.updateToPlayerPosition();
+		Player.raycast();
 
 		BeginDrawing();
 		ClearBackground(Colors.RAYWHITE);
-		CameraHandler.updateToPlayerPosition();
+
 		CameraHandler.begin();
 		{
 			Map.draw();
 			Player.draw();
-
 			Player.move();
 
-			Vec3d playerPos = Player.getPosition();
-			BlockData thisBlock = Map.getBlockAtWorldPosition(playerPos);
-			import math.ray;
+			
 
-			Vec3d lookDir = Vec3d(1, 1, -1); // Player.getLookVector(); //Vec3d(1, 1, -1);
+			// Vec3d playerPos = Player.getPosition();
+			// BlockData thisBlock = Map.getBlockAtWorldPosition(playerPos);
 
-			lookDir = vec3dMultiply(lookDir, Vec3d(20, 20, 20));
-			lookDir.x -= 10;
-			lookDir.y += 155;
+			// Vec3d lookDir = CameraHandler.getLookVector(); //Vec3d(1, 1, -1);
+
+			// lookDir = vec3dMultiply(lookDir, Vec3d(20, 20, 20));
+			// lookDir.x -= 10;
+			// lookDir.y += 155;
 
 			// writeln(lookDir);
 
-			ray(Vec3d(-10, 155, 0), lookDir);
+			// ray(Vec3d(-10, 155, 0), lookDir);
 
-			if (thisBlock.blockID != 0) {
+			// if (thisBlock.blockID != 0) {
 
-				// writeln(BlockDatabase.getBlockByID(thisBlock.blockID).name);
+			// writeln(BlockDatabase.getBlockByID(thisBlock.blockID).name);
 
-				Vec3d blockOutline = vec3dAdd(vec3dFloor(playerPos), Vec3d(0.5, 0.5, 0.5));
+			// Vec3d blockOutline = vec3dAdd(vec3dFloor(playerPos), Vec3d(0.5, 0.5, 0.5));
 
-				DrawCubeWires(blockOutline.toRaylib(), 1.01, 1.01, 1.01, Colors.BLACK);
+			// DrawCubeWires(blockOutline.toRaylib(), 1.01, 1.01, 1.01, Colors.BLACK);
 
-				// writeln("yep");
-			}
+			// writeln("yep");
+			// }
 
 			// DrawCube(Vector3(0, 0, 0), 0.1, 0.1, 0.1, Colors.RED);
 		}
