@@ -62,6 +62,8 @@ void main() {
 
 	auto rand = Random(unpredictableSeed());
 
+	bool drawWorld = true;
+
 	while (Window.shouldStayOpen()) {
 
 		if (Keyboard.isPressed(KeyboardKey.KEY_F1)) {
@@ -69,6 +71,11 @@ void main() {
 		}
 		if (Keyboard.isPressed(KeyboardKey.KEY_F2)) {
 			Mouse.toggleLock();
+		}
+
+		if (Keyboard.isPressed(KeyboardKey.KEY_F3)) {
+			drawWorld = !drawWorld;
+
 		}
 
 		// foreach (_; 0 .. uniform(1_000, 100_000, rand)) {
@@ -102,8 +109,10 @@ void main() {
 		ClearBackground(Colors.RAYWHITE);
 		CameraHandler.begin();
 		{
-			Map.draw();
-			Player.draw();
+			if (drawWorld) {
+				Map.draw();
+			}
+			// Player.draw();
 			Player.move();
 
 			Player.raycast();
@@ -116,15 +125,16 @@ void main() {
 			// Vec3d playerPos = Player.getPosition();
 			// BlockData thisBlock = Map.getBlockAtWorldPosition(playerPos);
 
-			// Vec3d lookDir = CameraHandler.getLookVector(); //Vec3d(1, 1, -1);
+			Vec3d lookDir = Vec3d(1, -1, 1);
 
-			// lookDir = vec3dMultiply(lookDir, Vec3d(20, 20, 20));
-			// lookDir.x -= 10;
-			// lookDir.y += 155;
+			lookDir = vec3dMultiply(lookDir, Vec3d(20, 20, 20));
+			lookDir.x -= 20;
+			lookDir.y += 155;
 
 			// writeln(lookDir);
+			import math.ray;
 
-			// ray(Vec3d(-10, 155, 0), lookDir);
+			rayCast(Vec3d(0, 160, 0), lookDir);
 
 			// if (thisBlock.blockID != 0) {
 
