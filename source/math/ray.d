@@ -67,6 +67,7 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
     }
 
     //? Ultra wideband.
+
     wideBandPoints.clear();
 
     double distanceCalcX = endX - startX;
@@ -149,6 +150,10 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     auto sw = StopWatch(AutoStart.yes);
 
+    const double divisorDirectionX = 1.0 / directionX;
+    const double divisorDirectionY = 1.0 / directionY;
+    const double divisorDirectionZ = 1.0 / directionZ;
+
     while (thisDistance < (distance + 0.01)) {
 
         floatingPositionX = (directionX * thisDistance) + startX;
@@ -164,10 +169,6 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         pointDistZ = endingPoint.z - thisPositionZ;
         pointDistance = sqrt(
             pointDistX * pointDistX + pointDistY * pointDistY + pointDistZ * pointDistZ);
-
-        const double divisorDirectionX = 1.0 / directionX;
-        const double divisorDirectionY = 1.0 / directionY;
-        const double divisorDirectionZ = 1.0 / directionZ;
 
         for (uint i = 0; i < 26; i++) {
 
