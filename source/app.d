@@ -101,7 +101,7 @@ void main() {
 			BlockData thisBlock = Map.getBlockAtWorldPosition(playerPos);
 			import math.ray;
 
-			Vec3d lookDir = Player.getLookVector();
+			Vec3d lookDir = Vec3d(1, 1, -1);
 
 			lookDir = vec3dMultiply(lookDir, Vec3d(20, 20, 20));
 			lookDir.x -= 10;

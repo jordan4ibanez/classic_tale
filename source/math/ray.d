@@ -62,8 +62,7 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
     double distance = vec3dDistance(start, end);
 
     auto sw = StopWatch(AutoStart.yes);
-
-    immutable Vec3d direction = vec3dNormalize(vec3dSubtract(end, start));
+    const Vec3d direction = vec3dNormalize(vec3dSubtract(end, start));
 
     double thisDistance = 0.01;
 
