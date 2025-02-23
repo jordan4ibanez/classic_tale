@@ -188,13 +188,7 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
     // AABB thisBox = AABB();
     foreach (ref key; wideBandPoints.byKey()) {
 
-        //     thisBox.min.x = key.x;
-        //     thisBox.min.y = key.y;
-        //     thisBox.min.z = key.z;
 
-        //     thisBox.max.x = key.x + 1.0;
-        //     thisBox.max.y = key.y + 1.0;
-        //     thisBox.max.z = key.z + 1.0;
 
 
         //         // DrawCube(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
