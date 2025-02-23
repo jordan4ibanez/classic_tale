@@ -142,7 +142,7 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 import std.algorithm;
 
 // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html 
-bool raycastBool(Vec3d origin, const ref Vec3d dir, const ref AABB aabb) {
+bool raycastBool(const ref Vec3d origin, const ref Vec3d dir, const ref AABB aabb) {
     immutable double t1 = (aabb.min.x - origin.x) / dir.x;
     immutable double t2 = (aabb.max.x - origin.x) / dir.x;
     immutable double t3 = (aabb.min.y - origin.y) / dir.y;
