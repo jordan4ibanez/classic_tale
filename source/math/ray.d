@@ -9,7 +9,9 @@ import std.datetime.stopwatch;
 import std.math;
 import std.stdio;
 
-HashSet!Vec3i old;
+private static HashSet!Vec3i old;
+
+private static HashSet!Vec3i wideBandPoints;
 
 void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
@@ -53,6 +55,8 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
     }
 
     //? Ultra wideband.
+
+    wideBandPoints.clear();
 
     double distance = vec3dDistance(start, end);
 
