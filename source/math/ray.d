@@ -70,6 +70,44 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
     Vec3i thisPosition;
     Vec3d floatingPosition;
     Vec3i thisLocal;
+    double pointDistX;
+    double pointDistY;
+    double pointDistZ;
+    double pointDistance;
+    double localDistX;
+    double localDistY;
+    double localDistZ;
+    double localDistance;
+
+    static immutable Vec3i[26] dirs = [
+        Vec3i(-1, -1, -1),
+        Vec3i(-1, -1, 0),
+        Vec3i(-1, -1, 1),
+        Vec3i(-1, 0, -1),
+        Vec3i(-1, 0, 0),
+        Vec3i(-1, 0, 1),
+        Vec3i(-1, 1, -1),
+        Vec3i(-1, 1, 0),
+        Vec3i(-1, 1, 1),
+        Vec3i(0, -1, -1),
+        Vec3i(0, -1, 0),
+        Vec3i(0, -1, 1),
+        Vec3i(0, 0, -1),
+        Vec3i(0, 0, 1),
+        Vec3i(0, 1, -1),
+        Vec3i(0, 1, 0),
+        Vec3i(0, 1, 1),
+        Vec3i(1, -1, -1),
+        Vec3i(1, -1, 0),
+        Vec3i(1, -1, 1),
+        Vec3i(1, 0, -1),
+        Vec3i(1, 0, 0),
+        Vec3i(1, 0, 1),
+        Vec3i(1, 1, -1),
+        Vec3i(1, 1, 0),
+        Vec3i(1, 1, 1),
+    ];
+
     while (thisDistance < (distance + 0.01)) {
 
         floatingPosition.x = (direction.x * thisDistance) + start.x;
