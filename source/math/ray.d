@@ -120,10 +120,8 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         const double pointDistance = sqrt(
             pointDist.x * pointDist.x + pointDist.y * pointDist.y + pointDist.z * pointDist.z);
 
-        const(const Vec3i*) dirPointer = dirs.ptr;
-
         for (uint i = 0; i < 26; i++) {
-            const Vec3i* thisDir = dirPointer + i;
+            const Vec3i* thisDir = dirs.ptr + i;
 
             counter++;
 
