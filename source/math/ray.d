@@ -255,6 +255,19 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                     // https://stackoverflow.com/a/26930963 https://creativecommons.org/licenses/by-sa/3.0/
 
+                    bool collisionXMin = false;
+                    bool collisionXMax = false;
+                    bool collisionYMin = false;
+                    bool collisionYMax = false;
+                    bool collisionZMin = false;
+                    bool collisionZMax = false;
+                    double collisionXMinDistance = float.max;
+                    double collisionXMaxDistance = float.max;
+                    double collisionYMinDistance = float.max;
+                    double collisionYMaxDistance = float.max;
+                    double collisionZMinDistance = float.max;
+                    double collisionZMaxDistance = float.max;
+
                     //? X min.
                     {
                         const double normalX = -1.0;
