@@ -84,7 +84,6 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         foreach (x; -1 .. 2) {
             foreach (y; -1 .. 2) {
                 foreach (z; -1 .. 2) {
-                    // foreach (Vec3i key; dirs) {
 
                     thisLocal.x = thisPosition.x + x;
                     thisLocal.y = thisPosition.y + y;
