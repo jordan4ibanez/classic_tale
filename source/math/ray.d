@@ -181,23 +181,33 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 }
 
 // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html 
+pragma(inline, true)
+@safe @nogc
 bool raycastBool(const ref Vec3d origin, const ref Vec3d dir, const ref AABB aabb) {
-    immutable double t1 = (aabb.min.x - origin.x) / dir.x;
-    immutable double t2 = (aabb.max.x - origin.x) / dir.x;
-    immutable double t3 = (aabb.min.y - origin.y) / dir.y;
-    immutable double t4 = (aabb.max.y - origin.y) / dir.y;
-    immutable double t5 = (aabb.min.z - origin.z) / dir.z;
-    immutable double t6 = (aabb.max.z - origin.z) / dir.z;
+    const double t1 = (aabb.min.x - origin.x) / dir.x;
+    const double t2 = (aabb.max.x - origin.x) / dir.x;
 
-    immutable double tmin = max(max(min(t1, t2), min(t3, t4)), min(t5, t6));
-    immutable double tmax = min(min(max(t1, t2), max(t3, t4)), max(t5, t6));
+    const double t3 = (aabb.min.y - origin.y) / dir.y;
+    const double t4 = (aabb.max.y - origin.y) / dir.y;
 
-    // if tmax < 0, ray (line) is intersecting AABB, but whole AABB is behind us
-    if (tmax < 0) {
-        return false;
-    }
-    // if tmin > tmax, ray doesn't intersect AABB
-    if (tmin > tmax) {
+    const double t5 = (aabb.min.z - origin.z) / dir.z;
+    const double t6 = (aabb.max.z - origin.z) / dir.z;
+
+    const double aMin = min(t1, t2);
+    const double aMax = max(t1, t2);
+    const double bMin = min(t3, t4);
+    const double bMax = max(t3, t4);
+    const double cMin = min(t5, t6);
+    const double cMax = max(t5, t6);
+    const double eMin = min(aMax, bMax);
+    const double eMax = max(aMin, bMin);
+
+    const double tmin = max(eMax, cMin);
+    const double tmax = min(eMin, cMax);
+
+    // if tmax < 0, ray (line) is intersecting AABB, but whole AABB is behind us.
+    // if tmin > tmax, ray doesn't intersect AABB.
+    if (tmax < 0 || tmin > tmax) {
         return false;
     }
 
