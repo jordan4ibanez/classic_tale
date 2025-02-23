@@ -118,28 +118,26 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         thisPosition.y = cast(int) floor(floatingPosition.y);
         thisPosition.z = cast(int) floor(floatingPosition.z);
 
-        double dx = endingPoint.x - thisPosition.x;
-        double dy = endingPoint.y - thisPosition.y;
-        double dz = endingPoint.z - thisPosition.z;
-        double pointDistance = sqrt(dx * dx + dy * dy + dz * dz);
+        pointDistX = endingPoint.x - thisPosition.x;
+        pointDistY = endingPoint.y - thisPosition.y;
+        pointDistZ = endingPoint.z - thisPosition.z;
+        pointDistance = sqrt(
+            pointDistX * pointDistX + pointDistY * pointDistY + pointDistZ * pointDistZ);
 
-        foreach (x; -1 .. 2) {
-            foreach (y; -1 .. 2) {
-                foreach (z; -1 .. 2) {
+        foreach (const ref dir; dirs) {
 
-                    thisLocal.x = thisPosition.x + x;
-                    thisLocal.y = thisPosition.y + y;
-                    thisLocal.z = thisPosition.z + z;
+            thisLocal.x = thisPosition.x + dir.x;
+            thisLocal.y = thisPosition.y + dir.y;
+            thisLocal.z = thisPosition.z + dir.z;
 
-                    immutable double localDistance = vec3dDistance(Vec3d(thisLocal.x, thisLocal.y, thisLocal
-                            .z), endingPoint);
+            localDistX = endingPoint.x - thisPosition.x;
+            localDistY = endingPoint.y - thisPosition.y;
+            localDistZ = endingPoint.z - thisPosition.z;
+            localDistance = sqrt(
+                localDistX * localDistX + localDistY * localDistY + localDistZ * localDistZ);
 
-                    if (localDistance > pointDistance) {
-                        continue;
-                    }
-
-                    wideBandPoints.insert(thisLocal);
-                }
+            if (localDistance < pointDistance) {
+                wideBandPoints.insert(thisLocal);
             }
         }
 
