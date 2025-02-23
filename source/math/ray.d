@@ -176,9 +176,10 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
         thisPositionY = cast(int) floor(floatingPositionY);
         thisPositionZ = cast(int) floor(floatingPositionZ);
 
-        pointDistX = endingPoint.x - thisPositionX;
-        pointDistY = endingPoint.y - thisPositionY;
-        pointDistZ = endingPoint.z - thisPositionZ;
+        pointDistX = endX - thisPositionX;
+        pointDistY = endY - thisPositionY;
+        pointDistZ = endZ - thisPositionZ;
+
         pointDistance = sqrt(
             pointDistX * pointDistX + pointDistY * pointDistY + pointDistZ * pointDistZ);
 
@@ -188,9 +189,9 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
             thisLocalY = thisPositionY + (dirs.ptr + i).y;
             thisLocalZ = thisPositionZ + (dirs.ptr + i).z;
 
-            localDistX = endingPoint.x - thisPositionX;
-            localDistY = endingPoint.y - thisPositionY;
-            localDistZ = endingPoint.z - thisPositionZ;
+            localDistX = endX - thisPositionX;
+            localDistY = endY - thisPositionY;
+            localDistZ = endZ - thisPositionZ;
 
             const localDistance = sqrt(
                 localDistX * localDistX + localDistY * localDistY + localDistZ * localDistZ);
