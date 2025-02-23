@@ -102,7 +102,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
         directionZ *= iLength;
     }
 
-    double thisDistance = 0.01;
+    double thisDistance = 0.0;
     double pointDistance;
 
     int thisPositionX;
