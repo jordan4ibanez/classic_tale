@@ -1,4 +1,4 @@
-# classic_fable
+# classic_tale
  Block game 17.
 
 I don't really like the name I slapped together.
