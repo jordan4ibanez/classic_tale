@@ -72,6 +72,9 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
     const double distance = sqrt(
         distanceCalcX * distanceCalcX + distanceCalcY * distanceCalcY + distanceCalcZ * distanceCalcZ);
 
+    // Why are you trying to cast this far?! 
+    assert(distance < 100);
+
     double directionX = endX - startX;
     double directionY = endY - startY;
     double directionZ = endZ - startZ;
