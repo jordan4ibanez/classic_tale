@@ -288,12 +288,6 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     hit = true;
                 }
 
-                // DrawCube(Vec3d(cast(double) thisLocalX + 0.5, cast(double) thisLocalY + 0.5, cast(
-                //         double) thisLocalZ + 0.5).toRaylib(), 1, 1, 1, Colors.ORANGE);
-
-                // DrawCubeWires(Vec3d(cast(double) thisLocalX + 0.5, cast(double) thisLocalY + 0.5, cast(
-                //         double) thisLocalZ + 0.5).toRaylib(), 1, 1, 1, Colors.BLACK);
-
                 wideBandPoints[cache] = false;
 
                 (rayPoints + currentIndex).x = thisLocalX;
