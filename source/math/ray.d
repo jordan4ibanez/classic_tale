@@ -105,8 +105,6 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
     double localDistY;
     double localDistZ;
 
-    int counter = 0;
-
     static const Vec3i[26] dirs = [
         Vec3i(-1, -1, -1),
         Vec3i(-1, -1, 0),
@@ -174,10 +172,6 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
         thisDistance += 1.0;
     }
-
-    // wideBandPoints.rehash();
-
-    // writeln("did ", counter, " counts");
 
     // wideBandPoints.rehash();
 
