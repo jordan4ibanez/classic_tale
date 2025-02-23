@@ -64,8 +64,6 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     immutable Vec3d direction = vec3dNormalize(vec3dSubtract(end, start));
 
-    HashSet!Vec3i wideBandPoints;
-
     double thisDistance = 0.01;
 
     while (thisDistance < (distance + 0.01)) {
