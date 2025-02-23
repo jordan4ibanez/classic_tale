@@ -10,6 +10,7 @@ import graphics.texture_handler;
 import math.vec2d;
 import math.vec2i;
 import math.vec3d;
+import math.vec3i;
 import mods.api;
 import raylib;
 import std.conv;
@@ -89,16 +90,27 @@ void main() {
 		CameraHandler.updateToPlayerPosition();
 		Player.raycast();
 
+		const Vec3i playerBlockSelection = Player.getBlockSelection();
+
+		if (playerBlockSelection.y != -1) {
+			if (Mouse.isButtonDown(MouseButton.MOUSE_BUTTON_LEFT)) {
+				Map.setBlockAtWorldPositionByID(Vec3d(playerBlockSelection.x, playerBlockSelection.y, playerBlockSelection
+						.z), 0);
+			}
+		}
+
 		BeginDrawing();
 		ClearBackground(Colors.RAYWHITE);
-
 		CameraHandler.begin();
 		{
 			Map.draw();
 			Player.draw();
 			Player.move();
 
-			
+			if (playerBlockSelection.y != -1) {
+				DrawCubeWires(vec3dAdd(Vec3d(playerBlockSelection.x, playerBlockSelection.y, playerBlockSelection
+						.z), Vec3d(0.5, 0.5, 0.5)).toRaylib(), 1.01, 1.01, 1.01, Colors.BLACK);
+			}
 
 			// Vec3d playerPos = Player.getPosition();
 			// BlockData thisBlock = Map.getBlockAtWorldPosition(playerPos);
