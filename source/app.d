@@ -134,7 +134,7 @@ void main() {
 			// writeln(lookDir);
 			import math.ray;
 
-			rayCast(Vec3d(0, 160, 0), lookDir);
+			// rayCast(Vec3d(0, 160, 0), lookDir);
 
 			// if (thisBlock.blockID != 0) {
 
