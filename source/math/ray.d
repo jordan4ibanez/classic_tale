@@ -57,7 +57,7 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     //? Ultra wideband.
 
-    wideBandPoints.clear();
+    // wideBandPoints.clear();
 
     double distance = vec3dDistance(start, end);
 
@@ -132,18 +132,19 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
             localDist.x = endingPoint.x - thisPosition.x;
             localDist.y = endingPoint.y - thisPosition.y;
             localDist.z = endingPoint.z - thisPosition.z;
+            
             const localDistance = sqrt(
                 localDist.x * localDist.x + localDist.y * localDist.y + localDist.z * localDist.z);
 
             if (localDistance <= pointDistance) {
-                wideBandPoints[thisLocal] = true;
+                // wideBandPoints[thisLocal] = true;
             }
         }
 
         thisDistance += 1.0;
     }
 
-    wideBandPoints.rehash();
+    // wideBandPoints.rehash();
 
     // writeln("did ", counter, " counts");
 
