@@ -185,10 +185,6 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
     // This seems to reduce the average time by 2-5 microseconds.
     wideBandPoints.rehash();
 
-    // @nogc
-
-    // auto blah = cast(Vec3i*)wideBandPoints.byKey();
-
     // AABB thisBox = AABB();
     foreach (ref key; wideBandPoints.byKey()) {
 
