@@ -91,6 +91,7 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                     immutable double localDistance = vec3dDistance(Vec3d(thisLocal.x, thisLocal.y, thisLocal
                             .z), endingPoint);
+
                     if (localDistance > pointDistance) {
                         continue;
                     }
