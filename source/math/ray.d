@@ -114,25 +114,30 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         thisPosition.y = cast(int) floor(floatingPosition.y);
         thisPosition.z = cast(int) floor(floatingPosition.z);
 
-        pointDistX = endingPoint.x - thisPosition.x;
-        pointDistY = endingPoint.y - thisPosition.y;
-        pointDistZ = endingPoint.z - thisPosition.z;
-        pointDistance = sqrt(
-            pointDistX * pointDistX + pointDistY * pointDistY + pointDistZ * pointDistZ);
+        pointDist.x = endingPoint.x - thisPosition.x;
+        pointDist.y = endingPoint.y - thisPosition.y;
+        pointDist.z = endingPoint.z - thisPosition.z;
+        const double pointDistance = sqrt(
+            pointDist.x * pointDist.x + pointDist.y * pointDist.y + pointDist.z * pointDist.z);
 
-        foreach (const ref dir; dirs) {
+        const(const Vec3i*) dirPointer = dirs.ptr;
 
-            thisLocal.x = thisPosition.x + dir.x;
-            thisLocal.y = thisPosition.y + dir.y;
-            thisLocal.z = thisPosition.z + dir.z;
+        for (uint i = 0; i < 26; i++) {
+            const Vec3i* thisDir = dirPointer + i;
 
-            localDistX = endingPoint.x - thisPosition.x;
-            localDistY = endingPoint.y - thisPosition.y;
-            localDistZ = endingPoint.z - thisPosition.z;
-            localDistance = sqrt(
-                localDistX * localDistX + localDistY * localDistY + localDistZ * localDistZ);
+            counter++;
 
-            if (localDistance < pointDistance) {
+            thisLocal.x = thisPosition.x + thisDir.x;
+            thisLocal.y = thisPosition.y + thisDir.y;
+            thisLocal.z = thisPosition.z + thisDir.z;
+
+            localDist.x = endingPoint.x - thisPosition.x;
+            localDist.y = endingPoint.y - thisPosition.y;
+            localDist.z = endingPoint.z - thisPosition.z;
+            const localDistance = sqrt(
+                localDist.x * localDist.x + localDist.y * localDist.y + localDist.z * localDist.z);
+
+            if (localDistance <= pointDistance) {
                 wideBandPoints.insert(thisLocal);
             }
         }
