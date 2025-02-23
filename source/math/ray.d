@@ -125,9 +125,9 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     }
 
-    HashSet!Vec3d testedPoints;
+    // HashSet!Vec3d testedPoints;
 
-    import raylib;
+    // import raylib;
 
     // DrawLine3D(startingPoint.toRaylib(), endingPoint.toRaylib(), Colors.BLUE);
 
