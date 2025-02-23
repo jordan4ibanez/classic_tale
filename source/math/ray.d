@@ -275,8 +275,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                         // todo: use all the collision distances and check which one is the lowest then save that collision point.
                         const double collisionDistance = (distanceNormal - (
-                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) * (
-                            1.0 / s);
+                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) / s;
 
                         Vec3d collisionPoint = Vec3d(rayOriginX + dirX * collisionDistance,
                             rayOriginY + dirY * collisionDistance, rayOriginZ + dirZ * collisionDistance);
@@ -303,8 +302,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         const double rayOriginZ = startZ;
 
                         const double collisionDistance = (distanceNormal - (
-                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) * (
-                            1.0 / s);
+                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) / s;
 
                         Vec3d collisionPoint = Vec3d(rayOriginX + dirX * collisionDistance,
                             rayOriginY + dirY * collisionDistance, rayOriginZ + dirZ * collisionDistance);
@@ -332,8 +330,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                         // todo: use all the collision distances and check which one is the lowest then save that collision point.
                         const double collisionDistance = (distanceNormal - (
-                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) * (
-                            1.0 / s);
+                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) / s;
 
                         Vec3d collisionPoint = Vec3d(rayOriginX + dirX * collisionDistance,
                             rayOriginY + dirY * collisionDistance, rayOriginZ + dirZ * collisionDistance);
@@ -361,8 +358,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                         // todo: use all the collision distances and check which one is the lowest then save that collision point.
                         const double collisionDistance = (distanceNormal - (
-                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) * (
-                            1.0 / s);
+                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) / s;
 
                         Vec3d collisionPoint = Vec3d(rayOriginX + dirX * collisionDistance,
                             rayOriginY + dirY * collisionDistance, rayOriginZ + dirZ * collisionDistance);
@@ -390,8 +386,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                         // todo: use all the collision distances and check which one is the lowest then save that collision point.
                         const double collisionDistance = (distanceNormal - (
-                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) * (
-                            1.0 / s);
+                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) / s;
 
                         Vec3d collisionPoint = Vec3d(rayOriginX + dirX * collisionDistance,
                             rayOriginY + dirY * collisionDistance, rayOriginZ + dirZ * collisionDistance);
@@ -419,8 +414,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                         // todo: use all the collision distances and check which one is the lowest then save that collision point.
                         const double collisionDistance = (distanceNormal - (
-                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) * (
-                            1.0 / s);
+                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) / s;
 
                         Vec3d collisionPoint = Vec3d(rayOriginX + dirX * collisionDistance,
                             rayOriginY + dirY * collisionDistance, rayOriginZ + dirZ * collisionDistance);
