@@ -296,6 +296,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                             collisionPoint.z >= zMin && collisionPoint.z <= zMax) {
                             DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
                                     .RED);
+                            collisionXMin = true;
                         }
                     }
 
@@ -326,6 +327,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                             collisionPoint.z >= zMin && collisionPoint.z <= zMax) {
                             DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
                                     .RED);
+                            collisionXMax = true;
                         }
                     }
 
@@ -357,6 +359,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                             collisionPoint.z >= zMin && collisionPoint.z <= zMax) {
                             DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
                                     .GREEN);
+                            collisionYMin = true;
                         }
                     }
 
@@ -388,6 +391,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                             collisionPoint.z >= zMin && collisionPoint.z <= zMax) {
                             DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
                                     .GREEN);
+                            collisionYMax = true;
                         }
                     }
 
@@ -455,6 +459,10 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         }
                     }
 
+                    if (collisionXMin || collisionXMax || collisionYMin || collisionYMax || collisionZMin ||
+                        collisionZMax) {
+                        hit = true;
+                    }
                 }
 
                 wideBandPoints[cache] = false;
