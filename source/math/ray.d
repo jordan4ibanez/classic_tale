@@ -213,15 +213,16 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html 
 pragma(inline)
 @safe @nogc
-bool raycastBool(const ref Vec3d origin, const ref Vec3d dir, const ref AABB aabb) {
-    const double t1 = (aabb.min.x - origin.x) / dir.x;
-    const double t2 = (aabb.max.x - origin.x) / dir.x;
+bool raycastBool(const double originX, const double originY, const double originZ, const double dirX,
+    const double dirY, const double dirZ, const double minX, const double minY, const double minZ,
+    const double maxX, const double maxY, const double maxZ) {
 
-    const double t3 = (aabb.min.y - origin.y) / dir.y;
-    const double t4 = (aabb.max.y - origin.y) / dir.y;
-
-    const double t5 = (aabb.min.z - origin.z) / dir.z;
-    const double t6 = (aabb.max.z - origin.z) / dir.z;
+    const double t1 = (minX - originX) / dirX;
+    const double t2 = (maxX - originX) / dirX;
+    const double t3 = (minY - originY) / dirY;
+    const double t4 = (maxY - originY) / dirY;
+    const double t5 = (minZ - originZ) / dirZ;
+    const double t6 = (maxZ - originZ) / dirZ;
 
     const double aMin = min(t1, t2);
     const double aMax = max(t1, t2);
