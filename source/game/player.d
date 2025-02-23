@@ -124,8 +124,7 @@ public: //* BEGIN PUBLIC API.
             const BlockData = Map.getBlockAtWorldPosition(thisPosition);
 
             if (BlockData.blockID != 0) {
-                // DrawCubeWires(vec3dAdd(thisPosition, Vec3d(0.5, 0.5, 0.5))
-                //         .toRaylib(), 1.01, 1.01, 1.01, Colors.BLACK);
+
                 blockSelection.x = cast(int) floor(thisPosition.x);
                 blockSelection.y = cast(int) floor(thisPosition.y);
                 blockSelection.z = cast(int) floor(thisPosition.z);
@@ -136,6 +135,10 @@ public: //* BEGIN PUBLIC API.
         blockSelection.x = 0;
         blockSelection.y = -1;
         blockSelection.z = 0;
+    }
+
+    Vec3i getBlockSelection() {
+        return blockSelection;
     }
 
     void doControls() {
