@@ -66,16 +66,15 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     double thisDistance = 0.01;
 
+    Vec3i thisPosition;
     while (thisDistance < (distance + 0.01)) {
 
         Vec3d floatingPosition = vec3dAdd(vec3dMultiply(direction, Vec3d(thisDistance, thisDistance, thisDistance)),
             start);
 
-        immutable Vec3i thisPosition = Vec3i(
-            cast(int) floor(floatingPosition.x),
-            cast(int) floor(floatingPosition.y),
-            cast(int) floor(floatingPosition.z)
-        );
+        thisPosition.x = cast(int) floor(floatingPosition.x);
+        thisPosition.y = cast(int) floor(floatingPosition.y);
+        thisPosition.z = cast(int) floor(floatingPosition.z);
 
         double pointDistance = vec3dDistance(Vec3d(thisPosition.x, thisPosition.y, thisPosition.z), endingPoint);
 
