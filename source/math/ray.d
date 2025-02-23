@@ -134,6 +134,8 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         Vec3i(1, 1, 1),
     ];
 
+    Vec3i cache;
+
     auto sw = StopWatch(AutoStart.yes);
 
     while (thisDistance < (distance + 0.01)) {
@@ -166,7 +168,10 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
                 localDistX * localDistX + localDistY * localDistY + localDistZ * localDistZ);
 
             if (localDistance <= pointDistance) {
-                // wideBandPoints[thisLocal] = true;
+                cache.x = thisLocalX;
+                cache.y = thisLocalY;
+                cache.z = thisLocalZ;
+                wideBandPoints[cache] = false;
             }
         }
 
