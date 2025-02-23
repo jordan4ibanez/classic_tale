@@ -6,15 +6,20 @@ import math.vec3d;
 import math.vec3i;
 import raylib;
 import std.algorithm;
+import std.algorithm.sorting;
 import std.datetime.stopwatch;
 import std.math;
 import std.range;
 import std.stdio;
+import utility.delta;
 
 // private static HashSet!Vec3i old;
 // private static HashSet!Vec3i wideBandPoints;
 private static bool[Vec3i] wideBandPoints;
 Vec3i* rayPoints;
+
+double timer = 0;
+ulong currentIter = 0;
 
 void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
@@ -240,6 +245,15 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         thisDistance += 1.0;
     }
 
+    timer += Delta.getDelta();
+    if (timer > 0.1) {
+        currentIter++;
+        timer = 0;
+        if (currentIter >= currentIndex) {
+            currentIter = 0;
+        }
+    }
+
     rayPoints[0 .. currentIndex].sort!((const ref Vec3i a, const ref Vec3i b) {
         double aDistX = endingPoint.x - a.x;
         double aDistY = endingPoint.y - a.y;
@@ -257,6 +271,23 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
         return aDist > bDist;
     });
+
+    for (ulong i = 0; i < currentIndex; i++) {
+
+        thisLocalX = (rayPoints + i).x;
+        thisLocalY = (rayPoints + i).y;
+        thisLocalZ = (rayPoints + i).z;
+
+        if (i == currentIter) {
+
+            DrawCube(Vec3d(cast(double) thisLocalX + 0.5, cast(double) thisLocalY + 0.5, cast(
+                    double) thisLocalZ + 0.5).toRaylib(), 1, 1, 1, Colors.ORANGE);
+
+            DrawCubeWires(Vec3d(cast(double) thisLocalX + 0.5, cast(double) thisLocalY + 0.5, cast(
+                    double) thisLocalZ + 0.5).toRaylib(), 1, 1, 1, Colors.BLACK);
+        }
+    }
+
     // This seems to reduce the average time by 2-5 microseconds.
     wideBandPoints.rehash();
 
