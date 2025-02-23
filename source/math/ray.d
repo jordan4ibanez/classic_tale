@@ -1,6 +1,6 @@
 module math.ray;
 
-import hashset;
+// import hashset;
 import math.aabb;
 import math.vec3d;
 import math.vec3i;
@@ -10,8 +10,9 @@ import std.datetime.stopwatch;
 import std.math;
 import std.stdio;
 
-private static HashSet!Vec3i old;
-private static HashSet!Vec3i wideBandPoints;
+// private static HashSet!Vec3i old;
+// private static HashSet!Vec3i wideBandPoints;
+private static bool[Vec3i] wideBandPoints;
 
 void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
@@ -137,12 +138,14 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
                 localDist.x * localDist.x + localDist.y * localDist.y + localDist.z * localDist.z);
 
             if (localDistance <= pointDistance) {
-                wideBandPoints.insert(thisLocal);
+                wideBandPoints[thisLocal] = true;
             }
         }
 
         thisDistance += 1.0;
     }
+
+    wideBandPoints.rehash();
 
     // writeln("did ", counter, " counts");
 
