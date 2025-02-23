@@ -164,7 +164,9 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     ulong currentIndex = 0;
 
-    while (thisDistance < (distance + 0.01)) {
+    bool hit = false;
+
+    while (thisDistance < distance) {
 
         floatingPositionX = (directionX * thisDistance) + startX;
         floatingPositionY = (directionY * thisDistance) + startY;
