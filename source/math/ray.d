@@ -11,7 +11,7 @@ import std.range;
 import std.stdio;
 
 // import raylib;
-// import std.datetime.stopwatch;
+import std.datetime.stopwatch;
 
 // private static HashSet!Vec3i old;
 // private static HashSet!Vec3i wideBandPoints;
@@ -102,7 +102,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
         directionZ *= iLength;
     }
 
-    double thisDistance = 0.0;
+    double thisDistance = 0.01;
     double pointDistance;
 
     int thisPositionX;
@@ -156,7 +156,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     Vec3i cache;
 
-    // auto sw = StopWatch(AutoStart.yes);
+    auto sw = StopWatch(AutoStart.yes);
 
     const double divisorDirectionX = 1.0 / directionX;
     const double divisorDirectionY = 1.0 / directionY;
@@ -166,7 +166,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     bool hit = false;
 
-    while (thisDistance < distance) {
+    while (thisDistance < (distance + 0.01)) {
 
         floatingPositionX = (directionX * thisDistance) + startX;
         floatingPositionY = (directionY * thisDistance) + startY;
@@ -207,19 +207,31 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                 //? Broadphase check.
                 // Cyrus-Beck clipping
                 // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html 
-                const double xMin = (thisLocalX - startX) * divisorDirectionX;
-                const double xMax = (thisLocalX + 1.0 - startX) * divisorDirectionX;
-                const double yMin = (thisLocalY - startY) * divisorDirectionY;
-                const double yMax = (thisLocalY + 1.0 - startY) * divisorDirectionY;
-                const double zMin = (thisLocalZ - startZ) * divisorDirectionZ;
-                const double zMax = (thisLocalZ + 1.0 - startZ) * divisorDirectionZ;
 
-                const double aMin = fmin(xMin, xMax);
-                const double aMax = fmax(xMin, xMax);
-                const double bMin = fmin(yMin, yMax);
-                const double bMax = fmax(yMin, yMax);
-                const double cMin = fmin(zMin, zMax);
-                const double cMax = fmax(zMin, zMax);
+                double sizeX = 1.0;
+                double sizeY = 1.0;
+                double sizeZ = 1.0;
+
+                const double xMin = thisLocalX;
+                const double xMax = thisLocalX + sizeX;
+                const double yMin = thisLocalY;
+                const double yMax = thisLocalY + sizeY;
+                const double zMin = thisLocalZ;
+                const double zMax = thisLocalZ + sizeZ;
+
+                const double xMinLocal = (thisLocalX - startX) * divisorDirectionX;
+                const double xMaxLocal = (thisLocalX + sizeX - startX) * divisorDirectionX;
+                const double yMinLocal = (thisLocalY - startY) * divisorDirectionY;
+                const double yMaxLocal = (thisLocalY + sizeY - startY) * divisorDirectionY;
+                const double zMinLocal = (thisLocalZ - startZ) * divisorDirectionZ;
+                const double zMaxLocal = (thisLocalZ + sizeZ - startZ) * divisorDirectionZ;
+
+                const double aMin = fmin(xMinLocal, xMaxLocal);
+                const double aMax = fmax(xMinLocal, xMaxLocal);
+                const double bMin = fmin(yMinLocal, yMaxLocal);
+                const double bMax = fmax(yMinLocal, yMaxLocal);
+                const double cMin = fmin(zMinLocal, zMaxLocal);
+                const double cMax = fmax(zMinLocal, zMaxLocal);
                 const double eMin = fmin(aMax, bMax);
                 const double eMax = fmax(aMin, bMin);
 
@@ -236,38 +248,84 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                 import game.map;
 
-                Vec3d inSpace = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
-                        Vec3d(result, result, result)), startingPoint);
+                Vec3d inSpace = Vec3d(thisLocalX, thisLocalY, thisLocalZ);
 
                 if (!hit && Map.getBlockAtWorldPosition(inSpace).blockID != 0) {
 
                     import raylib;
 
                     //! X AXIS IN RED.
-                    Vec3d AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
-                            Vec3d(aMin, aMin, aMin)), startingPoint);
-                    DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.RED);
+                    //! X MIN
 
-                    AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
-                            Vec3d(aMax, aMax, aMax)), startingPoint);
-                    DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.RED);
+                    // https://stackoverflow.com/a/26930963 https://creativecommons.org/licenses/by-sa/3.0/
 
-                    //? Y AXIS IN BLUE.
-                    AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
-                            Vec3d(bMin, bMin, bMin)), startingPoint);
+                    auto nx = -1.0;
+                    auto ny = 0.0;
+                    auto nz = 0.0;
+                    auto x = thisLocalX;
+                    auto y = thisLocalY;
+                    auto z = thisLocalZ;
+                    auto d = nx * x + ny * y + nz * z;
+                    auto ex = -directionX;
+                    auto ey = -directionY;
+                    auto ez = -directionZ;
 
-                    DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.BLUE);
-                    AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
-                            Vec3d(bMax, bMax, bMax)), startingPoint);
-                    DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.BLUE);
+                    auto s = nx * ex + ny * ey + nz * ez;
 
-                    //* Z AXIS IN GREEN.
-                    AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
-                            Vec3d(cMin, cMin, cMin)), startingPoint);
-                    DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.GREEN);
-                    AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
-                            Vec3d(cMax, cMax, cMax)), startingPoint);
-                    DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.GREEN);
+                    auto rx = startX;
+                    auto ry = startY;
+                    auto rz = startZ;
+
+                    auto t = (d - (nx * rx + ny * ry + nz * rz)) / s;
+                    auto c = Vector3(rx + ex * t, ry + ey * t, rz + ez * t);
+
+                    // Vec3d aaa = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
+                    //         Vec3d(result, result, result)), startingPoint);
+
+                    // writeln(abs(aaa.x - xMax) <= 0.0001 && aaa.y >= yMin && aaa.y <= yMax);
+
+                    DrawCubeWires(c, 0.05, 0.05, 0.05, Colors
+                            .RED);
+                    // }
+
+                    // aaa = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
+                    //         Vec3d(xMaxLocal, xMaxLocal, xMaxLocal)), startingPoint);
+                    // if (aaa.y >= yMin && aaa.y <= yMax) {
+                    //     DrawCubeWires(aaa.toRaylib(), 0.05, 0.05, 0.05, Colors.RED);
+                    // }
+
+                    // writeln(aaa.y, " ", yMinLocal, " ", yMaxLocal);
+                    // writeln(aaa.y >= yMin && aaa.y <= yMax);
+
+                    // writeln(AAA);
+
+                    // if (AAA.x == xMin) {
+
+                    //     DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.RED);
+
+                    // }
+
+                    // AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
+                    //         Vec3d(aMax, aMax, aMax)), startingPoint);
+
+                    // DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.RED);
+
+                    // //? Y AXIS IN BLUE.
+                    // AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
+                    //         Vec3d(bMin, bMin, bMin)), startingPoint);
+
+                    // DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.BLUE);
+                    // AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
+                    //         Vec3d(bMax, bMax, bMax)), startingPoint);
+                    // DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.BLUE);
+
+                    // //* Z AXIS IN GREEN.
+                    // AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
+                    //         Vec3d(cMin, cMin, cMin)), startingPoint);
+                    // DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.GREEN);
+                    // AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
+                    //         Vec3d(cMax, cMax, cMax)), startingPoint);
+                    // DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.GREEN);
 
                     hit = true;
                 }
