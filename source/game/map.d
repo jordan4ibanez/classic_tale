@@ -432,14 +432,14 @@ private: //* BEGIN INTERNAL API.
                     // todo: if solid block collide.
                     // todo: probably custom blocks one day.
 
-                    import raylib;
+                    // import raylib;
 
                     // These are literal positions in 3D space.
-                    DrawSphere(Vector3(thisXPoint, thisYPoint, thisZPoint), 0.01, Colors.ORANGE);
+                    // DrawSphere(Vector3(thisXPoint, thisYPoint, thisZPoint), 0.01, Colors.ORANGE);
 
                     // These are floored, it will look completely wrong.
                     // I assure you it is correct.
-                    DrawSphere(Vector3(currentX, currentY, currentZ), 0.01, Colors.BLUE);
+                    // DrawSphere(Vector3(currentX, currentY, currentZ), 0.01, Colors.BLUE);
 
                     if (data.blockID == 0) {
                         continue;
@@ -449,12 +449,12 @@ private: //* BEGIN INTERNAL API.
                     final switch (axis) {
                     case CollisionAxis.X:
 
-                        Vec3d blockMin = Vector3(currentX, currentY, currentZ);
-                        Vec3d blockMax = Vector3(currentX + 1, currentY + 1, currentZ + 1);
+                        Vec3d blockMin = Vec3d(currentX, currentY, currentZ);
+                        Vec3d blockMax = Vec3d(currentX + 1, currentY + 1, currentZ + 1);
 
-                        import raylib;
+                        // import raylib;
 
-                        DrawCube(blockMin.toRaylib(), 0.1, 0.1, 0.1, Colors.DARKPURPLE);
+                        // DrawCube(blockMin.toRaylib(), 0.1, 0.1, 0.1, Colors.DARKPURPLE);
 
                         CollisionResult result = collideEntityToBlock(entityPosition, entitySize, entityVelocity,
                             blockMin, blockMax, axis);
@@ -468,12 +468,12 @@ private: //* BEGIN INTERNAL API.
                     case CollisionAxis.Y:
                         // writeln("Y ");
 
-                        Vec3d blockMin = Vector3(currentX, currentY, currentZ);
-                        Vec3d blockMax = Vector3(currentX + 1, currentY + 1, currentZ + 1);
+                        Vec3d blockMin = Vec3d(currentX, currentY, currentZ);
+                        Vec3d blockMax = Vec3d(currentX + 1, currentY + 1, currentZ + 1);
 
-                        import raylib;
+                        // import raylib;
 
-                        DrawCube(blockMin.toRaylib(), 0.1, 0.1, 0.1, Colors.DARKPURPLE);
+                        // DrawCube(blockMin.toRaylib(), 0.1, 0.1, 0.1, Colors.DARKPURPLE);
 
                         CollisionResult result = collideEntityToBlock(entityPosition, entitySize, entityVelocity,
                             blockMin, blockMax, axis);
@@ -486,12 +486,12 @@ private: //* BEGIN INTERNAL API.
                         break;
                     case CollisionAxis.Z:
 
-                        Vec3d blockMin = Vector3(currentX, currentY, currentZ);
-                        Vec3d blockMax = Vector3(currentX + 1, currentY + 1, currentZ + 1);
+                        Vec3d blockMin = Vec3d(currentX, currentY, currentZ);
+                        Vec3d blockMax = Vec3d(currentX + 1, currentY + 1, currentZ + 1);
 
-                        import raylib;
+                        // import raylib;
 
-                        DrawCube(blockMin.toRaylib(), 0.1, 0.1, 0.1, Colors.DARKPURPLE);
+                        // DrawCube(blockMin.toRaylib(), 0.1, 0.1, 0.1, Colors.DARKPURPLE);
 
                         CollisionResult result = collideEntityToBlock(entityPosition, entitySize, entityVelocity,
                             blockMin, blockMax, axis);
