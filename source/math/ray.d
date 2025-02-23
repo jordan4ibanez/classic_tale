@@ -155,9 +155,6 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
             pointDistX * pointDistX + pointDistY * pointDistY + pointDistZ * pointDistZ);
 
         for (uint i = 0; i < 26; i++) {
-            const Vec3i* thisDir = dirs.ptr + i;
-
-            counter++;
 
             thisLocalX = thisPositionX + (dirs.ptr + i).x;
             thisLocalY = thisPositionY + (dirs.ptr + i).y;
