@@ -185,19 +185,19 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
     // This seems to reduce the average time by 2-5 microseconds.
     wideBandPoints.rehash();
 
-    const double inverseDirectionX = 1.0 / directionX;
-    const double inverseDirectionY = 1.0 / directionY;
-    const double inverseDirectionZ = 1.0 / directionZ;
+    const double divisorDirectionX = 1.0 / directionX;
+    const double divisorDirectionY = 1.0 / directionY;
+    const double divisorDirectionZ = 1.0 / directionZ;
 
     foreach (const ref key; wideBandPoints.byKey()) {
 
         // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html 
-        const double t1 = (key.x - startX) * inverseDirectionX;
-        const double t2 = (key.x + 1.0 - startX) * inverseDirectionX;
-        const double t3 = (key.y - startY) * inverseDirectionY;
-        const double t4 = (key.y + 1.0 - startY) * inverseDirectionY;
-        const double t5 = (key.z - startZ) * inverseDirectionZ;
-        const double t6 = (key.z + 1.0 - startZ) * inverseDirectionZ;
+        const double t1 = (key.x - startX) * divisorDirectionX;
+        const double t2 = (key.x + 1.0 - startX) * divisorDirectionX;
+        const double t3 = (key.y - startY) * divisorDirectionY;
+        const double t4 = (key.y + 1.0 - startY) * divisorDirectionY;
+        const double t5 = (key.z - startZ) * divisorDirectionZ;
+        const double t6 = (key.z + 1.0 - startZ) * divisorDirectionZ;
 
         const double aMin = min(t1, t2);
         const double aMax = max(t1, t2);
