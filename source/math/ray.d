@@ -9,7 +9,9 @@ import std.datetime.stopwatch;
 import std.math;
 import std.stdio;
 
-void ray(const Vec3d startingPoint, Vec3d endingPoint) {
+HashSet!Vec3i old;
+
+void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     //? This might be one of the strangest and overcomplicated collision voxel raycasting algorithms ever created.
 
@@ -50,13 +52,15 @@ void ray(const Vec3d startingPoint, Vec3d endingPoint) {
         end.z += 0.00001;
     }
 
+    //? Ultra wideband.
+
     double distance = vec3dDistance(start, end);
 
     auto sw = StopWatch(AutoStart.yes);
 
     immutable Vec3d direction = vec3dNormalize(vec3dSubtract(end, start));
 
-    HashSet!Vec3i points;
+    HashSet!Vec3i wideBandPoints;
 
     double thisDistance = 0.01;
 
@@ -77,15 +81,15 @@ void ray(const Vec3d startingPoint, Vec3d endingPoint) {
             foreach (y; -1 .. 2) {
                 foreach (z; -1 .. 2) {
                     // foreach (Vec3i key; dirs) {
-                    Vec3i thisLocal = vec3iAdd(thisPosition, Vec3i(x, y, z));
+                    immutable Vec3i thisLocal = vec3iAdd(thisPosition, Vec3i(x, y, z));
 
-                    double localDistance = vec3dDistance(Vec3d(thisLocal.x, thisLocal.y, thisLocal
+                    immutable double localDistance = vec3dDistance(Vec3d(thisLocal.x, thisLocal.y, thisLocal
                             .z), endingPoint);
                     if (localDistance > pointDistance) {
                         continue;
                     }
 
-                    points.insert(thisLocal);
+                    wideBandPoints.insert(thisLocal);
                 }
             }
         }
@@ -93,7 +97,7 @@ void ray(const Vec3d startingPoint, Vec3d endingPoint) {
         thisDistance += 1.0;
     }
 
-    foreach (Vec3i key; points) {
+    foreach (Vec3i key; wideBandPoints) {
 
         AABB thisBox = AABB(
             key.x, key.y, key.z,
@@ -102,22 +106,20 @@ void ray(const Vec3d startingPoint, Vec3d endingPoint) {
 
         if (raycastBool(start, direction, thisBox)) {
 
-            DrawCube(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
-                    .toRaylib(), 1, 1, 1, Colors.ORANGE);
+            // DrawCube(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
+            //         .toRaylib(), 1, 1, 1, Colors.ORANGE);
 
-            DrawCubeWires(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
-                    .toRaylib(), 1, 1, 1, Colors.BLACK);
+            // DrawCubeWires(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
+            //         .toRaylib(), 1, 1, 1, Colors.BLACK);
         }
 
     }
-
-    //? Ultra wideband.
 
     HashSet!Vec3d testedPoints;
 
     import raylib;
 
-    DrawLine3D(startingPoint.toRaylib(), endingPoint.toRaylib(), Colors.BLUE);
+    // DrawLine3D(startingPoint.toRaylib(), endingPoint.toRaylib(), Colors.BLUE);
 
     writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
 }
