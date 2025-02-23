@@ -28,6 +28,7 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
     // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html
 
     if (rayPoints is null) {
+        // ~6KB data roughly.
         rayPoints = cast(Vec3i*) GC.malloc(Vec3i.sizeof * 512);
     }
 
