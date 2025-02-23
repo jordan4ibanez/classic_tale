@@ -275,7 +275,8 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                         // todo: use all the collision distances and check which one is the lowest then save that collision point.
                         const double collisionDistance = (distanceNormal - (
-                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) / s;
+                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) * (
+                            1.0 / s);
 
                         Vec3d collisionPoint = Vec3d(rayOriginX + dirX * collisionDistance,
                             rayOriginY + dirY * collisionDistance, rayOriginZ + dirZ * collisionDistance);
@@ -286,7 +287,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                     //? X max.
                     {
-                        const double normalX = -1.0;
+                        const double normalX = 1.0;
                         const double normalY = 0.0;
                         const double normalZ = 0.0;
                         const double x = xMax;
@@ -302,7 +303,8 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         const double rayOriginZ = startZ;
 
                         const double collisionDistance = (distanceNormal - (
-                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) / s;
+                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) * (
+                            1.0 / s);
 
                         Vec3d collisionPoint = Vec3d(rayOriginX + dirX * collisionDistance,
                             rayOriginY + dirY * collisionDistance, rayOriginZ + dirZ * collisionDistance);
@@ -366,7 +368,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
     // This seems to reduce the average time by 2-5 microseconds.
     wideBandPoints.rehash();
 
-    // writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
+    writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
 
     // DrawLine3D(startingPoint.toRaylib(), endingPoint.toRaylib(), Colors.BLUE);
 
