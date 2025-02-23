@@ -199,17 +199,17 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         const double t5 = (key.z - startZ) * divisorDirectionZ;
         const double t6 = (key.z + 1.0 - startZ) * divisorDirectionZ;
 
-        const double aMin = min(t1, t2);
-        const double aMax = max(t1, t2);
-        const double bMin = min(t3, t4);
-        const double bMax = max(t3, t4);
-        const double cMin = min(t5, t6);
-        const double cMax = max(t5, t6);
-        const double eMin = min(aMax, bMax);
-        const double eMax = max(aMin, bMin);
+        const double aMin = fmin(t1, t2);
+        const double aMax = fmax(t1, t2);
+        const double bMin = fmin(t3, t4);
+        const double bMax = fmax(t3, t4);
+        const double cMin = fmin(t5, t6);
+        const double cMax = fmax(t5, t6);
+        const double eMin = fmin(aMax, bMax);
+        const double eMax = fmax(aMin, bMin);
 
-        const double tmin = max(eMax, cMin);
-        const double tmax = min(eMin, cMax);
+        const double tmin = fmax(eMax, cMin);
+        const double tmax = fmin(eMin, cMax);
 
         // if tmax < 0, ray (line) is intersecting AABB, but whole AABB is behind us.
         // if tmin > tmax, ray doesn't intersect AABB.
