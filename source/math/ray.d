@@ -190,14 +190,19 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
 
 
+        if (raycastBool(
+                startX, startY, startZ,
+                directionX, directionY, directionZ,
+                key.x, key.y, key.z,
+                key.x + 1.0, key.y + 1.0, key.z + 1.0)) {
 
-        //         // DrawCube(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
-        //         //         .toRaylib(), 1, 1, 1, Colors.ORANGE);
+                    DrawCube(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
+                            .toRaylib(), 1, 1, 1, Colors.ORANGE);
 
-        //         // DrawCubeWires(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
-        //         //         .toRaylib(), 1, 1, 1, Colors.BLACK);
-        //     }
-    // }
+                    DrawCubeWires(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
+                            .toRaylib(), 1, 1, 1, Colors.BLACK);
+        }
+    }
 
     // HashSet!Vec3d testedPoints;
 
