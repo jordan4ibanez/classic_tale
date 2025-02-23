@@ -61,13 +61,13 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
     }
 
     //? Ultra wideband.
-
-    // wideBandPoints.clear();
+    wideBandPoints.clear();
 
     double distanceCalcX = endX - startX;
     double distanceCalcY = endY - startY;
     double distanceCalcZ = endZ - startZ;
-    double distance = sqrt(
+
+    const double distance = sqrt(
         distanceCalcX * distanceCalcX + distanceCalcY * distanceCalcY + distanceCalcZ * distanceCalcZ);
 
     double directionX = endX - startX;
@@ -81,14 +81,18 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         directionY *= iLength;
         directionZ *= iLength;
     }
+
     double thisDistance = 0.01;
     double pointDistance;
+
     int thisPositionX;
     int thisPositionY;
     int thisPositionZ;
+
     double floatingPositionX;
     double floatingPositionY;
     double floatingPositionZ;
+
     int thisLocalX;
     int thisLocalY;
     int thisLocalZ;
