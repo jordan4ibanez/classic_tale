@@ -231,6 +231,23 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         thisDistance += 1.0;
     }
 
+    rayPoints[0 .. currentIndex].sort!((Vec3i a, Vec3i b) {
+        double aDistX = endingPoint.x - a.x;
+        double aDistY = endingPoint.y - a.y;
+        double aDistZ = endingPoint.z - a.z;
+
+        const aDist = sqrt(
+            aDistX * aDistX + aDistY * aDistY + aDistZ * aDistZ);
+
+        double bDistX = endingPoint.x - b.x;
+        double bDistY = endingPoint.y - b.y;
+        double bDistZ = endingPoint.z - b.z;
+
+        const bDist = sqrt(
+            bDistX * bDistX + bDistY * bDistY + bDistZ * bDistZ);
+
+        return aDist > bDist;
+    });
     // This seems to reduce the average time by 2-5 microseconds.
     wideBandPoints.rehash();
 
