@@ -80,7 +80,10 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         thisPosition.y = cast(int) floor(floatingPosition.y);
         thisPosition.z = cast(int) floor(floatingPosition.z);
 
-        double pointDistance = vec3dDistance(Vec3d(thisPosition.x, thisPosition.y, thisPosition.z), endingPoint);
+        double dx = endingPoint.x - thisPosition.x;
+        double dy = endingPoint.y - thisPosition.y;
+        double dz = endingPoint.z - thisPosition.z;
+        double pointDistance = sqrt(dx * dx + dy * dy + dz * dz);
 
         foreach (x; -1 .. 2) {
             foreach (y; -1 .. 2) {
