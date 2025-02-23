@@ -182,6 +182,7 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         thisDistance += 1.0;
     }
 
+    // This seems to reduce the average time by 5 microseconds.
     wideBandPoints.rehash();
 
     // @nogc
@@ -189,7 +190,7 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
     // auto blah = cast(Vec3i*)wideBandPoints.byKey();
 
     // AABB thisBox = AABB();
-    // foreach (ref key; wideBandPoints.byKey()) {
+    foreach (ref key; wideBandPoints.byKey()) {
 
         //     thisBox.min.x = key.x;
         //     thisBox.min.y = key.y;
@@ -199,11 +200,6 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         //     thisBox.max.y = key.y + 1.0;
         //     thisBox.max.z = key.z + 1.0;
 
-        //     if (raycastBool(
-        //             startX, startY, startZ,
-        //             directionX, directionY, directionZ,
-        //             key.x, key.y, key.z,
-        //             key.x + 1.0, key.y + 1.0, key.z + 1.0)) {
 
         //         // DrawCube(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
         //         //         .toRaylib(), 1, 1, 1, Colors.ORANGE);
