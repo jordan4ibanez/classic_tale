@@ -246,26 +246,28 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     //! X AXIS IN RED.
                     Vec3d AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
                             Vec3d(aMin, aMin, aMin)), startingPoint);
-                    DrawSphereWires(AAA.toRaylib(), 0.05, 5, 5, Colors.RED);
+                    DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.RED);
+
                     AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
                             Vec3d(aMax, aMax, aMax)), startingPoint);
-                    DrawSphereWires(AAA.toRaylib(), 0.05, 5, 5, Colors.RED);
+                    DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.RED);
 
                     //? Y AXIS IN BLUE.
                     AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
                             Vec3d(bMin, bMin, bMin)), startingPoint);
-                    DrawSphereWires(AAA.toRaylib(), 0.05, 5, 5, Colors.BLUE);
+
+                    DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.BLUE);
                     AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
                             Vec3d(bMax, bMax, bMax)), startingPoint);
-                    DrawSphereWires(AAA.toRaylib(), 0.05, 5, 5, Colors.BLUE);
+                    DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.BLUE);
 
                     //* Z AXIS IN GREEN.
                     AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
                             Vec3d(cMin, cMin, cMin)), startingPoint);
-                    DrawSphereWires(AAA.toRaylib(), 0.05, 5, 5, Colors.GREEN);
+                    DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.GREEN);
                     AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
                             Vec3d(cMax, cMax, cMax)), startingPoint);
-                    DrawSphereWires(AAA.toRaylib(), 0.05, 5, 5, Colors.GREEN);
+                    DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.GREEN);
 
                     hit = true;
                 }
