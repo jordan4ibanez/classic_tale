@@ -204,6 +204,8 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     continue;
                 }
 
+                //? Broadphase check.
+                // Cyrus-Beck clipping
                 // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html 
                 const double t1 = (thisLocalX - startX) * divisorDirectionX;
                 const double t2 = (thisLocalX + 1.0 - startX) * divisorDirectionX;
