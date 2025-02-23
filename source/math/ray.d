@@ -207,19 +207,19 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                 //? Broadphase check.
                 // Cyrus-Beck clipping
                 // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html 
-                const double t1 = (thisLocalX - startX) * divisorDirectionX;
-                const double t2 = (thisLocalX + 1.0 - startX) * divisorDirectionX;
-                const double t3 = (thisLocalY - startY) * divisorDirectionY;
-                const double t4 = (thisLocalY + 1.0 - startY) * divisorDirectionY;
-                const double t5 = (thisLocalZ - startZ) * divisorDirectionZ;
-                const double t6 = (thisLocalZ + 1.0 - startZ) * divisorDirectionZ;
+                const double xMin = (thisLocalX - startX) * divisorDirectionX;
+                const double xMax = (thisLocalX + 1.0 - startX) * divisorDirectionX;
+                const double yMin = (thisLocalY - startY) * divisorDirectionY;
+                const double yMax = (thisLocalY + 1.0 - startY) * divisorDirectionY;
+                const double zMin = (thisLocalZ - startZ) * divisorDirectionZ;
+                const double zMax = (thisLocalZ + 1.0 - startZ) * divisorDirectionZ;
 
-                const double aMin = fmin(t1, t2);
-                const double aMax = fmax(t1, t2);
-                const double bMin = fmin(t3, t4);
-                const double bMax = fmax(t3, t4);
-                const double cMin = fmin(t5, t6);
-                const double cMax = fmax(t5, t6);
+                const double aMin = fmin(xMin, xMax);
+                const double aMax = fmax(xMin, xMax);
+                const double bMin = fmin(yMin, yMax);
+                const double bMax = fmax(yMin, yMax);
+                const double cMin = fmin(zMin, zMax);
+                const double cMax = fmax(zMin, zMax);
                 const double eMin = fmin(aMax, bMax);
                 const double eMax = fmax(aMin, bMin);
 
