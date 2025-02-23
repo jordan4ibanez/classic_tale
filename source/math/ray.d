@@ -182,7 +182,7 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         thisDistance += 1.0;
     }
 
-    // This seems to reduce the average time by 5 microseconds.
+    // This seems to reduce the average time by 2-5 microseconds.
     wideBandPoints.rehash();
 
     // @nogc
