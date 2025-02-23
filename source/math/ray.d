@@ -251,7 +251,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                 Vec3d inSpace = Vec3d(thisLocalX, thisLocalY, thisLocalZ);
 
-                if (!hit && Map.getBlockAtWorldPosition(inSpace).blockID != 0) {
+                if (Map.getBlockAtWorldPosition(inSpace).blockID != 0) {
 
                     import raylib;
 
@@ -443,7 +443,6 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     //             .BLUE);
                     // }
 
-                    hit = true;
                 }
 
                 wideBandPoints[cache] = false;
