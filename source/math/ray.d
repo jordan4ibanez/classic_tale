@@ -25,53 +25,81 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
     // https://deepnight.net/tutorial/bresenham-magic-raycasting-line-of-sight-pathfinding/
     // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html
 
-    Vec3d start = startingPoint;
-    Vec3d end = endingPoint;
+    double startX = startingPoint.x;
+    double startY = startingPoint.y;
+    double startZ = startingPoint.z;
+
+    double endX = endingPoint.x;
+    double endY = endingPoint.y;
+    double endZ = endingPoint.z;
 
     // Bump it out of strange floating point issues.
-    if (start.x % 1.0 == 0) {
+    if (startX % 1.0 == 0) {
         // writeln("bump 1");
-        start.x += 0.00001;
+        startX += 0.00001;
     }
-    if (start.y % 1.0 == 0) {
+    if (startY % 1.0 == 0) {
         // writeln("bump 2");
-        start.y += 0.00001;
+        startY += 0.00001;
     }
-    if (start.z % 1.0 == 0) {
+    if (startZ % 1.0 == 0) {
         // writeln("bump 3");
-        start.z += 0.00001;
+        startZ += 0.00001;
     }
 
-    if (end.x % 1.0 == 0) {
+    if (endX % 1.0 == 0) {
         // writeln("bump 4");
-        end.x += 0.00001;
+        endX += 0.00001;
     }
-    if (end.y % 1.0 == 0) {
+    if (endY % 1.0 == 0) {
         // writeln("bump 5");
-        end.y += 0.00001;
+        endY += 0.00001;
     }
-    if (end.z % 1.0 == 0) {
+    if (endZ % 1.0 == 0) {
         // writeln("bump 6");
-        end.z += 0.00001;
+        endZ += 0.00001;
     }
 
     //? Ultra wideband.
 
     // wideBandPoints.clear();
 
-    double distance = vec3dDistance(start, end);
+    double distanceCalcX = endX - startX;
+    double distanceCalcY = endY - startY;
+    double distanceCalcZ = endZ - startZ;
+    double distance = sqrt(
+        distanceCalcX * distanceCalcX + distanceCalcY * distanceCalcY + distanceCalcZ * distanceCalcZ);
 
-    auto sw = StopWatch(AutoStart.yes);
-    const Vec3d direction = vec3dNormalize(vec3dSubtract(end, start));
-
+    double directionX = endX - startX;
+    double directionY = endY - startY;
+    double directionZ = endZ - startZ;
+    double __dirLength = sqrt(
+        directionX * directionX + directionY * directionY + directionZ * directionZ);
+    if (__dirLength != 0.0) {
+        const double iLength = 1.0 / __dirLength;
+        directionX *= iLength;
+        directionY *= iLength;
+        directionZ *= iLength;
+    }
     double thisDistance = 0.01;
+    double pointDistance;
+    int thisPositionX;
+    int thisPositionY;
+    int thisPositionZ;
+    double floatingPositionX;
+    double floatingPositionY;
+    double floatingPositionZ;
+    int thisLocalX;
+    int thisLocalY;
+    int thisLocalZ;
 
-    Vec3i thisPosition;
-    Vec3d floatingPosition;
+    double pointDistX;
+    double pointDistY;
+    double pointDistZ;
 
-    Vec3i thisLocal;
-    Vec3d pointDist;
-    Vec3d localDist;
+    double localDistX;
+    double localDistY;
+    double localDistZ;
 
     int counter = 0;
 
@@ -104,37 +132,39 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         Vec3i(1, 1, 1),
     ];
 
+    auto sw = StopWatch(AutoStart.yes);
+
     while (thisDistance < (distance + 0.01)) {
 
-        floatingPosition.x = (direction.x * thisDistance) + start.x;
-        floatingPosition.y = (direction.y * thisDistance) + start.y;
-        floatingPosition.z = (direction.z * thisDistance) + start.z;
+        floatingPositionX = (directionX * thisDistance) + startX;
+        floatingPositionY = (directionY * thisDistance) + startY;
+        floatingPositionZ = (directionZ * thisDistance) + startZ;
 
-        thisPosition.x = cast(int) floor(floatingPosition.x);
-        thisPosition.y = cast(int) floor(floatingPosition.y);
-        thisPosition.z = cast(int) floor(floatingPosition.z);
+        thisPositionX = cast(int) floor(floatingPositionX);
+        thisPositionY = cast(int) floor(floatingPositionY);
+        thisPositionX = cast(int) floor(floatingPositionZ);
 
-        pointDist.x = endingPoint.x - thisPosition.x;
-        pointDist.y = endingPoint.y - thisPosition.y;
-        pointDist.z = endingPoint.z - thisPosition.z;
-        const double pointDistance = sqrt(
-            pointDist.x * pointDist.x + pointDist.y * pointDist.y + pointDist.z * pointDist.z);
+        pointDistX = endingPoint.x - thisPositionX;
+        pointDistY = endingPoint.y - thisPositionY;
+        pointDistZ = endingPoint.z - thisPositionZ;
+        pointDistance = sqrt(
+            pointDistX * pointDistX + pointDistY * pointDistY + pointDistZ * pointDistZ);
 
         for (uint i = 0; i < 26; i++) {
             const Vec3i* thisDir = dirs.ptr + i;
 
             counter++;
 
-            thisLocal.x = thisPosition.x + thisDir.x;
-            thisLocal.y = thisPosition.y + thisDir.y;
-            thisLocal.z = thisPosition.z + thisDir.z;
+            thisLocalX = thisPositionX + thisDir.x;
+            thisLocalY = thisPositionY + thisDir.y;
+            thisLocalZ = thisPositionZ + thisDir.z;
 
-            localDist.x = endingPoint.x - thisPosition.x;
-            localDist.y = endingPoint.y - thisPosition.y;
-            localDist.z = endingPoint.z - thisPosition.z;
-            
+            localDistX = endingPoint.x - thisPositionX;
+            localDistY = endingPoint.y - thisPositionY;
+            localDistZ = endingPoint.z - thisPositionZ;
+
             const localDistance = sqrt(
-                localDist.x * localDist.x + localDist.y * localDist.y + localDist.z * localDist.z);
+                localDistX * localDistX + localDistY * localDistY + localDistZ * localDistZ);
 
             if (localDistance <= pointDistance) {
                 // wideBandPoints[thisLocal] = true;
