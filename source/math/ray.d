@@ -259,33 +259,32 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                     // https://stackoverflow.com/a/26930963 https://creativecommons.org/licenses/by-sa/3.0/
 
-                    auto nx = -1.0;
-                    auto ny = 0.0;
-                    auto nz = 0.0;
-                    auto x = thisLocalX;
-                    auto y = thisLocalY;
-                    auto z = thisLocalZ;
-                    auto d = nx * x + ny * y + nz * z;
-                    auto ex = -directionX;
-                    auto ey = -directionY;
-                    auto ez = -directionZ;
+                    {
+                        double normalX = -1.0;
+                        double normalY = 0.0;
+                        double normalZ = 0.0;
+                        double x = thisLocalX;
+                        double y = thisLocalY;
+                        double z = thisLocalZ;
+                        double distanceNormal = normalX * x + normalY * y + normalZ * z;
+                        double dirX = directionX;
+                        double dirY = directionY;
+                        double dirZ = directionZ;
+                        double s = normalX * dirX + normalY * dirY + normalZ * dirZ;
+                        double rayOriginX = startX;
+                        double rayOriginY = startY;
+                        double rayOriginZ = startZ;
 
-                    auto s = nx * ex + ny * ey + nz * ez;
+                        double collisionDistance = (distanceNormal - (
+                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) / s;
 
-                    auto rx = startX;
-                    auto ry = startY;
-                    auto rz = startZ;
+                        Vec3d collisionPoint = Vec3d(rayOriginX + dirX * collisionDistance,
+                            rayOriginY + dirY * collisionDistance, rayOriginZ + dirZ * collisionDistance);
 
-                    auto t = (d - (nx * rx + ny * ry + nz * rz)) / s;
-                    auto c = Vector3(rx + ex * t, ry + ey * t, rz + ez * t);
+                        DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
+                                .RED);
+                    }
 
-                    // Vec3d aaa = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
-                    //         Vec3d(result, result, result)), startingPoint);
-
-                    // writeln(abs(aaa.x - xMax) <= 0.0001 && aaa.y >= yMin && aaa.y <= yMax);
-
-                    DrawCubeWires(c, 0.05, 0.05, 0.05, Colors
-                            .RED);
                     // }
 
                     // aaa = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
