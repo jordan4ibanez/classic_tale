@@ -8,11 +8,13 @@ import raylib;
 import std.algorithm;
 import std.datetime.stopwatch;
 import std.math;
+import std.range;
 import std.stdio;
 
 // private static HashSet!Vec3i old;
 // private static HashSet!Vec3i wideBandPoints;
 private static bool[Vec3i] wideBandPoints;
+Vec3i* keySet;
 
 void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
@@ -73,8 +75,10 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
     double directionX = endX - startX;
     double directionY = endY - startY;
     double directionZ = endZ - startZ;
+
     double __dirLength = sqrt(
         directionX * directionX + directionY * directionY + directionZ * directionZ);
+
     if (__dirLength != 0.0) {
         const double iLength = 1.0 / __dirLength;
         directionX *= iLength;
@@ -178,40 +182,52 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         thisDistance += 1.0;
     }
 
-    // wideBandPoints.rehash();
+    wideBandPoints.rehash();
+
+    // @nogc
+
+    // auto blah = cast(Vec3i*)wideBandPoints.byKey();
 
     // AABB thisBox = AABB();
-    // foreach (const ref key; wideBandPoints) {
+    // foreach (ref key; wideBandPoints.byKey()) {
 
-    // thisBox.min.x = key.x;
-    // thisBox.min.y = key.y;
-    // thisBox.min.z = key.z;
+        //     thisBox.min.x = key.x;
+        //     thisBox.min.y = key.y;
+        //     thisBox.min.z = key.z;
 
-    // thisBox.max.x = key.x + 1.0;
-    // thisBox.max.y = key.y + 1.0;
-    // thisBox.max.z = key.z + 1.0;
+        //     thisBox.max.x = key.x + 1.0;
+        //     thisBox.max.y = key.y + 1.0;
+        //     thisBox.max.z = key.z + 1.0;
 
-    // if (raycastBool(start, direction, thisBox)) {
+        //     if (raycastBool(
+        //             startX, startY, startZ,
+        //             directionX, directionY, directionZ,
+        //             key.x, key.y, key.z,
+        //             key.x + 1.0, key.y + 1.0, key.z + 1.0)) {
 
-    // DrawCube(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
-    //         .toRaylib(), 1, 1, 1, Colors.ORANGE);
+        //         // DrawCube(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
+        //         //         .toRaylib(), 1, 1, 1, Colors.ORANGE);
 
-    // DrawCubeWires(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
-    //         .toRaylib(), 1, 1, 1, Colors.BLACK);
-    // }
+        //         // DrawCubeWires(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
+        //         //         .toRaylib(), 1, 1, 1, Colors.BLACK);
+        //     }
     // }
 
     // HashSet!Vec3d testedPoints;
 
     // import raylib;
 
-    // DrawLine3D(startingPoint.toRaylib(), endingPoint.toRaylib(), Colors.BLUE);
+    // auto boof = wideBandPoints.byKey();
+
+    // writeln(boof);
 
     writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
+
+    DrawLine3D(startingPoint.toRaylib(), endingPoint.toRaylib(), Colors.BLUE);
 }
 
 // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html 
-pragma(inline)
+// pragma(inline)
 @safe @nogc
 bool raycastBool(const double originX, const double originY, const double originZ, const double dirX,
     const double dirY, const double dirZ, const double minX, const double minY, const double minZ,
