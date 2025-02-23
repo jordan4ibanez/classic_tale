@@ -68,17 +68,14 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     Vec3i thisPosition;
     Vec3d floatingPosition;
-    Vec3i thisLocal;
-    double pointDistX;
-    double pointDistY;
-    double pointDistZ;
-    double pointDistance;
-    double localDistX;
-    double localDistY;
-    double localDistZ;
-    double localDistance;
 
-    static immutable Vec3i[26] dirs = [
+    Vec3i thisLocal;
+    Vec3d pointDist;
+    Vec3d localDist;
+
+    int counter = 0;
+
+    static const Vec3i[26] dirs = [
         Vec3i(-1, -1, -1),
         Vec3i(-1, -1, 0),
         Vec3i(-1, -1, 1),
