@@ -165,6 +165,10 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         pointDistance = sqrt(
             pointDistX * pointDistX + pointDistY * pointDistY + pointDistZ * pointDistZ);
 
+        const double divisorDirectionX = 1.0 / directionX;
+        const double divisorDirectionY = 1.0 / directionY;
+        const double divisorDirectionZ = 1.0 / directionZ;
+
         for (uint i = 0; i < 26; i++) {
 
             thisLocalX = thisPositionX + (dirs.ptr + i).x;
@@ -182,6 +186,43 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
                 cache.x = thisLocalX;
                 cache.y = thisLocalY;
                 cache.z = thisLocalZ;
+
+                if (cache in wideBandPoints) {
+                    continue;
+                }
+
+                // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html 
+                const double t1 = (thisLocalX - startX) * divisorDirectionX;
+                const double t2 = (thisLocalX + 1.0 - startX) * divisorDirectionX;
+                const double t3 = (thisLocalY - startY) * divisorDirectionY;
+                const double t4 = (thisLocalY + 1.0 - startY) * divisorDirectionY;
+                const double t5 = (thisLocalZ - startZ) * divisorDirectionZ;
+                const double t6 = (thisLocalZ + 1.0 - startZ) * divisorDirectionZ;
+
+                const double aMin = fmin(t1, t2);
+                const double aMax = fmax(t1, t2);
+                const double bMin = fmin(t3, t4);
+                const double bMax = fmax(t3, t4);
+                const double cMin = fmin(t5, t6);
+                const double cMax = fmax(t5, t6);
+                const double eMin = fmin(aMax, bMax);
+                const double eMax = fmax(aMin, bMin);
+
+                const double tmin = fmax(eMax, cMin);
+                const double tmax = fmin(eMin, cMax);
+
+                // if tmax < 0, ray (line) is intersecting AABB, but whole AABB is behind us.
+                // if tmin > tmax, ray doesn't intersect AABB.
+                if (tmax < 0 || tmin > tmax) {
+                    continue;
+                }
+
+                // DrawCube(Vec3d(cast(double) thisLocalX + 0.5, cast(double) thisLocalY + 0.5, cast(
+                //         double) thisLocalZ + 0.5).toRaylib(), 1, 1, 1, Colors.ORANGE);
+
+                // DrawCubeWires(Vec3d(cast(double) thisLocalX + 0.5, cast(double) thisLocalY + 0.5, cast(
+                //         double) thisLocalZ + 0.5).toRaylib(), 1, 1, 1, Colors.BLACK);
+
                 wideBandPoints[cache] = false;
             }
         }
@@ -191,46 +232,6 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     // This seems to reduce the average time by 2-5 microseconds.
     wideBandPoints.rehash();
-
-    const double divisorDirectionX = 1.0 / directionX;
-    const double divisorDirectionY = 1.0 / directionY;
-    const double divisorDirectionZ = 1.0 / directionZ;
-
-    foreach (const ref key; wideBandPoints.byKey()) {
-
-        // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html 
-        const double t1 = (key.x - startX) * divisorDirectionX;
-        const double t2 = (key.x + 1.0 - startX) * divisorDirectionX;
-        const double t3 = (key.y - startY) * divisorDirectionY;
-        const double t4 = (key.y + 1.0 - startY) * divisorDirectionY;
-        const double t5 = (key.z - startZ) * divisorDirectionZ;
-        const double t6 = (key.z + 1.0 - startZ) * divisorDirectionZ;
-
-        const double aMin = fmin(t1, t2);
-        const double aMax = fmax(t1, t2);
-        const double bMin = fmin(t3, t4);
-        const double bMax = fmax(t3, t4);
-        const double cMin = fmin(t5, t6);
-        const double cMax = fmax(t5, t6);
-        const double eMin = fmin(aMax, bMax);
-        const double eMax = fmax(aMin, bMin);
-
-        const double tmin = fmax(eMax, cMin);
-        const double tmax = fmin(eMin, cMax);
-
-        // if tmax < 0, ray (line) is intersecting AABB, but whole AABB is behind us.
-        // if tmin > tmax, ray doesn't intersect AABB.
-        if (tmax < 0 || tmin > tmax) {
-            continue;
-        }
-
-        // DrawCube(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
-        //         .toRaylib(), 1, 1, 1, Colors.ORANGE);
-
-        // DrawCubeWires(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
-        //         .toRaylib(), 1, 1, 1, Colors.BLACK);
-
-    }
 
     // HashSet!Vec3d testedPoints;
 
