@@ -11,7 +11,6 @@ import std.math;
 import std.stdio;
 
 private static HashSet!Vec3i old;
-
 private static HashSet!Vec3i wideBandPoints;
 
 void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
@@ -145,31 +144,30 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         thisDistance += 1.0;
     }
 
-    AABB thisBox = AABB();
-    foreach (const key; wideBandPoints) {
+    // writeln("did ", counter, " counts");
 
-        thisBox.min.x = key.x;
-        thisBox.min.y = key.y;
-        thisBox.min.z = key.z;
+    // wideBandPoints.rehash();
 
-        thisBox.max.x = key.x + 1.0;
-        thisBox.max.y = key.y + 1.0;
-        thisBox.max.z = key.z + 1.0;
+    // AABB thisBox = AABB();
+    // foreach (const ref key; wideBandPoints) {
 
-        // key.x, key.y, key.z,
-        // key.x + 1.0, key.y + 1.0, key.z + 1.0
-        // );
+    // thisBox.min.x = key.x;
+    // thisBox.min.y = key.y;
+    // thisBox.min.z = key.z;
 
-        if (raycastBool(start, direction, thisBox)) {
+    // thisBox.max.x = key.x + 1.0;
+    // thisBox.max.y = key.y + 1.0;
+    // thisBox.max.z = key.z + 1.0;
 
-            // DrawCube(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
-            //         .toRaylib(), 1, 1, 1, Colors.ORANGE);
+    // if (raycastBool(start, direction, thisBox)) {
 
-            // DrawCubeWires(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
-            //         .toRaylib(), 1, 1, 1, Colors.BLACK);
-        }
+    // DrawCube(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
+    //         .toRaylib(), 1, 1, 1, Colors.ORANGE);
 
-    }
+    // DrawCubeWires(Vec3d(cast(double) key.x + 0.5, cast(double) key.y + 0.5, cast(double) key.z + 0.5)
+    //         .toRaylib(), 1, 1, 1, Colors.BLACK);
+    // }
+    // }
 
     // HashSet!Vec3d testedPoints;
 
