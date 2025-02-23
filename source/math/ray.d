@@ -159,9 +159,9 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
             counter++;
 
-            thisLocalX = thisPositionX + thisDir.x;
-            thisLocalY = thisPositionY + thisDir.y;
-            thisLocalZ = thisPositionZ + thisDir.z;
+            thisLocalX = thisPositionX + (dirs.ptr + i).x;
+            thisLocalY = thisPositionY + (dirs.ptr + i).y;
+            thisLocalZ = thisPositionZ + (dirs.ptr + i).z;
 
             localDistX = endingPoint.x - thisPositionX;
             localDistY = endingPoint.y - thisPositionY;
