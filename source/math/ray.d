@@ -1,6 +1,6 @@
 module math.ray;
 
-// import hashset;
+import core.memory;
 import math.aabb;
 import math.vec3d;
 import math.vec3i;
@@ -14,7 +14,7 @@ import std.stdio;
 // private static HashSet!Vec3i old;
 // private static HashSet!Vec3i wideBandPoints;
 private static bool[Vec3i] wideBandPoints;
-Vec3i* keySet;
+Vec3i* rayPoints;
 
 void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
@@ -26,6 +26,10 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
     // https://stackoverflow.com/a/28786538
     // https://deepnight.net/tutorial/bresenham-magic-raycasting-line-of-sight-pathfinding/
     // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html
+
+    if (rayPoints is null) {
+        rayPoints = cast(Vec3i*) GC.malloc(Vec3i.sizeof * 512);
+    }
 
     double startX = startingPoint.x;
     double startY = startingPoint.y;
