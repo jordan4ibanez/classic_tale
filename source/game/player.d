@@ -7,9 +7,11 @@ import graphics.colors;
 import graphics.render;
 import graphics.texture_handler;
 import math.constants;
+import math.ray;
 import math.rect;
 import math.vec2d;
 import math.vec3d;
+import math.vec3i;
 import raylib : DEG2RAD, PI, RAD2DEG;
 import std.concurrency;
 import std.math.algebraic : abs;
@@ -44,6 +46,7 @@ private:
     Vec2d size = Vec2d(0.6, 1.8);
     Vec3d position = Vec3d(0, 161, 0);
     Vec3d velocity = Vec3d(0, 0, 0);
+    Vec3i blockSelection = Vec3i(0, -1, 0);
 
     double eyeHeight = 1.625;
     int inChunk = int.max;
@@ -101,6 +104,38 @@ public: //* BEGIN PUBLIC API.
         DrawCubeWires(collisionBoxLocation.toRaylib(), size.x, size.y, size.x, Colors.BLACK);
 
         DrawSphere(position.toRaylib(), 0.01, Colors.RED);
+    }
+
+    void raycast() {
+        import raylib;
+
+        const Vec3d start = CameraHandler.getPosition();
+        const Vec3d cameraDir = CameraHandler.getLookVector();
+        const Vec3d end = vec3dAdd(vec3dMultiply(cameraDir, Vec3d(10, 10, 10)), start);
+
+        RayResult result = rayCast(start, end);
+
+        for (ulong i = 0; i < result.arrayLength; i++) {
+            Vec3d thisPosition;
+            thisPosition.x = (result.pointsArray + i).x;
+            thisPosition.y = (result.pointsArray + i).y;
+            thisPosition.z = (result.pointsArray + i).z;
+
+            const BlockData = Map.getBlockAtWorldPosition(thisPosition);
+
+            if (BlockData.blockID != 0) {
+                // DrawCubeWires(vec3dAdd(thisPosition, Vec3d(0.5, 0.5, 0.5))
+                //         .toRaylib(), 1.01, 1.01, 1.01, Colors.BLACK);
+                blockSelection.x = cast(int) floor(thisPosition.x);
+                blockSelection.y = cast(int) floor(thisPosition.y);
+                blockSelection.z = cast(int) floor(thisPosition.z);
+                return;
+            }
+        }
+
+        blockSelection.x = 0;
+        blockSelection.y = -1;
+        blockSelection.z = 0;
     }
 
     void doControls() {
