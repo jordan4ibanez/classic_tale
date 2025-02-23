@@ -73,7 +73,7 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         Vec3d floatingPosition = vec3dAdd(vec3dMultiply(direction, Vec3d(thisDistance, thisDistance, thisDistance)),
             start);
 
-        Vec3i thisPosition = Vec3i(
+        immutable Vec3i thisPosition = Vec3i(
             cast(int) floor(floatingPosition.x),
             cast(int) floor(floatingPosition.y),
             cast(int) floor(floatingPosition.z)
