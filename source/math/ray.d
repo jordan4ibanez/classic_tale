@@ -285,47 +285,6 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                                 .RED);
                     }
 
-                    // }
-
-                    // aaa = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
-                    //         Vec3d(xMaxLocal, xMaxLocal, xMaxLocal)), startingPoint);
-                    // if (aaa.y >= yMin && aaa.y <= yMax) {
-                    //     DrawCubeWires(aaa.toRaylib(), 0.05, 0.05, 0.05, Colors.RED);
-                    // }
-
-                    // writeln(aaa.y, " ", yMinLocal, " ", yMaxLocal);
-                    // writeln(aaa.y >= yMin && aaa.y <= yMax);
-
-                    // writeln(AAA);
-
-                    // if (AAA.x == xMin) {
-
-                    //     DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.RED);
-
-                    // }
-
-                    // AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
-                    //         Vec3d(aMax, aMax, aMax)), startingPoint);
-
-                    // DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.RED);
-
-                    // //? Y AXIS IN BLUE.
-                    // AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
-                    //         Vec3d(bMin, bMin, bMin)), startingPoint);
-
-                    // DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.BLUE);
-                    // AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
-                    //         Vec3d(bMax, bMax, bMax)), startingPoint);
-                    // DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.BLUE);
-
-                    // //* Z AXIS IN GREEN.
-                    // AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
-                    //         Vec3d(cMin, cMin, cMin)), startingPoint);
-                    // DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.GREEN);
-                    // AAA = vec3dAdd(vec3dMultiply(Vec3d(directionX, directionY, directionZ),
-                    //         Vec3d(cMax, cMax, cMax)), startingPoint);
-                    // DrawCubeWires(AAA.toRaylib(), 0.05, 0.05, 0.05, Colors.GREEN);
-
                     hit = true;
                 }
 
