@@ -231,7 +231,7 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         thisDistance += 1.0;
     }
 
-    rayPoints[0 .. currentIndex].sort!((Vec3i a, Vec3i b) {
+    rayPoints[0 .. currentIndex].sort!((const ref Vec3i a, const ref Vec3i b) {
         double aDistX = endingPoint.x - a.x;
         double aDistY = endingPoint.y - a.y;
         double aDistZ = endingPoint.z - a.z;
