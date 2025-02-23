@@ -181,7 +181,7 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 }
 
 // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html 
-pragma(inline, true)
+pragma(inline)
 @safe @nogc
 bool raycastBool(const ref Vec3d origin, const ref Vec3d dir, const ref AABB aabb) {
     const double t1 = (aabb.min.x - origin.x) / dir.x;
