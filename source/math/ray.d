@@ -11,17 +11,18 @@ import std.datetime.stopwatch;
 import std.math;
 import std.range;
 import std.stdio;
-import utility.delta;
 
 // private static HashSet!Vec3i old;
 // private static HashSet!Vec3i wideBandPoints;
 private static bool[Vec3i] wideBandPoints;
-Vec3i* rayPoints;
+private static Vec3i* rayPoints;
 
-double timer = 0;
-ulong currentIter = 0;
+struct RayResult {
+    const(const Vec3i*) pointsArray;
+    const ulong arrayLength;
+}
 
-void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
+RayResult ray(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     //? This might be one of the strangest and overcomplicated collision voxel raycasting algorithms ever created.
 
@@ -245,15 +246,6 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         thisDistance += 1.0;
     }
 
-    timer += Delta.getDelta();
-    if (timer > 0.1) {
-        currentIter++;
-        timer = 0;
-        if (currentIter >= currentIndex) {
-            currentIter = 0;
-        }
-    }
-
     rayPoints[0 .. currentIndex].sort!((const ref Vec3i a, const ref Vec3i b) {
         double aDistX = endingPoint.x - a.x;
         double aDistY = endingPoint.y - a.y;
@@ -272,34 +264,26 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
         return aDist > bDist;
     });
 
+    // How to iterate.
     for (ulong i = 0; i < currentIndex; i++) {
 
-        thisLocalX = (rayPoints + i).x;
-        thisLocalY = (rayPoints + i).y;
-        thisLocalZ = (rayPoints + i).z;
+        // thisLocalX = (rayPoints + i).x;
+        // thisLocalY = (rayPoints + i).y;
+        // thisLocalZ = (rayPoints + i).z;
 
-        if (i == currentIter) {
+        // DrawCube(Vec3d(cast(double) thisLocalX + 0.5, cast(double) thisLocalY + 0.5, cast(
+        //         double) thisLocalZ + 0.5).toRaylib(), 1, 1, 1, Colors.ORANGE);
 
-            DrawCube(Vec3d(cast(double) thisLocalX + 0.5, cast(double) thisLocalY + 0.5, cast(
-                    double) thisLocalZ + 0.5).toRaylib(), 1, 1, 1, Colors.ORANGE);
-
-            DrawCubeWires(Vec3d(cast(double) thisLocalX + 0.5, cast(double) thisLocalY + 0.5, cast(
-                    double) thisLocalZ + 0.5).toRaylib(), 1, 1, 1, Colors.BLACK);
-        }
+        // DrawCubeWires(Vec3d(cast(double) thisLocalX + 0.5, cast(double) thisLocalY + 0.5, cast(
+        //         double) thisLocalZ + 0.5).toRaylib(), 1, 1, 1, Colors.BLACK);
     }
 
     // This seems to reduce the average time by 2-5 microseconds.
     wideBandPoints.rehash();
 
-    // HashSet!Vec3d testedPoints;
-
-    // import raylib;
-
-    // auto boof = wideBandPoints.byKey();
-
-    // writeln(boof);
-
     writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
 
     DrawLine3D(startingPoint.toRaylib(), endingPoint.toRaylib(), Colors.BLUE);
+
+    return RayResult(rayPoints, currentIndex);
 }
