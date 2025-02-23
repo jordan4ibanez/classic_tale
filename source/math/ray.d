@@ -155,6 +155,8 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
     const double divisorDirectionY = 1.0 / directionY;
     const double divisorDirectionZ = 1.0 / directionZ;
 
+    ulong currentIndex = 0;
+
     while (thisDistance < (distance + 0.01)) {
 
         floatingPositionX = (directionX * thisDistance) + startX;
@@ -226,6 +228,12 @@ void ray(const Vec3d startingPoint, const Vec3d endingPoint) {
                 //         double) thisLocalZ + 0.5).toRaylib(), 1, 1, 1, Colors.BLACK);
 
                 wideBandPoints[cache] = false;
+
+                (rayPoints + currentIndex).x = thisLocalX;
+                (rayPoints + currentIndex).y = thisLocalY;
+                (rayPoints + currentIndex).z = thisLocalZ;
+                currentIndex++;
+
             }
         }
 
