@@ -124,7 +124,7 @@ void main() {
 					DrawCubeWires(blockSelectionABove.toRaylib(), 0.05, 0.05, 0.05, Colors.RED);
 					if (!aabbCollision(possiblePositionBox, playerCollisionBox)) {
 
-						Map.setBlockAtWorldPositionByName(blockSelectionABove, "stone");
+						Map.setBlockAtWorldPositionByName(blockSelectionABove, "bedrock");
 					}
 				}
 
