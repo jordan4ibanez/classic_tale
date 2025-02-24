@@ -40,14 +40,17 @@ public: //* BEGIN PUBLIC API.
         // I'm sure I'll find something to put in here.
     }
 
+    pragma(inline)
     bool positionInFrustum(double x, double y, double z) {
         return pointInFrustum(&frustum, x, y, z);
     }
 
+    pragma(inline)
     bool aabbInFrustum(Vec3d min, Vec3d max) {
         return aabBoxInFrustum(&frustum, min, max);
     }
 
+    pragma(inline)
     Vec3d getLookVector() {
         Vec3d look;
 
