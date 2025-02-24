@@ -56,6 +56,8 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
     double endZ = endingPoint.z;
 
     // Bump it out of strange floating point issues.
+    // This bumps positive because when you're on X.0,Y.0,Z.0 you exist
+    // inside of a block with a normal of 1,1,1.
     //~ Note: When the mantissa exceeds this magic number on the X or Z
     //~ like when you start trying to do a FarLands exploration
     //~ this will begin to fall apart and it will default back into it's
