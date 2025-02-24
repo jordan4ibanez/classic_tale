@@ -116,18 +116,31 @@ public: //* BEGIN PUBLIC API.
         RayResult result = rayCast(start, end);
 
         for (ulong i = 0; i < result.arrayLength; i++) {
+
             Vec3d thisPosition;
+
             thisPosition.x = (result.pointsArray + i).blockPosition.x;
             thisPosition.y = (result.pointsArray + i).blockPosition.y;
             thisPosition.z = (result.pointsArray + i).blockPosition.z;
 
             const BlockData = Map.getBlockAtWorldPosition(thisPosition);
 
+            Vec3d thisPositionAbove;
+
+            thisPositionAbove.x = thisPosition.x + (result.pointsArray + i).faceDirection.x;
+            thisPositionAbove.y = thisPosition.y + (result.pointsArray + i).faceDirection.y;
+            thisPositionAbove.z = thisPosition.z + (result.pointsArray + i).faceDirection.z;
+
             if (BlockData.blockID != 0) {
 
                 blockSelection.x = cast(int) floor(thisPosition.x);
                 blockSelection.y = cast(int) floor(thisPosition.y);
                 blockSelection.z = cast(int) floor(thisPosition.z);
+
+                blockSelectionAbove.x = cast(int) floor(thisPositionAbove.x);
+                blockSelectionAbove.y = cast(int) floor(thisPositionAbove.y);
+                blockSelectionAbove.z = cast(int) floor(thisPositionAbove.z);
+
                 return;
             }
         }
@@ -135,6 +148,10 @@ public: //* BEGIN PUBLIC API.
         blockSelection.x = 0;
         blockSelection.y = -1;
         blockSelection.z = 0;
+
+        blockSelectionAbove.x = 0;
+        blockSelectionAbove.y = -1;
+        blockSelectionAbove.z = 0;
     }
 
     Vec3i getBlockSelection() {
