@@ -283,21 +283,18 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                     import raylib;
 
-                    bool collisionXMin = false;
-                    bool collisionXMax = false;
-                    bool collisionYMin = false;
-                    bool collisionYMax = false;
-                    bool collisionZMin = false;
-                    bool collisionZMax = false;
-                    double collisionXMinDistance = float.max;
-                    double collisionXMaxDistance = float.max;
-                    double collisionYMinDistance = float.max;
-                    double collisionYMaxDistance = float.max;
-                    double collisionZMinDistance = float.max;
-                    double collisionZMaxDistance = float.max;
+                    bool collisionX = false;
+                    bool collisionY = false;
+                    bool collisionZ = false;
+                    double collisionXDistance = float.max;
+                    double collisionYDistance = float.max;
+                    double collisionZDistance = float.max;
 
-                    //? X min.
-                    {
+                    const bool facingNegativeX = vec3dDotProduct(Vec3d(directionX, directionY, directionZ),
+                        Vec3d(1, 0, 0)) > 0.0;
+
+                    if (facingNegativeX) {
+                        //? X min.
                         const double normalX = -1.0;
                         const double normalY = 0.0;
                         const double normalZ = 0.0;
@@ -324,12 +321,10 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                             collisionPoint.z >= zMin && collisionPoint.z <= zMax) {
                             DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
                                     .RED);
-                            collisionXMin = true;
+                            collisionX = true;
                         }
-                    }
-
-                    //? X max.
-                    {
+                    } else {
+                        //? X max.
                         const double normalX = 1.0;
                         const double normalY = 0.0;
                         const double normalZ = 0.0;
@@ -355,7 +350,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                             collisionPoint.z >= zMin && collisionPoint.z <= zMax) {
                             DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
                                     .RED);
-                            collisionXMax = true;
+                            collisionX = true;
                         }
                     }
 
@@ -387,7 +382,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     //         collisionPoint.z >= zMin && collisionPoint.z <= zMax) {
                     //         DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
                     //                 .GREEN);
-                    //         collisionYMin = true;
+                    //         collisionY = true;
                     //     }
                     // }
 
@@ -419,7 +414,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     //         collisionPoint.z >= zMin && collisionPoint.z <= zMax) {
                     //         DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
                     //                 .GREEN);
-                    //         collisionYMax = true;
+                    //         collisionY = true;
                     //     }
                     // }
 
@@ -451,7 +446,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     //         collisionPoint.y >= yMin && collisionPoint.y <= yMax) {
                     //         DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
                     //                 .BLUE);
-                    //         collisionZMin = true;
+                    //         collisionZ = true;
                     //     }
                     // }
 
@@ -483,12 +478,12 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     //         collisionPoint.y >= yMin && collisionPoint.y <= yMax) {
                     //         DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
                     //                 .BLUE);
-                    //         collisionZMax = true;
+                    //         collisionZ = true;
                     //     }
                     // }
 
-                    if (collisionXMin || collisionXMax || collisionYMin || collisionYMax || collisionZMin ||
-                        collisionZMax) {
+                    if (collisionX || collisionX || collisionY || collisionY || collisionZ ||
+                        collisionZ) {
                         hit = true;
                     }
                 }
@@ -545,7 +540,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
     // This seems to reduce the average time by 2-5 microseconds.
     wideBandPoints.rehash();
 
-    writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
+    // writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
 
     return RayResult(rayPoints, currentIndex);
 }
