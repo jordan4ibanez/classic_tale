@@ -440,6 +440,9 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         // import raylib;
                         // DrawCubeWires(collisionPoint.toRaylib(), 0.03, 0.03, 0.03, Colors.GREEN);
 
+                        (rayPoints + currentIndex).faceDirection.x = faceDirection.x;
+                        (rayPoints + currentIndex).faceDirection.y = faceDirection.y;
+                        (rayPoints + currentIndex).faceDirection.z = faceDirection.z;
 
                         (rayPoints + currentIndex).collisionPoint.x = collisionPoint.x;
                         (rayPoints + currentIndex).collisionPoint.y = collisionPoint.y;
