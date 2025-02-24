@@ -264,6 +264,8 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     continue;
                 }
 
+                // https://stackoverflow.com/a/26930963 https://creativecommons.org/licenses/by-sa/3.0/
+
                 import game.map;
 
                 Vec3d inSpace = Vec3d(thisLocalX, thisLocalY, thisLocalZ);
@@ -271,8 +273,6 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                 if (Map.getBlockAtWorldPosition(inSpace).blockID != 0) {
 
                     import raylib;
-
-                    // https://stackoverflow.com/a/26930963 https://creativecommons.org/licenses/by-sa/3.0/
 
                     bool collisionXMin = false;
                     bool collisionXMax = false;
