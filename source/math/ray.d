@@ -20,7 +20,7 @@ private static Vec3i* rayPoints;
 
 struct RayCollision {
     Vec3i blockPosition;
-    Vec3d exactPosition;
+    Vec3d collisionPoint;
     Vec3i faceDirection;
 }
 
