@@ -352,11 +352,11 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         const double collisionDistance = (distanceNormal - (
                                 normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) / s;
 
-                        Vec3d collisionPoint = Vec3d(rayOriginX + dirX * collisionDistance,
-                            rayOriginY + dirY * collisionDistance, rayOriginZ + dirZ * collisionDistance);
+                        const double collisionPointX = rayOriginX + dirX * collisionDistance;
+                        const double collisionPointZ = rayOriginZ + dirZ * collisionDistance;
 
-                        if (collisionPoint.x >= xMin && collisionPoint.x <= xMax &&
-                            collisionPoint.z >= zMin && collisionPoint.z <= zMax) {
+                        if (collisionPointX >= xMin && collisionPointX <= xMax &&
+                            collisionPointZ >= zMin && collisionPointZ <= zMax) {
 
                             collisionY = true;
                             collisionYDistance = collisionDistance;
