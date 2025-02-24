@@ -129,7 +129,8 @@ bool pointInFrustumV(Frustum* frustum, Vector3 position) {
         return false;
 
     for (int i = 0; i < 6; i++) {
-        if (distanceToPlaneV(&frustum.planes[i], &position) <= 0) // point is behind plane
+        // Point is behind plane.
+        if (distanceToPlaneV(&frustum.planes[i], &position) <= 0)
             return false;
     }
 
@@ -141,7 +142,8 @@ bool pointInFrustum(Frustum* frustum, float x, float y, float z) {
         return false;
 
     for (int i = 0; i < 6; i++) {
-        if (distanceToPlane(&frustum.planes[i], x, y, z) <= 0) // point is behind plane
+        // Point is behind plane.
+        if (distanceToPlane(&frustum.planes[i], x, y, z) <= 0)
             return false;
     }
 
@@ -153,7 +155,8 @@ bool sphereInFrustumV(Frustum* frustum, Vector3 position, float radius) {
         return false;
 
     for (int i = 0; i < 6; i++) {
-        if (distanceToPlaneV(&frustum.planes[i], &position) < -radius) // center is behind plane by more than the radius
+        // Center is behind plane by more than the radius.
+        if (distanceToPlaneV(&frustum.planes[i], &position) < -radius)
             return false;
     }
 
@@ -161,7 +164,7 @@ bool sphereInFrustumV(Frustum* frustum, Vector3 position, float radius) {
 }
 
 bool aabBoxInFrustum(Frustum* frustum, Vector3 min, Vector3 max) {
-    // if any point is in and we are good
+    // If any point is in and we are good.
     if (pointInFrustum(frustum, min.x, min.y, min.z))
         return true;
 
@@ -186,7 +189,7 @@ bool aabBoxInFrustum(Frustum* frustum, Vector3 min, Vector3 max) {
     if (pointInFrustum(frustum, max.x, min.y, max.z))
         return true;
 
-    // check to see if all points are outside of any one plane, if so the entire box is outside
+    // Check to see if all points are outside of any one plane, if so the entire box is outside.
     for (int i = 0; i < 6; i++) {
         bool oneInside = false;
 
@@ -218,6 +221,6 @@ bool aabBoxInFrustum(Frustum* frustum, Vector3 min, Vector3 max) {
             return false;
     }
 
-    // the box extends outside the frustum but crosses it
+    // The box extends outside the frustum but crosses it.
     return true;
 }
