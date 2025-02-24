@@ -39,6 +39,8 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
     // https://stackoverflow.com/a/28786538
     // https://deepnight.net/tutorial/bresenham-magic-raycasting-line-of-sight-pathfinding/
     // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html
+    // https://www.cs.princeton.edu/courses/archive/fall00/cs426/lectures/raycast/sld017.htm
+    // https://stackoverflow.com/questions/26920705/ray-plane-intersection
 
     if (rayPoints is null) {
         // ~6KB data roughly.
