@@ -29,12 +29,12 @@ struct Frustum {
     Vector4[6] planes;
 }
 
-enum Back = 0;
-enum Front = 1;
-enum Bottom = 2;
-enum Top = 3;
-enum Right = 4;
-enum Left = 5;
+enum BACK = 0;
+enum FRONT = 1;
+enum BOTTOM = 2;
+enum TOP = 3;
+enum RIGHT = 4;
+enum LEFT = 5;
 enum MAX = 6;
 
 void normalizePlane(Vector4* plane) {
@@ -91,29 +91,29 @@ void extractFrustum(Frustum* frustum) {
     planes.m15 = modelview.m12 * projection.m3 + modelview.m13 * projection.m7 + modelview.m14 * projection.m11 +
         modelview.m15 * projection.m15;
 
-    frustum.planes[Right] = Vector4(planes.m3 - planes.m0, planes.m7 - planes.m4, planes.m11 - planes.m8, planes.m15 -
+    frustum.planes[RIGHT] = Vector4(planes.m3 - planes.m0, planes.m7 - planes.m4, planes.m11 - planes.m8, planes.m15 -
             planes.m12);
-    normalizePlane(&frustum.planes[Right]);
+    normalizePlane(&frustum.planes[RIGHT]);
 
-    frustum.planes[Left] = Vector4(planes.m3 + planes.m0, planes.m7 + planes.m4, planes.m11 + planes.m8, planes.m15 +
+    frustum.planes[LEFT] = Vector4(planes.m3 + planes.m0, planes.m7 + planes.m4, planes.m11 + planes.m8, planes.m15 +
             planes.m12);
-    normalizePlane(&frustum.planes[Left]);
+    normalizePlane(&frustum.planes[LEFT]);
 
-    frustum.planes[Top] = Vector4(planes.m3 - planes.m1, planes.m7 - planes.m5, planes.m11 - planes.m9, planes.m15 -
+    frustum.planes[TOP] = Vector4(planes.m3 - planes.m1, planes.m7 - planes.m5, planes.m11 - planes.m9, planes.m15 -
             planes.m13);
-    normalizePlane(&frustum.planes[Top]);
+    normalizePlane(&frustum.planes[TOP]);
 
-    frustum.planes[Bottom] = Vector4(planes.m3 + planes.m1, planes.m7 + planes.m5, planes.m11 + planes.m9, planes.m15 +
+    frustum.planes[BOTTOM] = Vector4(planes.m3 + planes.m1, planes.m7 + planes.m5, planes.m11 + planes.m9, planes.m15 +
             planes.m13);
-    normalizePlane(&frustum.planes[Bottom]);
+    normalizePlane(&frustum.planes[BOTTOM]);
 
-    frustum.planes[Back] = Vector4(planes.m3 - planes.m2, planes.m7 - planes.m6, planes.m11 - planes.m10, planes.m15 -
+    frustum.planes[BACK] = Vector4(planes.m3 - planes.m2, planes.m7 - planes.m6, planes.m11 - planes.m10, planes.m15 -
             planes.m14);
-    normalizePlane(&frustum.planes[Back]);
+    normalizePlane(&frustum.planes[BACK]);
 
-    frustum.planes[Front] = Vector4(planes.m3 + planes.m2, planes.m7 + planes.m6, planes.m11 + planes.m10, planes.m15 +
+    frustum.planes[FRONT] = Vector4(planes.m3 + planes.m2, planes.m7 + planes.m6, planes.m11 + planes.m10, planes.m15 +
             planes.m14);
-    normalizePlane(&frustum.planes[Front]);
+    normalizePlane(&frustum.planes[FRONT]);
 }
 
 float distanceToPlaneV(const Vector4* plane, const Vector3* position) {
