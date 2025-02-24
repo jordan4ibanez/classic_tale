@@ -196,7 +196,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
         pointDistance = sqrt(
             pointDistX * pointDistX + pointDistY * pointDistY + pointDistZ * pointDistZ);
 
-        for (uint i = 0; i < 26; i++) {
+        for (uint i = 0; i < 27; i++) {
 
             thisLocalX = thisPositionX + (dirs.ptr + i).x;
             thisLocalY = thisPositionY + (dirs.ptr + i).y;
