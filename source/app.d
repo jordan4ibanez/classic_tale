@@ -177,9 +177,9 @@ void main() {
 
 			// Size horizontal.
 			//? 40, 4
-			const double shx = 400.0 * guiScale;
+			const double shx = 40.0 * guiScale;
 			// Size vertical.
-			const double shy = 40.0 * guiScale;
+			const double shy = 4.0 * guiScale;
 			// Half width.
 			const double hx = shx * 0.5;
 			// Half height.
