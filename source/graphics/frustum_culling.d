@@ -31,19 +31,37 @@ module graphics.frustum_culling;
 **********************************************************************************************/
 
 
-#include "Frustum.h"
-#include "rlgl.h"
-#include "raymath.h"
+// #include "Frustum.h"
+// #include "rlgl.h"
+// #include "raymath.h"
 
-#include <math.h>
-#include <stddef.h>
+// #include <math.h>
+// #include <stddef.h>
+
+import raylib;
+import std.math.algebraic;
+
+ struct Frustum
+{
+    Vector4[6] Planes;
+}
+
+
+    enum Back = 0;
+    enum Front = 1;
+    enum Bottom = 2;
+    enum Top = 3;
+    enum Right = 4;
+    enum Left = 5;
+    enum MAX = 6;
+
 
 void NormalizePlane(Vector4* plane)
 {
-    if (plane == NULL)
+    if (plane is null)
         return;
 
-    float magnitude = sqrtf(plane.x * plane.x + plane.y * plane.y + plane.z * plane.z);
+    float magnitude = sqrt(plane.x * plane.x + plane.y * plane.y + plane.z * plane.z);
 
     plane.x /= magnitude;
     plane.y /= magnitude;
@@ -53,7 +71,7 @@ void NormalizePlane(Vector4* plane)
 
 void ExtractFrustum(Frustum* frustum)
 {
-    if (frustum == NULL)
+    if (frustum is null)
         return;
 
     Matrix projection = rlGetMatrixProjection();
@@ -78,22 +96,22 @@ void ExtractFrustum(Frustum* frustum)
     planes.m14 = modelview.m12 * projection.m2 + modelview.m13 * projection.m6 + modelview.m14 * projection.m10 + modelview.m15 * projection.m14;
     planes.m15 = modelview.m12 * projection.m3 + modelview.m13 * projection.m7 + modelview.m14 * projection.m11 + modelview.m15 * projection.m15;
 
-    frustum.Planes[Right] = (Vector4){ planes.m3 - planes.m0, planes.m7 - planes.m4, planes.m11 - planes.m8, planes.m15 - planes.m12 };
+    frustum.Planes[Right] = Vector4( planes.m3 - planes.m0, planes.m7 - planes.m4, planes.m11 - planes.m8, planes.m15 - planes.m12 );
     NormalizePlane(&frustum.Planes[Right]);
 
-    frustum.Planes[Left] = (Vector4){ planes.m3 + planes.m0, planes.m7 + planes.m4, planes.m11 + planes.m8, planes.m15 + planes.m12 };
+    frustum.Planes[Left] = Vector4( planes.m3 + planes.m0, planes.m7 + planes.m4, planes.m11 + planes.m8, planes.m15 + planes.m12 );
     NormalizePlane(&frustum.Planes[Left]);
 
-    frustum.Planes[Top] = (Vector4){ planes.m3 - planes.m1, planes.m7 - planes.m5, planes.m11 - planes.m9, planes.m15 - planes.m13 };
+    frustum.Planes[Top] = Vector4( planes.m3 - planes.m1, planes.m7 - planes.m5, planes.m11 - planes.m9, planes.m15 - planes.m13 );
     NormalizePlane(&frustum.Planes[Top]);
 
-    frustum.Planes[Bottom] = (Vector4){ planes.m3 + planes.m1, planes.m7 + planes.m5, planes.m11 + planes.m9, planes.m15 + planes.m13 };
+    frustum.Planes[Bottom] = Vector4( planes.m3 + planes.m1, planes.m7 + planes.m5, planes.m11 + planes.m9, planes.m15 + planes.m13 );
     NormalizePlane(&frustum.Planes[Bottom]);
 
-    frustum.Planes[Back] = (Vector4){ planes.m3 - planes.m2, planes.m7 - planes.m6, planes.m11 - planes.m10, planes.m15 - planes.m14 };
+    frustum.Planes[Back] = Vector4( planes.m3 - planes.m2, planes.m7 - planes.m6, planes.m11 - planes.m10, planes.m15 - planes.m14 );
     NormalizePlane(&frustum.Planes[Back]);
 
-    frustum.Planes[Front] = (Vector4){ planes.m3 + planes.m2, planes.m7 + planes.m6, planes.m11 + planes.m10, planes.m15 + planes.m14 };
+    frustum.Planes[Front] = Vector4( planes.m3 + planes.m2, planes.m7 + planes.m6, planes.m11 + planes.m10, planes.m15 + planes.m14 );
     NormalizePlane(&frustum.Planes[Front]);
 }
 
@@ -109,7 +127,7 @@ float DistanceToPlane(const Vector4* plane, float x, float y, float z)
 
 bool PointInFrustumV(Frustum* frustum, Vector3 position)
 {
-    if (frustum == NULL)
+    if (frustum is null)
         return false;
 
     for (int i = 0; i < 6; i++)
@@ -123,7 +141,7 @@ bool PointInFrustumV(Frustum* frustum, Vector3 position)
 
 bool PointInFrustum(Frustum* frustum, float x, float y, float z)
 {
-    if (frustum == NULL)
+    if (frustum is null)
         return false;
 
     for (int i = 0; i < 6; i++)
@@ -137,7 +155,7 @@ bool PointInFrustum(Frustum* frustum, float x, float y, float z)
 
 bool SphereInFrustumV(Frustum* frustum, Vector3 position, float radius)
 {
-    if (frustum == NULL)
+    if (frustum is null)
         return false;
 
     for (int i = 0; i < 6; i++)
