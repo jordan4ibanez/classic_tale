@@ -2,6 +2,7 @@ module graphics.camera_handler;
 
 import controls.mouse;
 import game.player;
+import graphics.frustum_culling;
 import graphics.gui;
 import math.constants;
 import math.vec2d;
@@ -11,7 +12,6 @@ import raylib.rcamera;
 import std.math.trigonometry;
 import std.stdio;
 import utility.window;
-import graphics.frustum_culling;
 
 static final const class CameraHandler {
 static:
@@ -38,6 +38,14 @@ public: //* BEGIN PUBLIC API.
 
     void terminate() {
         // I'm sure I'll find something to put in here.
+    }
+
+    bool positionInFrustum(double x, double y, double z) {
+        return pointInFrustum(&frustum, x, y, z);
+    }
+
+    bool aabbInFrustum(Vec3d min, Vec3d max) {
+        return aabBoxInFrustum(&frustum, min, max);
     }
 
     Vec3d getLookVector() {
@@ -101,7 +109,7 @@ public: //* BEGIN PUBLIC API.
 
     void begin() {
         BeginMode3D(camera);
-
+        extractFrustum(&frustum);
     }
 
     void end() {
