@@ -41,12 +41,12 @@ private static const enum MAX = 6;
 
 void normalizePlane(ref Vec4d plane) {
 
-    double magnitude = sqrt(plane.x * plane.x + plane.y * plane.y + plane.z * plane.z);
+    double magnitudeDivisor = 1.0 / sqrt(plane.x * plane.x + plane.y * plane.y + plane.z * plane.z);
 
-    plane.x /= magnitude;
-    plane.y /= magnitude;
-    plane.z /= magnitude;
-    plane.w /= magnitude;
+    plane.x *= magnitudeDivisor;
+    plane.y *= magnitudeDivisor;
+    plane.z *= magnitudeDivisor;
+    plane.w *= magnitudeDivisor;
 }
 
 void extractFrustum(ref Frustum frustum) {
