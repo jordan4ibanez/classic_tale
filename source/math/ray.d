@@ -42,6 +42,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
     // https://www.cs.princeton.edu/courses/archive/fall00/cs426/lectures/raycast/sld017.htm
     // https://stackoverflow.com/questions/26920705/ray-plane-intersection
     // https://tavianator.com/2011/ray_box.html
+    // https://en.wikipedia.org/wiki/Cyrus%E2%80%93Beck_algorithm
 
     if (rayPoints is null) {
         // ~6KB data roughly.
@@ -222,7 +223,9 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                 }
 
                 //? Wideband check.
-                // Cyrus-Beck clipping
+                //? Cyrus-Beck clipping.
+                //? Basically in this section it is doing a "do not care about details" check
+                //? to see if the ray intersects the AABB. It's either yes or no.
                 // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html 
 
                 double sizeX = 1.0;
