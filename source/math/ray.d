@@ -264,7 +264,14 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     continue;
                 }
 
+                //? Narrow band.
+                //? If here, the ray is definitively intersecting the AABB.
+                //? Find out where it enters. Do not care about where it exits.
+                //? It is using infinite plane faces with a 2D collision detection
+                //? to determine whether the point is in bounds on the face.
                 // https://stackoverflow.com/a/26930963 https://creativecommons.org/licenses/by-sa/3.0/
+
+                // todo: make this process the selection box on more complex blocks.
 
                 import game.map;
 
