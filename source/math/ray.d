@@ -290,7 +290,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     double collisionYDistance = float.max;
                     double collisionZDistance = float.max;
 
-                    // todo: use all the collision distances and check which one is the lowest then save that collision point.
+                    // todo: get the block box and loop on that until hit or no more aabb.
 
                     // This indicates which way the face, is facing.
 
@@ -400,22 +400,36 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         }
                     }
 
-                    if (collisionX || collisionY || collisionZ) {
-                        hit = true;
+                    double selectedDistance = float.nan;
+
+                    if (collisionX && collisionXDistance < collisionYDistance &&
+                        collisionXDistance < collisionZDistance) {
+
+                        selectedDistance = collisionXDistance;
+
+                    } else if (collisionY && collisionYDistance < collisionXDistance &&
+                        collisionYDistance < collisionZDistance) {
+
+                        selectedDistance = collisionYDistance;
+
+                    } else if (collisionZ && collisionZDistance <= collisionXDistance &&
+                        collisionZDistance <= collisionYDistance) {
+
+                        selectedDistance = collisionZDistance;
                     }
 
-                    if (!collisionX && !collisionY && !collisionZ) {
-                        writeln("warning: a floating point error occured in the raycast");
+                    if (!isNaN(selectedDistance)) {
+
+                        wideBandPoints[cache] = false;
+
+                        (rayPoints + currentIndex).x = thisLocalX;
+                        (rayPoints + currentIndex).y = thisLocalY;
+                        (rayPoints + currentIndex).z = thisLocalZ;
+
+                        currentIndex++;
+
                     }
                 }
-
-                wideBandPoints[cache] = false;
-
-                (rayPoints + currentIndex).x = thisLocalX;
-                (rayPoints + currentIndex).y = thisLocalY;
-                (rayPoints + currentIndex).z = thisLocalZ;
-                currentIndex++;
-
             }
         }
 
