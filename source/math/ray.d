@@ -403,6 +403,10 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     if (collisionX || collisionY || collisionZ) {
                         hit = true;
                     }
+
+                    if (!collisionX && !collisionY && !collisionZ) {
+                        writeln("warning: a floating point error occured in the raycast");
+                    }
                 }
 
                 wideBandPoints[cache] = false;
