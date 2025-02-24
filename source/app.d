@@ -95,6 +95,7 @@ void main() {
 
 		Player.doControls();
 		CameraHandler.updateToPlayerPosition();
+		Player.move();
 
 		const Vec3i playerBlockSelection = Player.getBlockSelection();
 
