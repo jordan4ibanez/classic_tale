@@ -130,7 +130,8 @@ void main() {
 			}
 		}
 
-		//! Raycast after world modification or the selectionbox will stick around for 1 frame.
+		//! Raycast after everything or the selectionbox will be outdated by 1 frame.
+		//? Keep this last.
 		Player.raycast();
 
 		BeginDrawing();
