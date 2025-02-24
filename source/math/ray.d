@@ -18,6 +18,12 @@ import std.datetime.stopwatch;
 private static bool[Vec3i] wideBandPoints;
 private static Vec3i* rayPoints;
 
+struct RayCollision {
+    Vec3i blockPosition;
+    Vec3d exactPosition;
+    Vec3i faceDirection;
+}
+
 struct RayResult {
     const(const Vec3i*) pointsArray;
     const ulong arrayLength;
