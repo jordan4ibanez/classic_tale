@@ -11,12 +11,14 @@ import raylib.rcamera;
 import std.math.trigonometry;
 import std.stdio;
 import utility.window;
+import graphics.frustum_culling;
 
 static final const class CameraHandler {
 static:
 private:
 
     Camera3D camera;
+    Frustum frustum;
 
 public: //* BEGIN PUBLIC API.
 
