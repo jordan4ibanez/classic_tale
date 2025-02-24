@@ -432,8 +432,9 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         const double dirY = directionY;
                         const double dirZ = directionZ;
 
-                        Vec3d collisionPoint = Vec3d(rayOriginX + dirX * selectedDistance,
-                            rayOriginY + dirY * selectedDistance, rayOriginZ + dirZ * selectedDistance);
+                        const double collisionPointX = rayOriginX + dirX * selectedDistance;
+                        const double collisionPointY = rayOriginY + dirY * selectedDistance;
+                        const double collisionPointZ = rayOriginZ + dirZ * selectedDistance;
 
                         // import raylib;
                         // DrawCubeWires(collisionPoint.toRaylib(), 0.03, 0.03, 0.03, Colors.GREEN);
@@ -442,9 +443,9 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         (rayPoints + currentIndex).faceDirection.y = faceDirectionY;
                         (rayPoints + currentIndex).faceDirection.z = faceDirectionZ;
 
-                        (rayPoints + currentIndex).collisionPoint.x = collisionPoint.x;
-                        (rayPoints + currentIndex).collisionPoint.y = collisionPoint.y;
-                        (rayPoints + currentIndex).collisionPoint.z = collisionPoint.z;
+                        (rayPoints + currentIndex).collisionPoint.x = collisionPointX;
+                        (rayPoints + currentIndex).collisionPoint.y = collisionPointY;
+                        (rayPoints + currentIndex).collisionPoint.z = collisionPointZ;
 
                         (rayPoints + currentIndex).blockPosition.x = thisLocalX;
                         (rayPoints + currentIndex).blockPosition.y = thisLocalY;
