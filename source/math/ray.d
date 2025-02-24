@@ -292,7 +292,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                     // todo: use all the collision distances and check which one is the lowest then save that collision point.
 
-                    // fixme: I think I named these wrong lol.
+                    // This indicates which way the face, is facing.
 
                     const bool facingNegativeX = vec3dDotProduct(Vec3d(directionX, directionY, directionZ),
                         Vec3d(1, 0, 0)) > 0.0;
