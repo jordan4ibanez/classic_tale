@@ -437,12 +437,9 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         Vec3d collisionPoint = Vec3d(rayOriginX + dirX * selectedDistance,
                             rayOriginY + dirY * selectedDistance, rayOriginZ + dirZ * selectedDistance);
 
-                        // DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
-                        //         .BLUE);
+                        // import raylib;
+                        // DrawCubeWires(collisionPoint.toRaylib(), 0.03, 0.03, 0.03, Colors.GREEN);
 
-                        import raylib;
-
-                        DrawSphere(collisionPoint.toRaylib(), 0.03, Colors.GOLD);
 
                         (rayPoints + currentIndex).collisionPoint.x = collisionPoint.x;
                         (rayPoints + currentIndex).collisionPoint.y = collisionPoint.y;
