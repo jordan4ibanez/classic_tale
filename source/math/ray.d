@@ -290,10 +290,15 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     double collisionYDistance = float.max;
                     double collisionZDistance = float.max;
 
+                    // todo: use all the collision distances and check which one is the lowest then save that collision point.
+
                     const bool facingNegativeX = vec3dDotProduct(Vec3d(directionX, directionY, directionZ),
                         Vec3d(1, 0, 0)) > 0.0;
 
-                    //? X face check.
+                    const bool facingNegativeY = vec3dDotProduct(Vec3d(directionX, directionY, directionZ),
+                        Vec3d(0, 1, 0)) > 0.0;
+
+                    //? X face collision.
                     {
                         const double normalX = (facingNegativeX) ? -1.0 : 1.0;
                         const double normalY = 0.0;
@@ -310,7 +315,6 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         const double rayOriginY = startY;
                         const double rayOriginZ = startZ;
 
-                        // todo: use all the collision distances and check which one is the lowest then save that collision point.
                         const double collisionDistance = (distanceNormal - (
                                 normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) / s;
 
@@ -325,69 +329,36 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         }
                     }
 
-                    // //? Y min.
-                    // {
-                    //     const double normalX = 0.0;
-                    //     const double normalY = -1.0;
-                    //     const double normalZ = 0.0;
-                    //     const double x = xMin;
-                    //     const double y = yMin;
-                    //     const double z = zMin;
-                    //     const double distanceNormal = normalX * x + normalY * y + normalZ * z;
-                    //     const double dirX = directionX;
-                    //     const double dirY = directionY;
-                    //     const double dirZ = directionZ;
-                    //     const double s = normalX * dirX + normalY * dirY + normalZ * dirZ;
-                    //     const double rayOriginX = startX;
-                    //     const double rayOriginY = startY;
-                    //     const double rayOriginZ = startZ;
+                    //? Y face collision.
+                    {
+                        const double normalX = 0.0;
+                        const double normalY = (facingNegativeY) ? -1.0 : 1.0;
+                        const double normalZ = 0.0;
+                        const double x = xMin;
+                        const double y = (facingNegativeY) ? yMin : yMax;
+                        const double z = zMin;
+                        const double distanceNormal = normalX * x + normalY * y + normalZ * z;
+                        const double dirX = directionX;
+                        const double dirY = directionY;
+                        const double dirZ = directionZ;
+                        const double s = normalX * dirX + normalY * dirY + normalZ * dirZ;
+                        const double rayOriginX = startX;
+                        const double rayOriginY = startY;
+                        const double rayOriginZ = startZ;
 
-                    //     // todo: use all the collision distances and check which one is the lowest then save that collision point.
-                    //     const double collisionDistance = (distanceNormal - (
-                    //             normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) / s;
+                        const double collisionDistance = (distanceNormal - (
+                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) / s;
 
-                    //     Vec3d collisionPoint = Vec3d(rayOriginX + dirX * collisionDistance,
-                    //         rayOriginY + dirY * collisionDistance, rayOriginZ + dirZ * collisionDistance);
+                        Vec3d collisionPoint = Vec3d(rayOriginX + dirX * collisionDistance,
+                            rayOriginY + dirY * collisionDistance, rayOriginZ + dirZ * collisionDistance);
 
-                    //     if (collisionPoint.x >= xMin && collisionPoint.x <= xMax &&
-                    //         collisionPoint.z >= zMin && collisionPoint.z <= zMax) {
-                    //         DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
-                    //                 .GREEN);
-                    //         collisionY = true;
-                    //     }
-                    // }
-
-                    // //? Y max.
-                    // {
-                    //     const double normalX = 0.0;
-                    //     const double normalY = 1.0;
-                    //     const double normalZ = 0.0;
-                    //     const double x = xMin;
-                    //     const double y = yMax;
-                    //     const double z = zMin;
-                    //     const double distanceNormal = normalX * x + normalY * y + normalZ * z;
-                    //     const double dirX = directionX;
-                    //     const double dirY = directionY;
-                    //     const double dirZ = directionZ;
-                    //     const double s = normalX * dirX + normalY * dirY + normalZ * dirZ;
-                    //     const double rayOriginX = startX;
-                    //     const double rayOriginY = startY;
-                    //     const double rayOriginZ = startZ;
-
-                    //     // todo: use all the collision distances and check which one is the lowest then save that collision point.
-                    //     const double collisionDistance = (distanceNormal - (
-                    //             normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) / s;
-
-                    //     Vec3d collisionPoint = Vec3d(rayOriginX + dirX * collisionDistance,
-                    //         rayOriginY + dirY * collisionDistance, rayOriginZ + dirZ * collisionDistance);
-
-                    //     if (collisionPoint.x >= xMin && collisionPoint.x <= xMax &&
-                    //         collisionPoint.z >= zMin && collisionPoint.z <= zMax) {
-                    //         DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
-                    //                 .GREEN);
-                    //         collisionY = true;
-                    //     }
-                    // }
+                        if (collisionPoint.x >= xMin && collisionPoint.x <= xMax &&
+                            collisionPoint.z >= zMin && collisionPoint.z <= zMax) {
+                            DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
+                                    .GREEN);
+                            collisionY = true;
+                        }
+                    }
 
                     // //? Z min.
                     // {
@@ -453,8 +424,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     //     }
                     // }
 
-                    if (collisionX || collisionX || collisionY || collisionY || collisionZ ||
-                        collisionZ) {
+                    if (collisionX || collisionY || collisionZ) {
                         hit = true;
                     }
                 }
