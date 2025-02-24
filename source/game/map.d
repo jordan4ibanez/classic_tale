@@ -68,7 +68,7 @@ public: //* BEGIN PUBLIC API.
         Vec3d position;
         Vec3d max;
 
-        foreach (const chunkPos, const ref thisChunk; database) {
+        foreach (const chunkPos, const thisChunk; database) {
             position.x = chunkPos.x * CHUNK_WIDTH;
             position.z = chunkPos.y * CHUNK_WIDTH;
 
