@@ -136,7 +136,9 @@ void main() {
 		Player.raycast();
 
 		BeginDrawing();
-		ClearBackground(Colors.RAYWHITE);
+
+		ClearBackground(Color(120, 166, 255, 255));
+
 		CameraHandler.begin();
 		{
 			if (drawWorld) {
