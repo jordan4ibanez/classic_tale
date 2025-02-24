@@ -43,12 +43,12 @@ void NormalizePlane(Vector4* plane)
     if (plane == NULL)
         return;
 
-    float magnitude = sqrtf(plane->x * plane->x + plane->y * plane->y + plane->z * plane->z);
+    float magnitude = sqrtf(plane.x * plane.x + plane.y * plane.y + plane.z * plane.z);
 
-    plane->x /= magnitude;
-    plane->y /= magnitude;
-    plane->z /= magnitude;
-    plane->w /= magnitude;
+    plane.x /= magnitude;
+    plane.y /= magnitude;
+    plane.z /= magnitude;
+    plane.w /= magnitude;
 }
 
 void ExtractFrustum(Frustum* frustum)
@@ -78,33 +78,33 @@ void ExtractFrustum(Frustum* frustum)
     planes.m14 = modelview.m12 * projection.m2 + modelview.m13 * projection.m6 + modelview.m14 * projection.m10 + modelview.m15 * projection.m14;
     planes.m15 = modelview.m12 * projection.m3 + modelview.m13 * projection.m7 + modelview.m14 * projection.m11 + modelview.m15 * projection.m15;
 
-    frustum->Planes[Right] = (Vector4){ planes.m3 - planes.m0, planes.m7 - planes.m4, planes.m11 - planes.m8, planes.m15 - planes.m12 };
-    NormalizePlane(&frustum->Planes[Right]);
+    frustum.Planes[Right] = (Vector4){ planes.m3 - planes.m0, planes.m7 - planes.m4, planes.m11 - planes.m8, planes.m15 - planes.m12 };
+    NormalizePlane(&frustum.Planes[Right]);
 
-    frustum->Planes[Left] = (Vector4){ planes.m3 + planes.m0, planes.m7 + planes.m4, planes.m11 + planes.m8, planes.m15 + planes.m12 };
-    NormalizePlane(&frustum->Planes[Left]);
+    frustum.Planes[Left] = (Vector4){ planes.m3 + planes.m0, planes.m7 + planes.m4, planes.m11 + planes.m8, planes.m15 + planes.m12 };
+    NormalizePlane(&frustum.Planes[Left]);
 
-    frustum->Planes[Top] = (Vector4){ planes.m3 - planes.m1, planes.m7 - planes.m5, planes.m11 - planes.m9, planes.m15 - planes.m13 };
-    NormalizePlane(&frustum->Planes[Top]);
+    frustum.Planes[Top] = (Vector4){ planes.m3 - planes.m1, planes.m7 - planes.m5, planes.m11 - planes.m9, planes.m15 - planes.m13 };
+    NormalizePlane(&frustum.Planes[Top]);
 
-    frustum->Planes[Bottom] = (Vector4){ planes.m3 + planes.m1, planes.m7 + planes.m5, planes.m11 + planes.m9, planes.m15 + planes.m13 };
-    NormalizePlane(&frustum->Planes[Bottom]);
+    frustum.Planes[Bottom] = (Vector4){ planes.m3 + planes.m1, planes.m7 + planes.m5, planes.m11 + planes.m9, planes.m15 + planes.m13 };
+    NormalizePlane(&frustum.Planes[Bottom]);
 
-    frustum->Planes[Back] = (Vector4){ planes.m3 - planes.m2, planes.m7 - planes.m6, planes.m11 - planes.m10, planes.m15 - planes.m14 };
-    NormalizePlane(&frustum->Planes[Back]);
+    frustum.Planes[Back] = (Vector4){ planes.m3 - planes.m2, planes.m7 - planes.m6, planes.m11 - planes.m10, planes.m15 - planes.m14 };
+    NormalizePlane(&frustum.Planes[Back]);
 
-    frustum->Planes[Front] = (Vector4){ planes.m3 + planes.m2, planes.m7 + planes.m6, planes.m11 + planes.m10, planes.m15 + planes.m14 };
-    NormalizePlane(&frustum->Planes[Front]);
+    frustum.Planes[Front] = (Vector4){ planes.m3 + planes.m2, planes.m7 + planes.m6, planes.m11 + planes.m10, planes.m15 + planes.m14 };
+    NormalizePlane(&frustum.Planes[Front]);
 }
 
 float DistanceToPlaneV(const Vector4* plane, const Vector3* position)
 {
-    return (plane->x * position->x + plane->y * position->y + plane->z * position->z + plane->w);
+    return (plane.x * position.x + plane.y * position.y + plane.z * position.z + plane.w);
 }
 
 float DistanceToPlane(const Vector4* plane, float x, float y, float z)
 {
-    return (plane->x * x + plane->y * y + plane->z * z + plane->w);
+    return (plane.x * x + plane.y * y + plane.z * z + plane.w);
 }
 
 bool PointInFrustumV(Frustum* frustum, Vector3 position)
@@ -114,7 +114,7 @@ bool PointInFrustumV(Frustum* frustum, Vector3 position)
 
     for (int i = 0; i < 6; i++)
     {
-        if (DistanceToPlaneV(&frustum->Planes[i], &position) <= 0) // point is behind plane
+        if (DistanceToPlaneV(&frustum.Planes[i], &position) <= 0) // point is behind plane
             return false;
     }
 
@@ -128,7 +128,7 @@ bool PointInFrustum(Frustum* frustum, float x, float y, float z)
 
     for (int i = 0; i < 6; i++)
     {
-        if (DistanceToPlane(&frustum->Planes[i], x, y, z) <= 0) // point is behind plane
+        if (DistanceToPlane(&frustum.Planes[i], x, y, z) <= 0) // point is behind plane
             return false;
     }
 
@@ -142,7 +142,7 @@ bool SphereInFrustumV(Frustum* frustum, Vector3 position, float radius)
 
     for (int i = 0; i < 6; i++)
     {
-        if (DistanceToPlaneV(&frustum->Planes[i], &position) < -radius) // center is behind plane by more than the radius
+        if (DistanceToPlaneV(&frustum.Planes[i], &position) < -radius) // center is behind plane by more than the radius
             return false;
     }
 
@@ -180,28 +180,28 @@ bool AABBoxInFrustum(Frustum* frustum, Vector3 min, Vector3 max)
     {
         bool oneInside = false;
 
-        if (DistanceToPlane(&frustum->Planes[i], min.x, min.y, min.z) >= 0)
+        if (DistanceToPlane(&frustum.Planes[i], min.x, min.y, min.z) >= 0)
             oneInside = true;
 
-        if (DistanceToPlane(&frustum->Planes[i], max.x, min.y, min.z) >= 0)
+        if (DistanceToPlane(&frustum.Planes[i], max.x, min.y, min.z) >= 0)
             oneInside = true;
 
-        if (DistanceToPlane(&frustum->Planes[i], max.x, max.y, min.z) >= 0)
+        if (DistanceToPlane(&frustum.Planes[i], max.x, max.y, min.z) >= 0)
             oneInside = true;
 
-        if (DistanceToPlane(&frustum->Planes[i], min.x, max.y, min.z) >= 0)
+        if (DistanceToPlane(&frustum.Planes[i], min.x, max.y, min.z) >= 0)
             oneInside = true;
 
-        if (DistanceToPlane(&frustum->Planes[i], min.x, min.y, max.z) >= 0)
+        if (DistanceToPlane(&frustum.Planes[i], min.x, min.y, max.z) >= 0)
             oneInside = true;
 
-        if (DistanceToPlane(&frustum->Planes[i], max.x, min.y, max.z) >= 0)
+        if (DistanceToPlane(&frustum.Planes[i], max.x, min.y, max.z) >= 0)
             oneInside = true;
 
-        if (DistanceToPlane(&frustum->Planes[i], max.x, max.y, max.z) >= 0)
+        if (DistanceToPlane(&frustum.Planes[i], max.x, max.y, max.z) >= 0)
             oneInside = true;
 
-        if (DistanceToPlane(&frustum->Planes[i], min.x, max.y, max.z) >= 0)
+        if (DistanceToPlane(&frustum.Planes[i], min.x, max.y, max.z) >= 0)
             oneInside = true;
 
         if (!oneInside)
