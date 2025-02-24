@@ -29,13 +29,13 @@ struct Frustum {
     Vector4[6] planes;
 }
 
-const static enum BACK = 0;
-const static enum FRONT = 1;
-const static enum BOTTOM = 2;
-const static enum TOP = 3;
-const static enum RIGHT = 4;
-const static enum LEFT = 5;
-const static enum MAX = 6;
+private static const enum BACK = 0;
+private static const enum FRONT = 1;
+private static const enum BOTTOM = 2;
+private static const enum TOP = 3;
+private static const enum RIGHT = 4;
+private static const enum LEFT = 5;
+private static const enum MAX = 6;
 
 void normalizePlane(Vector4* plane) {
     if (plane is null)
