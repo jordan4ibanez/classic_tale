@@ -51,6 +51,12 @@ public: //* BEGIN PUBLIC API.
     }
 
     pragma(inline)
+    bool aabbInFrustum(const double minX, const double minY, const double minZ,
+        const double maxX, const double maxY, const double maxZ) {
+        return aabBoxInFrustum(frustum, minX, minY, minZ, maxX, maxY, maxZ);
+    }
+
+    pragma(inline)
     Vec3d getLookVector() {
         Vec3d look;
 
