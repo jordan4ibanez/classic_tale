@@ -129,6 +129,9 @@ void main() {
 
 			}
 		}
+
+		Player.raycast();
+
 		BeginDrawing();
 		ClearBackground(Colors.RAYWHITE);
 		CameraHandler.begin();
