@@ -122,32 +122,6 @@ void main() {
 						.z), Vec3d(0.5, 0.5, 0.5)).toRaylib(), 1.01, 1.01, 1.01, Colors.BLACK);
 			}
 
-			// Vec3d playerPos = Player.getPosition();
-			// BlockData thisBlock = Map.getBlockAtWorldPosition(playerPos);
-
-			Vec3d lookDir = Vec3d(1, -1, 1);
-
-			lookDir = vec3dMultiply(lookDir, Vec3d(20, 20, 20));
-			lookDir.x -= 20;
-			lookDir.y += 155;
-
-			// writeln(lookDir);
-			import math.ray;
-
-			// rayCast(Vec3d(0, 160, 0), lookDir);
-
-			// if (thisBlock.blockID != 0) {
-
-			// writeln(BlockDatabase.getBlockByID(thisBlock.blockID).name);
-
-			// Vec3d blockOutline = vec3dAdd(vec3dFloor(playerPos), Vec3d(0.5, 0.5, 0.5));
-
-			// DrawCubeWires(blockOutline.toRaylib(), 1.01, 1.01, 1.01, Colors.BLACK);
-
-			// writeln("yep");
-			// }
-
-			// DrawCube(Vector3(0, 0, 0), 0.1, 0.1, 0.1, Colors.RED);
 		}
 		CameraHandler.end();
 
