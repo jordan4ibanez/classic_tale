@@ -42,12 +42,12 @@ public: //* BEGIN PUBLIC API.
 
     pragma(inline)
     bool positionInFrustum(double x, double y, double z) {
-        return pointInFrustum(&frustum, x, y, z);
+        return pointInFrustum(frustum, x, y, z);
     }
 
     pragma(inline)
     bool aabbInFrustum(Vec3d min, Vec3d max) {
-        return aabBoxInFrustum(&frustum, min, max);
+        return aabBoxInFrustum(frustum, min, max);
     }
 
     pragma(inline)
@@ -112,7 +112,7 @@ public: //* BEGIN PUBLIC API.
 
     void begin() {
         BeginMode3D(camera);
-        extractFrustum(&frustum);
+        extractFrustum(frustum);
     }
 
     void end() {
