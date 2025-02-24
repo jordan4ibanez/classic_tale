@@ -47,7 +47,7 @@ struct AABB {
     }
 
     /// Entity constructor.
-    this(const ref Vec3d position, const ref Vec2d size) {
+    this(const Vec3d position, const Vec2d size) {
         this.min.x = position.x - size.x / 2;
         this.min.y = position.y;
         this.min.z = position.z - size.x / 2;
