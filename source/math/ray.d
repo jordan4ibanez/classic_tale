@@ -462,6 +462,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
         thisDistance += 1.0;
     }
 
+    // Now sort it from near to far.
     rayPoints[0 .. currentIndex].sort!((const ref RayCollision a, const ref RayCollision b) {
         double aDistX = endX - a.collisionPoint.x;
         double aDistY = endY - a.collisionPoint.y;
