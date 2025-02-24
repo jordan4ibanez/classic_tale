@@ -83,6 +83,10 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
     }
 
     //? Ultra wideband.
+    //? Literally just fire the ray into the air block by block in
+    //? the direction it's pointing and collect all block points in
+    //? a 3x3 area. It will move into the wideband during this.
+    //? You can think of this kind of like an octree, but for logic.
 
     wideBandPoints.clear();
 
