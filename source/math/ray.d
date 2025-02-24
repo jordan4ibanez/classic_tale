@@ -331,6 +331,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                             DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
                                     .RED);
                             collisionX = true;
+                            collisionXDistance = collisionDistance;
                         }
                     }
 
@@ -362,6 +363,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                             DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
                                     .GREEN);
                             collisionY = true;
+                            collisionYDistance = collisionDistance;
                         }
                     }
 
@@ -394,6 +396,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                             DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
                                     .BLUE);
                             collisionZ = true;
+                            collisionZDistance = collisionDistance;
                         }
                     }
 
