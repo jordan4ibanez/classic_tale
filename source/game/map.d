@@ -108,9 +108,29 @@ public: //* BEGIN PUBLIC API.
         );
     }
 
+    Vec2i calculateChunkAtWorldPosition(double x, double z) {
+        return Vec2i(
+            cast(int) floor(x / CHUNK_WIDTH),
+            cast(int) floor(z / CHUNK_WIDTH),
+        );
+    }
+
     Vec2i getXZInChunk(Vec3d position) {
         int x = cast(int) floor(position.x % CHUNK_WIDTH);
         int z = cast(int) floor(position.z % CHUNK_WIDTH);
+        // Account for negatives.
+        if (x < 0) {
+            x += CHUNK_WIDTH;
+        }
+        if (z < 0) {
+            z += CHUNK_WIDTH;
+        }
+        return Vec2i(x, z);
+    }
+
+    Vec2i getXZInChunk(double px, double pz) {
+        int x = cast(int) floor(px % CHUNK_WIDTH);
+        int z = cast(int) floor(pz % CHUNK_WIDTH);
         // Account for negatives.
         if (x < 0) {
             x += CHUNK_WIDTH;
@@ -131,6 +151,26 @@ public: //* BEGIN PUBLIC API.
         Vec2i xzPosInChunk = getXZInChunk(position);
 
         int yPosInChunk = cast(int) floor(position.y);
+
+        // Out of bounds.
+        if (yPosInChunk < 0 || yPosInChunk >= CHUNK_HEIGHT) {
+            writeln("WARNING! trying to read out of bounds! " ~ to!string(yPosInChunk));
+            return BlockData();
+        }
+
+        return database[chunkID].data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk];
+    }
+
+    BlockData getBlockAtWorldPosition(double x, double y, double z) {
+        Vec2i chunkID = calculateChunkAtWorldPosition(x, z);
+
+        if (chunkID !in database) {
+            return BlockData();
+        }
+
+        Vec2i xzPosInChunk = getXZInChunk(x, z);
+
+        int yPosInChunk = cast(int) floor(y);
 
         // Out of bounds.
         if (yPosInChunk < 0 || yPosInChunk >= CHUNK_HEIGHT) {
