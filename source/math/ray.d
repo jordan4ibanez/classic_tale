@@ -51,7 +51,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
     // https://en.wikipedia.org/wiki/Cyrus%E2%80%93Beck_algorithm
 
     if (rayPoints is null) {
-        // ~6KB data roughly.
+        // ~28KB data roughly.
         rayPoints = cast(RayCollision*) GC.malloc(RayCollision.sizeof * 512);
     }
 
