@@ -23,6 +23,15 @@ struct Vec2d {
     }
 }
 
+/// Swap X and Y.
+Vec2d vec2dSwap(Vec2d input) {
+    Vec2d result = input;
+    const double x = result.x;
+    result.x = result.y;
+    result.y = x;
+    return result;
+}
+
 /// Vector with components value 0.0.
 Vec2d vec2dZero() {
     Vec2d result = Vec2d(0.0, 0.0);
