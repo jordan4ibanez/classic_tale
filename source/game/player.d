@@ -47,7 +47,7 @@ private:
     Vec3d position = Vec3d(0, 161, 0);
     Vec3d velocity = Vec3d(0, 0, 0);
     Vec3i blockSelection = Vec3i(0, -1, 0);
-
+    Vec3i blockSelectionAbove = Vec3i(0, -1, 0);
     double eyeHeight = 1.625;
     int inChunk = int.max;
     bool firstGen = true;
