@@ -41,6 +41,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
     // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html
     // https://www.cs.princeton.edu/courses/archive/fall00/cs426/lectures/raycast/sld017.htm
     // https://stackoverflow.com/questions/26920705/ray-plane-intersection
+    // https://tavianator.com/2011/ray_box.html
 
     if (rayPoints is null) {
         // ~6KB data roughly.
