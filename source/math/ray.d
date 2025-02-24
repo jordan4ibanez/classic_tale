@@ -293,12 +293,12 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     const bool facingNegativeX = vec3dDotProduct(Vec3d(directionX, directionY, directionZ),
                         Vec3d(1, 0, 0)) > 0.0;
 
-                    if (facingNegativeX) {
-                        //? X min.
-                        const double normalX = -1.0;
+                    //? X face check.
+                    {
+                        const double normalX = (facingNegativeX) ? -1.0 : 1.0;
                         const double normalY = 0.0;
                         const double normalZ = 0.0;
-                        const double x = xMin;
+                        const double x = (facingNegativeX) ? xMin : xMax;
                         const double y = yMin;
                         const double z = zMin;
                         const double distanceNormal = normalX * x + normalY * y + normalZ * z;
@@ -311,35 +311,6 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         const double rayOriginZ = startZ;
 
                         // todo: use all the collision distances and check which one is the lowest then save that collision point.
-                        const double collisionDistance = (distanceNormal - (
-                                normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) / s;
-
-                        Vec3d collisionPoint = Vec3d(rayOriginX + dirX * collisionDistance,
-                            rayOriginY + dirY * collisionDistance, rayOriginZ + dirZ * collisionDistance);
-
-                        if (collisionPoint.y >= yMin && collisionPoint.y <= yMax &&
-                            collisionPoint.z >= zMin && collisionPoint.z <= zMax) {
-                            DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
-                                    .RED);
-                            collisionX = true;
-                        }
-                    } else {
-                        //? X max.
-                        const double normalX = 1.0;
-                        const double normalY = 0.0;
-                        const double normalZ = 0.0;
-                        const double x = xMax;
-                        const double y = yMin;
-                        const double z = zMin;
-                        const double distanceNormal = normalX * x + normalY * y + normalZ * z;
-                        const double dirX = directionX;
-                        const double dirY = directionY;
-                        const double dirZ = directionZ;
-                        const double s = normalX * dirX + normalY * dirY + normalZ * dirZ;
-                        const double rayOriginX = startX;
-                        const double rayOriginY = startY;
-                        const double rayOriginZ = startZ;
-
                         const double collisionDistance = (distanceNormal - (
                                 normalX * rayOriginX + normalY * rayOriginY + normalZ * rayOriginZ)) / s;
 
