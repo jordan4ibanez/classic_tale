@@ -180,35 +180,44 @@ bool aabBoxInFrustum(const ref Frustum frustum, Vec3d min, Vec3d max) {
         return true;
 
     // Check to see if all points are outside of any one plane, if so the entire box is outside.
-    for (int i = 0; i < 6; i++) {
+    foreach (const ref plane; frustum.planes) {
         bool oneInside = false;
 
-        if (distanceToPlane(frustum.planes[i], min.x, min.y, min.z) >= 0)
+        if (distanceToPlane(plane, min.x, min.y, min.z) >= 0) {
             oneInside = true;
+        }
 
-        if (distanceToPlane(frustum.planes[i], max.x, min.y, min.z) >= 0)
+        if (distanceToPlane(plane, max.x, min.y, min.z) >= 0) {
             oneInside = true;
+        }
 
-        if (distanceToPlane(frustum.planes[i], max.x, max.y, min.z) >= 0)
+        if (distanceToPlane(plane, max.x, max.y, min.z) >= 0) {
             oneInside = true;
+        }
 
-        if (distanceToPlane(frustum.planes[i], min.x, max.y, min.z) >= 0)
+        if (distanceToPlane(plane, min.x, max.y, min.z) >= 0) {
             oneInside = true;
+        }
 
-        if (distanceToPlane(frustum.planes[i], min.x, min.y, max.z) >= 0)
+        if (distanceToPlane(plane, min.x, min.y, max.z) >= 0) {
             oneInside = true;
+        }
 
-        if (distanceToPlane(frustum.planes[i], max.x, min.y, max.z) >= 0)
+        if (distanceToPlane(plane, max.x, min.y, max.z) >= 0) {
             oneInside = true;
+        }
 
-        if (distanceToPlane(frustum.planes[i], max.x, max.y, max.z) >= 0)
+        if (distanceToPlane(plane, max.x, max.y, max.z) >= 0) {
             oneInside = true;
+        }
 
-        if (distanceToPlane(frustum.planes[i], min.x, max.y, max.z) >= 0)
+        if (distanceToPlane(plane, min.x, max.y, max.z) >= 0) {
             oneInside = true;
+        }
 
-        if (!oneInside)
+        if (!oneInside) {
             return false;
+        }
     }
 
     // The box extends outside the frustum but crosses it.
