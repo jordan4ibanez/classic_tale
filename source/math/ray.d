@@ -57,28 +57,22 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     // Bump it out of strange floating point issues.
     if (startX % 1.0 == 0) {
-        // writeln("bump 1");
         startX += 0.00001;
     }
     if (startY % 1.0 == 0) {
-        // writeln("bump 2");
         startY += 0.00001;
     }
     if (startZ % 1.0 == 0) {
-        // writeln("bump 3");
         startZ += 0.00001;
     }
 
     if (endX % 1.0 == 0) {
-        // writeln("bump 4");
         endX += 0.00001;
     }
     if (endY % 1.0 == 0) {
-        // writeln("bump 5");
         endY += 0.00001;
     }
     if (endZ % 1.0 == 0) {
-        // writeln("bump 6");
         endZ += 0.00001;
     }
 
