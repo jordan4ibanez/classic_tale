@@ -158,6 +158,10 @@ public: //* BEGIN PUBLIC API.
         return blockSelection;
     }
 
+    Vec3i getBlockSelectionAbove() {
+        return blockSelectionAbove;
+    }
+
     void doControls() {
         immutable double delta = Delta.getDelta();
         immutable double yaw = CameraHandler.getYaw();
