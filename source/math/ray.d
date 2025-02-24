@@ -245,6 +245,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                 const double zMin = thisLocalZ;
                 const double zMax = thisLocalZ + sizeZ;
 
+                // This is just to drop all these variables off the stack.
                 {
                     const double xMinLocal = (thisLocalX - startX) * divisorDirectionX;
                     const double xMaxLocal = (thisLocalX + sizeX - startX) * divisorDirectionX;
