@@ -22,11 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import raylib;
+// import raylib;
+import math.vec4d;
+import math.vec3d;
 import std.math.algebraic;
 
 struct Frustum {
-    Vector4[6] planes;
+    Vec4d[6] planes;
 }
 
 private static const enum BACK = 0;
@@ -37,7 +39,7 @@ private static const enum RIGHT = 4;
 private static const enum LEFT = 5;
 private static const enum MAX = 6;
 
-void normalizePlane(Vector4* plane) {
+void normalizePlane(Vec4d* plane) {
     if (plane is null)
         return;
 
@@ -91,40 +93,40 @@ void extractFrustum(Frustum* frustum) {
     planes.m15 = modelview.m12 * projection.m3 + modelview.m13 * projection.m7 + modelview.m14 * projection.m11 +
         modelview.m15 * projection.m15;
 
-    frustum.planes[RIGHT] = Vector4(planes.m3 - planes.m0, planes.m7 - planes.m4, planes.m11 - planes.m8, planes.m15 -
+    frustum.planes[RIGHT] = Vec4d(planes.m3 - planes.m0, planes.m7 - planes.m4, planes.m11 - planes.m8, planes.m15 -
             planes.m12);
     normalizePlane(&frustum.planes[RIGHT]);
 
-    frustum.planes[LEFT] = Vector4(planes.m3 + planes.m0, planes.m7 + planes.m4, planes.m11 + planes.m8, planes.m15 +
+    frustum.planes[LEFT] = Vec4d(planes.m3 + planes.m0, planes.m7 + planes.m4, planes.m11 + planes.m8, planes.m15 +
             planes.m12);
     normalizePlane(&frustum.planes[LEFT]);
 
-    frustum.planes[TOP] = Vector4(planes.m3 - planes.m1, planes.m7 - planes.m5, planes.m11 - planes.m9, planes.m15 -
+    frustum.planes[TOP] = Vec4d(planes.m3 - planes.m1, planes.m7 - planes.m5, planes.m11 - planes.m9, planes.m15 -
             planes.m13);
     normalizePlane(&frustum.planes[TOP]);
 
-    frustum.planes[BOTTOM] = Vector4(planes.m3 + planes.m1, planes.m7 + planes.m5, planes.m11 + planes.m9, planes.m15 +
+    frustum.planes[BOTTOM] = Vec4d(planes.m3 + planes.m1, planes.m7 + planes.m5, planes.m11 + planes.m9, planes.m15 +
             planes.m13);
     normalizePlane(&frustum.planes[BOTTOM]);
 
-    frustum.planes[BACK] = Vector4(planes.m3 - planes.m2, planes.m7 - planes.m6, planes.m11 - planes.m10, planes.m15 -
+    frustum.planes[BACK] = Vec4d(planes.m3 - planes.m2, planes.m7 - planes.m6, planes.m11 - planes.m10, planes.m15 -
             planes.m14);
     normalizePlane(&frustum.planes[BACK]);
 
-    frustum.planes[FRONT] = Vector4(planes.m3 + planes.m2, planes.m7 + planes.m6, planes.m11 + planes.m10, planes.m15 +
+    frustum.planes[FRONT] = Vec4d(planes.m3 + planes.m2, planes.m7 + planes.m6, planes.m11 + planes.m10, planes.m15 +
             planes.m14);
     normalizePlane(&frustum.planes[FRONT]);
 }
 
-float distanceToPlaneV(const Vector4* plane, const Vector3* position) {
+float distanceToPlaneV(const Vec4d* plane, const Vec3d* position) {
     return (plane.x * position.x + plane.y * position.y + plane.z * position.z + plane.w);
 }
 
-float distanceToPlane(const Vector4* plane, float x, float y, float z) {
+float distanceToPlane(const Vec4d* plane, float x, float y, float z) {
     return (plane.x * x + plane.y * y + plane.z * z + plane.w);
 }
 
-bool pointInFrustumV(Frustum* frustum, Vector3 position) {
+bool pointInFrustumV(Frustum* frustum, Vec3d position) {
     if (frustum is null)
         return false;
 
@@ -150,7 +152,7 @@ bool pointInFrustum(Frustum* frustum, float x, float y, float z) {
     return true;
 }
 
-bool sphereInFrustumV(Frustum* frustum, Vector3 position, float radius) {
+bool sphereInFrustumV(Frustum* frustum, Vec3d position, float radius) {
     if (frustum is null)
         return false;
 
@@ -163,7 +165,7 @@ bool sphereInFrustumV(Frustum* frustum, Vector3 position, float radius) {
     return true;
 }
 
-bool aabBoxInFrustum(Frustum* frustum, Vector3 min, Vector3 max) {
+bool aabBoxInFrustum(Frustum* frustum, Vec3d min, Vec3d max) {
     // If any point is in and we are good.
     if (pointInFrustum(frustum, min.x, min.y, min.z))
         return true;
