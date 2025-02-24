@@ -239,29 +239,31 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                 const double zMin = thisLocalZ;
                 const double zMax = thisLocalZ + sizeZ;
 
-                const double xMinLocal = (thisLocalX - startX) * divisorDirectionX;
-                const double xMaxLocal = (thisLocalX + sizeX - startX) * divisorDirectionX;
-                const double yMinLocal = (thisLocalY - startY) * divisorDirectionY;
-                const double yMaxLocal = (thisLocalY + sizeY - startY) * divisorDirectionY;
-                const double zMinLocal = (thisLocalZ - startZ) * divisorDirectionZ;
-                const double zMaxLocal = (thisLocalZ + sizeZ - startZ) * divisorDirectionZ;
+                {
+                    const double xMinLocal = (thisLocalX - startX) * divisorDirectionX;
+                    const double xMaxLocal = (thisLocalX + sizeX - startX) * divisorDirectionX;
+                    const double yMinLocal = (thisLocalY - startY) * divisorDirectionY;
+                    const double yMaxLocal = (thisLocalY + sizeY - startY) * divisorDirectionY;
+                    const double zMinLocal = (thisLocalZ - startZ) * divisorDirectionZ;
+                    const double zMaxLocal = (thisLocalZ + sizeZ - startZ) * divisorDirectionZ;
 
-                const double aMin = fmin(xMinLocal, xMaxLocal);
-                const double aMax = fmax(xMinLocal, xMaxLocal);
-                const double bMin = fmin(yMinLocal, yMaxLocal);
-                const double bMax = fmax(yMinLocal, yMaxLocal);
-                const double cMin = fmin(zMinLocal, zMaxLocal);
-                const double cMax = fmax(zMinLocal, zMaxLocal);
-                const double eMin = fmin(aMax, bMax);
-                const double eMax = fmax(aMin, bMin);
+                    const double aMin = fmin(xMinLocal, xMaxLocal);
+                    const double aMax = fmax(xMinLocal, xMaxLocal);
+                    const double bMin = fmin(yMinLocal, yMaxLocal);
+                    const double bMax = fmax(yMinLocal, yMaxLocal);
+                    const double cMin = fmin(zMinLocal, zMaxLocal);
+                    const double cMax = fmax(zMinLocal, zMaxLocal);
+                    const double eMin = fmin(aMax, bMax);
+                    const double eMax = fmax(aMin, bMin);
 
-                const double tmin = fmax(eMax, cMin);
-                const double tmax = fmin(eMin, cMax);
+                    const double tmin = fmax(eMax, cMin);
+                    const double tmax = fmin(eMin, cMax);
 
-                // if tmax < 0, ray (line) is intersecting AABB, but whole AABB is behind us.
-                // if tmin > tmax, ray doesn't intersect AABB.
-                if (tmax < 0 || tmin > tmax) {
-                    continue;
+                    // if tmax < 0, ray (line) is intersecting AABB, but whole AABB is behind us.
+                    // if tmin > tmax, ray doesn't intersect AABB.
+                    if (tmax < 0 || tmin > tmax) {
+                        continue;
+                    }
                 }
 
                 //? Narrow band.
