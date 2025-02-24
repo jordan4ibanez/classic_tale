@@ -428,9 +428,24 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                         wideBandPoints[cache] = false;
 
-                        (rayPoints + currentIndex).x = thisLocalX;
-                        (rayPoints + currentIndex).y = thisLocalY;
-                        (rayPoints + currentIndex).z = thisLocalZ;
+                        const double rayOriginX = startX;
+                        const double rayOriginY = startY;
+                        const double rayOriginZ = startZ;
+                        const double dirX = directionX;
+                        const double dirY = directionY;
+                        const double dirZ = directionZ;
+
+                        Vec3d collisionPoint = Vec3d(rayOriginX + dirX * selectedDistance,
+                            rayOriginY + dirY * selectedDistance, rayOriginZ + dirZ * selectedDistance);
+
+
+                        (rayPoints + currentIndex).collisionPoint.x = collisionPoint.x;
+                        (rayPoints + currentIndex).collisionPoint.y = collisionPoint.y;
+                        (rayPoints + currentIndex).collisionPoint.z = collisionPoint.z;
+
+                        (rayPoints + currentIndex).blockPosition.x = thisLocalX;
+                        (rayPoints + currentIndex).blockPosition.y = thisLocalY;
+                        (rayPoints + currentIndex).blockPosition.z = thisLocalZ;
 
                         currentIndex++;
 
@@ -442,17 +457,17 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
         thisDistance += 1.0;
     }
 
-    rayPoints[0 .. currentIndex].sort!((const ref Vec3i a, const ref Vec3i b) {
-        double aDistX = endX - a.x;
-        double aDistY = endY - a.y;
-        double aDistZ = endZ - a.z;
+    rayPoints[0 .. currentIndex].sort!((const ref RayCollision a, const ref RayCollision b) {
+        double aDistX = endX - a.collisionPoint.x;
+        double aDistY = endY - a.collisionPoint.y;
+        double aDistZ = endZ - a.collisionPoint.z;
 
         const aDist = sqrt(
             aDistX * aDistX + aDistY * aDistY + aDistZ * aDistZ);
 
-        double bDistX = endX - b.x;
-        double bDistY = endY - b.y;
-        double bDistZ = endZ - b.z;
+        double bDistX = endX - b.collisionPoint.x;
+        double bDistY = endY - b.collisionPoint.y;
+        double bDistZ = endZ - b.collisionPoint.z;
 
         const bDist = sqrt(
             bDistX * bDistX + bDistY * bDistY + bDistZ * bDistZ);
