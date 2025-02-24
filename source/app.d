@@ -130,6 +130,7 @@ void main() {
 			}
 		}
 
+		//! Raycast after world modification or the selectionbox will stick around for 1 frame.
 		Player.raycast();
 
 		BeginDrawing();
