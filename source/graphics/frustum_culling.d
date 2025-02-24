@@ -142,7 +142,7 @@ bool pointInFrustum(const ref Frustum frustum, double x, double y, double z) {
     return true;
 }
 
-bool sphereInFrustumV(const ref Frustum frustum, Vec3d position, double radius) {
+bool sphereInFrustumV(const ref Frustum frustum, const Vec3d position, const double radius) {
     foreach (const ref plane; frustum.planes) {
         // Center is behind plane by more than the radius.
         if (distanceToPlaneV(plane, position) < -radius) {
