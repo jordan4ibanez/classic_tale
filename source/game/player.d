@@ -117,9 +117,9 @@ public: //* BEGIN PUBLIC API.
 
         for (ulong i = 0; i < result.arrayLength; i++) {
             Vec3d thisPosition;
-            thisPosition.x = (result.pointsArray + i).x;
-            thisPosition.y = (result.pointsArray + i).y;
-            thisPosition.z = (result.pointsArray + i).z;
+            thisPosition.x = (result.pointsArray + i).blockPosition.x;
+            thisPosition.y = (result.pointsArray + i).blockPosition.y;
+            thisPosition.z = (result.pointsArray + i).blockPosition.z;
 
             const BlockData = Map.getBlockAtWorldPosition(thisPosition);
 
