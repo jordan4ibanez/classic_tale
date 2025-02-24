@@ -334,8 +334,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                         if (collisionPoint.y >= yMin && collisionPoint.y <= yMax &&
                             collisionPoint.z >= zMin && collisionPoint.z <= zMax) {
-                            DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
-                                    .RED);
+
                             collisionX = true;
                             collisionXDistance = collisionDistance;
                         }
@@ -366,8 +365,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                         if (collisionPoint.x >= xMin && collisionPoint.x <= xMax &&
                             collisionPoint.z >= zMin && collisionPoint.z <= zMax) {
-                            DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
-                                    .GREEN);
+
                             collisionY = true;
                             collisionYDistance = collisionDistance;
                         }
@@ -399,8 +397,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                         if (collisionPoint.x >= xMin && collisionPoint.x <= xMax &&
                             collisionPoint.y >= yMin && collisionPoint.y <= yMax) {
-                            DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
-                                    .BLUE);
+
                             collisionZ = true;
                             collisionZDistance = collisionDistance;
                         }
@@ -438,6 +435,10 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         Vec3d collisionPoint = Vec3d(rayOriginX + dirX * selectedDistance,
                             rayOriginY + dirY * selectedDistance, rayOriginZ + dirZ * selectedDistance);
 
+                        // DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
+                        //         .BLUE);
+
+                        DrawSphere(collisionPoint.toRaylib(), 0.03, Colors.GOLD);
 
                         (rayPoints + currentIndex).collisionPoint.x = collisionPoint.x;
                         (rayPoints + currentIndex).collisionPoint.y = collisionPoint.y;
