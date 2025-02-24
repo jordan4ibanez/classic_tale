@@ -11,7 +11,7 @@ import std.range;
 import std.stdio;
 
 // import raylib;
-import std.datetime.stopwatch;
+// import std.datetime.stopwatch;
 
 // private static HashSet!Vec3i old;
 // private static HashSet!Vec3i wideBandPoints;
@@ -179,7 +179,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     Vec3i cache;
 
-    auto sw = StopWatch(AutoStart.yes);
+    // auto sw = StopWatch(AutoStart.yes);
 
     const double divisorDirectionX = 1.0 / directionX;
     const double divisorDirectionY = 1.0 / directionY;
