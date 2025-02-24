@@ -186,26 +186,35 @@ void main() {
 			const double hy = shy * 0.5;
 			Vector2 start, end;
 
+			const double a = windowCenter.x - hx;
+			const double b = windowCenter.y - hy;
+			const double c = windowCenter.x - hy;
+			const double d = windowCenter.y - hx;
+			const double e = windowCenter.x + hy;
+			const double f = windowCenter.x + hx;
+			const double g = windowCenter.y + hy;
+			const double h = windowCenter.y + hx;
+
 			//? First pass uses subtractive blend mode.
 			//? This causes issues when looking at gray things like stone.
 			BeginBlendMode(BlendMode.BLEND_SUBTRACT_COLORS);
 			// Horizontal.
-			start.x = windowCenter.x - hx;
-			start.y = windowCenter.y - hy;
+			start.x = a;
+			start.y = b;
 			end.x = shx;
 			end.y = shy;
 			DrawRectangleV(start, end, Colors.WHITE);
 
 			// Vertical.
-			start.x = windowCenter.x - hy;
-			start.y = windowCenter.y - hx;
+			start.x = c;
+			start.y = d;
 			end.x = shy;
 			end.y = shx;
 			DrawRectangleV(start, end, Colors.WHITE);
 
 			// Center.
-			start.x = windowCenter.x - hy;
-			start.y = windowCenter.y - hy;
+			start.x = c;
+			start.y = b;
 			end.x = shy;
 			end.y = shy;
 			DrawRectangleV(start, end, Colors.WHITE);
@@ -216,21 +225,21 @@ void main() {
 			BeginBlendMode(BlendMode.BLEND_ADD_COLORS);
 
 			// Left
-			start.x = windowCenter.x - hx;
-			start.y = windowCenter.y - hy;
+			start.x = a;
+			start.y = b;
 			end.x = hx - hy;
 			end.y = shy;
 			DrawRectangleV(start, end, ULTRA_DARK_GRAY);
 
 			// Right
-			start.x = windowCenter.x + hy;
-			start.y = windowCenter.y - hy;
+			start.x = e;
+			start.y = b;
 			end.x = hx - hy;
 			end.y = shy;
 			DrawRectangleV(start, end, ULTRA_DARK_GRAY);
 			// Vertical.
-			start.x = windowCenter.x - hy;
-			start.y = windowCenter.y - hx;
+			start.x = c;
+			start.y = d;
 			end.x = shy;
 			end.y = shx;
 			DrawRectangleV(start, end, ULTRA_DARK_GRAY);
@@ -243,65 +252,65 @@ void main() {
 
 			static immutable debugColor = Colors.BLACK;
 
-			start.x = windowCenter.x - hx;
-			start.y = windowCenter.y - hy;
-			end.x = windowCenter.x - hy;
-			end.y = windowCenter.y - hy;
+			start.x = a;
+			start.y = b;
+			end.x = c;
+			end.y = b;
 			DrawLineV(start, end, debugColor);
-			start.x = windowCenter.x - hy;
-			start.y = windowCenter.y - hy;
-			end.x = windowCenter.x - hy;
-			end.y = windowCenter.y - hx;
+			start.x = c;
+			start.y = b;
+			end.x = c;
+			end.y = d;
 			DrawLineV(start, end, debugColor);
-			start.x = windowCenter.x - hy;
-			start.y = windowCenter.y - hx;
-			end.x = windowCenter.x + hy;
-			end.y = windowCenter.y - hx;
+			start.x = c;
+			start.y = d;
+			end.x = e;
+			end.y = d;
 			DrawLineV(start, end, debugColor);
-			start.x = windowCenter.x + hy;
-			start.y = windowCenter.y - hx;
-			end.x = windowCenter.x + hy;
-			end.y = windowCenter.y - hy;
+			start.x = e;
+			start.y = d;
+			end.x = e;
+			end.y = b;
 			DrawLineV(start, end, debugColor);
-			start.x = windowCenter.x + hy;
-			start.y = windowCenter.y - hy;
-			end.x = windowCenter.x + hx;
-			end.y = windowCenter.y - hy;
+			start.x = e;
+			start.y = b;
+			end.x = f;
+			end.y = b;
 			DrawLineV(start, end, debugColor);
-			start.x = windowCenter.x + hx;
-			start.y = windowCenter.y - hy;
-			end.x = windowCenter.x + hx;
-			end.y = windowCenter.y + hy;
+			start.x = f;
+			start.y = b;
+			end.x = f;
+			end.y = g;
 			DrawLineV(start, end, debugColor);
-			start.x = windowCenter.x + hx;
-			start.y = windowCenter.y + hy;
-			end.x = windowCenter.x + hy;
-			end.y = windowCenter.y + hy;
+			start.x = f;
+			start.y = g;
+			end.x = e;
+			end.y = g;
 			DrawLineV(start, end, debugColor);
-			start.x = windowCenter.x + hy;
-			start.y = windowCenter.y + hy;
-			end.x = windowCenter.x + hy;
-			end.y = windowCenter.y + hx;
+			start.x = e;
+			start.y = g;
+			end.x = e;
+			end.y = h;
 			DrawLineV(start, end, debugColor);
-			start.x = windowCenter.x + hy;
-			start.y = windowCenter.y + hx;
-			end.x = windowCenter.x - hy;
-			end.y = windowCenter.y + hx;
+			start.x = e;
+			start.y = h;
+			end.x = c;
+			end.y = h;
 			DrawLineV(start, end, debugColor);
-			start.x = windowCenter.x - hy;
-			start.y = windowCenter.y + hx;
-			end.x = windowCenter.x - hy;
-			end.y = windowCenter.y + hy;
+			start.x = c;
+			start.y = h;
+			end.x = c;
+			end.y = g;
 			DrawLineV(start, end, debugColor);
-			start.x = windowCenter.x - hy;
-			start.y = windowCenter.y + hy;
-			end.x = windowCenter.x - hx;
-			end.y = windowCenter.y + hy;
+			start.x = c;
+			start.y = g;
+			end.x = a;
+			end.y = g;
 			DrawLineV(start, end, debugColor);
-			start.x = windowCenter.x - hx;
-			start.y = windowCenter.y + hy;
-			end.x = windowCenter.x - hx;
-			end.y = windowCenter.y - hy;
+			start.x = a;
+			start.y = g;
+			end.x = a;
+			end.y = b;
 			DrawLineV(start, end, debugColor);
 		}
 
