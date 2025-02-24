@@ -137,7 +137,9 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
     double localDistY;
     double localDistZ;
 
-    static const Vec3i[26] dirs = [
+    static const Vec3i[27] dirs = [
+        // Self first.
+        Vec3i(0, 0, 0),
         Vec3i(-1, -1, -1),
         Vec3i(-1, -1, 0),
         Vec3i(-1, -1, 1),
