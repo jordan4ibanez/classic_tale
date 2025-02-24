@@ -5,6 +5,7 @@ import game.map;
 import game.map_graphics;
 import game.player;
 import graphics.camera_handler;
+import graphics.gui;
 import graphics.model_handler;
 import graphics.texture_handler;
 import math.aabb;
