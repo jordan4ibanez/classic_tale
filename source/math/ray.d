@@ -25,7 +25,7 @@ struct RayCollision {
 }
 
 struct RayResult {
-    const(const Vec3i*) pointsArray;
+    const(const RayCollision*) pointsArray;
     const ulong arrayLength;
 }
 
