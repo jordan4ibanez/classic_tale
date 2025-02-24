@@ -52,8 +52,8 @@ void normalizePlane(ref Vec4d plane) {
 
 void extractFrustum(ref Frustum frustum) {
 
-    Matrix projection = rlGetMatrixProjection();
-    Matrix modelview = rlGetMatrixModelview();
+    const Matrix projection = rlGetMatrixProjection();
+    const Matrix modelview = rlGetMatrixModelview();
 
     Matrix planes = Matrix();
 
