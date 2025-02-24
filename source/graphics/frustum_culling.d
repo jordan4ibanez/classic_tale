@@ -58,7 +58,7 @@ void extractFrustum(Frustum* frustum) {
     Matrix projection = rlGetMatrixProjection();
     Matrix modelview = rlGetMatrixModelview();
 
-    Matrix planes = {0};
+    Matrix planes = Matrix();
 
     planes.m0 = modelview.m0 * projection.m0 + modelview.m1 * projection.m4 + modelview.m2 * projection.m8 + modelview
         .m3 * projection.m12;
