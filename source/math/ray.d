@@ -536,7 +536,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
     // This seems to reduce the average time by 2-5 microseconds.
     wideBandPoints.rehash();
 
-    // writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
+    writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
 
     return RayResult(rayPoints, currentIndex);
 }
