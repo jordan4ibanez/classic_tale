@@ -16,7 +16,7 @@ import std.datetime.stopwatch;
 // private static HashSet!Vec3i old;
 // private static HashSet!Vec3i wideBandPoints;
 private static bool[Vec3i] wideBandPoints;
-private static Vec3i* rayPoints;
+private static RayCollision* rayPoints;
 
 struct RayCollision {
     Vec3i blockPosition;
@@ -52,7 +52,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     if (rayPoints is null) {
         // ~6KB data roughly.
-        rayPoints = cast(Vec3i*) GC.malloc(Vec3i.sizeof * 512);
+        rayPoints = cast(RayCollision*) GC.malloc(RayCollision.sizeof * 512);
     }
 
     double startX = startingPoint.x;
