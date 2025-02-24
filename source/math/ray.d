@@ -396,25 +396,28 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     }
 
                     double selectedDistance = float.nan;
-                    Vec3i faceDirection;
+
+                    int faceDirectionX = 0;
+                    int faceDirectionY = 0;
+                    int faceDirectionZ = 0;
 
                     if (collisionX && collisionXDistance < collisionYDistance &&
                         collisionXDistance < collisionZDistance) {
 
                         selectedDistance = collisionXDistance;
-                        faceDirection.x = (facingNegativeX) ? -1 : 1;
+                        faceDirectionX = (facingNegativeX) ? -1 : 1;
 
                     } else if (collisionY && collisionYDistance < collisionXDistance &&
                         collisionYDistance < collisionZDistance) {
 
                         selectedDistance = collisionYDistance;
-                        faceDirection.y = (facingNegativeY) ? -1 : 1;
+                        faceDirectionY = (facingNegativeY) ? -1 : 1;
 
                     } else if (collisionZ && collisionZDistance <= collisionXDistance &&
                         collisionZDistance <= collisionYDistance) {
 
                         selectedDistance = collisionZDistance;
-                        faceDirection.z = (facingNegativeZ) ? -1 : 1;
+                        faceDirectionZ = (facingNegativeZ) ? -1 : 1;
                     }
 
                     if (!isNaN(selectedDistance)) {
@@ -434,9 +437,9 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         // import raylib;
                         // DrawCubeWires(collisionPoint.toRaylib(), 0.03, 0.03, 0.03, Colors.GREEN);
 
-                        (rayPoints + currentIndex).faceDirection.x = faceDirection.x;
-                        (rayPoints + currentIndex).faceDirection.y = faceDirection.y;
-                        (rayPoints + currentIndex).faceDirection.z = faceDirection.z;
+                        (rayPoints + currentIndex).faceDirection.x = faceDirectionX;
+                        (rayPoints + currentIndex).faceDirection.y = faceDirectionY;
+                        (rayPoints + currentIndex).faceDirection.z = faceDirectionZ;
 
                         (rayPoints + currentIndex).collisionPoint.x = collisionPoint.x;
                         (rayPoints + currentIndex).collisionPoint.y = collisionPoint.y;
