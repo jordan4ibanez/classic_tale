@@ -283,9 +283,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                 import game.map;
 
-                Vec3d inSpace = Vec3d(thisLocalX, thisLocalY, thisLocalZ);
-
-                if (Map.getBlockAtWorldPosition(inSpace).blockID != 0) {
+                if (Map.getBlockAtWorldPosition(thisLocalX, thisLocalY, thisLocalZ).blockID != 0) {
 
                     bool collisionX = false;
                     bool collisionY = false;
