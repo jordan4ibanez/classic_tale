@@ -66,17 +66,16 @@ public: //* BEGIN PUBLIC API.
         // todo: this should probably order by distance. Lucky D has that built in. :D
 
         Vec3d position;
-        Vec3d max;
 
         foreach (const chunkPos, const ref thisChunk; database) {
             position.x = chunkPos.x * CHUNK_WIDTH;
             position.z = chunkPos.y * CHUNK_WIDTH;
 
-            max.x = position.x + CHUNK_WIDTH;
-            max.y = position.y + CHUNK_HEIGHT;
-            max.z = position.z + CHUNK_WIDTH;
+            const double maxX = position.x + CHUNK_WIDTH;
+            const double maxY = position.y + CHUNK_HEIGHT;
+            const double maxZ = position.z + CHUNK_WIDTH;
 
-            if (CameraHandler.aabbInFrustum(position, max)) {
+            if (CameraHandler.aabbInFrustum(position.x, position.y, position.z, maxX, maxY, maxZ)) {
                 ModelHandler.drawIgnoreMissing(thisChunk.meshKey, position);
             }
         }
