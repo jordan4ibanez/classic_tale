@@ -41,7 +41,8 @@ private static const enum MAX = 6;
 
 void normalizePlane(ref Vec4d plane) {
 
-    double magnitudeDivisor = 1.0 / sqrt(plane.x * plane.x + plane.y * plane.y + plane.z * plane.z);
+    const double magnitudeDivisor = 1.0 / sqrt(plane.x * plane.x + plane.y * plane.y + plane.z * plane
+            .z);
 
     plane.x *= magnitudeDivisor;
     plane.y *= magnitudeDivisor;
