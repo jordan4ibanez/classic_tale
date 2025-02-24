@@ -99,7 +99,7 @@ void main() {
 		const Vec3i playerBlockSelection = Player.getBlockSelection();
 
 		if (playerBlockSelection.y != -1) {
-			if (Mouse.isButtonPressed(MouseButton.MOUSE_BUTTON_LEFT)) {
+			if (Mouse.isButtonDown(MouseButton.MOUSE_BUTTON_LEFT)) {
 				Map.setBlockAtWorldPositionByID(Vec3d(playerBlockSelection.x, playerBlockSelection.y, playerBlockSelection
 						.z), 0);
 			}
