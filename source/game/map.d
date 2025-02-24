@@ -77,7 +77,7 @@ public: //* BEGIN PUBLIC API.
             max.z = position.z + CHUNK_WIDTH;
 
             if (CameraHandler.aabbInFrustum(position, max)) {
-                // ModelHandler.drawIgnoreMissing(thisChunk.meshKey, position);
+                ModelHandler.drawIgnoreMissing(thisChunk.meshKey, position);
             }
         }
     }

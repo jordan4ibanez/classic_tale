@@ -39,9 +39,7 @@ private static const enum RIGHT = 4;
 private static const enum LEFT = 5;
 private static const enum MAX = 6;
 
-void normalizePlane(Vec4d* plane) {
-    if (plane is null)
-        return;
+void normalizePlane(ref Vec4d plane) {
 
     double magnitude = sqrt(plane.x * plane.x + plane.y * plane.y + plane.z * plane.z);
 
@@ -51,9 +49,7 @@ void normalizePlane(Vec4d* plane) {
     plane.w /= magnitude;
 }
 
-void extractFrustum(Frustum* frustum) {
-    if (frustum is null)
-        return;
+void extractFrustum(ref Frustum frustum) {
 
     Matrix projection = rlGetMatrixProjection();
     Matrix modelview = rlGetMatrixModelview();
@@ -95,77 +91,66 @@ void extractFrustum(Frustum* frustum) {
 
     frustum.planes[RIGHT] = Vec4d(planes.m3 - planes.m0, planes.m7 - planes.m4, planes.m11 - planes.m8, planes.m15 -
             planes.m12);
-    normalizePlane(&frustum.planes[RIGHT]);
+    normalizePlane(frustum.planes[RIGHT]);
 
     frustum.planes[LEFT] = Vec4d(planes.m3 + planes.m0, planes.m7 + planes.m4, planes.m11 + planes.m8, planes.m15 +
             planes.m12);
-    normalizePlane(&frustum.planes[LEFT]);
+    normalizePlane(frustum.planes[LEFT]);
 
     frustum.planes[TOP] = Vec4d(planes.m3 - planes.m1, planes.m7 - planes.m5, planes.m11 - planes.m9, planes.m15 -
             planes.m13);
-    normalizePlane(&frustum.planes[TOP]);
+    normalizePlane(frustum.planes[TOP]);
 
     frustum.planes[BOTTOM] = Vec4d(planes.m3 + planes.m1, planes.m7 + planes.m5, planes.m11 + planes.m9, planes.m15 +
             planes.m13);
-    normalizePlane(&frustum.planes[BOTTOM]);
+    normalizePlane(frustum.planes[BOTTOM]);
 
     frustum.planes[BACK] = Vec4d(planes.m3 - planes.m2, planes.m7 - planes.m6, planes.m11 - planes.m10, planes.m15 -
             planes.m14);
-    normalizePlane(&frustum.planes[BACK]);
+    normalizePlane(frustum.planes[BACK]);
 
     frustum.planes[FRONT] = Vec4d(planes.m3 + planes.m2, planes.m7 + planes.m6, planes.m11 + planes.m10, planes.m15 +
             planes.m14);
-    normalizePlane(&frustum.planes[FRONT]);
+    normalizePlane(frustum.planes[FRONT]);
 }
 
-double distanceToPlaneV(const Vec4d* plane, const Vec3d* position) {
+double distanceToPlaneV(const ref Vec4d plane, const ref Vec3d position) {
     return (plane.x * position.x + plane.y * position.y + plane.z * position.z + plane.w);
 }
 
-double distanceToPlane(const Vec4d* plane, double x, double y, double z) {
+double distanceToPlane(const ref Vec4d plane, double x, double y, double z) {
     return (plane.x * x + plane.y * y + plane.z * z + plane.w);
 }
 
-bool pointInFrustumV(Frustum* frustum, Vec3d position) {
-    if (frustum is null)
-        return false;
-
+bool pointInFrustumV(const ref Frustum frustum, Vec3d position) {
     for (int i = 0; i < 6; i++) {
         // Point is behind plane.
-        if (distanceToPlaneV(&frustum.planes[i], &position) <= 0)
+        if (distanceToPlaneV(frustum.planes[i], position) <= 0)
             return false;
     }
-
     return true;
 }
 
-bool pointInFrustum(Frustum* frustum, double x, double y, double z) {
-    if (frustum is null)
-        return false;
-
+bool pointInFrustum(const ref Frustum frustum, double x, double y, double z) {
     for (int i = 0; i < 6; i++) {
         // Point is behind plane.
-        if (distanceToPlane(&frustum.planes[i], x, y, z) <= 0)
+        if (distanceToPlane(frustum.planes[i], x, y, z) <= 0)
             return false;
     }
-
     return true;
 }
 
-bool sphereInFrustumV(Frustum* frustum, Vec3d position, double radius) {
-    if (frustum is null)
-        return false;
-
+bool sphereInFrustumV(const ref Frustum frustum, Vec3d position, double radius) {
     for (int i = 0; i < 6; i++) {
         // Center is behind plane by more than the radius.
-        if (distanceToPlaneV(&frustum.planes[i], &position) < -radius)
+        if (distanceToPlaneV(frustum.planes[i], position) < -radius)
             return false;
     }
 
     return true;
 }
 
-bool aabBoxInFrustum(Frustum* frustum, Vec3d min, Vec3d max) {
+bool aabBoxInFrustum(const ref Frustum frustum, Vec3d min, Vec3d max) {
     // If any point is in and we are good.
     if (pointInFrustum(frustum, min.x, min.y, min.z))
         return true;
@@ -195,28 +180,28 @@ bool aabBoxInFrustum(Frustum* frustum, Vec3d min, Vec3d max) {
     for (int i = 0; i < 6; i++) {
         bool oneInside = false;
 
-        if (distanceToPlane(&frustum.planes[i], min.x, min.y, min.z) >= 0)
+        if (distanceToPlane(frustum.planes[i], min.x, min.y, min.z) >= 0)
             oneInside = true;
 
-        if (distanceToPlane(&frustum.planes[i], max.x, min.y, min.z) >= 0)
+        if (distanceToPlane(frustum.planes[i], max.x, min.y, min.z) >= 0)
             oneInside = true;
 
-        if (distanceToPlane(&frustum.planes[i], max.x, max.y, min.z) >= 0)
+        if (distanceToPlane(frustum.planes[i], max.x, max.y, min.z) >= 0)
             oneInside = true;
 
-        if (distanceToPlane(&frustum.planes[i], min.x, max.y, min.z) >= 0)
+        if (distanceToPlane(frustum.planes[i], min.x, max.y, min.z) >= 0)
             oneInside = true;
 
-        if (distanceToPlane(&frustum.planes[i], min.x, min.y, max.z) >= 0)
+        if (distanceToPlane(frustum.planes[i], min.x, min.y, max.z) >= 0)
             oneInside = true;
 
-        if (distanceToPlane(&frustum.planes[i], max.x, min.y, max.z) >= 0)
+        if (distanceToPlane(frustum.planes[i], max.x, min.y, max.z) >= 0)
             oneInside = true;
 
-        if (distanceToPlane(&frustum.planes[i], max.x, max.y, max.z) >= 0)
+        if (distanceToPlane(frustum.planes[i], max.x, max.y, max.z) >= 0)
             oneInside = true;
 
-        if (distanceToPlane(&frustum.planes[i], min.x, max.y, max.z) >= 0)
+        if (distanceToPlane(frustum.planes[i], min.x, max.y, max.z) >= 0)
             oneInside = true;
 
         if (!oneInside)
