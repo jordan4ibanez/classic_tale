@@ -287,8 +287,6 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                 if (Map.getBlockAtWorldPosition(inSpace).blockID != 0) {
 
-                    import raylib;
-
                     bool collisionX = false;
                     bool collisionY = false;
                     bool collisionZ = false;
@@ -437,6 +435,8 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                         // DrawCubeWires(collisionPoint.toRaylib(), 0.05, 0.05, 0.05, Colors
                         //         .BLUE);
+
+                        import raylib;
 
                         DrawSphere(collisionPoint.toRaylib(), 0.03, Colors.GOLD);
 
