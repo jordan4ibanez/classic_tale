@@ -56,6 +56,11 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
     double endZ = endingPoint.z;
 
     // Bump it out of strange floating point issues.
+    //~ Note: When the mantissa exceeds this magic number on the X or Z
+    //~ like when you start trying to do a FarLands exploration
+    //~ this will begin to fall apart and it will default back into it's
+    //~ original location as it cannot be pushed by this value.
+    //todo: look into a way to mantissa bump on any precision level.
     if (startX % 1.0 == 0) {
         startX += 0.00001;
     }
