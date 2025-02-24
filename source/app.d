@@ -168,6 +168,105 @@ void main() {
 		DrawText(toStringz("Y:" ~ format("%.2f", pos.y)), 11, 101, 30, Colors.BLUE);
 		DrawText(toStringz("Z:" ~ format("%.2f", pos.z)), 10, 130, 30, Colors.BLACK);
 		DrawText(toStringz("Z:" ~ format("%.2f", pos.z)), 11, 131, 30, Colors.BLUE);
+
+		{ // Draw the crosshair.
+
+			Vec2d windowCenter = vec2dMultiply(Window.getSize(), Vec2d(0.5, 0.5));
+
+			double guiScale = GUI.getGUIScale();
+
+			// Size horizontal.
+			//? 40, 4
+			const Vec2d sh = vec2dMultiply(Vec2d(40, 4), Vec2d(guiScale, guiScale));
+			// Size vertical;
+			// const Vec2d sv = Vec2d(sh.y, sh.x);
+			const double hx = sh.x * 0.5;
+			// Half height.
+			const double hy = sh.y * 0.5;
+
+			//? First pass uses subtractive blend mode.
+			//? This causes issues when looking at gray things like stone.
+			BeginBlendMode(BlendMode.BLEND_SUBTRACT_COLORS);
+			// Horizontal.
+			DrawRectangleV(vec2dSubtract(windowCenter, Vec2d(hx, hy))
+					.toRaylib(), sh.toRaylib(), Colors.WHITE);
+			// Vertical.
+			DrawRectangleV(vec2dSubtract(windowCenter, Vec2d(hy, hx))
+					.toRaylib(), Vec2d(sh.y, sh.x).toRaylib(), Colors.WHITE);
+			// Center.
+			DrawRectangleV(vec2dSubtract(windowCenter, Vec2d(hy, hy))
+					.toRaylib(), Vec2d(sh.y, sh.y).toRaylib(), Colors.WHITE);
+			EndBlendMode();
+
+			//? Second pass layers on lightness to make it stand out more.
+			static immutable ULTRA_DARK_GRAY = Color(55, 55, 55, 255);
+			BeginBlendMode(BlendMode.BLEND_ADD_COLORS);
+			// Left
+			DrawRectangleV(vec2dSubtract(windowCenter, Vec2d(hx, hy))
+					.toRaylib(), Vec2d(hx - hy, sh.y).toRaylib(), ULTRA_DARK_GRAY);
+			// Right
+			DrawRectangleV(Vec2d(windowCenter.x + hy, windowCenter.y - hy)
+					.toRaylib(), Vec2d(hx - hy, sh.y).toRaylib(), ULTRA_DARK_GRAY);
+			// Vertical.
+			DrawRectangleV(Vec2d(windowCenter.x - hy, windowCenter.y - hx)
+					.toRaylib(), Vec2d(sh.y, sh.x).toRaylib(), ULTRA_DARK_GRAY);
+			EndBlendMode();
+
+			//? Third pass draws an outline on the cursor.
+
+			// This starts at the top left of the vertical bar then wraps around clockwise.
+
+			static immutable debugColor = Colors.BLACK;
+
+			DrawLineV(Vec2d(windowCenter.x - hx, windowCenter.y - hy)
+					.toRaylib(), Vec2d(windowCenter.x - hy, windowCenter.y - hy)
+					.toRaylib, debugColor);
+
+			DrawLineV(Vec2d(windowCenter.x - hy, windowCenter.y - hy)
+					.toRaylib(), Vec2d(windowCenter.x - hy, windowCenter.y - hx)
+					.toRaylib, debugColor);
+
+			DrawLineV(Vec2d(windowCenter.x - hy, windowCenter.y - hx)
+					.toRaylib(), Vec2d(windowCenter.x + hy, windowCenter.y - hx)
+					.toRaylib, debugColor);
+
+			DrawLineV(Vec2d(windowCenter.x + hy, windowCenter.y - hx)
+					.toRaylib(), Vec2d(windowCenter.x + hy, windowCenter.y - hy)
+					.toRaylib, debugColor);
+
+			DrawLineV(Vec2d(windowCenter.x + hy, windowCenter.y - hy)
+					.toRaylib(), Vec2d(windowCenter.x + hx, windowCenter.y - hy)
+					.toRaylib, debugColor);
+
+			DrawLineV(Vec2d(windowCenter.x + hx, windowCenter.y - hy)
+					.toRaylib(), Vec2d(windowCenter.x + hx, windowCenter.y + hy)
+					.toRaylib, debugColor);
+
+			DrawLineV(Vec2d(windowCenter.x + hx, windowCenter.y + hy)
+					.toRaylib(), Vec2d(windowCenter.x + hy, windowCenter.y + hy)
+					.toRaylib, debugColor);
+
+			DrawLineV(Vec2d(windowCenter.x + hy, windowCenter.y + hy)
+					.toRaylib(), Vec2d(windowCenter.x + hy, windowCenter.y + hx)
+					.toRaylib, debugColor);
+
+			DrawLineV(Vec2d(windowCenter.x + hy, windowCenter.y + hx)
+					.toRaylib(), Vec2d(windowCenter.x - hy, windowCenter.y + hx)
+					.toRaylib, debugColor);
+
+			DrawLineV(Vec2d(windowCenter.x - hy, windowCenter.y + hx)
+					.toRaylib(), Vec2d(windowCenter.x - hy, windowCenter.y + hy)
+					.toRaylib, debugColor);
+
+			DrawLineV(Vec2d(windowCenter.x - hy, windowCenter.y + hy)
+					.toRaylib(), Vec2d(windowCenter.x - hx, windowCenter.y + hy)
+					.toRaylib, debugColor);
+
+			DrawLineV(Vec2d(windowCenter.x - hx, windowCenter.y + hy)
+					.toRaylib(), Vec2d(windowCenter.x - hx, windowCenter.y - hy)
+					.toRaylib, debugColor);
+		}
+
 		EndDrawing();
 	}
 
