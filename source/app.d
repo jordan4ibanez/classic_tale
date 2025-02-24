@@ -114,9 +114,7 @@ void main() {
 			}
 			// Player.draw();
 			Player.move();
-
 			Player.raycast();
-
 			if (playerBlockSelection.y != -1) {
 				DrawCubeWires(vec3dAdd(Vec3d(playerBlockSelection.x, playerBlockSelection.y, playerBlockSelection
 						.z), Vec3d(0.5, 0.5, 0.5)).toRaylib(), 1.01, 1.01, 1.01, Colors.BLACK);
