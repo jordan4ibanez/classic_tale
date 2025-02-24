@@ -25,7 +25,13 @@ struct RayResult {
 
 RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
-    //? This might be one of the strangest and overcomplicated collision voxel raycasting algorithms ever created.
+    //? This might be one of the strangest and overcomplicated collision voxel 
+    //? raycasting algorithms ever created.
+    //? It has been completely unrolled into pure math and minimal function calls for performance.
+    //? It is a 3 phase algorithm and it is very simple but the unrolling of
+    //? all the function calls makes it look extremely complex.
+    //? The following links are the general "big picture" I read through to understand
+    //? how the implementation would need to be designed.
 
     // https://www.geeksforgeeks.org/bresenhams-algorithm-for-3-d-line-drawing/
     // http://www.cse.yorku.ca/~amana/research/grid.pdf
