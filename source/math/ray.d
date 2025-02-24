@@ -21,7 +21,7 @@ private static RayCollision* rayPoints;
 struct RayCollision {
     Vec3i blockPosition;
     Vec3d collisionPoint;
-    Vec3d faceDirection;
+    Vec3i faceDirection;
 }
 
 struct RayResult {
@@ -402,25 +402,25 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     }
 
                     double selectedDistance = float.nan;
-                    Vec3d faceDirection;
+                    Vec3i faceDirection;
 
                     if (collisionX && collisionXDistance < collisionYDistance &&
                         collisionXDistance < collisionZDistance) {
 
                         selectedDistance = collisionXDistance;
-                        faceDirection.x = (facingNegativeX) ? -1.0 : 1.0;
+                        faceDirection.x = (facingNegativeX) ? -1 : 1;
 
                     } else if (collisionY && collisionYDistance < collisionXDistance &&
                         collisionYDistance < collisionZDistance) {
 
                         selectedDistance = collisionYDistance;
-                        faceDirection.y = (facingNegativeY) ? -1.0 : 1.0;
+                        faceDirection.y = (facingNegativeY) ? -1 : 1;
 
                     } else if (collisionZ && collisionZDistance <= collisionXDistance &&
                         collisionZDistance <= collisionYDistance) {
 
                         selectedDistance = collisionZDistance;
-                        faceDirection.z = (facingNegativeZ) ? -1.0 : 1.0;
+                        faceDirection.z = (facingNegativeZ) ? -1 : 1;
                     }
 
                     if (!isNaN(selectedDistance)) {
