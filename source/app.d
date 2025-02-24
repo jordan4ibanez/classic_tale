@@ -108,6 +108,27 @@ void main() {
 			}
 		}
 
+		// Primitive placing prototype.
+		if (Mouse.isButtonPressed(MouseButton.MOUSE_BUTTON_RIGHT)) {
+			const Vec3i playerBlockSelectionAbove = Player.getBlockSelectionAbove();
+			if (playerBlockSelectionAbove.y != -1) {
+				Vec3d blockSelectionABove = Vec3d(playerBlockSelectionAbove.x, playerBlockSelectionAbove.y,
+					playerBlockSelectionAbove.z);
+				if (Map.getBlockAtWorldPosition(blockSelectionABove).blockID == 0) {
+					// Do not allow the player to be in the new collisionbox.
+					AABB possiblePositionBox = AABB(blockSelectionABove.x, blockSelectionABove.y, blockSelectionABove
+							.z, blockSelectionABove.x + 1.0, blockSelectionABove.y + 1.0, blockSelectionABove
+							.z + 1.0);
+					AABB playerCollisionBox = AABB(Player.getPosition, Player.getSize);
+					DrawCubeWires(blockSelectionABove.toRaylib(), 0.05, 0.05, 0.05, Colors.RED);
+					if (!aabbCollision(possiblePositionBox, playerCollisionBox)) {
+
+						Map.setBlockAtWorldPositionByName(blockSelectionABove, "stone");
+					}
+				}
+
+			}
+		}
 		BeginDrawing();
 		ClearBackground(Colors.RAYWHITE);
 		CameraHandler.begin();
