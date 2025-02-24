@@ -22,9 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-// import raylib;
-import math.vec4d;
 import math.vec3d;
+import math.vec4d;
+import raylib : Matrix, rlGetMatrixModelview, rlGetMatrixProjection;
 import std.math.algebraic;
 
 struct Frustum {
