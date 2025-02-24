@@ -487,17 +487,6 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
     //     thisLocalY = (rayPoints + i).y;
     //     thisLocalZ = (rayPoints + i).z;
 
-    // if (i == 0) {
-    //     writeln(thisLocalX, " ", thisLocalY, " ", thisLocalZ);
-    // }
-
-    // DrawCube(Vec3d(cast(double) thisLocalX + 0.5, cast(double) thisLocalY + 0.5, cast(
-    //         double) thisLocalZ + 0.5).toRaylib(), 1, 1, 1, Colors.ORANGE);
-
-    // DrawCubeWires(Vec3d(cast(double) thisLocalX + 0.5, cast(double) thisLocalY + 0.5, cast(
-    //         double) thisLocalZ + 0.5).toRaylib(), 1, 1, 1, Colors.BLACK);
-    // }
-
     // This seems to reduce the average time by 2-5 microseconds.
     wideBandPoints.rehash();
 
