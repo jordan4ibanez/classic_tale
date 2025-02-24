@@ -43,7 +43,7 @@ void normalizePlane(Vec4d* plane) {
     if (plane is null)
         return;
 
-    float magnitude = sqrt(plane.x * plane.x + plane.y * plane.y + plane.z * plane.z);
+    double magnitude = sqrt(plane.x * plane.x + plane.y * plane.y + plane.z * plane.z);
 
     plane.x /= magnitude;
     plane.y /= magnitude;
@@ -118,11 +118,11 @@ void extractFrustum(Frustum* frustum) {
     normalizePlane(&frustum.planes[FRONT]);
 }
 
-float distanceToPlaneV(const Vec4d* plane, const Vec3d* position) {
+double distanceToPlaneV(const Vec4d* plane, const Vec3d* position) {
     return (plane.x * position.x + plane.y * position.y + plane.z * position.z + plane.w);
 }
 
-float distanceToPlane(const Vec4d* plane, float x, float y, float z) {
+double distanceToPlane(const Vec4d* plane, double x, double y, double z) {
     return (plane.x * x + plane.y * y + plane.z * z + plane.w);
 }
 
@@ -139,7 +139,7 @@ bool pointInFrustumV(Frustum* frustum, Vec3d position) {
     return true;
 }
 
-bool pointInFrustum(Frustum* frustum, float x, float y, float z) {
+bool pointInFrustum(Frustum* frustum, double x, double y, double z) {
     if (frustum is null)
         return false;
 
@@ -152,7 +152,7 @@ bool pointInFrustum(Frustum* frustum, float x, float y, float z) {
     return true;
 }
 
-bool sphereInFrustumV(Frustum* frustum, Vec3d position, float radius) {
+bool sphereInFrustumV(Frustum* frustum, Vec3d position, double radius) {
     if (frustum is null)
         return false;
 
