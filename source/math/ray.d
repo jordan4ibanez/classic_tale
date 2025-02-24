@@ -297,15 +297,11 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     // todo: get the block box and loop on that until hit or no more aabb.
 
                     // This indicates which way the face, is facing.
+                    // Dot product.
 
-                    const bool facingNegativeX = vec3dDotProduct(Vec3d(directionX, directionY, directionZ),
-                        Vec3d(1, 0, 0)) > 0.0;
-
-                    const bool facingNegativeY = vec3dDotProduct(Vec3d(directionX, directionY, directionZ),
-                        Vec3d(0, 1, 0)) > 0.0;
-
-                    const bool facingNegativeZ = vec3dDotProduct(Vec3d(directionX, directionY, directionZ),
-                        Vec3d(0, 0, 1)) > 0.0;
+                    double facingNegativeX = (directionX * 1.0 + directionY * 0.0 + directionZ * 0.0) > 0.0;
+                    double facingNegativeY = (directionX * 0.0 + directionY * 1.0 + directionZ * 0.0) > 0.0;
+                    double facingNegativeZ = (directionX * 0.0 + directionY * 0.0 + directionZ * 1.0) > 0.0;
 
                     //? X face collision.
                     {
