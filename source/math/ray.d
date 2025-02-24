@@ -402,21 +402,25 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     }
 
                     double selectedDistance = float.nan;
+                    Vec3d faceDirection;
 
                     if (collisionX && collisionXDistance < collisionYDistance &&
                         collisionXDistance < collisionZDistance) {
 
                         selectedDistance = collisionXDistance;
+                        faceDirection.x = (facingNegativeX) ? -1.0 : 1.0;
 
                     } else if (collisionY && collisionYDistance < collisionXDistance &&
                         collisionYDistance < collisionZDistance) {
 
                         selectedDistance = collisionYDistance;
+                        faceDirection.y = (facingNegativeY) ? -1.0 : 1.0;
 
                     } else if (collisionZ && collisionZDistance <= collisionXDistance &&
                         collisionZDistance <= collisionYDistance) {
 
                         selectedDistance = collisionZDistance;
+                        faceDirection.z = (facingNegativeZ) ? -1.0 : 1.0;
                     }
 
                     if (!isNaN(selectedDistance)) {
