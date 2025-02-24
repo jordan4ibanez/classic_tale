@@ -100,8 +100,8 @@ public: //* BEGIN PUBLIC API.
     }
 
     void begin() {
-        // UpdateCamera(&camera, CameraMode.CAMERA_CUSTOM);
         BeginMode3D(camera);
+
     }
 
     void end() {
