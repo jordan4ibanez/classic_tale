@@ -118,7 +118,7 @@ double distanceToPlaneV(const ref Vec4d plane, const ref Vec3d position) {
     return (plane.x * position.x + plane.y * position.y + plane.z * position.z + plane.w);
 }
 
-double distanceToPlane(const ref Vec4d plane, double x, double y, double z) {
+double distanceToPlane(const ref Vec4d plane, const double x, const double y, const double z) {
     return (plane.x * x + plane.y * y + plane.z * z + plane.w);
 }
 
