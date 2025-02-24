@@ -218,7 +218,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                     continue;
                 }
 
-                //? Broadphase check.
+                //? Wideband check.
                 // Cyrus-Beck clipping
                 // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html 
 
