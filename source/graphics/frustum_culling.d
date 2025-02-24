@@ -123,28 +123,31 @@ double distanceToPlane(const ref Vec4d plane, double x, double y, double z) {
 }
 
 bool pointInFrustumV(const ref Frustum frustum, Vec3d position) {
-    for (int i = 0; i < 6; i++) {
+    foreach (const ref plane; frustum.planes) {
         // Point is behind plane.
-        if (distanceToPlaneV(frustum.planes[i], position) <= 0)
+        if (distanceToPlaneV(plane, position) <= 0) {
             return false;
+        }
     }
     return true;
 }
 
 bool pointInFrustum(const ref Frustum frustum, double x, double y, double z) {
-    for (int i = 0; i < 6; i++) {
+    foreach (const ref plane; frustum.planes) {
         // Point is behind plane.
-        if (distanceToPlane(frustum.planes[i], x, y, z) <= 0)
+        if (distanceToPlane(plane, x, y, z) <= 0) {
             return false;
+        }
     }
     return true;
 }
 
 bool sphereInFrustumV(const ref Frustum frustum, Vec3d position, double radius) {
-    for (int i = 0; i < 6; i++) {
+    foreach (const ref plane; frustum.planes) {
         // Center is behind plane by more than the radius.
-        if (distanceToPlaneV(frustum.planes[i], position) < -radius)
+        if (distanceToPlaneV(plane, position) < -radius) {
             return false;
+        }
     }
 
     return true;
