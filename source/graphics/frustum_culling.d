@@ -231,3 +231,83 @@ bool aabBoxInFrustum(const ref Frustum frustum, const Vec3d min, const Vec3d max
     // The box extends outside the frustum but crosses it.
     return true;
 }
+
+bool aabBoxInFrustum(const ref Frustum frustum, const double minX, const double minY, const double minZ,
+    const double maxX, const double maxY, const double maxZ) {
+    // If any point is in and we are good.
+    if (pointInFrustum(frustum, minX, minY, minZ)) {
+        return true;
+    }
+
+    if (pointInFrustum(frustum, minX, maxY, minZ)) {
+        return true;
+    }
+
+    if (pointInFrustum(frustum, maxX, maxY, minZ)) {
+        return true;
+    }
+
+    if (pointInFrustum(frustum, maxX, minY, minZ)) {
+        return true;
+    }
+
+    if (pointInFrustum(frustum, minX, minY, maxZ)) {
+        return true;
+    }
+
+    if (pointInFrustum(frustum, minX, maxY, maxZ)) {
+        return true;
+    }
+
+    if (pointInFrustum(frustum, maxX, maxY, maxZ)) {
+        return true;
+    }
+
+    if (pointInFrustum(frustum, maxX, minY, maxZ)) {
+        return true;
+    }
+
+    // Check to see if all points are outside of any one plane, if so the entire box is outside.
+    foreach (const ref plane; frustum.planes) {
+        bool oneInside = false;
+
+        if (distanceToPlane(plane, minX, minY, minZ) >= 0) {
+            oneInside = true;
+        }
+
+        if (distanceToPlane(plane, maxX, minY, minZ) >= 0) {
+            oneInside = true;
+        }
+
+        if (distanceToPlane(plane, maxX, maxY, minZ) >= 0) {
+            oneInside = true;
+        }
+
+        if (distanceToPlane(plane, minX, maxY, minZ) >= 0) {
+            oneInside = true;
+        }
+
+        if (distanceToPlane(plane, minX, minY, maxZ) >= 0) {
+            oneInside = true;
+        }
+
+        if (distanceToPlane(plane, maxX, minY, maxZ) >= 0) {
+            oneInside = true;
+        }
+
+        if (distanceToPlane(plane, maxX, maxY, maxZ) >= 0) {
+            oneInside = true;
+        }
+
+        if (distanceToPlane(plane, minX, maxY, maxZ) >= 0) {
+            oneInside = true;
+        }
+
+        if (!oneInside) {
+            return false;
+        }
+    }
+
+    // The box extends outside the frustum but crosses it.
+    return true;
+}
