@@ -153,31 +153,39 @@ bool sphereInFrustumV(const ref Frustum frustum, Vec3d position, double radius) 
     return true;
 }
 
-bool aabBoxInFrustum(const ref Frustum frustum, Vec3d min, Vec3d max) {
+bool aabBoxInFrustum(const ref Frustum frustum, const Vec3d min, const Vec3d max) {
     // If any point is in and we are good.
-    if (pointInFrustum(frustum, min.x, min.y, min.z))
+    if (pointInFrustum(frustum, min.x, min.y, min.z)) {
         return true;
+    }
 
-    if (pointInFrustum(frustum, min.x, max.y, min.z))
+    if (pointInFrustum(frustum, min.x, max.y, min.z)) {
         return true;
+    }
 
-    if (pointInFrustum(frustum, max.x, max.y, min.z))
+    if (pointInFrustum(frustum, max.x, max.y, min.z)) {
         return true;
+    }
 
-    if (pointInFrustum(frustum, max.x, min.y, min.z))
+    if (pointInFrustum(frustum, max.x, min.y, min.z)) {
         return true;
+    }
 
-    if (pointInFrustum(frustum, min.x, min.y, max.z))
+    if (pointInFrustum(frustum, min.x, min.y, max.z)) {
         return true;
+    }
 
-    if (pointInFrustum(frustum, min.x, max.y, max.z))
+    if (pointInFrustum(frustum, min.x, max.y, max.z)) {
         return true;
+    }
 
-    if (pointInFrustum(frustum, max.x, max.y, max.z))
+    if (pointInFrustum(frustum, max.x, max.y, max.z)) {
         return true;
+    }
 
-    if (pointInFrustum(frustum, max.x, min.y, max.z))
+    if (pointInFrustum(frustum, max.x, min.y, max.z)) {
         return true;
+    }
 
     // Check to see if all points are outside of any one plane, if so the entire box is outside.
     foreach (const ref plane; frustum.planes) {
