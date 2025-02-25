@@ -144,6 +144,8 @@ void main() {
 		//? Keep this last.
 		Player.raycast();
 
+		Lights.update();
+
 		BeginDrawing();
 
 		// ClearBackground(Color(120, 166, 255, 255));
@@ -160,6 +162,8 @@ void main() {
 				DrawCubeWires(vec3dAdd(Vec3d(playerBlockSelection.x, playerBlockSelection.y, playerBlockSelection
 						.z), Vec3d(0.5, 0.5, 0.5)).toRaylib(), 1.0001, 1.0001, 1.0001, Colors.BLACK);
 			}
+
+			Lights.debugIt();
 
 		}
 		CameraHandler.end();
