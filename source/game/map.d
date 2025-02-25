@@ -85,7 +85,7 @@ public: //* BEGIN PUBLIC API.
         return key in database;
     }
 
-    const(Chunk*) getChunkPointer(immutable int keyX, immutable int keyZ) {
+    const(Chunk*) getChunkPointer(const int keyX, const int keyZ) {
         return Vec2i(keyX, keyZ) in database;
     }
 
@@ -369,10 +369,10 @@ private: //* BEGIN INTERNAL API.
             throw new Error("Attempted to get biome " ~ to!string(0) ~ " which does not exist");
         }
 
-        immutable double baseHeight = 160;
+        const double baseHeight = 160;
 
-        immutable int basePositionX = chunkPosition.x * CHUNK_WIDTH;
-        immutable int basePositionZ = chunkPosition.y * CHUNK_WIDTH;
+        const int basePositionX = chunkPosition.x * CHUNK_WIDTH;
+        const int basePositionZ = chunkPosition.y * CHUNK_WIDTH;
 
         const(BlockDefinition*) bedrock = BlockDatabase.getBlockByName("bedrock");
         if (bedrock is null) {
@@ -400,19 +400,19 @@ private: //* BEGIN INTERNAL API.
         foreach (x; 0 .. CHUNK_WIDTH) {
             foreach (z; 0 .. CHUNK_WIDTH) {
 
-                immutable double selectedNoise = fnlGetNoise2D(&noise, x + basePositionX, z + basePositionZ);
+                const double selectedNoise = fnlGetNoise2D(&noise, x + basePositionX, z + basePositionZ);
 
-                immutable double noiseScale = 20;
+                const double noiseScale = 20;
 
-                immutable int selectedHeight = cast(int) floor(
+                const int selectedHeight = cast(int) floor(
                     baseHeight + (selectedNoise * noiseScale));
 
-                immutable int grassLayer = selectedHeight;
-                immutable int dirtLayer = selectedHeight - 3;
+                const int grassLayer = selectedHeight;
+                const int dirtLayer = selectedHeight - 3;
 
-                immutable double bedRockNoise = fnlGetNoise2D(&noise, (x + basePositionX) * 12, (
+                const double bedRockNoise = fnlGetNoise2D(&noise, (x + basePositionX) * 12, (
                         z + basePositionZ) * 12) * 2;
-                immutable int bedRockSelectedHeight = cast(int) round(abs(bedRockNoise));
+                const int bedRockSelectedHeight = cast(int) round(abs(bedRockNoise));
 
                 yStack: foreach (y; 0 .. CHUNK_HEIGHT) {
 
@@ -453,7 +453,7 @@ private: //* BEGIN INTERNAL API.
         bool hitGround = false;
 
         // Entity position is on the bottom center of the collisionbox.
-        immutable double entityHalfWidth = entitySize.x * 0.5;
+        const double entityHalfWidth = entitySize.x * 0.5;
 
         foreach (double xOnRect; 0 .. ceil(entitySize.x) + 1) {
             double thisXPoint = (xOnRect > entitySize.x) ? entitySize.x : xOnRect;
