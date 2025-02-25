@@ -52,7 +52,7 @@ private:
         return database[shaderName];
     }
 
-    public void setFloatUniformFloat(string shaderName, int location, float value) {
+    public void setUniformFloat(string shaderName, int location, float value) {
         if (shaderName !in database) {
             throw new Error(
                 "[ShaderHandler]: Tried to set uniform in non-existent shader. " ~ shaderName);
