@@ -207,8 +207,6 @@ void main() {
 			const double h = windowCenter.y + hx;
 			const double i = hx - hy;
 
-			static const Color WHITE = Colors.WHITE;
-
 			// Left
 			(rectangles + 0).x = a;
 			(rectangles + 0).y = b;
@@ -227,25 +225,7 @@ void main() {
 			(rectangles + 2).width = shy;
 			(rectangles + 2).height = shx;
 
-			//? First pass uses subtractive blend mode.
-			//? This causes issues when looking at gray things like stone.
-			BeginBlendMode(BlendMode.BLEND_SUBTRACT_COLORS);
-			Render2d.drawRectangles(rectangles, 3, WHITE);
-			EndBlendMode();
-
-			//? Second pass layers on lightness to make it stand out more.
-			static const ULTRA_DARK_GRAY = Color(55, 55, 55, 255);
-
-			BeginBlendMode(BlendMode.BLEND_ADD_COLORS);
-			Render2d.drawRectangles(rectangles, 3, ULTRA_DARK_GRAY);
-			EndBlendMode();
-
-			//? Third pass draws an outline on the cursor.
-
-			// This starts at the top left of the vertical bar then wraps around clockwise.
-
-			static const Color debugColor = Colors.BLACK;
-
+			// This starts at the top left of the horizontal bar then wraps around clockwise.
 			(linePoints + 0).x = a;
 			(linePoints + 0).y = b;
 			(linePoints + 1).x = c;
@@ -273,6 +253,22 @@ void main() {
 			(linePoints + 12).x = a;
 			(linePoints + 12).y = b;
 
+			static const ULTRA_DARK_GRAY = Color(55, 55, 55, 255);
+			static const Color debugColor = Colors.BLACK;
+			static const Color WHITE = Colors.WHITE;
+
+			//? First pass uses subtractive blend mode.
+			//? This causes issues when looking at gray things like stone.
+			BeginBlendMode(BlendMode.BLEND_SUBTRACT_COLORS);
+			Render2d.drawRectangles(rectangles, 3, WHITE);
+			EndBlendMode();
+
+			//? Second pass layers on lightness to make it stand out more.
+			BeginBlendMode(BlendMode.BLEND_ADD_COLORS);
+			Render2d.drawRectangles(rectangles, 3, ULTRA_DARK_GRAY);
+			EndBlendMode();
+
+			//? Third pass draws an outline on the cursor.
 			Render2d.drawLinesConnected(linePoints, 13, debugColor);
 
 			writeln("took: ", cast(double) sw.peek().total!"hnsecs", " hns");
