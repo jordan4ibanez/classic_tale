@@ -106,7 +106,6 @@ public:
         //? This causes issues when looking at gray things like stone.
         BeginBlendMode(BlendMode.BLEND_SUBTRACT_COLORS);
         Render2d.drawRectangles(rectangles, 3, WHITE);
-        EndBlendMode();
 
         //? Second pass layers on lightness to make it stand out more.
         BeginBlendMode(BlendMode.BLEND_ADD_COLORS);
