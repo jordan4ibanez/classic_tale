@@ -11,14 +11,16 @@ private:
 
 public:
 
-    void drawLine(const double startX, const double startY, const double endX, const double endY,
-        const ref Color color) {
+    void drawLines(const Vec2d* points, const ulong numPoints, const ref Color color) {
 
         rlBegin(RL_LINES);
         {
             rlColor4ub(color.r, color.g, color.b, color.a);
-            rlVertex2f(startX, startY);
-            rlVertex2f(endX, endY);
+
+            foreach (i; 0 .. (numPoints - 1)) {
+                rlVertex2f((points + i).x, (points + i).y);
+                rlVertex2f((points + i + 1).x, (points + i + 1).y);
+            }
         }
         rlEnd();
     }
