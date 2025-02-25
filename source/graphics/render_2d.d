@@ -25,22 +25,27 @@ public:
         rlEnd();
     }
 
-    void drawRectangle(const double x, const double y, const double width, const double height, const ref Color color) {
+    void drawRectangles(const Rect* rects, const ulong numRects, const ref Color color) {
 
         rlBegin(RL_TRIANGLES);
         {
-            const double a = x + width;
-            const double b = y + height;
-
             rlColor4ub(color.r, color.g, color.b, color.a);
 
-            rlVertex2f(x, y);
-            rlVertex2f(x, b);
-            rlVertex2f(a, y);
+            foreach (i; 0 .. numRects) {
 
-            rlVertex2f(a, y);
-            rlVertex2f(x, b);
-            rlVertex2f(a, b);
+                const double x = (rects + i).x;
+                const double y = (rects + i).y;
+                const double a = x + (rects + i).width;
+                const double b = y + (rects + i).height;
+
+                rlVertex2f(x, y);
+                rlVertex2f(x, b);
+                rlVertex2f(a, y);
+
+                rlVertex2f(a, y);
+                rlVertex2f(x, b);
+                rlVertex2f(a, b);
+            }
         }
         rlEnd();
     }
