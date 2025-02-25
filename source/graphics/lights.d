@@ -27,13 +27,14 @@ public:
         // shaderViewPositionLocation = ShaderHandler.getUniformLocation("main", "viewPos");
         // assert(shaderViewPositionLocation > 0);
 
-        float[4] ambientLightLevel = [1.0, 0.05, 0.09, 1.0];
+        float[4] ambientLightLevel = [0.05, 0.05, 0.1, 1.0];
 
         SetShaderValue(*ShaderHandler.getShaderPointer("main"), shaderAmbientLightLocation,
             &ambientLightLevel, ShaderUniformDataType.SHADER_UNIFORM_VEC4);
 
-        lantern = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
-            Colors.RED, *ShaderHandler.getShaderPointer("main"));
+        // Flame yellow.
+        lantern = CreateLight(LightType.LIGHT_POINT, Vector3(1, 1, 1), Vector3(0, 0, 0),
+            Color(255, 207, 73), *ShaderHandler.getShaderPointer("main"));
     }
 
     void update() {
@@ -42,9 +43,7 @@ public:
 
         // ShaderHandler.setUniformVec3d("main", shaderViewPositionLocation, camPos);
 
-        lantern.position.x = camPos.x;
-        lantern.position.y = camPos.y;
-        lantern.position.z = camPos.z;
+        lantern.position = camPos.toRaylib();
 
         // DrawSphere(lantern.position, 10.0, Colors.RED);
 
