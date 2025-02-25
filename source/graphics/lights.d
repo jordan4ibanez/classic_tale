@@ -6,6 +6,7 @@ import math.vec3d;
 import raylib;
 import raylib.rcamera;
 import std.stdio;
+import utility.delta;
 
 static const MAX_LIGHTS = 512;
 
@@ -22,6 +23,9 @@ private:
     Light[4] testLights;
 
     float pos = 0;
+
+    double ambientLight = 0.1;
+    double up = false;
 
 public:
 
@@ -53,7 +57,30 @@ public:
 
     void update() {
 
+        double delta = Delta.getDelta();
+
+        if (up) {
+            ambientLight += delta * 0.25;
+            if (ambientLight >= 1) {
+                ambientLight = 1;
+                up = false;
+            }
+        } else {
+
+            ambientLight -= delta * 0.25;
+            if (ambientLight <= 0.1) {
+                ambientLight = 0.1;
+                up = true;
+            }
+        }
+
         const Vec3d camPos = CameraHandler.getPosition();
+
+        float[3] ambientLightLevel = [
+            ambientLight, ambientLight, ambientLight * 1.05
+        ];
+        SetShaderValue(*ShaderHandler.getShaderPointer("main"), shaderAmbientLightLocation,
+            &ambientLightLevel, ShaderUniformDataType.SHADER_UNIFORM_VEC3);
 
         // ShaderHandler.setUniformVec3d("main", shaderViewPositionLocation, camPos);
 
