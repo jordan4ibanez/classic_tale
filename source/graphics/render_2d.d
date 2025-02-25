@@ -1,5 +1,7 @@
 module graphics.render_2d;
 
+import math.rect;
+import math.vec2d;
 import raylib;
 
 static final const class Render2d {
