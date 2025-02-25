@@ -42,10 +42,14 @@ void main()
     // vec3 lightDir = normalize(lights[0].position - fragPosition);
     // float diff = max(dot(norm, lightDir), 0.0);
 
-    float brightness = 5.0;
+    float brightness = 10.0;
 
     float dist = (brightness - distance(lights[0].position, fragPosition)) / brightness;
     vec3 outputLight = vec3(lights[0].color) * dist;
+    outputLight.x = clamp(outputLight.x, 0.0, 1.0);
+    outputLight.y = clamp(outputLight.y, 0.0, 1.0);
+    outputLight.z = clamp(outputLight.z, 0.0, 1.0);
+    
 
     // vec3 diffuse = diff * vec3(lights[0].color);
 
