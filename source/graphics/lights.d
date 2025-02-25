@@ -57,6 +57,21 @@ public:
 
         lantern.position = camPos.toRaylib();
 
+        Vec3d workerPos = camPos;
+
+        workerPos.x += 20;
+        testLights[0].position = workerPos.toRaylib();
+
+        workerPos.x -= 40;
+        testLights[1].position = workerPos.toRaylib();
+
+        workerPos.x += 20;
+        workerPos.z += 20;
+        testLights[2].position = workerPos.toRaylib();
+
+        workerPos.z -= 40;
+        testLights[3].position = workerPos.toRaylib();
+
         // DrawSphere(lantern.position, 10.0, Colors.RED);
 
         // lantern.target.x = camPos.x;
@@ -77,6 +92,11 @@ public:
     void debugIt() {
 
         DrawSphere(lantern.position, 1.0, Colors.BLUE);
+
+        DrawSphere(testLights[0].position, 1.0, Colors.RED);
+        DrawSphere(testLights[1].position, 1.0, Colors.GREEN);
+        DrawSphere(testLights[2].position, 1.0, Colors.BLUE);
+        DrawSphere(testLights[3].position, 1.0, Colors.WHITE);
 
     }
 }
