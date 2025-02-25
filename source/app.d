@@ -7,7 +7,9 @@ import game.player;
 import graphics.camera_handler;
 import graphics.crosshair;
 import graphics.gui;
+import graphics.lights;
 import graphics.model_handler;
+import graphics.shader_handler;
 import graphics.texture_handler;
 import math.aabb;
 import math.rect;
@@ -24,7 +26,6 @@ import std.stdio;
 import std.string;
 import utility.garbage_collector;
 import utility.window;
-import graphics.shader_handler;
 
 void main() {
 
@@ -51,9 +52,7 @@ void main() {
 	}
 
 	ShaderHandler.newShader("main", "shaders/lighting.vs", "shaders/lighting.fs");
-
-	
-
+	Lights.initialize();
 
 	Crosshair.initialize();
 
@@ -147,7 +146,8 @@ void main() {
 
 		BeginDrawing();
 
-		ClearBackground(Color(120, 166, 255, 255));
+		// ClearBackground(Color(120, 166, 255, 255));
+		ClearBackground(Color(0, 1, 25, 255));
 
 		CameraHandler.begin();
 		{
