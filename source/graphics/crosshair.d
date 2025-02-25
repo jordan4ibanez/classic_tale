@@ -6,9 +6,10 @@ import graphics.render_2d;
 import math.rect;
 import math.vec2d;
 import raylib : BeginBlendMode, BlendMode, Color, Colors, EndBlendMode;
-import std.datetime.stopwatch;
 import std.stdio;
 import utility.window;
+
+// import std.datetime.stopwatch;
 
 static final const class Crosshair {
 static:
@@ -26,7 +27,7 @@ public:
 
     void draw() {
 
-        auto sw = StopWatch(AutoStart.yes);
+        // auto sw = StopWatch(AutoStart.yes);
 
         Vec2d windowCenter = vec2dMultiply(Window.getSize(), Vec2d(0.5, 0.5));
 
@@ -115,7 +116,7 @@ public:
         //? Third pass draws an outline on the cursor.
         Render2d.drawLinesConnected(linePoints, 13, debugColor);
 
-        writeln("took: ", cast(double) sw.peek().total!"hnsecs", " hns");
+        // writeln("took: ", cast(double) sw.peek().total!"hnsecs", " hns");
 
     }
 
