@@ -8,7 +8,7 @@ static final const class ShaderHandler {
 static:
 private:
 
-    Shader*[string] database;
+    Shader[string] database;
 
     //* BEGIN PUBLIC API.
 
@@ -18,10 +18,10 @@ private:
             throw new Error("[ShaderHandler]: Tried to overwrite shader " ~ shaderName);
         }
 
-        Shader* thisShader = new Shader();
-        *thisShader = LoadShader(toStringz(vertCodeLocation), toStringz(fragCodeLocation));
+        Shader thisShader = Shader();
+        thisShader = LoadShader(toStringz(vertCodeLocation), toStringz(fragCodeLocation));
 
-        if (!IsShaderValid(*thisShader)) {
+        if (!IsShaderValid(thisShader)) {
             throw new Error("[ShaderHandler]: Invalid shader. " ~ shaderName);
         }
 
@@ -34,7 +34,7 @@ private:
                 "[ShaderHandler]: Tried to get non-existent shader. " ~ shaderName);
         }
 
-        int val = GetShaderLocation(*database[shaderName], toStringz(uniformName));
+        int val = GetShaderLocation(database[shaderName], toStringz(uniformName));
 
         if (val == -1) {
             throw new Error(
@@ -45,38 +45,41 @@ private:
     }
 
     public Shader* getShaderPointer(string shaderName) {
-        if (shaderName !in database) {
+        Shader* thisShader = shaderName in database;
+        if (thisShader is null) {
             throw new Error(
                 "[ShaderHandler]: Tried to get non-existent shader pointer. " ~ shaderName);
         }
-        return database[shaderName];
+        return thisShader;
     }
 
     public void setUniformFloat(string shaderName, int location, float value) {
-        if (shaderName !in database) {
+        Shader* thisShader = shaderName in database;
+        if (thisShader is null) {
             throw new Error(
                 "[ShaderHandler]: Tried to set uniform in non-existent shader. " ~ shaderName);
         }
 
-        SetShaderValue(*database[shaderName], location, &value,
+        SetShaderValue(*thisShader, location, &value,
             ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
     }
 
     public void setUniformVec3d(string shaderName, int location, Vec3d value) {
-        if (shaderName !in database) {
+        Shader* thisShader = shaderName in database;
+        if (thisShader is null) {
             throw new Error(
                 "[ShaderHandler]: Tried to set uniform in non-existent shader. " ~ shaderName);
         }
 
         float[3] valueArray = [value.x, value.y, value.z];
 
-        SetShaderValue(*database[shaderName], location, valueArray.ptr,
+        SetShaderValue(*thisShader, location, valueArray.ptr,
             ShaderUniformDataType.SHADER_UNIFORM_VEC3);
     }
 
     public void terminate() {
         foreach (shaderName, thisShader; database) {
-            UnloadShader(*thisShader);
+            UnloadShader(thisShader);
         }
 
         database.clear();
