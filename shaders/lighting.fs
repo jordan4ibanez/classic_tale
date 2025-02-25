@@ -15,7 +15,7 @@ out vec4 finalColor;
 
 // NOTE: Add here your custom variables
 
-#define     MAX_LIGHTS              5
+#define     MAX_LIGHTS              512
 #define     LIGHT_DIRECTIONAL       0
 #define     LIGHT_POINT             1
 
@@ -40,7 +40,7 @@ void main()
 
     vec3 outputLight = vec3(0.0, 0.0, 0.0);
     
-    for (int i = 0; i < MAX_LIGHTS; i++){
+    for (int i = 0; i < 5; i++){
         float dist = (brightness - distance(lights[i].position, fragPosition)) / brightness;
         dist = clamp(dist, 0.0, 1.0);
 
