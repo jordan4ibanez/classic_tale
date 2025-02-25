@@ -15,7 +15,7 @@ out vec4 finalColor;
 
 // NOTE: Add here your custom variables
 
-#define     MAX_LIGHTS              1
+#define     MAX_LIGHTS              5
 #define     LIGHT_DIRECTIONAL       0
 #define     LIGHT_POINT             1
 
@@ -36,20 +36,28 @@ void main()
 {
     vec4 texelColor = texture(texture0, fragTexCoord);
 
-    float brightness = 10.0;
+    float brightness = 20.0;    
 
-    float dist = (brightness - distance(lights[0].position, fragPosition)) / brightness;
-    vec3 outputLight = vec3(lights[0].color) * dist;
+    vec3 outputLight = vec3(0.0, 0.0, 0.0);
+    
+    for (int i = 0; i < MAX_LIGHTS; i++){
+        float dist = (brightness - distance(lights[i].position, fragPosition)) / brightness;
+        dist = clamp(dist, 0.0, 1.0);
+
+        outputLight += (lights[i].color * dist);
+    }
+
     outputLight.x = clamp(outputLight.x, 0.0, 1.0);
     outputLight.y = clamp(outputLight.y, 0.0, 1.0);
     outputLight.z = clamp(outputLight.z, 0.0, 1.0);
 
-    vec3 lightLevel = vec3(ambient.x, ambient.y, ambient.z) + outputLight;
+    vec3 lightLevel = ambient + outputLight;
+
     lightLevel.x = clamp(lightLevel.x, 0.0, 1.0);
     lightLevel.y = clamp(lightLevel.y, 0.0, 1.0);
     lightLevel.z = clamp(lightLevel.z, 0.0, 1.0);
         
     vec3 result = lightLevel * vec3(texelColor);
 
-    finalColor = vec4(result, 1.0);
+    finalColor = vec4(result, texelColor.a);
 }
