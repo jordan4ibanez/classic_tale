@@ -24,6 +24,7 @@ import std.stdio;
 import std.string;
 import utility.garbage_collector;
 import utility.window;
+import graphics.shader_handler;
 
 void main() {
 
@@ -48,6 +49,11 @@ void main() {
 	scope (exit) {
 		ModelHandler.terminate();
 	}
+
+	ShaderHandler.newShader("main", "shaders/lighting.vs", "shaders/lighting.fs");
+
+	
+
 
 	Crosshair.initialize();
 
