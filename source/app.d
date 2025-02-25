@@ -63,7 +63,7 @@ void main() {
 		}
 	}
 
-	auto rand = Random(unpredictableSeed());
+	// auto rand = Random(unpredictableSeed());
 
 	bool drawWorld = true;
 
