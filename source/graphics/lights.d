@@ -15,7 +15,10 @@ private:
     int shaderAmbientLightLocation;
     int shaderViewPositionLocation;
 
+    // Lantern is basically as if you're holding a lantern. 
     Light lantern;
+
+    Light[4] testLights;
 
     float pos = 0;
 
@@ -33,8 +36,17 @@ public:
             &ambientLightLevel, ShaderUniformDataType.SHADER_UNIFORM_VEC3);
 
         // Flame yellow.
-        lantern = CreateLight(LightType.LIGHT_POINT, Vector3(1, 1, 1), Vector3(0, 0, 0),
+        lantern = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
             Color(255, 207, 73), *ShaderHandler.getShaderPointer("main"));
+
+        testLights[0] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
+            Colors.RED, *ShaderHandler.getShaderPointer("main"));
+        testLights[1] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
+            Colors.BLUE, *ShaderHandler.getShaderPointer("main"));
+        testLights[2] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
+            Colors.GREEN, *ShaderHandler.getShaderPointer("main"));
+        testLights[3] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
+            Colors.WHITE, *ShaderHandler.getShaderPointer("main"));
     }
 
     void update() {
