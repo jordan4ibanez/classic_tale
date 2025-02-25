@@ -27,10 +27,10 @@ public:
         // shaderViewPositionLocation = ShaderHandler.getUniformLocation("main", "viewPos");
         // assert(shaderViewPositionLocation > 0);
 
-        float[4] ambientLightLevel = [0.05, 0.05, 0.1, 1.0];
+        float[3] ambientLightLevel = [0.05, 0.05, 0.1];
 
         SetShaderValue(*ShaderHandler.getShaderPointer("main"), shaderAmbientLightLocation,
-            &ambientLightLevel, ShaderUniformDataType.SHADER_UNIFORM_VEC4);
+            &ambientLightLevel, ShaderUniformDataType.SHADER_UNIFORM_VEC3);
 
         // Flame yellow.
         lantern = CreateLight(LightType.LIGHT_POINT, Vector3(1, 1, 1), Vector3(0, 0, 0),
@@ -142,11 +142,11 @@ void UpdateLightValues(Shader shader, Light light) {
     SetShaderValue(shader, light.targetLoc, &target, ShaderUniformDataType.SHADER_UNIFORM_VEC3);
 
     // Send to shader light color values
-    float[4] color = [
+    // Alpha is ignored.
+    float[3] color = [
         cast(float) light.color.r / cast(float) 255,
         cast(float) light.color.g / cast(float) 255,
-        cast(float) light.color.b / cast(float) 255,
-        cast(float) light.color.a / cast(float) 255
+        cast(float) light.color.b / cast(float) 255
     ];
-    SetShaderValue(shader, light.colorLoc, &color, ShaderUniformDataType.SHADER_UNIFORM_VEC4);
+    SetShaderValue(shader, light.colorLoc, &color, ShaderUniformDataType.SHADER_UNIFORM_VEC3);
 }
