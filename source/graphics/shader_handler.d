@@ -62,6 +62,18 @@ private:
             ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
     }
 
+    public void setUniformVec3d(string shaderName, int location, Vec3d value) {
+        if (shaderName !in database) {
+            throw new Error(
+                "[ShaderHandler]: Tried to set uniform in non-existent shader. " ~ shaderName);
+        }
+
+        float[3] valueArray = [value.x, value.y, value.z];
+
+        SetShaderValue(*database[shaderName], location, valueArray.ptr,
+            ShaderUniformDataType.SHADER_UNIFORM_VEC3);
+    }
+
     public void terminate() {
         foreach (shaderName, thisShader; database) {
             UnloadShader(*thisShader);
