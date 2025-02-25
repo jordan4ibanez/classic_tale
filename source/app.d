@@ -170,6 +170,11 @@ void main() {
 		DrawText(toStringz("Z:" ~ format("%.2f", pos.z)), 10, 130, 30, Colors.BLACK);
 		DrawText(toStringz("Z:" ~ format("%.2f", pos.z)), 11, 131, 30, Colors.BLUE);
 
+		import core.memory;
+
+		Rect* rectangles = cast(Rect*) GC.malloc(Rect.sizeof * 3);
+		Vec2d* linePoints = cast(Vec2d*) GC.malloc(Vec2d.sizeof * 13);
+
 		{ // Draw the crosshair.
 
 			Vec2d windowCenter = vec2dMultiply(Window.getSize(), Vec2d(0.5, 0.5));
