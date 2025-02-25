@@ -13,7 +13,6 @@ private:
     //* BEGIN PUBLIC API.
 
     public void newShader(string shaderName, string vertCodeLocation, string fragCodeLocation) {
-
         if (shaderName in database) {
             throw new Error("[ShaderHandler]: Tried to overwrite shader " ~ shaderName);
         }
