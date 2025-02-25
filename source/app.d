@@ -9,6 +9,7 @@ import graphics.gui;
 import graphics.model_handler;
 import graphics.texture_handler;
 import math.aabb;
+import math.rect;
 import math.vec2d;
 import math.vec2i;
 import math.vec3d;
