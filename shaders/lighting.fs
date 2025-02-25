@@ -15,7 +15,7 @@ out vec4 finalColor;
 
 // NOTE: Add here your custom variables
 
-#define     MAX_LIGHTS              4
+#define     MAX_LIGHTS              1
 #define     LIGHT_DIRECTIONAL       0
 #define     LIGHT_POINT             1
 
@@ -34,45 +34,38 @@ uniform vec3 viewPos;
 
 void main()
 {
-    // Texel color fetching from texture sampler
     vec4 texelColor = texture(texture0, fragTexCoord);
-    vec3 lightDot = vec3(0.0);
-    vec3 normal = normalize(fragNormal);
-    vec3 viewD = normalize(viewPos - fragPosition);
-    vec3 specular = vec3(0.0);
 
-    vec4 tint = colDiffuse * fragColor;
+  	
+    // diffuse 
+    // vec3 norm = normalize(fragNormal);
+    // vec3 lightDir = normalize(lights[0].position - fragPosition);
+    // float diff = max(dot(norm, lightDir), 0.0);
 
-    // NOTE: Implement here your fragment shader code
+    float brightness = 5.0;
 
-    for (int i = 0; i < MAX_LIGHTS; i++)
-    {
-        if (lights[i].enabled == 1)
-        {
-            vec3 light = vec3(0.0);
+    float dist = (brightness - distance(lights[0].position, fragPosition)) / brightness;
+    vec3 outputLight = vec3(lights[0].color) * dist;
 
-            if (lights[i].type == LIGHT_DIRECTIONAL)
-            {
-                light = -normalize(lights[i].target - lights[i].position);
-            }
+    // vec3 diffuse = diff * vec3(lights[0].color);
 
-            if (lights[i].type == LIGHT_POINT)
-            {
-                light = normalize(lights[i].position - fragPosition);
-            }
+    
+    
+    // specular
+    // float specularStrength = 0.5;
+    // vec3 viewDir = normalize(viewPos - fragPosition);
+    // vec3 reflectDir = reflect(-lightDir, norm);  
+    // float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    // vec3 specular = specularStrength * spec * vec3(lights[0].color);
 
-            float NdotL = max(dot(normal, light), 0.0);
-            lightDot += lights[i].color.rgb*NdotL;
 
-            float specCo = 0.0;
-            if (NdotL > 0.0) specCo = pow(max(0.0, dot(viewD, reflect(-(light), normal))), 16.0); // 16 refers to shine
-            specular += specCo;
-        }
-    }
+    vec3 lightLevel = vec3(ambient.x, ambient.y, ambient.z) + outputLight;
+    lightLevel.x = clamp(lightLevel.x, 0.0, 1.0);
+    lightLevel.y = clamp(lightLevel.y, 0.0, 1.0);
+    lightLevel.z = clamp(lightLevel.z, 0.0, 1.0);
 
-    finalColor = (texelColor*((tint + vec4(specular, 1.0))*vec4(lightDot, 1.0)));
-    finalColor += texelColor*(ambient/10.0)*tint;
+        
+    vec3 result = lightLevel * vec3(texelColor);
 
-    // Gamma correction
-    finalColor = pow(finalColor, vec4(1.0/2.2));
+    finalColor = vec4(result, 1.0);
 }
