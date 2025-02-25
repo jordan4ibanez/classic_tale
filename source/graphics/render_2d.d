@@ -5,6 +5,7 @@ import raylib;
 static final const class Render2d {
 static:
 private:
+@nogc:
 
 public:
 
@@ -22,24 +23,20 @@ public:
 
     void drawRectangle(const double x, const double y, const double width, const double height, const ref Color color) {
 
-        const double topRightX = x + width;
-
-        const double bottomLeftY = y + height;
-
-        const double bottomRightX = x + width;
-        const double bottomRightY = y + height;
-
         rlBegin(RL_TRIANGLES);
         {
+            const double a = x + width;
+            const double b = y + height;
+
             rlColor4ub(color.r, color.g, color.b, color.a);
 
             rlVertex2f(x, y);
-            rlVertex2f(x, bottomLeftY);
-            rlVertex2f(topRightX, y);
+            rlVertex2f(x, b);
+            rlVertex2f(a, y);
 
-            rlVertex2f(topRightX, y);
-            rlVertex2f(x, bottomLeftY);
-            rlVertex2f(bottomRightX, bottomRightY);
+            rlVertex2f(a, y);
+            rlVertex2f(x, b);
+            rlVertex2f(a, b);
         }
         rlEnd();
     }
