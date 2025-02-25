@@ -11,7 +11,7 @@ private:
 
 public:
 
-    void drawLines(const Vec2d* points, const ulong numPoints, const ref Color color) {
+    void drawLinesConnected(const Vec2d* points, const ulong numPoints, const ref Color color) {
 
         rlBegin(RL_LINES);
         {

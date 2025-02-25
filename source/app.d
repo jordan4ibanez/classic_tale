@@ -312,6 +312,7 @@ void main() {
 			end.x = a;
 			end.y = b;
 			DrawLineV(start, end, debugColor);
+			Render2d.drawLinesConnected(linePoints, 13, debugColor);
 		}
 
 		EndDrawing();
