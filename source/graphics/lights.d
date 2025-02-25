@@ -7,11 +7,12 @@ import raylib;
 import raylib.rcamera;
 import std.stdio;
 
+static const MAX_LIGHTS = 512;
+
 static final const class Lights {
 static:
 private:
 
-    const MAX_LIGHTS = 4;
     int shaderAmbientLightLocation;
     int shaderViewPositionLocation;
 
@@ -25,10 +26,8 @@ private:
 public:
 
     void initialize() {
-        shaderAmbientLightLocation = ShaderHandler.getUniformLocation("main", "ambient");
-        assert(shaderAmbientLightLocation > 0);
         // shaderViewPositionLocation = ShaderHandler.getUniformLocation("main", "viewPos");
-        // assert(shaderViewPositionLocation > 0);
+        shaderAmbientLightLocation = ShaderHandler.getUniformLocation("main", "ambient");
 
         float[3] ambientLightLevel = [0.05, 0.05, 0.1];
 
@@ -41,10 +40,13 @@ public:
 
         testLights[0] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
             Colors.RED, *ShaderHandler.getShaderPointer("main"));
+
         testLights[1] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
-            Colors.BLUE, *ShaderHandler.getShaderPointer("main"));
-        testLights[2] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
             Colors.GREEN, *ShaderHandler.getShaderPointer("main"));
+
+        testLights[2] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
+            Colors.BLUE, *ShaderHandler.getShaderPointer("main"));
+
         testLights[3] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
             Colors.WHITE, *ShaderHandler.getShaderPointer("main"));
     }
@@ -81,6 +83,10 @@ public:
         // lantern.color.r = 128;
 
         UpdateLightValues(*ShaderHandler.getShaderPointer("main"), lantern);
+
+        foreach (light; testLights) {
+            UpdateLightValues(*ShaderHandler.getShaderPointer("main"), light);
+        }
 
         // ShaderHandler.setUniformVec3d("main", lantern.positionLoc, CameraHandler.getPosition());
 
@@ -123,8 +129,6 @@ enum LightType {
     LIGHT_DIRECTIONAL = 0,
     LIGHT_POINT = 1
 }
-
-static const MAX_LIGHTS = 4;
 
 static int lightsCount = 0;
 
