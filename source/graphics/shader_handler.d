@@ -1,5 +1,6 @@
 module graphics.shader_handler;
 
+import math.vec3d;
 import raylib;
 import std.string;
 
