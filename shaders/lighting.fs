@@ -15,15 +15,13 @@ out vec4 finalColor;
 
 // NOTE: Add here your custom variables
 
-#define     MAX_LIGHTS              512
+#define     MAX_LIGHTS              128
 #define     LIGHT_DIRECTIONAL       0
 #define     LIGHT_POINT             1
 
 struct Light {
-    int enabled;
-    int type;
+    bool enabled;
     vec3 position;
-    vec3 target;
     vec3 color;
 };
 
@@ -40,7 +38,11 @@ void main()
 
     vec3 outputLight = vec3(0.0, 0.0, 0.0);
     
-    for (int i = 0; i < 5; i++){
+    for (int i = 0; i < MAX_LIGHTS; i++){
+
+        if (!lights[i].enabled) {
+           continue; 
+        }
         float dist = (brightness - distance(lights[i].position, fragPosition)) / brightness;
         dist = clamp(dist, 0.0, 1.0);
 
