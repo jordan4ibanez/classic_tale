@@ -37,7 +37,7 @@ public:
         //? 40, 4
         const double shx = 40.0 * guiScale;
         // Size vertical.
-        const double shy = 6.0 * guiScale;
+        const double shy = 4.0 * guiScale;
         // Half width.
         const double hx = shx * 0.5;
         // Half height.
