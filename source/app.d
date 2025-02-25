@@ -29,7 +29,7 @@ import utility.window;
 
 void main() {
 
-	SetTraceLogLevel(TraceLogLevel.LOG_ERROR);
+	SetTraceLogLevel(TraceLogLevel.LOG_WARNING);
 
 	Window.initialize();
 	scope (exit) {
