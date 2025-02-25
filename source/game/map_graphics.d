@@ -363,6 +363,8 @@ private:
         ModelHandler.newModelFromMeshPointers(thisChunk.meshKey, vertices, vertexAllocation, textureCoordinates,
             textureCoordAllocation);
 
+        ModelHandler.setModelShader(thisChunk.meshKey, "main");
+
     }
 
     // Maybe this can have a numeric AA or array to hash this in immediate mode?
