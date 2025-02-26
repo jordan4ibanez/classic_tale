@@ -137,6 +137,7 @@ public: //* BEGIN PUBLIC API.
         thisMesh.vertices = vertices;
         thisMesh.texcoords = textureCoordinates;
         thisMesh.normals = normals;
+        thisMesh.colors = colors;
 
         UploadMesh(&thisMesh, false);
 
@@ -159,9 +160,11 @@ public: //* BEGIN PUBLIC API.
             thisMesh.vertices = null;
             thisMesh.texcoords = null;
             thisMesh.normals = null;
+            thisMesh.colors = null;
             thisModel.meshes[0].vertices = null;
             thisModel.meshes[0].texcoords = null;
             thisModel.meshes[0].normals = null;
+            thisModel.meshes[0].colors = null;
         }
     }
 
