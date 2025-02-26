@@ -369,7 +369,8 @@ private:
         }
 
         // writeln("does not exist, creating");
-        ModelHandler.newModelFromMeshPointers(thisChunk.meshKey, vertices, vertexAllocation, textureCoordinates);
+        ModelHandler.newModelFromMeshPointers(thisChunk.meshKey, vertices, vertexAllocation, textureCoordinates,
+            normals);
 
         ModelHandler.setModelShader(thisChunk.meshKey, "main");
 
