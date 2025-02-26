@@ -37,9 +37,9 @@ void main()
 
     vec3 outputLight = vec3(0.0, 0.0, 0.0);
 
-    if (fragNormal.x > 0) {
-        discard;
-    }
+    // if (fragNormal.x > 0) {
+    //     discard;
+    // }
 
     // if (fragNormal.y > 0) {
     //     discard;
@@ -49,9 +49,9 @@ void main()
     //     discard;
     // }
 
-    if (isnan(fragNormal.x) || isinf(fragNormal.x) || isnan(fragNormal.y) || isinf(fragNormal.y) || isnan(fragNormal.z) || isinf(fragNormal.z)) {
-        discard;
-    }
+    // if (isnan(fragNormal.x) || isinf(fragNormal.x) || isnan(fragNormal.y) || isinf(fragNormal.y) || isnan(fragNormal.z) || isinf(fragNormal.z)) {
+    //     discard;
+    // }
 
     
     for (int i = 0; i < MAX_LIGHTS; i++){
