@@ -254,6 +254,8 @@ private:
         float* vertices = cast(float*) GC.malloc(float.sizeof * (allocation * 18));
         float* normals = cast(float*) GC.malloc(float.sizeof * (allocation * 18));
 
+        ubyte* colors = cast(ubyte*) GC.malloc(ubyte.sizeof * (allocation * 24));
+
         float* textureCoordinates = cast(float*) GC.malloc(float.sizeof * (allocation * 12));
 
         ulong vertIndex = 0;
@@ -378,7 +380,7 @@ private:
 
         // writeln("does not exist, creating");
         ModelHandler.newModelFromMeshPointers(thisChunk.meshKey, vertices, allocation * 18, textureCoordinates,
-            normals);
+            normals, colors);
     }
 
     // Maybe this can have a numeric AA or array to hash this in immediate mode?
