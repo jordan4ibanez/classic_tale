@@ -232,7 +232,8 @@ public: //* BEGIN PUBLIC API.
 
         thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = blockID;
 
-        updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, blockID);
+        updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, blockID, position.x, position
+                .z);
 
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
@@ -270,7 +271,8 @@ public: //* BEGIN PUBLIC API.
 
         thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = thisBlock.id;
 
-        updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, thisBlock.id);
+        updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, thisBlock.id, position.x, position
+                .z);
 
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
@@ -278,7 +280,7 @@ public: //* BEGIN PUBLIC API.
     }
 
     /// x y z inside of the chunk.
-    void updateHeightMap(Chunk* thisChunk, int x, int y, int z, int newID) {
+    void updateHeightMap(Chunk* thisChunk, int x, int y, int z, int newID, double worldPositionX, double worldPositionZ) {
         const int height = thisChunk.heightmap[x][z];
         // ID was set to air.
         if (newID == 0) {
@@ -290,7 +292,7 @@ public: //* BEGIN PUBLIC API.
                     if (thisChunk.data[x][z][yScan].blockID != 0) {
                         // writeln("Subtractive: height at ", x, ", ", z, " is now ", yScan);
                         thisChunk.heightmap[x][z] = yScan;
-                        return;
+                        return cascadeLight(worldPositionX, height, worldPositionZ);
                     }
                 }
             }
@@ -305,15 +307,13 @@ public: //* BEGIN PUBLIC API.
             }
         }
 
-        cascadeLight();
     }
 
     /// Flood fill lighting.
-    void cascadeLight() {
+    void cascadeLight(double x, double y, double z) {
         
-    }
 
-    
+    }
 
     void worldLoad(Vec2i currentPlayerChunk) {
         foreach (x; currentPlayerChunk.x - 1 .. currentPlayerChunk.x + 2) {
