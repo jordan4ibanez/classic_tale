@@ -21,6 +21,7 @@ out vec4 finalColor;
 
 struct Light {
     bool enabled;
+    float brightness;
     vec3 position;
     vec3 color;
 };
@@ -34,8 +35,6 @@ void main()
 {
     vec4 texelColor = texture(texture0, fragTexCoord);
 
-    float brightness = 20.0;    
-
     vec3 outputLight = vec3(0.0, 0.0, 0.0);
     
     for (int i = 0; i < MAX_LIGHTS; i++){
@@ -43,7 +42,7 @@ void main()
         if (!lights[i].enabled) {
            continue; 
         }
-        float dist = (brightness - distance(lights[i].position, fragPosition)) / brightness;
+        float dist = (lights[i].brightness - distance(lights[i].position, fragPosition)) / lights[i].brightness;
         dist = clamp(dist, 0.0, 1.0);
 
         outputLight += (lights[i].color * dist);
