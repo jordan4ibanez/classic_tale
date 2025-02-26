@@ -261,6 +261,7 @@ public: //* BEGIN PUBLIC API.
         }
 
         thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = thisBlock.id;
+        
 
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
