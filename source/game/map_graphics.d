@@ -459,6 +459,40 @@ private:
             vertices[vertIndex + 16] = topLeft.y;
             vertices[vertIndex + 17] = topLeft.z;
 
+            // Tri 1 normals.
+
+            // 0
+            normals[vertIndex] = thisNormal.x;
+            normals[vertIndex + 1] = thisNormal.y;
+            normals[vertIndex + 2] = thisNormal.z;
+
+            // 1
+            normals[vertIndex + 3] = thisNormal.x;
+            normals[vertIndex + 4] = thisNormal.y;
+            normals[vertIndex + 5] = thisNormal.z;
+
+            // 2
+            normals[vertIndex + 6] = thisNormal.x;
+            normals[vertIndex + 7] = thisNormal.y;
+            normals[vertIndex + 8] = thisNormal.z;
+
+            // Tri 2 normals.
+
+            // 2
+            normals[vertIndex + 9] = thisNormal.x;
+            normals[vertIndex + 10] = thisNormal.y;
+            normals[vertIndex + 11] = thisNormal.z;
+
+            // 3
+            normals[vertIndex + 12] = thisNormal.x;
+            normals[vertIndex + 13] = thisNormal.y;
+            normals[vertIndex + 14] = thisNormal.z;
+
+            // 0
+            normals[vertIndex + 15] = thisNormal.x;
+            normals[vertIndex + 16] = thisNormal.y;
+            normals[vertIndex + 17] = thisNormal.z;
+
             vertIndex += 18;
 
         }
