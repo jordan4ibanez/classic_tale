@@ -36,12 +36,28 @@ void main()
     vec4 texelColor = texture(texture0, fragTexCoord);
 
     vec3 outputLight = vec3(0.0, 0.0, 0.0);
+
+    if (fragNormal.x > 0) {
+        discard;
+    }
+
+    // if (fragNormal.y > 0) {
+    //     discard;
+    // }
+
+    // if (fragNormal.z > 0) {
+    //     discard;
+    // }
+
+    if (isnan(fragNormal.x) || isinf(fragNormal.x) || isnan(fragNormal.y) || isinf(fragNormal.y) || isnan(fragNormal.z) || isinf(fragNormal.z)) {
+        discard;
+    }
+
     
     for (int i = 0; i < MAX_LIGHTS; i++){
         if (!lights[i].enabled) {
            continue; 
         }
-
         // vec3 norm = normalize(fragNormal);
         vec3 lightDir = normalize(lights[i].position - fragPosition);
         float diff = dot(fragNormal, lightDir);
