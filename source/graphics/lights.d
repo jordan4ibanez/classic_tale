@@ -40,7 +40,7 @@ public:
 
         // Flame yellow.
         lantern = CreateLight(Vector3(0, 0, 0), Vector3(0, 0, 0),
-            Color(255, 207, 73), 20.0, *ShaderHandler.getShaderPointer("main"));
+            Color(255, 207, 73), 0.0, *ShaderHandler.getShaderPointer("main"));
 
         // testLights[0] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
         //     Colors.RED, *ShaderHandler.getShaderPointer("main"));
@@ -59,20 +59,20 @@ public:
 
         double delta = Delta.getDelta();
 
-        // if (up) {
-        //     ambientLight += delta * 0.25;
-        //     if (ambientLight >= 1) {
-        //         ambientLight = 1;
-        //         up = false;
-        //     }
-        // } else {
+        if (up) {
+            lantern.brightness += delta * 10.0;
+            if (lantern.brightness >= 20) {
+                lantern.brightness = 20;
+                up = false;
+            }
+        } else {
 
-        //     ambientLight -= delta * 0.25;
-        //     if (ambientLight <= 0.1) {
-        //         ambientLight = 0.1;
-        //         up = true;
-        //     }
-        // }
+            lantern.brightness -= delta * 10.0;
+            if (lantern.brightness <= 1) {
+                lantern.brightness = 1;
+                up = true;
+            }
+        }
 
         float[3] ambientLightLevel = [
             ambientLight, ambientLight, ambientLight * 1.05
@@ -107,6 +107,8 @@ public:
         // lantern.target.z = camPos.z;
 
         // lantern.color.r = 128;
+
+        writeln(lantern.brightness);
 
         UpdateLightValues(*ShaderHandler.getShaderPointer("main"), lantern);
 
