@@ -31,6 +31,8 @@ uniform Light lights[MAX_LIGHTS];
 uniform vec3 ambient;
 uniform vec3 viewPos;
 
+// todo: use deferred shading. Immediate shading is very slow.
+
 void main()
 {
     vec4 texelColor = texture(texture0, fragTexCoord);
