@@ -423,7 +423,7 @@ private:
             const Vec3d topRight, /*3*/
             const Normal thisNormal) {
 
-            // Tri 1.
+            // Tri 1 vertices.
 
             // 0
             vertices[vertIndex] = topLeft.x;
@@ -440,7 +440,7 @@ private:
             vertices[vertIndex + 7] = bottomRight.y;
             vertices[vertIndex + 8] = bottomRight.z;
 
-            // Tri 2.
+            // Tri 2 vertices.
 
             // 2
             vertices[vertIndex + 9] = bottomRight.x;
