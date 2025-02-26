@@ -20,12 +20,14 @@ private:
     // Lantern is basically as if you're holding a lantern. 
     Light lantern;
 
-    Light[4] testLights;
+    // Light[4] testLights;
 
     float pos = 0;
 
     double ambientLight = 0.1;
     double up = false;
+
+    RenderTexture renderTexture;
 
 public:
 
@@ -40,41 +42,15 @@ public:
 
         // Flame yellow.
         lantern = CreateLight(Vector3(0, 0, 0), Vector3(0, 0, 0),
-            Color(255, 207, 73), 0.0, *ShaderHandler.getShaderPointer("main"));
+            Color(255, 207, 73), 20.0, *ShaderHandler.getShaderPointer("main"));
 
-        // testLights[0] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
-        //     Colors.RED, *ShaderHandler.getShaderPointer("main"));
+        renderTexture = LoadRenderTexture(2048, 2048);
 
-        // testLights[1] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
-        //     Colors.GREEN, *ShaderHandler.getShaderPointer("main"));
-
-        // testLights[2] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
-        //     Colors.BLUE, *ShaderHandler.getShaderPointer("main"));
-
-        // testLights[3] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
-        //     Colors.WHITE, *ShaderHandler.getShaderPointer("main"));
     }
 
     void update() {
 
         double delta = Delta.getDelta();
-
-        lantern.brightness = 20;
-
-        // if (up) {
-        //     lantern.brightness += delta * 10.0;
-        //     if (lantern.brightness >= 20) {
-        //         lantern.brightness = 20;
-        //         up = false;
-        //     }
-        // } else {
-
-        //     lantern.brightness -= delta * 10.0;
-        //     if (lantern.brightness <= 1) {
-        //         lantern.brightness = 1;
-        //         up = true;
-        //     }
-        // }
 
         float[3] ambientLightLevel = [
             ambientLight, ambientLight, ambientLight * 1.05
@@ -82,46 +58,16 @@ public:
         SetShaderValue(*ShaderHandler.getShaderPointer("main"), shaderAmbientLightLocation,
             &ambientLightLevel, ShaderUniformDataType.SHADER_UNIFORM_VEC3);
 
-        const Vec3d camPos = CameraHandler.getPosition();
+        Vec3d camPos = CameraHandler.getPosition();
         ShaderHandler.setUniformVec3d("main", shaderViewPositionLocation, camPos);
 
         lantern.position = camPos.toRaylib();
 
-        // Vec3d workerPos = camPos;
-
-        // workerPos.x += 20;
-        // testLights[0].position = workerPos.toRaylib();
-
-        // workerPos.x -= 40;
-        // testLights[1].position = workerPos.toRaylib();
-
-        // workerPos.x += 20;
-        // workerPos.z += 20;
-        // testLights[2].position = workerPos.toRaylib();
-
-        // workerPos.z -= 40;
-        // testLights[3].position = workerPos.toRaylib();
-
-        // DrawSphere(lantern.position, 10.0, Colors.RED);
-
-        // lantern.target.x = camPos.x;
-        // lantern.target.y = camPos.y;
-        // lantern.target.z = camPos.z;
-
-        // lantern.color.r = 128;
-
-        // writeln(lantern.brightness);
-
         UpdateLightValues(*ShaderHandler.getShaderPointer("main"), lantern);
 
-        foreach (light; testLights) {
-            UpdateLightValues(*ShaderHandler.getShaderPointer("main"), light);
-        }
-
-        // ShaderHandler.setUniformVec3d("main", lantern.positionLoc, CameraHandler.getPosition());
-
-        // writeln(CameraHandler.getPosition());
-        // ShaderHandler.setUniformVec3d("main", lantern.attenuationLoc, CameraHandler.getPosition());
+        // foreach (light; testLights) {
+        //     UpdateLightValues(*ShaderHandler.getShaderPointer("main"), light);
+        // }
 
     }
 
@@ -129,10 +75,10 @@ public:
 
         DrawSphere(lantern.position, 1.0, Colors.BLUE);
 
-        DrawSphere(testLights[0].position, 1.0, Colors.RED);
-        DrawSphere(testLights[1].position, 1.0, Colors.GREEN);
-        DrawSphere(testLights[2].position, 1.0, Colors.BLUE);
-        DrawSphere(testLights[3].position, 1.0, Colors.WHITE);
+        // DrawSphere(testLights[0].position, 1.0, Colors.RED);
+        // DrawSphere(testLights[1].position, 1.0, Colors.GREEN);
+        // DrawSphere(testLights[2].position, 1.0, Colors.BLUE);
+        // DrawSphere(testLights[3].position, 1.0, Colors.WHITE);
 
     }
 }
