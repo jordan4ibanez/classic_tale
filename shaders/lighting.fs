@@ -13,9 +13,9 @@ uniform vec4 colDiffuse;
 // Output fragment color
 out vec4 finalColor;
 
-// NOTE: Add here your custom variables
+// NOTE: Add your custom variables here
 
-#define     MAX_LIGHTS              128
+#define     MAX_LIGHTS              512
 #define     LIGHT_DIRECTIONAL       0
 #define     LIGHT_POINT             1
 
@@ -29,12 +29,10 @@ struct Light {
 // Input lighting values
 uniform Light lights[MAX_LIGHTS];
 uniform vec3 ambient;
-uniform vec3 viewPos;
 
 // todo: use deferred shading. Immediate shading is very slow.
 
-void main()
-{
+void main() {
     vec4 texelColor = texture(texture0, fragTexCoord);
     vec3 outputLight = vec3(0.0, 0.0, 0.0);
     vec3 norm = normalize(fragNormal);

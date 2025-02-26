@@ -18,9 +18,11 @@ private:
     int shaderViewPositionLocation;
 
     // Lantern is basically as if you're holding a lantern. 
-    Light lantern;
+    // Light lantern;
 
-    // Light[4] testLights;
+    int currentLight = 0;
+
+    Light[MAX_LIGHTS] testLights;
 
     float pos = 0;
 
@@ -40,11 +42,16 @@ public:
         SetShaderValue(*ShaderHandler.getShaderPointer("main"), shaderAmbientLightLocation,
             &ambientLightLevel, ShaderUniformDataType.SHADER_UNIFORM_VEC3);
 
+        // renderTexture = LoadRenderTexture(2048, 2048);
+    }
+
+    void addLight() {
+
         // Flame yellow.
-        lantern = CreateLight(Vector3(0, 0, 0), Vector3(0, 0, 0),
+        testLights[currentLight] = CreateLight(Vector3(0, 0, 0), Vector3(0, 0, 0),
             Color(255, 207, 73), 20.0, *ShaderHandler.getShaderPointer("main"));
 
-        renderTexture = LoadRenderTexture(2048, 2048);
+        currentLight++;
 
     }
 
@@ -58,22 +65,30 @@ public:
         SetShaderValue(*ShaderHandler.getShaderPointer("main"), shaderAmbientLightLocation,
             &ambientLightLevel, ShaderUniformDataType.SHADER_UNIFORM_VEC3);
 
-        Vec3d camPos = CameraHandler.getPosition();
-        ShaderHandler.setUniformVec3d("main", shaderViewPositionLocation, camPos);
+        // Vec3d camPos = CameraHandler.getPosition();
 
-        lantern.position = camPos.toRaylib();
+        // ShaderHandler.setUniformVec3d("main", shaderViewPositionLocation, camPos);
 
-        UpdateLightValues(*ShaderHandler.getShaderPointer("main"), lantern);
+        // lantern.position = camPos.toRaylib();
 
-        // foreach (light; testLights) {
-        //     UpdateLightValues(*ShaderHandler.getShaderPointer("main"), light);
-        // }
+        // UpdateLightValues(*ShaderHandler.getShaderPointer("main"), lantern);
+
+        foreach (light; testLights) {
+            UpdateLightValues(*ShaderHandler.getShaderPointer("main"), light);
+        }
 
     }
 
     void debugIt() {
 
-        DrawSphere(lantern.position, 1.0, Colors.BLUE);
+        // DrawSphere(lantern.position, 1.0, Colors.BLUE);
+
+        foreach (l; testLights) {
+            if (!l.enabled) {
+                break;
+            }
+            DrawSphere(l.position, 1.0, Colors.BLUE);
+        }
 
         // DrawSphere(testLights[0].position, 1.0, Colors.RED);
         // DrawSphere(testLights[1].position, 1.0, Colors.GREEN);
