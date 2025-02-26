@@ -301,11 +301,13 @@ private:
                         if (neighborFront) {
                             if (neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID == 0) {
                                 faceGen.front = true;
-                                faceGen.lightLevelFront = 4;
+                                faceGen.lightLevelFront = neighborFront.data[x][CHUNK_WIDTH - 1][y]
+                                    .naturalLightBank;
                             }
                         }
                     } else if (thisChunk.data[x][z - 1][y].blockID == 0) {
                         faceGen.front = true;
+                        faceGen.lightLevelFront = thisChunk.data[x][z - 1][y].naturalLightBank;
                     }
 
                     // Back.
@@ -313,10 +315,13 @@ private:
                         if (neighborBack) {
                             if (neighborBack.data[x][0][y].blockID == 0) {
                                 faceGen.back = true;
+                                faceGen.lightLevelBack = neighborBack
+                                    .data[x][0][y].naturalLightBank;
                             }
                         }
                     } else if (thisChunk.data[x][z + 1][y].blockID == 0) {
                         faceGen.back = true;
+                        faceGen.lightLevelBack = thisChunk.data[x][z + 1][y].naturalLightBank;
                     }
 
                     // Left.
@@ -324,10 +329,13 @@ private:
                         if (neighborLeft) {
                             if (neighborLeft.data[CHUNK_WIDTH - 1][z][y].blockID == 0) {
                                 faceGen.left = true;
+                                faceGen.lightLevelLeft = neighborLeft.data[CHUNK_WIDTH - 1][z][y]
+                                    .naturalLightBank;
                             }
                         }
                     } else if (thisChunk.data[x - 1][z][y].blockID == 0) {
                         faceGen.left = true;
+                        faceGen.lightLevelLeft = thisChunk.data[x - 1][z][y].naturalLightBank;
                     }
 
                     // Right.
@@ -335,10 +343,13 @@ private:
                         if (neighborRight) {
                             if (neighborRight.data[0][z][y].blockID == 0) {
                                 faceGen.right = true;
+                                faceGen.lightLevelRight = neighborRight
+                                    .data[0][z][y].naturalLightBank;
                             }
                         }
                     } else if (thisChunk.data[x + 1][z][y].blockID == 0) {
                         faceGen.right = true;
+                        faceGen.lightLevelRight = thisChunk.data[x + 1][z][y].naturalLightBank;
                     }
 
                     // Top.
@@ -347,6 +358,7 @@ private:
                         faceGen.top = true;
                     } else if (thisChunk.data[x][z][y + 1].blockID == 0) {
                         faceGen.top = true;
+                        faceGen.lightLevelTop = thisChunk.data[x][z][y + 1].naturalLightBank;
                     }
 
                     // Bottom.
@@ -355,6 +367,7 @@ private:
                         // The player should never fall out the bottom of the world.
                     } else if (thisChunk.data[x][z][y - 1].blockID == 0) {
                         faceGen.bottom = true;
+                        faceGen.lightLevelBottom = thisChunk.data[x][z][y - 1].naturalLightBank;
                     }
 
                     pos.x = x;
@@ -512,42 +525,44 @@ private:
 
             // Tri 1 colors.
 
+            const ubyte outputColor = cast(ubyte)(lightValue * cast(ubyte)16);
+
             // 0
-            colors[colorIndex] = lightValue;
-            colors[colorIndex + 1] = lightValue;
-            colors[colorIndex + 2] = lightValue;
+            colors[colorIndex] = outputColor;
+            colors[colorIndex + 1] = outputColor;
+            colors[colorIndex + 2] = outputColor;
             colors[colorIndex + 3] = 255;
 
             // 1
-            colors[colorIndex + 4] = lightValue;
-            colors[colorIndex + 5] = lightValue;
-            colors[colorIndex + 6] = lightValue;
+            colors[colorIndex + 4] = outputColor;
+            colors[colorIndex + 5] = outputColor;
+            colors[colorIndex + 6] = outputColor;
             colors[colorIndex + 7] = 255;
 
             // 2
-            colors[colorIndex + 8] = lightValue;
-            colors[colorIndex + 9] = lightValue;
-            colors[colorIndex + 10] = lightValue;
+            colors[colorIndex + 8] = outputColor;
+            colors[colorIndex + 9] = outputColor;
+            colors[colorIndex + 10] = outputColor;
             colors[colorIndex + 11] = 255;
 
             // Tri 2 colors.
 
             // 2
-            colors[colorIndex + 12] = lightValue;
-            colors[colorIndex + 13] = lightValue;
-            colors[colorIndex + 14] = lightValue;
+            colors[colorIndex + 12] = outputColor;
+            colors[colorIndex + 13] = outputColor;
+            colors[colorIndex + 14] = outputColor;
             colors[colorIndex + 15] = 255;
 
             // 3
-            colors[colorIndex + 16] = lightValue;
-            colors[colorIndex + 17] = lightValue;
-            colors[colorIndex + 18] = lightValue;
+            colors[colorIndex + 16] = outputColor;
+            colors[colorIndex + 17] = outputColor;
+            colors[colorIndex + 18] = outputColor;
             colors[colorIndex + 19] = 255;
 
             // 0
-            colors[colorIndex + 20] = lightValue;
-            colors[colorIndex + 21] = lightValue;
-            colors[colorIndex + 22] = lightValue;
+            colors[colorIndex + 20] = outputColor;
+            colors[colorIndex + 21] = outputColor;
+            colors[colorIndex + 22] = outputColor;
             colors[colorIndex + 23] = 255;
 
             vertIndex += 18;
@@ -613,7 +628,7 @@ private:
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z),
                 Normal.Front,
-                100
+                faceGeneration.lightLevelFront
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.front);
@@ -641,7 +656,7 @@ private:
                 Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z),
                 Normal.Back,
-                100
+                faceGeneration.lightLevelBack
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.back);
@@ -669,7 +684,7 @@ private:
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z),
                 Normal.Left,
-                100
+                faceGeneration.lightLevelLeft
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.left);
@@ -699,7 +714,7 @@ private:
                 Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z),
                 Normal.Right,
-                100
+                faceGeneration.lightLevelRight
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.right);
@@ -728,7 +743,7 @@ private:
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z),
                 Normal.Top,
-                100
+                faceGeneration.lightLevelTop
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.top);
@@ -758,7 +773,7 @@ private:
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z),
                 Normal.Bottom,
-                100
+                faceGeneration.lightLevelBottom
             );
 
             // This face is extremely confusing to visualize because one axis is inverted,
