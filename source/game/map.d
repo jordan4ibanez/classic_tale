@@ -279,9 +279,7 @@ public: //* BEGIN PUBLIC API.
 
     /// x y z inside of the chunk.
     void updateHeightMap(Chunk* thisChunk, int x, int y, int z, int newID) {
-
         const int height = thisChunk.heightmap[x][z];
-
         // ID was set to air.
         if (newID == 0) {
             // If it was the top, have to scan down.
@@ -307,7 +305,15 @@ public: //* BEGIN PUBLIC API.
             }
         }
 
+        cascadeLight();
     }
+
+    /// Flood fill lighting.
+    void cascadeLight() {
+        
+    }
+
+    
 
     void worldLoad(Vec2i currentPlayerChunk) {
         foreach (x; currentPlayerChunk.x - 1 .. currentPlayerChunk.x + 2) {
