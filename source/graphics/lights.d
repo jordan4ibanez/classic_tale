@@ -59,20 +59,22 @@ public:
 
         double delta = Delta.getDelta();
 
-        if (up) {
-            lantern.brightness += delta * 10.0;
-            if (lantern.brightness >= 20) {
-                lantern.brightness = 20;
-                up = false;
-            }
-        } else {
+        lantern.brightness = 20;
 
-            lantern.brightness -= delta * 10.0;
-            if (lantern.brightness <= 1) {
-                lantern.brightness = 1;
-                up = true;
-            }
-        }
+        // if (up) {
+        //     lantern.brightness += delta * 10.0;
+        //     if (lantern.brightness >= 20) {
+        //         lantern.brightness = 20;
+        //         up = false;
+        //     }
+        // } else {
+
+        //     lantern.brightness -= delta * 10.0;
+        //     if (lantern.brightness <= 1) {
+        //         lantern.brightness = 1;
+        //         up = true;
+        //     }
+        // }
 
         float[3] ambientLightLevel = [
             ambientLight, ambientLight, ambientLight * 1.05
@@ -108,7 +110,7 @@ public:
 
         // lantern.color.r = 128;
 
-        writeln(lantern.brightness);
+        // writeln(lantern.brightness);
 
         UpdateLightValues(*ShaderHandler.getShaderPointer("main"), lantern);
 

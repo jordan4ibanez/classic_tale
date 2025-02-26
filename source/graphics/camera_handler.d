@@ -32,7 +32,7 @@ public: //* BEGIN PUBLIC API.
 
         camera.position = Vector3(0, 170, 0);
         camera.up = Vector3(0, 1, 0);
-        camera.fovy = 55;
+        camera.fovy = 90;
         camera.projection = CameraProjection.CAMERA_PERSPECTIVE;
     }
 
