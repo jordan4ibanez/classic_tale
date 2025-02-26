@@ -226,7 +226,7 @@ public: //* BEGIN PUBLIC API.
 
         thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = blockID;
 
-        updateHeightMap(thisChunk, xzPosInChunk.x, xzPosInChunk.y, yPosInChunk, blockID);
+        updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, blockID);
 
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
@@ -264,7 +264,7 @@ public: //* BEGIN PUBLIC API.
 
         thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = thisBlock.id;
 
-        updateHeightMap(thisChunk, xzPosInChunk.x, xzPosInChunk.y, yPosInChunk, thisBlock.id);
+        updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, thisBlock.id);
 
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
