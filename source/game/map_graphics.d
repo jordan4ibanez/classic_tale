@@ -423,6 +423,8 @@ private:
             const Vec3d topRight, /*3*/
             const Normal thisNormal) {
 
+            // Done like this to attempt to improve cache performance.
+
             // Tri 1 vertices.
 
             // 0
