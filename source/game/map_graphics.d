@@ -420,7 +420,8 @@ private:
             const Vec3d topLeft, /*0*/
             const Vec3d bottomLeft, /*1*/
             const Vec3d bottomRight, /*2*/
-            const Vec3d topRight /*3*/ ) {
+            const Vec3d topRight, /*3*/
+            const Normal normal) {
 
             // Tri 1.
 
@@ -516,7 +517,8 @@ private:
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z),
-                Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z)
+                Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z),
+                Normal.Front
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.front);
@@ -542,7 +544,8 @@ private:
                 Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
-                Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z)
+                Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z),
+                Normal.Back
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.back);
@@ -568,7 +571,8 @@ private:
                 Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
-                Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z)
+                Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z),
+                Normal.Left
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.left);
@@ -596,7 +600,8 @@ private:
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
-                Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z)
+                Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z),
+                Normal.Right
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.right);
@@ -623,7 +628,8 @@ private:
                 Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z),
-                Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z)
+                Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z),
+                Normal.Top
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.top);
@@ -651,7 +657,8 @@ private:
                 Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
-                Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z)
+                Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z),
+                Normal.Bottom
             );
 
             // This face is extremely confusing to visualize because one axis is inverted,
