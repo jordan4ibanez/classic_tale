@@ -362,7 +362,7 @@ private:
         // }
         // writeln("took: ", total, "ms average");
 
-        writeln("took: ", sw.peek().total!"msecs", "ms");
+        writeln("took: ", sw.peek().total!"usecs", "us");
 
         if (ModelHandler.modelExists(thisChunk.meshKey)) {
             ModelHandler.destroy(thisChunk.meshKey);
