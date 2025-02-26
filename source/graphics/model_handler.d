@@ -122,7 +122,7 @@ public: //* BEGIN PUBLIC API.
     GC can work it's magic.
     */
     void newModelFromMeshPointers(string modelName, float* vertices, immutable ulong verticesLength,
-        float* textureCoordinates, immutable ulong textCoordsLength, bool immediateWipe = true) {
+        float* textureCoordinates, bool immediateWipe = true) {
 
         if (modelName in database) {
             throw new Error(
@@ -135,6 +135,7 @@ public: //* BEGIN PUBLIC API.
         thisMesh.triangleCount = thisMesh.vertexCount / 3;
         thisMesh.vertices = vertices;
         thisMesh.texcoords = textureCoordinates;
+        
 
         UploadMesh(&thisMesh, false);
 
