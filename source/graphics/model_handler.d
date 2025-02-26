@@ -120,9 +120,10 @@ public: //* BEGIN PUBLIC API.
     /*
     Immediate wipe will instantly replace the mesh data with null pointers so the
     GC can work it's magic.
+    ? This is pretty much exclusively used for the map model generator.
     */
     void newModelFromMeshPointers(string modelName, float* vertices, immutable ulong verticesLength,
-        float* textureCoordinates, float* normals, bool immediateWipe = true) {
+        float* textureCoordinates, float* normals, ubyte* colors, bool immediateWipe = true) {
 
         if (modelName in database) {
             throw new Error(
