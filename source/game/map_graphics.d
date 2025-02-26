@@ -242,8 +242,12 @@ private:
             }
         }
 
+        // Vertices and normals are synced. The normal is the direction of the vertex.
         float* vertices = cast(float*) GC.malloc(float.sizeof * vertexAllocation);
+        float* normals = cast(float*) GC.malloc(float.sizeof * vertexAllocation);
+
         float* textureCoordinates = cast(float*) GC.malloc(float.sizeof * textureCoordAllocation);
+        
 
         ulong vertIndex = 0;
         ulong textIndex = 0;
