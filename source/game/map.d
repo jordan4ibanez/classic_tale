@@ -260,7 +260,7 @@ public: //* BEGIN PUBLIC API.
             throw new Error("Cannot set to block " ~ name ~ ", does not exist.");
         }
 
-        database[chunkID].data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = thisBlock.id;
+        thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = thisBlock.id;
 
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
