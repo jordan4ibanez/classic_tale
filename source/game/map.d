@@ -271,6 +271,26 @@ public: //* BEGIN PUBLIC API.
         updateAdjacentNeighborToPositionInChunk(chunkID, xzPosInChunk);
     }
 
+    /// x y z inside of the chunk.
+    void updateHeightMap(Chunk* thisChunk, int x, int y, int z, int newID) {
+
+        const int height = thisChunk.heightmap[x][z];
+
+        // ID was set to air.
+        if (newID == 0) {
+
+        }  // todo: set this to check block definition database for replaceable or airlike, not too sure how this should be handled with complex block types.
+        // Else it was set to not air.
+        else {
+            // If it's taller, it's the top.
+            if (y > height) {
+                thisChunk.heightmap[x][z] = y;
+                writeln("addition: height at ", x, ", ", z, " is now ", y);
+            }
+        }
+
+    }
+
     void worldLoad(Vec2i currentPlayerChunk) {
         foreach (x; currentPlayerChunk.x - 1 .. currentPlayerChunk.x + 2) {
             foreach (z; currentPlayerChunk.y - 1 .. currentPlayerChunk.y + 2) {
