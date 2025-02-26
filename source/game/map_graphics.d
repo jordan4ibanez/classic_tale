@@ -416,7 +416,6 @@ private:
         immutable Vec3d chunkPositionMin = vec3dAdd(position, min);
         immutable Vec3d chunkPositionMax = vec3dAdd(position, max);
 
-        // pragma(inline, true)
         void makeQuad(
             const Vec3d topLeft, /*0*/
             const Vec3d bottomLeft, /*1*/
@@ -461,7 +460,6 @@ private:
 
         }
 
-        // pragma(inline, true)
         void makeTextureQuad(
             const Vec2d topLeft,
             const Vec2d bottomLeft,
