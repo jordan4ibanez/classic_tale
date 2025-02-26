@@ -133,8 +133,8 @@ private: //* BEGIN INTERNAL API.
         BlockDefinition bedrock = new BlockDefinition();
         bedrock.name = "bedrock";
         bedrock.modName = "engine";
-        bedrock.textures = "default_bedrock.png";
-        bedrock.textureIDs = TextureHandler.getIDFromName("default_bedrock.png");
+        bedrock.textures = "bedrock.png";
+        bedrock.textureIDs = TextureHandler.getIDFromName("bedrock.png");
         // todo: do the match thing below when mongoDB is added in.
         bedrock.id = 1;
 
