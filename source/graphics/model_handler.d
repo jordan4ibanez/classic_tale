@@ -157,8 +157,10 @@ public: //* BEGIN PUBLIC API.
             // This looks a bit silly, because it is. I just like to double check. :)
             thisMesh.vertices = null;
             thisMesh.texcoords = null;
+            thisMesh.normals = null;
             thisModel.meshes[0].vertices = null;
             thisModel.meshes[0].texcoords = null;
+            thisModel.meshes[0].normals = null;
         }
     }
 
