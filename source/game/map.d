@@ -416,6 +416,8 @@ private: //* BEGIN INTERNAL API.
                         z + basePositionZ) * 12) * 2;
                 const int bedRockSelectedHeight = cast(int) round(abs(bedRockNoise));
 
+                thisChunk.heightmap[x][z] = grassLayer;
+
                 yStack: foreach (y; 0 .. CHUNK_HEIGHT) {
 
                     if (y > selectedHeight) {
