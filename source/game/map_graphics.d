@@ -247,7 +247,6 @@ private:
         float* normals = cast(float*) GC.malloc(float.sizeof * vertexAllocation);
 
         float* textureCoordinates = cast(float*) GC.malloc(float.sizeof * textureCoordAllocation);
-        
 
         ulong vertIndex = 0;
         ulong textIndex = 0;
