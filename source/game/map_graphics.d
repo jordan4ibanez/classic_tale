@@ -12,6 +12,7 @@ import math.vec3d;
 import std.array;
 import std.bitmanip;
 import std.conv;
+
 // import std.datetime.stopwatch;
 import std.meta;
 import std.stdio;
@@ -371,9 +372,6 @@ private:
         // writeln("does not exist, creating");
         ModelHandler.newModelFromMeshPointers(thisChunk.meshKey, vertices, vertexAllocation, textureCoordinates,
             normals);
-
-        ModelHandler.setModelShader(thisChunk.meshKey, "main");
-
     }
 
     // Maybe this can have a numeric AA or array to hash this in immediate mode?

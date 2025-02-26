@@ -63,6 +63,17 @@ private:
             ShaderUniformDataType.SHADER_UNIFORM_FLOAT);
     }
 
+    public void setUniformInt(string shaderName, int location, int value) {
+        Shader* thisShader = shaderName in database;
+        if (thisShader is null) {
+            throw new Error(
+                "[ShaderHandler]: Tried to set uniform in non-existent shader. " ~ shaderName);
+        }
+
+        SetShaderValue(*thisShader, location, &value,
+            ShaderUniformDataType.SHADER_UNIFORM_INT);
+    }
+
     public void setUniformVec3d(string shaderName, int location, Vec3d value) {
         Shader* thisShader = shaderName in database;
         if (thisShader is null) {

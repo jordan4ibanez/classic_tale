@@ -29,6 +29,7 @@ struct Light {
 // Input lighting values
 uniform Light lights[MAX_LIGHTS];
 uniform vec3 ambient;
+uniform int currentLights;
 
 // todo: use deferred shading. Immediate shading is very slow.
 
@@ -36,7 +37,7 @@ void main() {
     vec4 texelColor = texture(texture0, fragTexCoord);
     vec3 outputLight = vec3(0.0, 0.0, 0.0);
     vec3 norm = normalize(fragNormal);
-    for (int i = 0; i < 1; i++){
+    for (int i = 0; i < currentLights; i++){
         if (!lights[i].enabled) {
            continue; 
         }

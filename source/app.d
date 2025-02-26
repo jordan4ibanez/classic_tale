@@ -7,7 +7,6 @@ import game.player;
 import graphics.camera_handler;
 import graphics.crosshair;
 import graphics.gui;
-import graphics.lights;
 import graphics.model_handler;
 import graphics.shader_handler;
 import graphics.texture_handler;
@@ -50,9 +49,6 @@ void main() {
 	scope (exit) {
 		ModelHandler.terminate();
 	}
-
-	ShaderHandler.newShader("main", "shaders/lighting.vs", "shaders/lighting.fs");
-	Lights.initialize();
 
 	Crosshair.initialize();
 
@@ -134,6 +130,11 @@ void main() {
 					if (!aabbCollision(possiblePositionBox, playerCollisionBox)) {
 
 						Map.setBlockAtWorldPositionByName(blockSelectionABove, "bedrock");
+
+						Vec3d aboveAbove = blockSelectionABove;
+						aboveAbove.x += 0.5;
+						aboveAbove.y += 1.5;
+						aboveAbove.z += 0.5;
 					}
 				}
 
@@ -143,8 +144,6 @@ void main() {
 		//! Raycast after everything or the selectionbox will be outdated by 1 frame.
 		//? Keep this last.
 		Player.raycast();
-
-		Lights.update();
 
 		BeginDrawing();
 
@@ -162,9 +161,6 @@ void main() {
 				DrawCubeWires(vec3dAdd(Vec3d(playerBlockSelection.x, playerBlockSelection.y, playerBlockSelection
 						.z), Vec3d(0.5, 0.5, 0.5)).toRaylib(), 1.0001, 1.0001, 1.0001, Colors.BLACK);
 			}
-
-			Lights.debugIt();
-
 		}
 		CameraHandler.end();
 
