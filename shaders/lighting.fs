@@ -39,25 +39,9 @@ void main()
 
     vec3 outputLight = vec3(0.0, 0.0, 0.0);
 
-    // if (fragNormal.x > 0) {
-    //     discard;
-    // }
-
-    // if (fragNormal.y > 0) {
-    //     discard;
-    // }
-
-    // if (fragNormal.z > 0) {
-    //     discard;
-    // }
-
-    // if (isnan(fragNormal.x) || isinf(fragNormal.x) || isnan(fragNormal.y) || isinf(fragNormal.y) || isnan(fragNormal.z) || isinf(fragNormal.z)) {
-    //     discard;
-    // }
-
     vec3 norm = normalize(fragNormal);
     
-    
+
     for (int i = 0; i < 1; i++){
         if (!lights[i].enabled) {
            continue; 
