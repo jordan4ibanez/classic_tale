@@ -311,7 +311,15 @@ public: //* BEGIN PUBLIC API.
 
     /// Flood fill lighting.
     void cascadeLight(double x, double y, double z) {
-        
+        // Cascade down, then out.
+        // If nothing below, move outwards.
+        /*
+
+        so if y - 1 is an air block, trigger another cascade.
+
+        if it's not, trigger a horizontal cascade.
+
+        */
 
     }
 
