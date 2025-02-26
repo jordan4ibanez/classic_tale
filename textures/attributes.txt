@@ -1,6 +1,4 @@
 dirt: https://opengameart.org/content/tileable-dirt-textures CC0
 grass: https://opengameart.org/content/tileable-grass-textures-set-1 CC0
-stone/bedrock: https://opengameart.org/content/100-seamless-textures CC0
-
-
-
+bedrock: https://opengameart.org/content/100-seamless-textures CC0
+stone: https://opengameart.org/content/seamless-2 CC0
