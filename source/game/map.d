@@ -284,7 +284,7 @@ public: //* BEGIN PUBLIC API.
                 foreach_reverse (yScan; 0 .. y) {
                     // Found it. That's it.
                     if (thisChunk.data[x][z][yScan].blockID != 0) {
-                        writeln("Subtractive: height at ", x, ", ", z, " is now ", yScan);
+                        // writeln("Subtractive: height at ", x, ", ", z, " is now ", yScan);
                         thisChunk.heightmap[x][z] = yScan;
                         return;
                     }
@@ -297,7 +297,7 @@ public: //* BEGIN PUBLIC API.
             //? Note: Additive update.
             if (y > height) {
                 thisChunk.heightmap[x][z] = y;
-                writeln("Additive: height at ", x, ", ", z, " is now ", y);
+                // writeln("Additive: height at ", x, ", ", z, " is now ", y);
             }
         }
 
