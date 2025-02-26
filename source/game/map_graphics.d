@@ -421,7 +421,7 @@ private:
             const Vec3d bottomLeft, /*1*/
             const Vec3d bottomRight, /*2*/
             const Vec3d topRight, /*3*/
-            const Normal normal) {
+            const Normal thisNormal) {
 
             // Tri 1.
 
