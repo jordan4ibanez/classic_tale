@@ -226,6 +226,8 @@ public: //* BEGIN PUBLIC API.
 
         thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = blockID;
 
+        updateHeightMap(thisChunk, xzPosInChunk.x, xzPosInChunk.y, yPosInChunk, blockID);
+
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
         updateAdjacentNeighborToPositionInChunk(chunkID, xzPosInChunk);
@@ -261,7 +263,8 @@ public: //* BEGIN PUBLIC API.
         }
 
         thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = thisBlock.id;
-        
+
+        updateHeightMap(thisChunk, xzPosInChunk.x, xzPosInChunk.y, yPosInChunk, thisBlock.id);
 
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
