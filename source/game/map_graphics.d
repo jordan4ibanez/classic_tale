@@ -20,6 +20,15 @@ import std.stdio;
 // double[averager] timer = 0;
 // ulong timerIndex = 0;
 
+private static immutable enum Normal : Vec3d {
+    Front = Vec3d(0, 0, -1),
+    Back = Vec3d(0, 0, 1),
+    Left = Vec3d(-1, 0, 0),
+    Right = Vec3d(1, 0, 0),
+    Top = Vec3d(0, 1, 0),
+    Bottom = Vec3d(0, -1, 0)
+}
+
 struct FaceGeneration {
     mixin(bitfields!(
             bool, "front", 1,
