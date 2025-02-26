@@ -136,16 +136,12 @@ private:
 
         // auto sw = StopWatch(AutoStart.yes);
 
-        ulong vertexAllocation = 0;
-        ulong textureCoordAllocation = 0;
+        ulong allocation = 0;
 
         // Neighbor chunks.
         const(Chunk*) neighborFront = Map.getChunkPointer(chunkKey.x, chunkKey.y - 1);
-
         const(Chunk*) neighborBack = Map.getChunkPointer(chunkKey.x, chunkKey.y + 1);
-
         const(Chunk*) neighborLeft = Map.getChunkPointer(chunkKey.x - 1, chunkKey.y);
-
         const(Chunk*) neighborRight = Map.getChunkPointer(chunkKey.x + 1, chunkKey.y);
 
         // Preallocation.
@@ -166,62 +162,72 @@ private:
                     if (z - 1 < 0) {
                         if (neighborFront) {
                             if (neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID == 0) {
-                                vertexAllocation += 18;
-                                textureCoordAllocation += 12;
+                                allocation++;
+                                // vertexAllocation += 18;
+                                // textureCoordAllocation += 12;
                             }
                         }
                     } else if (thisChunk.data[x][z - 1][y].blockID == 0) {
-                        vertexAllocation += 18;
-                        textureCoordAllocation += 12;
+                        allocation++;
+                        // vertexAllocation += 18;
+                        // textureCoordAllocation += 12;
                     }
 
                     // Back.
                     if (z + 1 >= CHUNK_WIDTH) {
                         if (neighborBack) {
                             if (neighborBack.data[x][0][y].blockID == 0) {
-                                vertexAllocation += 18;
-                                textureCoordAllocation += 12;
+                                allocation++;
+                                // vertexAllocation += 18;
+                                // textureCoordAllocation += 12;
                             }
                         }
                     } else if (thisChunk.data[x][z + 1][y].blockID == 0) {
-                        vertexAllocation += 18;
-                        textureCoordAllocation += 12;
+                        allocation++;
+                        // vertexAllocation += 18;
+                        // textureCoordAllocation += 12;
                     }
 
                     // Left.
                     if (x - 1 < 0) {
                         if (neighborLeft) {
                             if (neighborLeft.data[CHUNK_WIDTH - 1][z][y].blockID == 0) {
-                                vertexAllocation += 18;
-                                textureCoordAllocation += 12;
+                                allocation++;
+                                // vertexAllocation += 18;
+                                // textureCoordAllocation += 12;
                             }
                         }
                     } else if (thisChunk.data[x - 1][z][y].blockID == 0) {
-                        vertexAllocation += 18;
-                        textureCoordAllocation += 12;
+                        allocation++;
+                        // vertexAllocation += 18;
+                        // textureCoordAllocation += 12;
                     }
 
                     // Right.
                     if (x + 1 >= CHUNK_WIDTH) {
                         if (neighborRight) {
                             if (neighborRight.data[0][z][y].blockID == 0) {
-                                vertexAllocation += 18;
-                                textureCoordAllocation += 12;
+                                allocation++;
+                                // vertexAllocation += 18;
+                                // textureCoordAllocation += 12;
                             }
                         }
                     } else if (thisChunk.data[x + 1][z][y].blockID == 0) {
-                        vertexAllocation += 18;
-                        textureCoordAllocation += 12;
+                        allocation++;
+                        // vertexAllocation += 18;
+                        // textureCoordAllocation += 12;
                     }
 
                     // Top.
                     if (y + 1 >= CHUNK_HEIGHT) {
                         // Draw it, that's the top of the map.
-                        vertexAllocation += 18;
-                        textureCoordAllocation += 12;
+                        allocation++;
+                        // vertexAllocation += 18;
+                        // textureCoordAllocation += 12;
                     } else if (thisChunk.data[x][z][y + 1].blockID == 0) {
-                        vertexAllocation += 18;
-                        textureCoordAllocation += 12;
+                        allocation++;
+                        // vertexAllocation += 18;
+                        // textureCoordAllocation += 12;
                     }
 
                     // Bottom.
@@ -229,8 +235,9 @@ private:
                         // Do not draw the bottom of the world.
                         // The player should never fall out the bottom of the world.
                     } else if (thisChunk.data[x][z][y - 1].blockID == 0) {
-                        vertexAllocation += 18;
-                        textureCoordAllocation += 12;
+                        allocation++;
+                        // vertexAllocation += 18;
+                        // textureCoordAllocation += 12;
                     }
 
                     // 3 [xyz], 6 [2 tris], 6 faces
@@ -244,10 +251,10 @@ private:
         }
 
         // Vertices and normals are synced. The normal is the direction of the vertex.
-        float* vertices = cast(float*) GC.malloc(float.sizeof * vertexAllocation);
-        float* normals = cast(float*) GC.malloc(float.sizeof * vertexAllocation);
+        float* vertices = cast(float*) GC.malloc(float.sizeof * (allocation * 18));
+        float* normals = cast(float*) GC.malloc(float.sizeof * (allocation * 18));
 
-        float* textureCoordinates = cast(float*) GC.malloc(float.sizeof * textureCoordAllocation);
+        float* textureCoordinates = cast(float*) GC.malloc(float.sizeof * (allocation * 12));
 
         ulong vertIndex = 0;
         ulong textIndex = 0;
@@ -370,7 +377,7 @@ private:
         }
 
         // writeln("does not exist, creating");
-        ModelHandler.newModelFromMeshPointers(thisChunk.meshKey, vertices, vertexAllocation, textureCoordinates,
+        ModelHandler.newModelFromMeshPointers(thisChunk.meshKey, vertices, allocation * 18, textureCoordinates,
             normals);
     }
 
