@@ -278,14 +278,26 @@ public: //* BEGIN PUBLIC API.
 
         // ID was set to air.
         if (newID == 0) {
-
+            // If it was the top, have to scan down.
+            //? Note: Subtractive update.
+            if (height == y) {
+                foreach_reverse (yScan; 0 .. y) {
+                    // Found it. That's it.
+                    if (thisChunk.data[x][z][yScan].blockID != 0) {
+                        writeln("Subtractive: height at ", x, ", ", z, " is now ", yScan);
+                        thisChunk.heightmap[x][z] = yScan;
+                        return;
+                    }
+                }
+            }
         }  // todo: set this to check block definition database for replaceable or airlike, not too sure how this should be handled with complex block types.
         // Else it was set to not air.
         else {
             // If it's taller, it's the top.
+            //? Note: Additive update.
             if (y > height) {
                 thisChunk.heightmap[x][z] = y;
-                writeln("addition: height at ", x, ", ", z, " is now ", y);
+                writeln("Additive: height at ", x, ", ", z, " is now ", y);
             }
         }
 
