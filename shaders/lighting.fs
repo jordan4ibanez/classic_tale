@@ -53,17 +53,19 @@ void main()
     //     discard;
     // }
 
+    vec3 norm = normalize(fragNormal);
+    
     
     for (int i = 0; i < 1; i++){
         if (!lights[i].enabled) {
            continue; 
         }
-        // vec3 norm = normalize(fragNormal);
+        
         vec3 lightDir = normalize(lights[i].position - fragPosition);
-        float diff = dot(fragNormal, lightDir);
+        float diff = max(dot(fragNormal, lightDir), 0.0);
 
         float dist = (lights[i].brightness - distance(lights[i].position, fragPosition)) / lights[i].brightness;
-        dist = clamp(dist, 0.0, 1.0);
+        dist = max(dist, 0.0);
 
         outputLight += (lights[i].color * dist) * diff;
     }
