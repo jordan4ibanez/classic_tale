@@ -12,7 +12,7 @@ import math.vec3d;
 import std.array;
 import std.bitmanip;
 import std.conv;
-import std.datetime.stopwatch;
+// import std.datetime.stopwatch;
 import std.meta;
 import std.stdio;
 
@@ -133,7 +133,7 @@ private:
 
         FaceTextures faceTextures;
 
-        auto sw = StopWatch(AutoStart.yes);
+        // auto sw = StopWatch(AutoStart.yes);
 
         ulong vertexAllocation = 0;
         ulong textureCoordAllocation = 0;
@@ -362,7 +362,7 @@ private:
         // }
         // writeln("took: ", total, "ms average");
 
-        writeln("took: ", sw.peek().total!"usecs", "us");
+        // writeln("took: ", sw.peek().total!"usecs", "us");
 
         if (ModelHandler.modelExists(thisChunk.meshKey)) {
             ModelHandler.destroy(thisChunk.meshKey);
