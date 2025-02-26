@@ -39,42 +39,40 @@ public:
             &ambientLightLevel, ShaderUniformDataType.SHADER_UNIFORM_VEC3);
 
         // Flame yellow.
-        lantern = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
-            Color(255, 207, 73), *ShaderHandler.getShaderPointer("main"));
+        lantern = CreateLight(Vector3(0, 0, 0), Vector3(0, 0, 0),
+            Color(255, 207, 73), 20.0, *ShaderHandler.getShaderPointer("main"));
 
-        testLights[0] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
-            Colors.RED, *ShaderHandler.getShaderPointer("main"));
+        // testLights[0] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
+        //     Colors.RED, *ShaderHandler.getShaderPointer("main"));
 
-        testLights[1] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
-            Colors.GREEN, *ShaderHandler.getShaderPointer("main"));
+        // testLights[1] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
+        //     Colors.GREEN, *ShaderHandler.getShaderPointer("main"));
 
-        testLights[2] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
-            Colors.BLUE, *ShaderHandler.getShaderPointer("main"));
+        // testLights[2] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
+        //     Colors.BLUE, *ShaderHandler.getShaderPointer("main"));
 
-        testLights[3] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
-            Colors.WHITE, *ShaderHandler.getShaderPointer("main"));
+        // testLights[3] = CreateLight(LightType.LIGHT_POINT, Vector3(0, 0, 0), Vector3(0, 0, 0),
+        //     Colors.WHITE, *ShaderHandler.getShaderPointer("main"));
     }
 
     void update() {
 
         double delta = Delta.getDelta();
 
-        if (up) {
-            ambientLight += delta * 0.25;
-            if (ambientLight >= 1) {
-                ambientLight = 1;
-                up = false;
-            }
-        } else {
+        // if (up) {
+        //     ambientLight += delta * 0.25;
+        //     if (ambientLight >= 1) {
+        //         ambientLight = 1;
+        //         up = false;
+        //     }
+        // } else {
 
-            ambientLight -= delta * 0.25;
-            if (ambientLight <= 0.1) {
-                ambientLight = 0.1;
-                up = true;
-            }
-        }
-
-        const Vec3d camPos = CameraHandler.getPosition();
+        //     ambientLight -= delta * 0.25;
+        //     if (ambientLight <= 0.1) {
+        //         ambientLight = 0.1;
+        //         up = true;
+        //     }
+        // }
 
         float[3] ambientLightLevel = [
             ambientLight, ambientLight, ambientLight * 1.05
@@ -82,24 +80,25 @@ public:
         SetShaderValue(*ShaderHandler.getShaderPointer("main"), shaderAmbientLightLocation,
             &ambientLightLevel, ShaderUniformDataType.SHADER_UNIFORM_VEC3);
 
-        // ShaderHandler.setUniformVec3d("main", shaderViewPositionLocation, camPos);
+        const Vec3d camPos = CameraHandler.getPosition();
+        ShaderHandler.setUniformVec3d("main", shaderViewPositionLocation, camPos);
 
         lantern.position = camPos.toRaylib();
 
-        Vec3d workerPos = camPos;
+        // Vec3d workerPos = camPos;
 
-        workerPos.x += 20;
-        testLights[0].position = workerPos.toRaylib();
+        // workerPos.x += 20;
+        // testLights[0].position = workerPos.toRaylib();
 
-        workerPos.x -= 40;
-        testLights[1].position = workerPos.toRaylib();
+        // workerPos.x -= 40;
+        // testLights[1].position = workerPos.toRaylib();
 
-        workerPos.x += 20;
-        workerPos.z += 20;
-        testLights[2].position = workerPos.toRaylib();
+        // workerPos.x += 20;
+        // workerPos.z += 20;
+        // testLights[2].position = workerPos.toRaylib();
 
-        workerPos.z -= 40;
-        testLights[3].position = workerPos.toRaylib();
+        // workerPos.z -= 40;
+        // testLights[3].position = workerPos.toRaylib();
 
         // DrawSphere(lantern.position, 10.0, Colors.RED);
 
@@ -135,12 +134,11 @@ public:
 }
 
 struct Light {
-    int type;
-    bool enabled;
+    bool enabled = false;
     Vector3 position;
     Vector3 target;
     Color color;
-    float attenuation;
+    float brightness;
 
     // Shader locations
     int enabledLoc;
@@ -148,7 +146,7 @@ struct Light {
     int positionLoc;
     int targetLoc;
     int colorLoc;
-    int attenuationLoc;
+    int brightnessLoc;
 }
 
 // Light type
@@ -160,15 +158,15 @@ enum LightType {
 static int lightsCount = 0;
 
 // Create a light and get shader locations
-Light CreateLight(int type, Vector3 position, Vector3 target, Color color, Shader shader) {
+Light CreateLight(Vector3 position, Vector3 target, Color color, float brightness, Shader shader) {
     Light light = {0};
 
     if (lightsCount < MAX_LIGHTS) {
         light.enabled = true;
-        light.type = type;
         light.position = position;
         light.target = target;
         light.color = color;
+        light.brightness = brightness;
 
         // NOTE: Lighting shader naming must be the provided ones
         light.enabledLoc = GetShaderLocation(shader, TextFormat("lights[%i].enabled", lightsCount));
@@ -176,6 +174,7 @@ Light CreateLight(int type, Vector3 position, Vector3 target, Color color, Shade
         light.positionLoc = GetShaderLocation(shader, TextFormat("lights[%i].position", lightsCount));
         light.targetLoc = GetShaderLocation(shader, TextFormat("lights[%i].target", lightsCount));
         light.colorLoc = GetShaderLocation(shader, TextFormat("lights[%i].color", lightsCount));
+        light.brightnessLoc = GetShaderLocation(shader, TextFormat("lights[%i].brightness", lightsCount));
 
         UpdateLightValues(shader, light);
 
@@ -193,7 +192,10 @@ void UpdateLightValues(Shader shader, Light light) {
     SetShaderValue(shader, light.enabledLoc, &light.enabled, ShaderUniformDataType
             .SHADER_UNIFORM_INT);
 
-    SetShaderValue(shader, light.typeLoc, &light.type, ShaderUniformDataType.SHADER_UNIFORM_INT);
+    // SetShaderValue(shader, light.typeLoc, &light.type, ShaderUniformDataType.SHADER_UNIFORM_INT);
+
+    SetShaderValue(shader, light.brightnessLoc, &light.brightness, ShaderUniformDataType
+            .SHADER_UNIFORM_FLOAT);
 
     // Send to shader light position values
     // float[3] position = [light.position.x, light.position.y, light.position.z];
