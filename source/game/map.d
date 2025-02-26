@@ -557,28 +557,6 @@ private: //* BEGIN INTERNAL API.
 
                         break;
                     }
-
-                    // if (axis == CollisionAxis.X) {
-                    //     CollisionResult result = collideXToBlock(entityPosition, entitySize, entityVelocity,
-                    //         Vec2d(currentX, currentY), Vec2d(1, 1));
-
-                    //     if (result.collides) {
-                    //         entityPosition.x = result.newPosition;
-                    //         entityVelocity.x = 0;
-                    //     }
-                    // } else {
-
-                    //     CollisionResult result = collideYToBlock(entityPosition, entitySize, entityVelocity,
-                    //         Vec2d(currentX, currentY), Vec2d(1, 1));
-
-                    //     if (result.collides) {
-                    //         entityPosition.y = result.newPosition;
-                    //         entityVelocity.y = 0;
-                    //         if (result.hitGround) {
-                    //             hitGround = true;
-                    //         }
-                    //     }
-                    // }
                 }
             }
         }
