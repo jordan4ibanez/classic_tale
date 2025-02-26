@@ -344,7 +344,7 @@ private:
                     pos.y = y;
                     pos.z = z;
 
-                    makeCube(vertIndex, textIndex, vertices, textureCoordinates, pos, min,
+                    makeCube(vertIndex, textIndex, vertices, textureCoordinates, normals, pos, min,
                         max, &faceGen, &faceTextures);
 
                 }
@@ -378,7 +378,7 @@ private:
 
     // Maybe this can have a numeric AA or array to hash this in immediate mode?
     // pragma(inline)
-    void makeCube(ref ulong vertIndex, ref ulong textIndex, float* vertices, float* textureCoordinates,
+    void makeCube(ref ulong vertIndex, ref ulong textIndex, float* vertices, float* textureCoordinates, float* normals,
         const ref Vec3d position, const ref Vec3d min, const ref Vec3d max, FaceGeneration* faceGeneration,
         const FaceTextures* textures) {
 
