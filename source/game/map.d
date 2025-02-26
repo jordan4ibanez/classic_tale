@@ -157,7 +157,9 @@ public: //* BEGIN PUBLIC API.
     BlockData getBlockAtWorldPosition(Vec3d position) {
         Vec2i chunkID = calculateChunkAtWorldPosition(position);
 
-        if (chunkID !in database) {
+        Chunk* thisChunk = chunkID in database;
+
+        if (thisChunk is null) {
             return BlockData();
         }
 
@@ -171,13 +173,15 @@ public: //* BEGIN PUBLIC API.
             return BlockData();
         }
 
-        return database[chunkID].data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk];
+        return thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk];
     }
 
     BlockData getBlockAtWorldPosition(double x, double y, double z) {
         Vec2i chunkID = calculateChunkAtWorldPosition(x, z);
 
-        if (chunkID !in database) {
+        Chunk* thisChunk = chunkID in database;
+
+        if (thisChunk is null) {
             return BlockData();
         }
 
@@ -191,7 +195,7 @@ public: //* BEGIN PUBLIC API.
             return BlockData();
         }
 
-        return database[chunkID].data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk];
+        return thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk];
     }
 
     void setBlockAtWorldPositionByID(Vec3d position, int blockID) {
@@ -201,7 +205,9 @@ public: //* BEGIN PUBLIC API.
 
         Vec2i chunkID = calculateChunkAtWorldPosition(position);
 
-        if (chunkID !in database) {
+        Chunk* thisChunk = chunkID in database;
+
+        if (thisChunk is null) {
             // todo: maybe unload the chunk after?
             // loadChunk(chunkID);
             // writeln("remember to load up chunks!");
@@ -218,7 +224,7 @@ public: //* BEGIN PUBLIC API.
             return;
         }
 
-        database[chunkID].data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = blockID;
+        thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = blockID;
 
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
@@ -229,7 +235,9 @@ public: //* BEGIN PUBLIC API.
 
         Vec2i chunkID = calculateChunkAtWorldPosition(position);
 
-        if (chunkID !in database) {
+        Chunk* thisChunk = chunkID in database;
+
+        if (thisChunk is null) {
             // todo: maybe unload the chunk after?
             // loadChunk(chunkID);
             // writeln("remember to load up chunks!");
