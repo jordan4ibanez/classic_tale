@@ -133,7 +133,7 @@ private:
 
         FaceTextures faceTextures;
 
-        // auto sw = StopWatch(AutoStart.yes);
+        auto sw = StopWatch(AutoStart.yes);
 
         ulong vertexAllocation = 0;
         ulong textureCoordAllocation = 0;
@@ -242,11 +242,8 @@ private:
             }
         }
 
-        // writeln(vertexAllocation, " ", textureCoordAllocation);
         float* vertices = cast(float*) GC.malloc(float.sizeof * vertexAllocation);
-        // float[] vertices = uninitializedArray!(float[])(vertexAllocation);
         float* textureCoordinates = cast(float*) GC.malloc(float.sizeof * textureCoordAllocation);
-        // float[] textureCoordinates = uninitializedArray!(float[])(textureCoordAllocation);
 
         ulong vertIndex = 0;
         ulong textIndex = 0;
@@ -362,15 +359,14 @@ private:
         // }
         // writeln("took: ", total, "ms average");
 
-        // writeln("took: ", sw.peek().total!"msecs", "ms");
+        writeln("took: ", sw.peek().total!"msecs", "ms");
 
         if (ModelHandler.modelExists(thisChunk.meshKey)) {
             ModelHandler.destroy(thisChunk.meshKey);
         }
 
         // writeln("does not exist, creating");
-        ModelHandler.newModelFromMeshPointers(thisChunk.meshKey, vertices, vertexAllocation, textureCoordinates,
-            textureCoordAllocation);
+        ModelHandler.newModelFromMeshPointers(thisChunk.meshKey, vertices, vertexAllocation, textureCoordinates);
 
         ModelHandler.setModelShader(thisChunk.meshKey, "main");
 
