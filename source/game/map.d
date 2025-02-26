@@ -39,7 +39,6 @@ struct BlockData {
     ubyte naturalLightBank = 0;
     //? Artificial light sources like torches or camp fire.
     ubyte artificialLightBank = 0;
-
 }
 
 struct Chunk {
@@ -469,26 +468,26 @@ private: //* BEGIN INTERNAL API.
 
                 thisChunk.heightmap[x][z] = grassLayer;
 
-                yStack: foreach (y; 0 .. CHUNK_HEIGHT) {
+                foreach (y; 0 .. CHUNK_HEIGHT) {
 
                     if (y > selectedHeight) {
-                        break yStack;
-                    }
-
-                    if (y == 0) {
-                        thisChunk.data[x][z][y].blockID = bedrock.id;
-                    } else if (y <= 2) {
-                        if (y <= bedRockSelectedHeight) {
+                        thisChunk.data[x][z][y].naturalLightBank = 15;
+                    } else {
+                        if (y == 0) {
                             thisChunk.data[x][z][y].blockID = bedrock.id;
-                        } else {
+                        } else if (y <= 2) {
+                            if (y <= bedRockSelectedHeight) {
+                                thisChunk.data[x][z][y].blockID = bedrock.id;
+                            } else {
+                                thisChunk.data[x][z][y].blockID = stone.id;
+                            }
+                        } else if (y < dirtLayer) {
                             thisChunk.data[x][z][y].blockID = stone.id;
+                        } else if (y < grassLayer) {
+                            thisChunk.data[x][z][y].blockID = dirt.id;
+                        } else if (y == grassLayer) {
+                            thisChunk.data[x][z][y].blockID = grass.id;
                         }
-                    } else if (y < dirtLayer) {
-                        thisChunk.data[x][z][y].blockID = stone.id;
-                    } else if (y < grassLayer) {
-                        thisChunk.data[x][z][y].blockID = dirt.id;
-                    } else if (y == grassLayer) {
-                        thisChunk.data[x][z][y].blockID = grass.id;
                     }
                 }
             }
