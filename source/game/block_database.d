@@ -8,6 +8,7 @@ import std.string;
 class BlockDefinition {
     string name = null;
     string modName = null;
+    // Front, back, left, right, top, bottom.
     string[6] textures = null;
     // This is reserved.
     int[6] textureIDs = -1;
