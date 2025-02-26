@@ -54,7 +54,7 @@ void main()
     // }
 
     
-    for (int i = 0; i < MAX_LIGHTS; i++){
+    for (int i = 0; i < 1; i++){
         if (!lights[i].enabled) {
            continue; 
         }
