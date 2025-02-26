@@ -38,7 +38,13 @@ struct FaceGeneration {
             bool, "right", 1,
             bool, "top", 1,
             bool, "bottom", 1,
-            bool, "", 2
+            ubyte, "lightLevelFront", 4,
+            ubyte, "lightLevelBack", 4,
+            ubyte, "lightLevelLeft", 4,
+            ubyte, "lightLevelRight", 4,
+            ubyte, "lightLevelTop", 4,
+            ubyte, "lightLevelBottom", 4,
+            bool, "", 2,
     ));
 
     this(bool input) {
@@ -260,6 +266,7 @@ private:
 
         ulong vertIndex = 0;
         ulong textIndex = 0;
+        ulong colorIndex = 0;
 
         FaceGeneration faceGen = AllFaces;
 
@@ -294,6 +301,7 @@ private:
                         if (neighborFront) {
                             if (neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID == 0) {
                                 faceGen.front = true;
+                                faceGen.lightLevelFront = 4;
                             }
                         }
                     } else if (thisChunk.data[x][z - 1][y].blockID == 0) {
@@ -353,7 +361,7 @@ private:
                     pos.y = y;
                     pos.z = z;
 
-                    makeCube(vertIndex, textIndex, vertices, textureCoordinates, normals, pos, min,
+                    makeCube(vertIndex, textIndex, colorIndex, vertices, textureCoordinates, normals, colors, pos, min,
                         max, &faceGen, &faceTextures);
 
                 }
@@ -385,9 +393,9 @@ private:
 
     // Maybe this can have a numeric AA or array to hash this in immediate mode?
     // pragma(inline)
-    void makeCube(ref ulong vertIndex, ref ulong textIndex, float* vertices, float* textureCoordinates, float* normals,
-        const ref Vec3d position, const ref Vec3d min, const ref Vec3d max, FaceGeneration* faceGeneration,
-        const FaceTextures* textures) {
+    void makeCube(ref ulong vertIndex, ref ulong textIndex, ref ulong colorIndex, float* vertices,
+        float* textureCoordinates, float* normals, ubyte* colors, const ref Vec3d position, const ref Vec3d min,
+        const ref Vec3d max, FaceGeneration* faceGeneration, const FaceTextures* textures,) {
 
         // assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
         // assert(max.x <= 1 && max.y <= 1 && max.z <= 1, "max is out of bounds");
@@ -429,7 +437,8 @@ private:
             const Vec3d bottomLeft, /*1*/
             const Vec3d bottomRight, /*2*/
             const Vec3d topRight, /*3*/
-            const Normal thisNormal) {
+            const Normal thisNormal,
+            const ubyte lightValue) {
 
             // Done like this to attempt to improve cache performance.
 
@@ -501,7 +510,48 @@ private:
             normals[vertIndex + 16] = thisNormal.y;
             normals[vertIndex + 17] = thisNormal.z;
 
+            // Tri 1 colors.
+
+            // 0
+            colors[colorIndex] = lightValue;
+            colors[colorIndex + 1] = lightValue;
+            colors[colorIndex + 2] = lightValue;
+            colors[colorIndex + 3] = 255;
+
+            // 1
+            colors[colorIndex + 4] = lightValue;
+            colors[colorIndex + 5] = lightValue;
+            colors[colorIndex + 6] = lightValue;
+            colors[colorIndex + 7] = 255;
+
+            // 2
+            colors[colorIndex + 8] = lightValue;
+            colors[colorIndex + 9] = lightValue;
+            colors[colorIndex + 10] = lightValue;
+            colors[colorIndex + 11] = 255;
+
+            // Tri 2 colors.
+
+            // 2
+            colors[colorIndex + 12] = lightValue;
+            colors[colorIndex + 13] = lightValue;
+            colors[colorIndex + 14] = lightValue;
+            colors[colorIndex + 15] = 255;
+
+            // 3
+            colors[colorIndex + 16] = lightValue;
+            colors[colorIndex + 17] = lightValue;
+            colors[colorIndex + 18] = lightValue;
+            colors[colorIndex + 19] = 255;
+
+            // 0
+            colors[colorIndex + 20] = lightValue;
+            colors[colorIndex + 21] = lightValue;
+            colors[colorIndex + 22] = lightValue;
+            colors[colorIndex + 23] = 255;
+
             vertIndex += 18;
+            colorIndex += 24;
 
         }
 
@@ -562,7 +612,8 @@ private:
                 Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z),
-                Normal.Front
+                Normal.Front,
+                100
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.front);
@@ -589,7 +640,8 @@ private:
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z),
-                Normal.Back
+                Normal.Back,
+                100
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.back);
@@ -616,7 +668,8 @@ private:
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z),
-                Normal.Left
+                Normal.Left,
+                100
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.left);
@@ -645,7 +698,8 @@ private:
                 Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z),
-                Normal.Right
+                Normal.Right,
+                100
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.right);
@@ -673,7 +727,8 @@ private:
                 Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z),
-                Normal.Top
+                Normal.Top,
+                100
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.top);
@@ -702,7 +757,8 @@ private:
                 Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z),
-                Normal.Bottom
+                Normal.Bottom,
+                100
             );
 
             // This face is extremely confusing to visualize because one axis is inverted,
