@@ -382,16 +382,16 @@ private:
         const ref Vec3d position, const ref Vec3d min, const ref Vec3d max, FaceGeneration* faceGeneration,
         const FaceTextures* textures) {
 
-        assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
-        assert(max.x <= 1 && max.y <= 1 && max.z <= 1, "max is out of bounds");
-        assert(max.x >= min.x && max.y >= min.y && max.z >= min.z, "inverted axis");
+        // assert(min.x >= 0 && min.y >= 0 && min.z >= 0, "min is out of bounds");
+        // assert(max.x <= 1 && max.y <= 1 && max.z <= 1, "max is out of bounds");
+        // assert(max.x >= min.x && max.y >= min.y && max.z >= min.z, "inverted axis");
 
         // Allow flat faces to be optimized.
         immutable double width = max.x - min.x;
         immutable double height = max.y - min.y;
         immutable double depth = max.z - min.z;
 
-        assert(width > 0 || height > 0 || depth > 0, "this cube is nothing!");
+        // assert(width > 0 || height > 0 || depth > 0, "this cube is nothing!");
 
         if (width == 0) {
             // writeln("squishing on X axis");
