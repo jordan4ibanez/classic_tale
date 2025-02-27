@@ -399,12 +399,17 @@ public: //* BEGIN PUBLIC API.
         // Else it was set to not air.
         else {
             // If it's taller, it's the top.
+            // This portion of the heightmap has shifted up.
             //? Note: Additive update.
-            if (y > height) {
+            if (yInChunk > height) {
                 writeln("heightmap update");
-                thisChunk.heightmap[x][z] = y;
+                thisChunk.heightmap[xInChunk][zInChunk] = yInChunk;
 
-                // writeln("Additive: height at ", x, ", ", z, " is now ", y);
+                foreach (yScan; height .. yInChunk - 1) {
+                    thisChunk.data[xInChunk][zInChunk][yScan].sunlight = false;
+
+                    // writeln("Additive: height at ", x, ", ", z, " is now ", y);
+                }
                 // return cascadeNaturalLight(worldPositionX, y - 1, worldPositionZ);
             }
         }
