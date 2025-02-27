@@ -383,6 +383,9 @@ public: //* BEGIN PUBLIC API.
                     }
                 }
             }
+
+            // This is a Y striping non-update fix. 0, 1, 0 1 -> top. If this is not triggered it will leave outdated lights.
+            return cascadeNaturalLight(worldPositionX, y, worldPositionZ);
         }  // todo: set this to check block definition database for replaceable or airlike, not too sure how this should be handled with complex block types.
         // Else it was set to not air.
         else {
