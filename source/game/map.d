@@ -237,6 +237,26 @@ public: //* BEGIN PUBLIC API.
         return thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][y];
     }
 
+    BlockData* getBlockPointerAtWorldPosition(int x, int y, int z) {
+        Vec2i chunkID = calculateChunkAtWorldPosition(x, z);
+
+        Chunk* thisChunk = chunkID in database;
+
+        if (thisChunk is null) {
+            return null;
+        }
+
+        Vec2i xzPosInChunk = getXZInChunk(x, z);
+
+        // Out of bounds.
+        if (y < 0 || y >= CHUNK_HEIGHT) {
+            writeln("WARNING! trying to read out of bounds! " ~ to!string(y));
+            return null;
+        }
+
+        return &thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][y];
+    }
+
     void setBlockAtWorldPositionByID(Vec3d position, int blockID) {
         if (!BlockDatabase.hasBlockID(blockID)) {
             throw new Error("Cannot set to block ID " ~ to!string(blockID) ~ ", ID does not exist.");
@@ -373,7 +393,6 @@ public: //* BEGIN PUBLIC API.
             }
         }
     }
-    
 
     /// Flood fill lighting.
     void cascadeNaturalLight(int x, int y, int z) {
