@@ -396,7 +396,7 @@ public: //* BEGIN PUBLIC API.
         }
     }
 
-    /// Flood fill lighting.
+    /// Flood fill lighting. Recursive. Might overflow Window's tiny 1MB stack.
     void cascadeNaturalLight(int x, int y, int z) {
         /*
         Cascade down, then out.
