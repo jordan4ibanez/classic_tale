@@ -420,6 +420,7 @@ public: //* BEGIN PUBLIC API.
             return;
         }
 
+        // Todo: this needs to be able to flow through clear blocks like glass.
         if (thisBlock.blockID == 0) {
             // This means that now it is direct sunlight.
             if (getTopAt(x, z) <= y) {
