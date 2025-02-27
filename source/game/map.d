@@ -449,6 +449,8 @@ public: //* BEGIN PUBLIC API.
                 break;
             }
 
+            // Search for any in sun blocks.
+
             getBlockPointerAtWorldPosition(thisPosition.unwrap());
 
         }
