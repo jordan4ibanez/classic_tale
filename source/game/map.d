@@ -101,23 +101,24 @@ public: //* BEGIN PUBLIC API.
         return gravity;
     }
 
-    double getTop(Vec3d position) {
-        // todo: this should probably just use a heightmap.
+    int getTopAt(Vec3d position) {
         Vec2i chunkID = calculateChunkAtWorldPosition(position);
         Vec2i posInChunk = getXZInChunk(position);
-
-        if (chunkID !in database) {
+        Chunk* thisChunk = chunkID in database;
+        if (thisChunk is null) {
             return 0;
         }
+        return thisChunk.heightmap[posInChunk.x][posInChunk.y];
+    }
 
-        Chunk thisChunk = database[chunkID];
-
-        foreach_reverse (y; 0 .. CHUNK_HEIGHT) {
-            if (thisChunk.data[posInChunk.x][posInChunk.y][y].blockID != 0) {
-                return y + 1;
-            }
+    int getTopAt(int x, int z) {
+        Vec2i chunkID = calculateChunkAtWorldPosition(x, z);
+        Vec2i posInChunk = getXZInChunk(x, z);
+        Chunk* thisChunk = chunkID in database;
+        if (thisChunk is null) {
+            return 0;
         }
-        return 0;
+        return thisChunk.heightmap[posInChunk.x][posInChunk.y];
     }
 
     Vec2i calculateChunkAtWorldPosition(Vec3d position) {
