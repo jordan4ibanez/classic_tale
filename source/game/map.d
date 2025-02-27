@@ -376,7 +376,7 @@ public: //* BEGIN PUBLIC API.
         int worldPositionX, int worldPositionZ) {
 
         const int height = thisChunk.heightmap[xInChunk][zInChunk];
-        // ID was set to air.
+        // ID was set to air. (removed/dug)
         if (newID == 0) {
             // If it was the top, have to scan down.
             //? Note: Subtractive update. Slightly more expensive. Has to scan down.
