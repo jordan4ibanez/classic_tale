@@ -147,6 +147,19 @@ public: //* BEGIN PUBLIC API.
         return Vec2i(x, z);
     }
 
+    Vec2i getXZInChunk(int xInput, int zInput) {
+        int x = xInput % CHUNK_WIDTH;
+        int z = zInput % CHUNK_WIDTH;
+        // Account for negatives.
+        if (x < 0) {
+            x += CHUNK_WIDTH;
+        }
+        if (z < 0) {
+            z += CHUNK_WIDTH;
+        }
+        return Vec2i(x, z);
+    }
+
     Vec2i getXZInChunk(double px, double pz) {
         int x = cast(int) floor(px % CHUNK_WIDTH);
         int z = cast(int) floor(pz % CHUNK_WIDTH);
@@ -204,6 +217,26 @@ public: //* BEGIN PUBLIC API.
         return thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk];
     }
 
+    BlockData getBlockAtWorldPosition(int x, int y, int z) {
+        Vec2i chunkID = calculateChunkAtWorldPosition(x, z);
+
+        Chunk* thisChunk = chunkID in database;
+
+        if (thisChunk is null) {
+            return BlockData();
+        }
+
+        Vec2i xzPosInChunk = getXZInChunk(x, z);
+
+        // Out of bounds.
+        if (y < 0 || y >= CHUNK_HEIGHT) {
+            writeln("WARNING! trying to read out of bounds! " ~ to!string(y));
+            return BlockData();
+        }
+
+        return thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][y];
+    }
+
     void setBlockAtWorldPositionByID(Vec3d position, int blockID) {
         if (!BlockDatabase.hasBlockID(blockID)) {
             throw new Error("Cannot set to block ID " ~ to!string(blockID) ~ ", ID does not exist.");
@@ -232,8 +265,41 @@ public: //* BEGIN PUBLIC API.
 
         thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = blockID;
 
-        updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, blockID, position.x, position
-                .z);
+        updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, blockID,
+            cast(int) position.x, cast(int) position.z);
+
+        // This gets put into a HashSetQueue so it can keep doing it over and over.
+        MapGraphics.generate(chunkID);
+        updateAdjacentNeighborToPositionInChunk(chunkID, xzPosInChunk);
+    }
+
+    void setBlockAtWorldPositionByID(int x, int y, int z, int blockID) {
+        if (!BlockDatabase.hasBlockID(blockID)) {
+            throw new Error("Cannot set to block ID " ~ to!string(blockID) ~ ", ID does not exist.");
+        }
+
+        Vec2i chunkID = calculateChunkAtWorldPosition(x, z);
+
+        Chunk* thisChunk = chunkID in database;
+
+        if (thisChunk is null) {
+            // todo: maybe unload the chunk after?
+            // loadChunk(chunkID);
+            // writeln("remember to load up chunks!");
+            return;
+        }
+
+        Vec2i xzPosInChunk = getXZInChunk(x, z);
+
+        // Out of bounds.
+        if (y < 0 || y >= CHUNK_HEIGHT) {
+            writeln("WARNING! trying to write out of bounds! " ~ to!string(y));
+            return;
+        }
+
+        thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][y].blockID = blockID;
+
+        updateHeightMap(thisChunk, xzPosInChunk.x, y, xzPosInChunk.y, blockID, x, z);
 
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
@@ -271,8 +337,8 @@ public: //* BEGIN PUBLIC API.
 
         thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = thisBlock.id;
 
-        updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, thisBlock.id, position.x, position
-                .z);
+        updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, thisBlock.id,
+            cast(int) position.x, cast(int) position.z);
 
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
@@ -280,7 +346,7 @@ public: //* BEGIN PUBLIC API.
     }
 
     /// x y z inside of the chunk.
-    void updateHeightMap(Chunk* thisChunk, int x, int y, int z, int newID, double worldPositionX, double worldPositionZ) {
+    void updateHeightMap(Chunk* thisChunk, int x, int y, int z, int newID, int worldPositionX, int worldPositionZ) {
         const int height = thisChunk.heightmap[x][z];
         // ID was set to air.
         if (newID == 0) {
@@ -310,16 +376,18 @@ public: //* BEGIN PUBLIC API.
     }
 
     /// Flood fill lighting.
-    void cascadeLight(double x, double y, double z) {
-        // Cascade down, then out.
-        // If nothing below, move outwards.
+    void cascadeLight(int x, int y, int z) {
         /*
+        Cascade down, then out.
+        If nothing below, move outwards.
 
         so if y - 1 is an air block, trigger another cascade.
-
         if it's not, trigger a horizontal cascade.
-
         */
+
+        if (getBlockAtWorldPosition(x, y, z).blockID == 0) {
+            setBlockAtWorldPositionByID(x, y, z, 2);
+        }
 
     }
 
