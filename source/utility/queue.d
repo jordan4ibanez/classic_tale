@@ -1,6 +1,6 @@
 module utility.queue;
 
-import optibrev;
+public import optibrev;
 import std.container;
 
 struct Queue(T) {
@@ -19,7 +19,7 @@ public:
         if (elements.empty()) {
             return result;
         }
-        result = elements.front();
+        result.Some(elements.front());
         elements.removeFront();
         return result;
     }
