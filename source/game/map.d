@@ -40,6 +40,7 @@ struct BlockData {
     ubyte naturalLightBank = 0;
     //? Artificial light sources like torches or camp fire.
     ubyte artificialLightBank = 0;
+    bool openSky = false;
 }
 
 struct Chunk {
