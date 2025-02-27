@@ -654,7 +654,7 @@ private: //* BEGIN INTERNAL API.
 
                     if (y > selectedHeight) {
                         thisChunk.data[x][z][y].naturalLightBank = 15;
-                        thisChunk.data[x][z][y].openSky = true;
+                        thisChunk.data[x][z][y].sunlight = true;
                     } else {
                         if (y == 0) {
                             thisChunk.data[x][z][y].blockID = bedrock.id;
