@@ -386,7 +386,7 @@ public: //* BEGIN PUBLIC API.
                     if (thisChunk.data[xInChunk][zInChunk][yScan].blockID != 0) {
                         // writeln("Subtractive: height at ", x, ", ", z, " is now ", yScan);
                         thisChunk.heightmap[xInChunk][zInChunk] = yScan;
-                        // return cascadeNaturalLight(worldPositionX, height, worldPositionZ);
+                        return cascadeNaturalLight(worldPositionX, height, worldPositionZ);
                     } else {
                         thisChunk.data[xInChunk][zInChunk][yScan].sunlight = true;
                     }
@@ -407,10 +407,9 @@ public: //* BEGIN PUBLIC API.
 
                 foreach (yScan; height .. yInChunk - 1) {
                     thisChunk.data[xInChunk][zInChunk][yScan].sunlight = false;
-
-                    // writeln("Additive: height at ", x, ", ", z, " is now ", y);
                 }
-                // return cascadeNaturalLight(worldPositionX, y - 1, worldPositionZ);
+                // writeln("Additive: height at ", x, ", ", z, " is now ", y);
+                return cascadeNaturalLight(worldPositionX, yInChunk - 1, worldPositionZ);
             }
         }
     }
