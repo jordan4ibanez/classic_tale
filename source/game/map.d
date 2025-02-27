@@ -445,45 +445,41 @@ public: //* BEGIN PUBLIC API.
             // writeln("enter");
             // This means that now it is direct sunlight.
             if (getTopAt(x, z) <= y) {
-                writeln("CASCADE UP");
+
+                writeln("sunlight cascade straight down");
+
                 thisBlock.naturalLightBank = 15;
                 cascadeNaturalLight(x, y - 1, z);
+
                 // Todo: check if natural light next to is less than 14 and flow into it if so.
             } else {
-                // writeln("cascade down");
                 // This means it is now under a block. Check surroundings to find local natural light level.
                 ubyte maxOutputNeighbors = 0;
-                // ubyte upLight = 0;
+                bool spreadFront = false;
+                bool spreadBack = false;
+                bool spreadLeft = false;
+                bool spreadRight = false;
 
-                static const Vec3i[5] directions2D = [
-                    Vec3i(-1, 0, 0),
-                    Vec3i(1, 0, 0),
+                static const Vec3i[1] directions2D = [
+                    // Vec3i(-1, 0, 0),
+                    // Vec3i(1, 0, 0),
                     Vec3i(0, 1, 0),
-                    Vec3i(0, 0, -1),
-                    Vec3i(0, 0, 1),
+                    // Vec3i(0, 0, -1),
+                    // Vec3i(0, 0, 1),
                 ];
 
-                foreach (i, dir; directions2D) {
-                    const BlockData* neighbor = getBlockPointerAtWorldPosition(x + dir.x, y + dir.y, z + dir
-                            .z);
+                const BlockData* neighbor = getBlockPointerAtWorldPosition(x, y + 1, z);
 
-                    if (neighbor) {
-
-                        maxOutputNeighbors = max(maxOutputNeighbors, neighbor.naturalLightBank);
-                    }
+                if (neighbor && neighbor.blockID == 0) {
+                    maxOutputNeighbors = max(maxOutputNeighbors, neighbor.naturalLightBank);
                 }
 
                 if (maxOutputNeighbors > 0) {
                     maxOutputNeighbors -= 1;
                 }
 
-                writeln("hmm:", maxOutputNeighbors);
-
                 thisBlock.naturalLightBank = maxOutputNeighbors;
 
-                // if (upLight < thisBlock.naturalLightBank) {
-                //     cascadeNaturalLight(x, y - 1, z);
-                // }
                 cascadeNaturalLight(x, y - 1, z);
             }
         }
