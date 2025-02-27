@@ -434,8 +434,25 @@ public: //* BEGIN PUBLIC API.
         }
     }
 
-    /// Flood fill lighting. Recursive. Might overflow Window's tiny 1MB stack.
     void cascadeNaturalLight(int x, int y, int z) {
+        import utility.queue;
+
+        Queue!Vec3i queue;
+
+        queue.push(Vec3i(x, y, z));
+
+        while (true) {
+            Option!Vec3i thisPosition = queue.pop();
+
+            if (thisPosition.isNone()) {
+                writeln("breaking");
+                break;
+            }
+
+            getBlockPointerAtWorldPosition(thisPosition.unwrap());
+
+        }
+
         /*
         Cascade down, then out.
         If nothing below, move outwards.
@@ -445,66 +462,68 @@ public: //* BEGIN PUBLIC API.
         */
 
         // Went under the world.
-        if (y < 0) {
-            writeln("cascaded under the map.");
-            return;
-        }
+        // if (y < 0) {
+        //     writeln("cascaded under the map.");
+        //     return;
+        // }
 
-        BlockData* thisBlock = getBlockPointerAtWorldPosition(x, y, z);
+        // BlockData* thisBlock = getBlockPointerAtWorldPosition(x, y, z);
 
         // Whoops, went into unloaded area.
-        if (thisBlock is null) {
-            writeln("cascaded into unloaded area.");
-            return;
-        }
+        // if (thisBlock is null) {
+        //     writeln("cascaded into unloaded area.");
+        //     return;
+        // }
 
         // writeln(thisBlock.blockID);
 
-        // Todo: this needs to be able to flow through clear blocks like glass.
-        if (thisBlock.blockID == 0) {
-            // writeln("enter");
-            // This means that now it is direct sunlight.
-            if (getTopAt(x, z) <= y) {
+        // // Todo: this needs to be able to flow through clear blocks like glass.
+        // if (thisBlock.blockID == 0) {
+        //     // writeln("enter");
+        //     // This means that now it is direct sunlight.
+        //     if (getTopAt(x, z) <= y) {
 
-                thisBlock.naturalLightBank = 15;
-                cascadeNaturalLight(x, y - 1, z);
-                // BlockData* leftBlock = getBlockPointerAtWorldPosition(x - 1, y, z);
+        //         thisBlock.naturalLightBank = 15;
+        //         cascadeNaturalLight(x, y - 1, z);
+        //         // BlockData* leftBlock = getBlockPointerAtWorldPosition(x - 1, y, z);
 
-                // Todo: check if natural light next to is less than 14 and flow into it if so.
-            } else {
-                // This means it is now under a block. Check surroundings to find local natural light level.
-                ubyte maxOutputNeighbors = 0;
-                bool spreadFront = false;
-                bool spreadBack = false;
-                bool spreadLeft = false;
-                bool spreadRight = false;
+        //         // Todo: check if natural light next to is less than 14 and flow into it if so.
+        //     } else {
+        //         // This means it is now under a block. Check surroundings to find local natural light level.
+        //         ubyte maxOutputNeighbors = 0;
+        //         bool spreadFront = false;
+        //         bool spreadBack = false;
+        //         bool spreadLeft = false;
+        //         bool spreadRight = false;
 
-                static const Vec3i[5] directions = [
-                    Vec3i(-1, 0, 0),
-                    Vec3i(1, 0, 0),
-                    Vec3i(0, 1, 0),
-                    Vec3i(0, 0, -1),
-                    Vec3i(0, 0, 1),
-                ];
+        //         static const Vec3i[5] directions = [
+        //             Vec3i(-1, 0, 0),
+        //             Vec3i(1, 0, 0),
+        //             Vec3i(0, 1, 0),
+        //             // Vec3i(0, 0, -1),
+        //             // Vec3i(0, 0, 1),
+        //         ];
 
-                foreach (dir; directions) {
-                    const BlockData* neighbor = getBlockPointerAtWorldPosition(x + dir.x, y + +dir.y, z + dir
-                            .z);
+        //         foreach (dir; directions) {
+        //             const BlockData* neighbor = getBlockPointerAtWorldPosition(x + dir.x, y + dir.y, z + dir
+        //                     .z);
 
-                    if (neighbor && neighbor.blockID == 0) {
-                        maxOutputNeighbors = max(maxOutputNeighbors, neighbor.naturalLightBank);
-                    }
-                }
+        //             if (neighbor && neighbor.blockID == 0) {
+        //                 maxOutputNeighbors = max(maxOutputNeighbors, neighbor.naturalLightBank);
+        //             }
+        //         }
 
-                if (maxOutputNeighbors > 0) {
-                    maxOutputNeighbors -= 1;
-                }
+        //         if (maxOutputNeighbors > 0) {
+        //             maxOutputNeighbors -= 1;
+        //         }
 
-                thisBlock.naturalLightBank = maxOutputNeighbors;
+        //         thisBlock.naturalLightBank = maxOutputNeighbors;
 
-                cascadeNaturalLight(x, y - 1, z);
-            }
-        }
+        //         // if ()
+
+        //         cascadeNaturalLight(x, y - 1, z);
+        //     }
+        // }
 
     }
 
