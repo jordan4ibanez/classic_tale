@@ -14,6 +14,7 @@ import math.rect;
 import math.vec2d;
 import math.vec2i;
 import math.vec3d;
+import math.vec3i;
 import std.algorithm.comparison;
 import std.conv;
 import std.math.algebraic;
@@ -285,6 +286,7 @@ public: //* BEGIN PUBLIC API.
         }
 
         thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = blockID;
+        thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].naturalLightBank = 0;
 
         updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, blockID,
             cast(int) position.x, cast(int) position.z);
@@ -319,6 +321,7 @@ public: //* BEGIN PUBLIC API.
         }
 
         thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][y].blockID = blockID;
+        thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][y].naturalLightBank = 0;
 
         updateHeightMap(thisChunk, xzPosInChunk.x, y, xzPosInChunk.y, blockID, x, z);
 
@@ -357,6 +360,7 @@ public: //* BEGIN PUBLIC API.
         }
 
         thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = thisBlock.id;
+        thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].naturalLightBank = 0;
 
         updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, thisBlock.id,
             cast(int) position.x, cast(int) position.z);
@@ -425,39 +429,52 @@ public: //* BEGIN PUBLIC API.
             return;
         }
 
-        writeln(thisBlock.blockID);
+        // writeln(thisBlock.blockID);
 
         // Todo: this needs to be able to flow through clear blocks like glass.
         if (thisBlock.blockID == 0) {
-            writeln("enter");
+            // writeln("enter");
             // This means that now it is direct sunlight.
             if (getTopAt(x, z) <= y) {
+                writeln("CASCADE UP");
                 thisBlock.naturalLightBank = 15;
                 cascadeNaturalLight(x, y - 1, z);
                 // Todo: check if natural light next to is less than 14 and flow into it if so.
             } else {
-                writeln("cascade down");
+                // writeln("cascade down");
                 // This means it is now under a block. Check surroundings to find local natural light level.
                 ubyte maxOutputNeighbors = 0;
+                // ubyte upLight = 0;
 
-                // static const Vec2i[4] directions2D = [
-                //     Vec2i(-1, 0),
-                //     Vec2i(1, 0),
-                //     Vec2i(0, -1),
-                //     Vec2i(0, 1),
-                // ];
+                static const Vec3i[5] directions2D = [
+                    Vec3i(-1, 0, 0),
+                    Vec3i(1, 0, 0),
+                    Vec3i(0, 1, 0),
+                    Vec3i(0, 0, -1),
+                    Vec3i(0, 0, 1),
+                ];
 
-                // foreach (dir; directions2D) {
-                //     const BlockData* neighbor = getBlockPointerAtWorldPosition(x + dir.x, y, z + dir
-                //             .y);
-                //     if (neighbor) {
-                //         maxOutputNeighbors = max(maxOutputNeighbors, cast(ubyte)(
-                //                 neighbor.artificialLightBank - 1));
-                //     }
-                // }
+                foreach (i, dir; directions2D) {
+                    const BlockData* neighbor = getBlockPointerAtWorldPosition(x + dir.x, y + dir.y, z + dir
+                            .z);
+
+                    if (neighbor) {
+
+                        maxOutputNeighbors = max(maxOutputNeighbors, neighbor.naturalLightBank);
+                    }
+                }
+
+                if (maxOutputNeighbors > 0) {
+                    maxOutputNeighbors -= 1;
+                }
+
+                writeln("hmm:", maxOutputNeighbors);
 
                 thisBlock.naturalLightBank = maxOutputNeighbors;
 
+                // if (upLight < thisBlock.naturalLightBank) {
+                //     cascadeNaturalLight(x, y - 1, z);
+                // }
                 cascadeNaturalLight(x, y - 1, z);
             }
         }
