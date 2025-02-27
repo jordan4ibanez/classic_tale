@@ -394,7 +394,7 @@ public: //* BEGIN PUBLIC API.
             }
 
             // This is a Y striping non-update fix. 0, 1, 0 1 -> top. If this is not triggered it will leave outdated lights.
-            // return cascadeNaturalLight(worldPositionX, y, worldPositionZ);
+            return cascadeNaturalLight(worldPositionX, yInChunk, worldPositionZ);
         }  // todo: set this to check block definition database for replaceable or airlike, not too sure how this should be handled with complex block types.
         // Else it was set to not air.
         else {
@@ -446,10 +446,9 @@ public: //* BEGIN PUBLIC API.
             // This means that now it is direct sunlight.
             if (getTopAt(x, z) <= y) {
 
-                writeln("sunlight cascade straight down");
-
                 thisBlock.naturalLightBank = 15;
                 cascadeNaturalLight(x, y - 1, z);
+                // BlockData* leftBlock = getBlockPointerAtWorldPosition(x - 1, y, z);
 
                 // Todo: check if natural light next to is less than 14 and flow into it if so.
             } else {
@@ -460,18 +459,21 @@ public: //* BEGIN PUBLIC API.
                 bool spreadLeft = false;
                 bool spreadRight = false;
 
-                static const Vec3i[1] directions2D = [
-                    // Vec3i(-1, 0, 0),
-                    // Vec3i(1, 0, 0),
+                static const Vec3i[5] directions = [
+                    Vec3i(-1, 0, 0),
+                    Vec3i(1, 0, 0),
                     Vec3i(0, 1, 0),
-                    // Vec3i(0, 0, -1),
-                    // Vec3i(0, 0, 1),
+                    Vec3i(0, 0, -1),
+                    Vec3i(0, 0, 1),
                 ];
 
-                const BlockData* neighbor = getBlockPointerAtWorldPosition(x, y + 1, z);
+                foreach (dir; directions) {
+                    const BlockData* neighbor = getBlockPointerAtWorldPosition(x + dir.x, y + +dir.y, z + dir
+                            .z);
 
-                if (neighbor && neighbor.blockID == 0) {
-                    maxOutputNeighbors = max(maxOutputNeighbors, neighbor.naturalLightBank);
+                    if (neighbor && neighbor.blockID == 0) {
+                        maxOutputNeighbors = max(maxOutputNeighbors, neighbor.naturalLightBank);
+                    }
                 }
 
                 if (maxOutputNeighbors > 0) {
