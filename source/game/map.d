@@ -404,8 +404,27 @@ public: //* BEGIN PUBLIC API.
         so if y - 1 is an air block, trigger another cascade.
         if it's not, trigger a horizontal cascade.
         */
-        if (getBlockAtWorldPosition(x, y, z).blockID == 0) {
 
+        // Went under the world.
+        if (y < 0) {
+            writeln("cascaded under the map.");
+            return;
+        }
+
+        BlockData* thisBlock = getBlockPointerAtWorldPosition(x, y, z);
+
+        // Whoops, went into unloaded area.
+        if (thisBlock is null) {
+            writeln("cascaded into unloaded area.");
+            return;
+        }
+
+        if (thisBlock.blockID == 0) {
+            // This means that now it is direct sunlight.
+            if (getTopAt(x, z) <= y) {
+                thisBlock.naturalLightBank = 15;
+                cascadeNaturalLight(x, y - 1, z);
+            }
         }
 
     }
