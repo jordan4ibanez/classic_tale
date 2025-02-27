@@ -372,8 +372,8 @@ public: //* BEGIN PUBLIC API.
     }
 
     /// x y z inside of the chunk.
-    void updateHeightMap(Chunk* thisChunk, int x, int y, int z, int newID, int worldPositionX, int worldPositionZ) {
-        const int height = thisChunk.heightmap[x][z];
+    void updateHeightMap(Chunk* thisChunk, int xInChunk, int yInChunk, int zInChunk, int newID,
+        int worldPositionX, int worldPositionZ) {
         // ID was set to air.
         if (newID == 0) {
             // If it was the top, have to scan down.
