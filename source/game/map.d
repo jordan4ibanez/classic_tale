@@ -260,6 +260,26 @@ public: //* BEGIN PUBLIC API.
         return &thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][y];
     }
 
+    BlockData* getBlockPointerAtWorldPosition(Vec3i position) {
+        Vec2i chunkID = calculateChunkAtWorldPosition(position.x, position.z);
+
+        Chunk* thisChunk = chunkID in database;
+
+        if (thisChunk is null) {
+            return null;
+        }
+
+        Vec2i xzPosInChunk = getXZInChunk(position.x, position.z);
+
+        // Out of bounds.
+        if (position.y < 0 || position.y >= CHUNK_HEIGHT) {
+            writeln("WARNING! trying to read out of bounds! " ~ to!string(position.y));
+            return null;
+        }
+
+        return &thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][position.y];
+    }
+
     void setBlockAtWorldPositionByID(Vec3d position, int blockID) {
         if (!BlockDatabase.hasBlockID(blockID)) {
             throw new Error("Cannot set to block ID " ~ to!string(blockID) ~ ", ID does not exist.");
