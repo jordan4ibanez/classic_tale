@@ -372,7 +372,7 @@ public: //* BEGIN PUBLIC API.
         // ID was set to air.
         if (newID == 0) {
             // If it was the top, have to scan down.
-            //? Note: Subtractive update.
+            //? Note: Subtractive update. Slightly more expensive. Has to scan down.
             if (height == y) {
                 foreach_reverse (yScan; 0 .. y) {
                     // Found it. That's it.
