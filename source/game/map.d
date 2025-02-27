@@ -391,6 +391,7 @@ public: //* BEGIN PUBLIC API.
             if (y > height) {
                 thisChunk.heightmap[x][z] = y;
                 // writeln("Additive: height at ", x, ", ", z, " is now ", y);
+                return cascadeNaturalLight(worldPositionX, height, worldPositionZ);
             }
         }
     }
