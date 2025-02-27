@@ -358,7 +358,7 @@ public: //* BEGIN PUBLIC API.
                     if (thisChunk.data[x][z][yScan].blockID != 0) {
                         // writeln("Subtractive: height at ", x, ", ", z, " is now ", yScan);
                         thisChunk.heightmap[x][z] = yScan;
-                        return cascadeLight(worldPositionX, height, worldPositionZ);
+                        return cascadeNaturalLight(worldPositionX, height, worldPositionZ);
                     }
                 }
             }
@@ -372,11 +372,11 @@ public: //* BEGIN PUBLIC API.
                 // writeln("Additive: height at ", x, ", ", z, " is now ", y);
             }
         }
-
     }
+    
 
     /// Flood fill lighting.
-    void cascadeLight(int x, int y, int z) {
+    void cascadeNaturalLight(int x, int y, int z) {
         /*
         Cascade down, then out.
         If nothing below, move outwards.
@@ -384,9 +384,8 @@ public: //* BEGIN PUBLIC API.
         so if y - 1 is an air block, trigger another cascade.
         if it's not, trigger a horizontal cascade.
         */
-
         if (getBlockAtWorldPosition(x, y, z).blockID == 0) {
-            setBlockAtWorldPositionByID(x, y, z, 2);
+
         }
 
     }
