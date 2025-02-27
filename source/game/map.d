@@ -383,13 +383,13 @@ public: //* BEGIN PUBLIC API.
                     if (thisChunk.data[x][z][yScan].blockID != 0) {
                         // writeln("Subtractive: height at ", x, ", ", z, " is now ", yScan);
                         thisChunk.heightmap[x][z] = yScan;
-                        return cascadeNaturalLight(worldPositionX, height, worldPositionZ);
+                        // return cascadeNaturalLight(worldPositionX, height, worldPositionZ);
                     }
                 }
             }
 
             // This is a Y striping non-update fix. 0, 1, 0 1 -> top. If this is not triggered it will leave outdated lights.
-            return cascadeNaturalLight(worldPositionX, y, worldPositionZ);
+            // return cascadeNaturalLight(worldPositionX, y, worldPositionZ);
         }  // todo: set this to check block definition database for replaceable or airlike, not too sure how this should be handled with complex block types.
         // Else it was set to not air.
         else {
@@ -400,7 +400,7 @@ public: //* BEGIN PUBLIC API.
                 thisChunk.heightmap[x][z] = y;
 
                 // writeln("Additive: height at ", x, ", ", z, " is now ", y);
-                return cascadeNaturalLight(worldPositionX, y - 1, worldPositionZ);
+                // return cascadeNaturalLight(worldPositionX, y - 1, worldPositionZ);
             }
         }
     }
