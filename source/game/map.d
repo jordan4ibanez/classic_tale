@@ -392,9 +392,11 @@ public: //* BEGIN PUBLIC API.
             // If it's taller, it's the top.
             //? Note: Additive update.
             if (y > height) {
+                writeln("heightmap update");
                 thisChunk.heightmap[x][z] = y;
+
                 // writeln("Additive: height at ", x, ", ", z, " is now ", y);
-                return cascadeNaturalLight(worldPositionX, height, worldPositionZ);
+                return cascadeNaturalLight(worldPositionX, y - 1, worldPositionZ);
             }
         }
     }
@@ -423,11 +425,39 @@ public: //* BEGIN PUBLIC API.
             return;
         }
 
+        writeln(thisBlock.blockID);
+
         // Todo: this needs to be able to flow through clear blocks like glass.
         if (thisBlock.blockID == 0) {
+            writeln("enter");
             // This means that now it is direct sunlight.
             if (getTopAt(x, z) <= y) {
                 thisBlock.naturalLightBank = 15;
+                cascadeNaturalLight(x, y - 1, z);
+                // Todo: check if natural light next to is less than 14 and flow into it if so.
+            } else {
+                writeln("cascade down");
+                // This means it is now under a block. Check surroundings to find local natural light level.
+                ubyte maxOutputNeighbors = 0;
+
+                // static const Vec2i[4] directions2D = [
+                //     Vec2i(-1, 0),
+                //     Vec2i(1, 0),
+                //     Vec2i(0, -1),
+                //     Vec2i(0, 1),
+                // ];
+
+                // foreach (dir; directions2D) {
+                //     const BlockData* neighbor = getBlockPointerAtWorldPosition(x + dir.x, y, z + dir
+                //             .y);
+                //     if (neighbor) {
+                //         maxOutputNeighbors = max(maxOutputNeighbors, cast(ubyte)(
+                //                 neighbor.artificialLightBank - 1));
+                //     }
+                // }
+
+                thisBlock.naturalLightBank = maxOutputNeighbors;
+
                 cascadeNaturalLight(x, y - 1, z);
             }
         }
