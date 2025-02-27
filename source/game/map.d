@@ -374,17 +374,21 @@ public: //* BEGIN PUBLIC API.
     /// x y z inside of the chunk.
     void updateHeightMap(Chunk* thisChunk, int xInChunk, int yInChunk, int zInChunk, int newID,
         int worldPositionX, int worldPositionZ) {
+
+        const int height = thisChunk.heightmap[xInChunk][zInChunk];
         // ID was set to air.
         if (newID == 0) {
             // If it was the top, have to scan down.
             //? Note: Subtractive update. Slightly more expensive. Has to scan down.
-            if (height == y) {
-                foreach_reverse (yScan; 0 .. y) {
+            if (height == yInChunk) {
+                foreach_reverse (yScan; 0 .. yInChunk) {
                     // Found it. That's it.
-                    if (thisChunk.data[x][z][yScan].blockID != 0) {
+                    if (thisChunk.data[xInChunk][zInChunk][yScan].blockID != 0) {
                         // writeln("Subtractive: height at ", x, ", ", z, " is now ", yScan);
-                        thisChunk.heightmap[x][z] = yScan;
+                        thisChunk.heightmap[xInChunk][zInChunk] = yScan;
                         // return cascadeNaturalLight(worldPositionX, height, worldPositionZ);
+                    } else {
+                        thisChunk.data[xInChunk][zInChunk][yScan].sunlight = true;
                     }
                 }
             }
