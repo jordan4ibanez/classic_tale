@@ -442,7 +442,7 @@ public: //* BEGIN PUBLIC API.
 
     private struct MazeElement {
         mixin(bitfields!(
-                bool, "air", 1,
+                bool, "isAir", 1,
                 ubyte, "lightLevel", 4,
                 bool, "", 3
         ));
@@ -493,7 +493,7 @@ public: //* BEGIN PUBLIC API.
                     if ((xRaw == minW || xRaw == maxW - 1) &&
                         (zRaw == minW || zRaw == maxW - 1) &&
                         (yRaw == 0 || yRaw == (CHUNK_HEIGHT - 1))) {
-                        lightPool[xInBox][zInBox][yRaw].air = false;
+                        lightPool[xInBox][zInBox][yRaw].isAir = false;
                         continue;
                     }
 
@@ -517,21 +517,21 @@ public: //* BEGIN PUBLIC API.
 
                             lightPool[xInBox][zInBox][yRaw].lightLevel = thisBlock
                                 .naturalLightBank;
-                            lightPool[xInBox][zInBox][yRaw].air = true;
+                            lightPool[xInBox][zInBox][yRaw].isAir = true;
                             sourceQueue.push(Vec3i(xInBox, yRaw, zInBox));
                         } else {
 
                             const bool isSunlight = thisBlock.isSunlight;
                             lightPool[xInBox][zInBox][yRaw].lightLevel = (isSunlight) ? LIGHT_LEVEL_MAX
                                 : 0;
-                            lightPool[xInBox][zInBox][yRaw].air = true;
+                            lightPool[xInBox][zInBox][yRaw].isAir = true;
 
                             if (isSunlight) {
                                 sourceQueue.push(Vec3i(xInBox, yRaw, zInBox));
                             }
                         }
                     } else {
-                        lightPool[xInBox][zInBox][yRaw].air = false;
+                        lightPool[xInBox][zInBox][yRaw].isAir = false;
                     }
                 }
             }
