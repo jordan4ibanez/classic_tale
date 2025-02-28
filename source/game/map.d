@@ -621,6 +621,8 @@ public: //* BEGIN PUBLIC API.
                         continue;
                     }
 
+                    // +1 to allow the light to flow over the block. Basically, make it so you can see the top of blocks.
+                    // The other +1 is because the foreach is exclusive. (subtracts 1)
                     const int neighborTop = neighborBlockChunk
                         .heightmap[thisXInsideChunkLocal][thisZInsideChunkLocal] + 2;
 
