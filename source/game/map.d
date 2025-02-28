@@ -472,9 +472,9 @@ public: //* BEGIN PUBLIC API.
         // import utility.queue;
 
         if (!sourceQueue.initialized) {
-            // ~2 MB.
-            sourceQueue = CircularBuffer!(Vec3i)(100_000);
-            cascadeQueue = CircularBuffer!(LightTraversalNode)(100_000);
+            // ~2.1 MB.
+            sourceQueue = CircularBuffer!(Vec3i)(10_000);
+            cascadeQueue = CircularBuffer!(LightTraversalNode)(150_000);
         }
 
         static const minW = -(LIGHT_LEVEL_MAX + 1);
