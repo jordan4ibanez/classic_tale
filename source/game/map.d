@@ -477,6 +477,7 @@ public: //* BEGIN PUBLIC API.
         // Search for air. Binary. Lightsource or darkness.
         // This is shifting the whole world position into the box position.
         // Accumulating the light data so that the world does not need the be checked again.
+        Vec3i cache;
         foreach (xRaw; minW .. maxW) {
             int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
 
@@ -521,7 +522,12 @@ public: //* BEGIN PUBLIC API.
                             elementPointer.lightLevel = thisBlock.naturalLightBank;
                             elementPointer.isAir = true;
 
-                            sourceQueue.push(Vec3i(xInBox, yRaw, zInBox));
+                            cache.x = xInBox;
+                            cache.y = yRaw;
+                            cache.z = zInBox;
+
+                            sourceQueue.push(cache);
+
                         } else {
 
                             const bool isSunlight = thisBlock.isSunlight;
@@ -530,7 +536,11 @@ public: //* BEGIN PUBLIC API.
                             elementPointer.isAir = true;
 
                             if (isSunlight) {
-                                sourceQueue.push(Vec3i(xInBox, yRaw, zInBox));
+                                cache.x = xInBox;
+                                cache.y = yRaw;
+                                cache.z = zInBox;
+
+                                sourceQueue.push(cache);
                             }
                         }
                     } else {
