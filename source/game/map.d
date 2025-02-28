@@ -431,7 +431,7 @@ public: //* BEGIN PUBLIC API.
             // This portion of the heightmap has shifted up.
             //? Note: Additive update.
             if (yInChunk > height) {
-                writeln("heightmap update");
+                // writeln("heightmap update");
                 thisChunk.heightmap[xInChunk][zInChunk] = yInChunk;
                 foreach (yScan; height .. yInChunk) {
                     thisChunk.data[xInChunk][zInChunk][yScan].isSunlight = false;
