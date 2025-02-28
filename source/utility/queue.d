@@ -19,7 +19,7 @@ public:
         if (elements.empty()) {
             return result;
         }
-        result.Some(elements.front());
+        result = result.Some(elements.front());
         elements.removeFront();
         return result;
     }
