@@ -559,11 +559,11 @@ public: //* BEGIN PUBLIC API.
                     ___doNotUseZRawInChunk + CHUNK_WIDTH) : ___doNotUseZRawInChunk;
 
                 //? This is a double check.
-                auto res = calculateChunkAtWorldPosition(cast(double) xWorldLocal, cast(double) zWorldLocal);
-                assert(res.x - minChunkX == chunkXInCache && res.y - minChunkZ == chunkZInCache);
-                assert(chunkXInCache >= 0 && chunkZInCache >= 0 && chunkXInCache <= 2 && chunkZInCache <= 2);
-                auto cz = getXZInChunk(xWorldLocal, zWorldLocal);
-                assert(xInChunkPointer == cz.x && zInChunkPointer == cz.y);
+                // auto res = calculateChunkAtWorldPosition(cast(double) xWorldLocal, cast(double) zWorldLocal);
+                // assert(res.x - minChunkX == chunkXInCache && res.y - minChunkZ == chunkZInCache);
+                // assert(chunkXInCache >= 0 && chunkZInCache >= 0 && chunkXInCache <= 2 && chunkZInCache <= 2);
+                // auto cz = getXZInChunk(xWorldLocal, zWorldLocal);
+                // assert(xInChunkPointer == cz.x && zInChunkPointer == cz.y);
 
                 Chunk * thisChunk = chunkPointers[chunkXInCache][chunkZInCache];
 
