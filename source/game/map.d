@@ -569,7 +569,25 @@ public: //* BEGIN PUBLIC API.
 
                 Chunk* thisChunk = chunkPointers[chunkXInCache][chunkZInCache];
 
-                foreach (const yRaw; 0 .. CHUNK_HEIGHT) {
+                static const Vec2i[4] DIRECTIONS = [
+                    Vec2i(-1, 0),
+                    Vec2i(1, 0),
+                    Vec2i(0, -1),
+                    Vec2i(0, 1)
+                ];
+                int highPoint = 0;
+
+                foreach (dir; DIRECTIONS) {
+                    const int localX = xInWorld + dir.x;
+                    const int localZ = xInWorld + dir.y;
+
+                    const int neighborTop = getTopAt(localX, localZ) + 1;
+                    if (neighborTop > highPoint) {
+                        highPoint = neighborTop;
+                    }
+                }
+
+                foreach (const yRaw; 0 .. highPoint) {
 
                     MazeElement* elementPointer = &lightPool[xInBox][zInBox][yRaw];
 
