@@ -454,10 +454,8 @@ public: //* BEGIN PUBLIC API.
     // todo: accumulate the x and z min and max and reallocate this to utilize the box of that + max light level to do it in one shot.
 
     void cascadeNaturalLight(int xInWorld, int zInWorld) {
-
-        import utility.queue;
-
         import std.datetime.stopwatch;
+        import utility.queue;
 
         auto sw = StopWatch(AutoStart.yes);
 
