@@ -483,6 +483,17 @@ public: //* BEGIN PUBLIC API.
                 maxChunkZ - minChunkZ) + 1);
 
         {
+            Vec2i cacheKey;
+            foreach (x; minChunkX .. maxChunkX + 1) {
+                foreach (z; minChunkZ .. maxChunkZ + 1) {
+                    cacheKey.x = x;
+                    cacheKey.y = z;
+                    chunkPointers[x - minChunkX][z - minChunkZ] = cacheKey in database;
+                }
+            }
+        }
+
+        {
             // This is an extreme micro optimization.
             // The "shell" of the update is never mutated.
             // In certain scenarios this would have created a few extra
