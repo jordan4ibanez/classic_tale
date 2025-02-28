@@ -569,6 +569,11 @@ public: //* BEGIN PUBLIC API.
 
                 Chunk* thisChunk = chunkPointers[chunkXInCache][chunkZInCache];
 
+                // Find the highest point on this X and Z position that touches a neighbor block.
+                //? This is an extreme and aggressive optimization that will have less of an effect if you
+                //? build a huge castle which takes up the entire chunk.
+                //! If you can think of a better way to do this, I would be happy to hear about it. :D
+
                 static const Vec2i[4] DIRECTIONS = [
                     Vec2i(-1, 0),
                     Vec2i(1, 0),
