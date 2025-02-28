@@ -514,35 +514,30 @@ public: //* BEGIN PUBLIC API.
                     const(const BlockData*) thisBlock = getBlockPointerAtWorldPosition(xWorldLocal, yRaw, zWorldLocal);
 
                     // Initial binary application.
-                    if (thisBlock) {
+                    if (thisBlock && thisBlock.blockID == 0) {
 
                         // The walls are all light sources or else we'd infinitely be checking the world. Must assume their data is correct.
                         if ((xRaw == minW || xRaw == maxW - 1) ||
                             (zRaw == minW || zRaw == maxW - 1) ||
                             (yRaw == 0 || yRaw == (CHUNK_HEIGHT - 1))) {
 
-                            if (thisBlock.blockID == 0) {
-                                lightPool[xInBox][zInBox][yRaw].lightLevel = thisBlock
-                                    .naturalLightBank;
-                                lightPool[xInBox][zInBox][yRaw].air = true;
-                                sourceQueue.push(Vec3i(xInBox, yRaw, zInBox));
-                            }
+                            lightPool[xInBox][zInBox][yRaw].lightLevel = thisBlock
+                                .naturalLightBank;
+                            lightPool[xInBox][zInBox][yRaw].air = true;
+                            sourceQueue.push(Vec3i(xInBox, yRaw, zInBox));
                         } else {
 
-                            if (thisBlock.blockID == 0) {
-                                const bool isSunlight = thisBlock.isSunlight;
-                                lightPool[xInBox][zInBox][yRaw].lightLevel = (isSunlight) ? LIGHT_LEVEL_MAX
-                                    : 0;
-                                lightPool[xInBox][zInBox][yRaw].air = true;
+                            const bool isSunlight = thisBlock.isSunlight;
+                            lightPool[xInBox][zInBox][yRaw].lightLevel = (isSunlight) ? LIGHT_LEVEL_MAX
+                                : 0;
+                            lightPool[xInBox][zInBox][yRaw].air = true;
 
-                                if (isSunlight) {
-                                    sourceQueue.push(Vec3i(xInBox, yRaw, zInBox));
-                                }
-
-                            } else {
-                                lightPool[xInBox][zInBox][yRaw].air = false;
+                            if (isSunlight) {
+                                sourceQueue.push(Vec3i(xInBox, yRaw, zInBox));
                             }
                         }
+                    } else {
+                        lightPool[xInBox][zInBox][yRaw].air = false;
                     }
                 }
             }
