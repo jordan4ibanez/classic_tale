@@ -535,7 +535,7 @@ public: //* BEGIN PUBLIC API.
         // This is shifting the whole world position into the box position.
         // Accumulating the light data so that the world does not need the be checked again.
         Vec3i cache;
-        BlockData* thisBlock;
+        BlockData* currentBlockPointer;
         foreach (const xRaw; minW .. maxW) {
             const int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
             const int xWorldLocal = xInWorld + xRaw;
@@ -650,18 +650,18 @@ public: //* BEGIN PUBLIC API.
                     // }
 
                     //!! This is slowing the entire thing down.
-                    thisBlock = &thisChunk
+                    currentBlockPointer = &thisChunk
                         .data[xInChunkPointer][zInChunkPointer][yRaw];
 
                     // Initial binary application.
-                    if (thisBlock && thisBlock.blockID == 0) {
+                    if (currentBlockPointer && currentBlockPointer.blockID == 0) {
 
                         // The walls are all light sources or else we'd infinitely be checking the world. Must assume their data is correct.
                         if ((xRaw == minW || xRaw == maxW - 1) ||
                             (zRaw == minW || zRaw == maxW - 1) ||
                             (yRaw == 0 || yRaw == (CHUNK_HEIGHT - 1))) {
 
-                            elementPointer.lightLevel = thisBlock.naturalLightBank;
+                            elementPointer.lightLevel = currentBlockPointer.naturalLightBank;
                             elementPointer.isAir = true;
 
                             cache.x = xInBox;
@@ -674,7 +674,7 @@ public: //* BEGIN PUBLIC API.
 
                             // This is in the "core" of the box. Can be treated as normal cascade data.
 
-                            const bool isSunlight = thisBlock.isSunlight;
+                            const bool isSunlight = currentBlockPointer.isSunlight;
 
                             elementPointer.lightLevel = (isSunlight) ? LIGHT_LEVEL_MAX : 0;
                             elementPointer.isAir = true;
