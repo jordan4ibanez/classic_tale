@@ -489,11 +489,13 @@ public: //* BEGIN PUBLIC API.
 
                 foreach (yRaw; 0 .. CHUNK_HEIGHT) {
 
+                    MazeElement* elementPointer = &lightPool[xInBox][zInBox][yRaw];
+
                     // Do not do corners.
                     if ((xRaw == minW || xRaw == maxW - 1) &&
                         (zRaw == minW || zRaw == maxW - 1) &&
                         (yRaw == 0 || yRaw == (CHUNK_HEIGHT - 1))) {
-                        lightPool[xInBox][zInBox][yRaw].isAir = false;
+                        elementPointer.isAir = false;
                         continue;
                     }
 
@@ -510,8 +512,6 @@ public: //* BEGIN PUBLIC API.
 
                     // Initial binary application.
                     if (thisBlock && thisBlock.blockID == 0) {
-
-                        MazeElement* elementPointer = &lightPool[xInBox][zInBox][yRaw];
 
                         // The walls are all light sources or else we'd infinitely be checking the world. Must assume their data is correct.
                         if ((xRaw == minW || xRaw == maxW - 1) ||
