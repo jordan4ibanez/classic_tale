@@ -464,35 +464,6 @@ public: //* BEGIN PUBLIC API.
         static const maxW = LIGHT_LEVEL_MAX + 1;
 
         // Pointer caching.
-        const int minChunkX = (xInWorld + minW) / CHUNK_WIDTH;
-        const int minChunkZ = (zInWorld + minW) / CHUNK_WIDTH;
-        const int maxChunkX = (xInWorld + maxW) / CHUNK_WIDTH;
-        const int maxChunkZ = (zInWorld + maxW) / CHUNK_WIDTH;
-
-        Chunk*[][] chunkPointers = new Chunk*[][](abs(maxChunkX - minChunkX) + 1, abs(
-                maxChunkZ - minChunkZ) + 1);
-
-        {
-            // This is an extreme micro optimization.
-            // The "shell" of the update is never mutated.
-            // In certain scenarios this would have created a few extra
-            // mesh updates. This stops that.
-
-            const int updateMinChunkX = (xInWorld + minW + 1) / CHUNK_WIDTH;
-            const int updateMinChunkZ = (zInWorld + minW + 1) / CHUNK_WIDTH;
-            const int updateMaxChunkX = (xInWorld + maxW - 1) / CHUNK_WIDTH;
-            const int updateMaxChunkZ = (zInWorld + maxW - 1) / CHUNK_WIDTH;
-
-            Vec2i cacheKey;
-
-            foreach (x; updateMinChunkX .. updateMaxChunkX + 1) {
-                foreach (z; updateMinChunkZ .. updateMaxChunkZ + 1) {
-                    cacheKey.x = x;
-                    cacheKey.y = z;
-                    MapGraphics.generate(cacheKey);
-                }
-            }
-        }
 
         const int _xMin = xInWorld + minW;
         const int _xMax = xInWorld + maxW;
@@ -510,6 +481,41 @@ public: //* BEGIN PUBLIC API.
 
         Chunk*[][] chunkPointers = new Chunk*[][](abs(maxChunkX - minChunkX) + 1, abs(
                 maxChunkZ - minChunkZ) + 1);
+
+        {
+            // This is an extreme micro optimization.
+            // The "shell" of the update is never mutated.
+            // In certain scenarios this would have created a few extra
+            // mesh updates. This stops that.
+
+            const int _xMinUpdate = xInWorld + minW;
+            const int _xMaxUpdate = xInWorld + maxW;
+            const int _zMinUpdate = zInWorld + minW;
+            const int _zMaxUpdate = zInWorld + maxW;
+
+            const int updateMinChunkX = (_xMinUpdate < 0) ? (
+                ((_xMinUpdate + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
+                _xMinUpdate / CHUNK_WIDTH);
+            const int updateMaxChunkX = (_xMaxUpdate < 0) ? (
+                ((_xMaxUpdate + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
+                _xMaxUpdate / CHUNK_WIDTH);
+            const int updateMinChunkZ = (_zMinUpdate < 0) ? (
+                ((_zMinUpdate + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
+                _zMinUpdate / CHUNK_WIDTH);
+            const int updateMaxChunkZ = (_zMaxUpdate < 0) ? (
+                ((_zMaxUpdate + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
+                _zMaxUpdate / CHUNK_WIDTH);
+
+            Vec2i cacheKey;
+
+            foreach (x; updateMinChunkX .. updateMaxChunkX + 1) {
+                foreach (z; updateMinChunkZ .. updateMaxChunkZ + 1) {
+                    cacheKey.x = x;
+                    cacheKey.y = z;
+                    MapGraphics.generate(cacheKey);
+                }
+            }
+        }
 
         Queue!Vec3i sourceQueue;
 
