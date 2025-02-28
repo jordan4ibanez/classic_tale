@@ -478,17 +478,15 @@ public: //* BEGIN PUBLIC API.
         // This is shifting the whole world position into the box position.
         // Accumulating the light data so that the world does not need the be checked again.
         Vec3i cache;
-        foreach (xRaw; minW .. maxW) {
-            int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
+        foreach (const xRaw; minW .. maxW) {
+            const int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
+            const int xWorldLocal = xInWorld + xRaw;
 
-            int xWorldLocal = xInWorld + xRaw;
+            foreach (const zRaw; minW .. maxW) {
+                const int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
+                const int zWorldLocal = zInWorld + zRaw;
 
-            foreach (zRaw; minW .. maxW) {
-                int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
-
-                int zWorldLocal = zInWorld + zRaw;
-
-                foreach (yRaw; 0 .. CHUNK_HEIGHT) {
+                foreach (const yRaw; 0 .. CHUNK_HEIGHT) {
 
                     MazeElement* elementPointer = &lightPool[xInBox][zInBox][yRaw];
 
