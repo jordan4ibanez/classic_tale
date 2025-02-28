@@ -799,8 +799,6 @@ public: //* BEGIN PUBLIC API.
                     cascadeQueue.put(cacheTraversal);
                 }
             }
-
-            // writeln("source: ", thisSource.x, ", ", thisSource.y, ", ", thisSource.z);
         }
 
         writeln(count);
