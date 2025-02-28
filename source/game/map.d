@@ -469,6 +469,25 @@ public: //* BEGIN PUBLIC API.
                 thisKey.x = key.x + x;
                 thisKey.y = key.y + z;
                 MapGraphics.generate(thisKey);
+        {
+            // This is an extreme micro optimization.
+            // The "shell" of the update is never mutated.
+            // In certain scenarios this would have created a few extra
+            // mesh updates. This stops that.
+
+            const int updateMinChunkX = (xInWorld + minW + 1) / CHUNK_WIDTH;
+            const int updateMinChunkZ = (zInWorld + minW + 1) / CHUNK_WIDTH;
+            const int updateMaxChunkX = (xInWorld + maxW - 1) / CHUNK_WIDTH;
+            const int updateMaxChunkZ = (zInWorld + maxW - 1) / CHUNK_WIDTH;
+
+            Vec2i cacheKey;
+
+            foreach (x; updateMinChunkX .. updateMaxChunkX + 1) {
+                foreach (z; updateMinChunkZ .. updateMaxChunkZ + 1) {
+                    cacheKey.x = x;
+                    cacheKey.y = z;
+                    MapGraphics.generate(cacheKey);
+                }
             }
         }
 
