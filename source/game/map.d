@@ -438,7 +438,7 @@ public: //* BEGIN PUBLIC API.
 
     const ubyte LIGHT_LEVEL_MAX = 15;
 
-    private static immutable boundaryX = ((LIGHT_LEVEL_MAX + 1) * 2) + 1;
+    private static immutable BOUNDARY_BOX_MAX = ((LIGHT_LEVEL_MAX + 1) * 2) + 1;
 
     private struct MazeElement {
         mixin(bitfields!(
@@ -449,7 +449,7 @@ public: //* BEGIN PUBLIC API.
     }
 
     // Y Z X
-    private static MazeElement[CHUNK_HEIGHT][boundaryX][boundaryX] lightPool;
+    private static MazeElement[CHUNK_HEIGHT][BOUNDARY_BOX_MAX][BOUNDARY_BOX_MAX] lightPool;
 
     // todo: accumulate the x and z min and max and reallocate this to utilize the box of that + max light level to do it in one shot.
 
@@ -537,9 +537,7 @@ public: //* BEGIN PUBLIC API.
             }
         }
 
-        // Queue!Vec3i updateQueue;
-
-        writeln("=====");
+        Queue!Vec3i updateQueue;
 
         struct LightTraversalNode {
             int x = 0;
@@ -548,21 +546,70 @@ public: //* BEGIN PUBLIC API.
             ubyte lightLevel = 0;
         }
 
-        while (true) {
+        const static Vec3i[6] DIRECTIONS = [
+            Vec3i(-1, 0, 0),
+            Vec3i(1, 0, 0),
+            Vec3i(0, -1, 0),
+            Vec3i(0, 1, 0),
+            Vec3i(0, 0, -1),
+            Vec3i(0, 0, 1),
+        ];
+
+        // This is now working within the space of the box.
+
+        SOURCE_LOOP: while (true) {
             Option!Vec3i thisResult = sourceQueue.pop();
 
             writeln(thisResult);
 
             if (thisResult.isNone()) {
-                break;
+                break SOURCE_LOOP;
             }
 
-            Vec3i thisSource = thisResult.unwrap();
+            //? INITIALIZE CASCADE.
+            const Vec3i thisSource = thisResult.unwrap();
 
-            Queue!Vec3i inputSourceQueue;
+            Queue!Vec3i cascadeQueue;
+
+            foreach (dir; DIRECTIONS) {
+                // Trying to step out of bounds.
+                if (thisSource.x + dir.x >= BOUNDARY_BOX_MAX || thisSource.x + dir.x < 0 ||
+                    thisSource.z + dir.z >= BOUNDARY_BOX_MAX || thisSource.z + dir.z < 0 ||
+                    thisSource.y + dir.y >= CHUNK_HEIGHT || thisSource.y + dir.y < 0) {
+                    continue;
+                }
+
+                // This is already a light source. Don't need to cascade.
+                if (
+                    lightPool[thisSource.x + dir.x][thisSource.z + dir.z][thisSource.y + dir.y]
+                    .lightLevel == LIGHT_LEVEL_MAX) {
+                    continue;
+                }
+
+            }
+
             writeln("source: ", thisSource.x, ", ", thisSource.y, ", ", thisSource.z);
-
         }
+
+        // foreach (xRaw; minW .. maxW) {
+        //     int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
+
+        //     int xWorldLocal = xInWorld + xRaw;
+
+        //     foreach (zRaw; minW .. maxW) {
+        //         int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
+
+        //         int zWorldLocal = zInWorld + zRaw;
+
+        //         foreach (yRaw; 0 .. CHUNK_HEIGHT) {
+
+        //             BlockData* thisBlock = getBlockPointerAtWorldPosition(xWorldLocal, yRaw, zWorldLocal);
+
+        //             thisBlock.naturalLightBank = lightPool[xInBox][zInBox][yRaw].lightLevel;
+
+        //         }
+        //     }
+        // }
 
         writeln("took: ", sw.peek().total!"usecs", "us");
 
