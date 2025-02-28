@@ -506,7 +506,7 @@ public: //* BEGIN PUBLIC API.
 
                     // Do not bother if the block is direct sunlight aka above the height map.
                     // It already has max light level applied.
-                    if (getTopAt(xWorldLocal, zWorldLocal) < yRaw) {
+                    if (yRaw > getTopAt(xWorldLocal, zWorldLocal)) {
                         lightPool[xInBox][zInBox][yRaw].air = false;
                         continue;
                     }
