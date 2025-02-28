@@ -550,11 +550,21 @@ public: //* BEGIN PUBLIC API.
 
         // Queue!Vec3i updateQueue;
 
-        // writeln("=====");
+        writeln("=====");
 
-        // while(true) {
-        //     sourceQueue.pop();
-        // }
+        while (true) {
+            Option!Vec3i thisResult = sourceQueue.pop();
+
+            writeln(thisResult);
+
+            if (thisResult.isNone()) {
+                break;
+            }
+
+            Vec3i thisSource = thisResult.unwrap();
+            writeln("source: ", thisSource.x, ", ", thisSource.y, ", ", thisSource.z);
+
+        }
 
         writeln("took: ", sw.peek().total!"usecs", "us");
 
