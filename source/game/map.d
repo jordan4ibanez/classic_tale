@@ -450,7 +450,7 @@ public: //* BEGIN PUBLIC API.
     private struct MazeElement {
         mixin(bitfields!(
                 bool, "air", 1,
-                ubyte, "level", 4,
+                ubyte, "lightLevel", 4,
                 bool, "", 3
         ));
     }
@@ -479,6 +479,11 @@ public: //* BEGIN PUBLIC API.
             }
         }
 
+        Queue!Vec3i sourceQueue;
+
+        // Search for air. Binary. Lightsource or darkness.
+        // This is shifting the whole world position into the box position.
+        // Accumulating the light data so that the world does not need the be checked again.
         foreach (xRaw; minW .. maxW) {
             int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
 
@@ -491,8 +496,6 @@ public: //* BEGIN PUBLIC API.
 
                 foreach (yRaw; 0 .. CHUNK_HEIGHT) {
 
-                    BlockData* thisBlock = getBlockPointerAtWorldPosition(xWorldLocal, yRaw, zWorldLocal);
-
                     // Do not do corners.
                     if ((xRaw == minW || xRaw == maxW - 1) &&
                         (zRaw == minW || zRaw == maxW - 1) &&
@@ -501,26 +504,55 @@ public: //* BEGIN PUBLIC API.
                         continue;
                     }
 
-                    // The walls 
+                    // Do not bother if the block is above direct sunlight.
+                    // if (getTopAt(xWorldLocal, zWorldLocal) < yRaw) {
+                    //     continue;
+                    // }
+
+                    const(const BlockData*) thisBlock = getBlockPointerAtWorldPosition(xWorldLocal, yRaw, zWorldLocal);
 
                     // Initial binary application.
                     if (thisBlock) {
 
-                        if (thisBlock.blockID == 0) {
-                            const bool isSunlight = thisBlock.isSunlight;
-                            lightPool[xInBox][zInBox][yRaw].level = (isSunlight) ? LIGHT_LEVEL_MAX
-                                : 0;
-                            lightPool[xInBox][zInBox][yRaw].air = true;
+                        // The walls are all light sources or else we'd infinitely be checking the world. Must assume their data is correct.
+                        if ((xRaw == minW || xRaw == maxW - 1) ||
+                            (zRaw == minW || zRaw == maxW - 1) ||
+                            (yRaw == 0 || yRaw == (CHUNK_HEIGHT - 1))) {
 
-                            
+                            if (thisBlock.blockID == 0) {
+                                lightPool[xInBox][zInBox][yRaw].lightLevel = thisBlock
+                                    .naturalLightBank;
+                                lightPool[xInBox][zInBox][yRaw].air = true;
+                                sourceQueue.push(Vec3i(xInBox, yRaw, zInBox));
+                            }
                         } else {
-                            lightPool[xInBox][zInBox][yRaw].air = false;
-                        }
 
+                            if (thisBlock.blockID == 0) {
+                                const bool isSunlight = thisBlock.isSunlight;
+                                lightPool[xInBox][zInBox][yRaw].lightLevel = (isSunlight) ? LIGHT_LEVEL_MAX
+                                    : 0;
+                                lightPool[xInBox][zInBox][yRaw].air = true;
+
+                                if (isSunlight) {
+                                    sourceQueue.push(Vec3i(xInBox, yRaw, zInBox));
+                                }
+
+                            } else {
+                                lightPool[xInBox][zInBox][yRaw].air = false;
+                            }
+                        }
                     }
                 }
             }
         }
+
+        // Queue!Vec3i updateQueue;
+
+        // writeln("=====");
+
+        // while(true) {
+        //     sourceQueue.pop();
+        // }
 
         writeln("took: ", sw.peek().total!"usecs", "us");
 
