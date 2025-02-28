@@ -16,6 +16,7 @@ import math.vec2i;
 import math.vec3d;
 import math.vec3i;
 import std.algorithm.comparison;
+import std.bitmanip;
 import std.conv;
 import std.math.algebraic;
 import std.math.rounding;
@@ -442,12 +443,20 @@ public: //* BEGIN PUBLIC API.
         }
     }
 
-    const ubyte LIGHT_MAX_LEVEL = 15;
+    const ubyte LIGHT_LEVEL_MAX = 15;
 
-    private static immutable boundaryX = (LIGHT_MAX_LEVEL * 2) + 1;
+    private static immutable boundaryX = ((LIGHT_LEVEL_MAX + 1) * 2) + 1;
+
+    private struct MazeElement {
+        mixin(bitfields!(
+                bool, "air", 1,
+                ubyte, "level", 4,
+                bool, "", 3
+        ));
+    }
 
     // Y Z X
-    private static ubyte[CHUNK_HEIGHT][boundaryX][boundaryX] lightPool;
+    private static MazeElement[CHUNK_HEIGHT][boundaryX][boundaryX] lightPool;
 
     // todo: accumulate the x and z min and max and reallocate this to utilize the box of that + max light level to do it in one shot.
 
@@ -459,8 +468,8 @@ public: //* BEGIN PUBLIC API.
 
         auto sw = StopWatch(AutoStart.yes);
 
-        const minW = -LIGHT_MAX_LEVEL;
-        const maxW = LIGHT_MAX_LEVEL + 1;
+        const minW = -(LIGHT_LEVEL_MAX + 1);
+        const maxW = LIGHT_LEVEL_MAX + 1;
 
         Vec2i key = calculateChunkAtWorldPosition(xInWorld, zInWorld);
         foreach (x; -1 .. 2) {
@@ -471,12 +480,12 @@ public: //* BEGIN PUBLIC API.
         }
 
         foreach (xRaw; minW .. maxW) {
-            int xInBox = xRaw + LIGHT_MAX_LEVEL;
+            int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
 
             int xWorldLocal = xInWorld + xRaw;
 
             foreach (zRaw; minW .. maxW) {
-                int zInBox = zRaw + LIGHT_MAX_LEVEL;
+                int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
 
                 int zWorldLocal = zInWorld + zRaw;
 
@@ -485,24 +494,35 @@ public: //* BEGIN PUBLIC API.
                     BlockData* thisBlock = getBlockPointerAtWorldPosition(xWorldLocal, yRaw, zWorldLocal);
 
                     // Do not do corners.
-                    if (yRaw == 0 || yRaw == (CHUNK_HEIGHT - 1)) {
+                    if ((xRaw == minW || xRaw == maxW - 1) &&
+                        (zRaw == minW || zRaw == maxW - 1) &&
+                        (yRaw == 0 || yRaw == (CHUNK_HEIGHT - 1))) {
+                        lightPool[xInBox][zInBox][yRaw].air = false;
+                        continue;
+                    }
 
-                        if (thisBlock) {
-                            thisBlock.blockID = 1;
+                    // The walls 
+
+                    // Initial binary application.
+                    if (thisBlock) {
+
+                        if (thisBlock.blockID == 0) {
+                            const bool isSunlight = thisBlock.isSunlight;
+                            lightPool[xInBox][zInBox][yRaw].level = (isSunlight) ? LIGHT_LEVEL_MAX
+                                : 0;
+                            lightPool[xInBox][zInBox][yRaw].air = true;
+
+                            
+                        } else {
+                            lightPool[xInBox][zInBox][yRaw].air = false;
                         }
 
                     }
-
-                    if (thisBlock) {
-                        // thisBlock.blockID = 1;
-                    }
-
-                    lightPool[xInBox][zInBox][yRaw] = 1;
                 }
             }
         }
 
-        // writeln("took: ", sw.peek().total!"usecs", "us");
+        writeln("took: ", sw.peek().total!"usecs", "us");
 
         // Queue!Vec3i inputSourceQueue;
 
@@ -636,8 +656,7 @@ public: //* BEGIN PUBLIC API.
     void worldLoad(Vec2i currentPlayerChunk) {
         foreach (x; currentPlayerChunk.x - 1 .. currentPlayerChunk.x + 2) {
             foreach (z; currentPlayerChunk.y - 1 .. currentPlayerChunk.y + 2) {
-                writeln("loading chunk ", x, ",", z);
-                // loadChunk(i);
+                writeln("loading chunk ", x, ",", z); // loadChunk(i);
             }
         }
 
@@ -663,12 +682,11 @@ private: //* BEGIN INTERNAL API.
 
         // todo: what IS THIS MESS?!
         Vec2i[] keys = [] ~ database.keys;
-
         foreach (Vec2i key; keys) {
             // Todo: make this render distance instead of 1.
-            if (abs(key.x - currentPlayerChunk.x) > 1 || abs(key.y - currentPlayerChunk.y) > 1) {
-                database.remove(key);
-                // todo: save the chunks to sqlite.
+            if (abs(key.x - currentPlayerChunk.x) > 1 || abs(
+                    key.y - currentPlayerChunk.y) > 1) {
+                database.remove(key); // todo: save the chunks to sqlite.
                 writeln("deleted: " ~ to!string(key));
             }
         }
@@ -683,8 +701,8 @@ private: //* BEGIN INTERNAL API.
         Chunk newChunk = Chunk(generateKey(chunkPosition));
         generateChunkData(chunkPosition, newChunk);
         database[chunkPosition] = newChunk;
-
-        MapGraphics.generate(chunkPosition);
+        MapGraphics.generate(
+            chunkPosition);
         updateAllNeighbors(chunkPosition);
     }
 
@@ -711,12 +729,14 @@ private: //* BEGIN INTERNAL API.
     // I named this like this so it's very obvious when it's used.
     void updateAdjacentNeighborToPositionInChunk(const ref Vec2i chunkKey, const ref Vec2i xzPosInChunk) {
         if (xzPosInChunk.x == 0) {
-            const Vec2i left = Vec2i(chunkKey.x - 1, chunkKey.y);
+            const Vec2i left = Vec2i(chunkKey.x - 1, chunkKey
+                    .y);
             if (left in database) {
                 MapGraphics.generate(left);
             }
         } else if (xzPosInChunk.x == CHUNK_WIDTH - 1) {
-            const Vec2i right = Vec2i(chunkKey.x + 1, chunkKey.y);
+            const Vec2i right = Vec2i(chunkKey.x + 1, chunkKey
+                    .y);
             if (right in database) {
                 MapGraphics.generate(right);
             }
@@ -738,11 +758,13 @@ private: //* BEGIN INTERNAL API.
     void generateChunkData(Vec2i chunkPosition, ref Chunk thisChunk) {
 
         // todo: the chunk should have a biome.
-        const(BiomeDefinition*) thisBiome = BiomeDatabase.getBiomeByID(0);
+        const(BiomeDefinition*) thisBiome = BiomeDatabase.getBiomeByID(
+            0);
         if (thisBiome is null) {
             import std.conv;
 
-            throw new Error("Attempted to get biome " ~ to!string(0) ~ " which does not exist");
+            throw new Error("Attempted to get biome " ~ to!string(
+                    0) ~ " which does not exist");
         }
 
         const double baseHeight = 160;
@@ -750,68 +772,102 @@ private: //* BEGIN INTERNAL API.
         const int basePositionX = chunkPosition.x * CHUNK_WIDTH;
         const int basePositionZ = chunkPosition.y * CHUNK_WIDTH;
 
-        const(BlockDefinition*) bedrock = BlockDatabase.getBlockByName("bedrock");
+        const(BlockDefinition*) bedrock = BlockDatabase.getBlockByName(
+            "bedrock");
         if (bedrock is null) {
-            throw new Error("Please do not remove bedrock from the engine.");
+            throw new Error(
+                "Please do not remove bedrock from the engine.");
         }
 
         const(BlockDefinition*) stone = BlockDatabase.getBlockByID(
             thisBiome.stoneLayerID);
         if (stone is null) {
-            throw new Error("Stone does not exist for biome " ~ thisBiome.name);
+            throw new Error(
+                "Stone does not exist for biome " ~ thisBiome
+                    .name);
         }
 
         const(BlockDefinition*) dirt = BlockDatabase.getBlockByID(
             thisBiome.dirtLayerID);
         if (dirt is null) {
-            throw new Error("Dirt does not exist for biome " ~ thisBiome.name);
+            throw new Error(
+                "Dirt does not exist for biome " ~ thisBiome
+                    .name);
         }
 
-        const(BlockDefinition*) grass = BlockDatabase.getBlockByID(
-            thisBiome.grassLayerID);
+        const(BlockDefinition*) grass = BlockDatabase
+            .getBlockByID(
+                thisBiome.grassLayerID);
         if (grass is null) {
-            throw new Error("Grass does not exist for biome " ~ thisBiome.name);
+            throw new Error(
+                "Grass does not exist for biome " ~ thisBiome
+                    .name);
         }
 
         foreach (x; 0 .. CHUNK_WIDTH) {
             foreach (z; 0 .. CHUNK_WIDTH) {
 
-                const double selectedNoise = fnlGetNoise2D(&noise, x + basePositionX, z + basePositionZ);
+                const double selectedNoise = fnlGetNoise2D(
+                    &noise, x + basePositionX, z + basePositionZ);
 
                 const double noiseScale = 20;
 
-                const int selectedHeight = cast(int) floor(
-                    baseHeight + (selectedNoise * noiseScale));
+                const int selectedHeight = cast(
+                    int) floor(
+                    baseHeight + (
+                        selectedNoise * noiseScale));
 
                 const int grassLayer = selectedHeight;
                 const int dirtLayer = selectedHeight - 3;
 
-                const double bedRockNoise = fnlGetNoise2D(&noise, (x + basePositionX) * 12, (
+                const double bedRockNoise = fnlGetNoise2D(
+                    &noise, (x + basePositionX) * 12, (
                         z + basePositionZ) * 12) * 2;
-                const int bedRockSelectedHeight = cast(int) round(abs(bedRockNoise));
+                const int bedRockSelectedHeight = cast(
+                    int) round(
+                    abs(bedRockNoise));
 
                 thisChunk.heightmap[x][z] = grassLayer;
 
                 foreach (y; 0 .. CHUNK_HEIGHT) {
 
-                    if (y > selectedHeight) {
-                        thisChunk.data[x][z][y].naturalLightBank = 15;
+                    if (
+                        y > selectedHeight) {
+                        thisChunk.data[x][z][y]
+                            .naturalLightBank = 15;
                         thisChunk.data[x][z][y].isSunlight = true;
                     } else {
                         if (y == 0) {
-                            thisChunk.data[x][z][y].blockID = bedrock.id;
-                        } else if (y <= 2) {
-                            if (y <= bedRockSelectedHeight) {
-                                thisChunk.data[x][z][y].blockID = bedrock.id;
+                            thisChunk.data[x][z][y]
+                                .blockID = bedrock
+                                .id;
+                        } else if (
+                            y <= 2) {
+                            if (
+                                y <= bedRockSelectedHeight) {
+                                thisChunk.data[x][z][y]
+                                    .blockID = bedrock
+                                    .id;
                             } else {
-                                thisChunk.data[x][z][y].blockID = stone.id;
+                                thisChunk.data[x][z][y]
+                                    .blockID = stone
+                                    .id;
                             }
-                        } else if (y < dirtLayer) {
-                            thisChunk.data[x][z][y].blockID = stone.id;
-                        } else if (y < grassLayer) {
-                            thisChunk.data[x][z][y].blockID = dirt.id;
-                        } else if (y == grassLayer) {
-                            thisChunk.data[x][z][y].blockID = grass.id;
+                        } else if (
+                            y < dirtLayer) {
+                            thisChunk.data[x][z][y]
+                                .blockID = stone
+                                .id;
+                        } else if (
+                            y < grassLayer) {
+                            thisChunk.data[x][z][y]
+                                .blockID = dirt
+                                .id;
+                        } else if (
+                            y == grassLayer) {
+                            thisChunk.data[x][z][y]
+                                .blockID = grass
+                                .id;
                         }
                     }
                 }
@@ -835,30 +891,44 @@ private: //* BEGIN INTERNAL API.
         const double entityHalfWidth = entitySize.x * 0.5;
 
         foreach (double xOnRect; 0 .. ceil(entitySize.x) + 1) {
-            double thisXPoint = (xOnRect > entitySize.x) ? entitySize.x : xOnRect;
+            double thisXPoint = (
+                xOnRect > entitySize.x) ? entitySize.x : xOnRect;
             thisXPoint += entityPosition.x - entityHalfWidth;
             oldX = currentX;
-            currentX = cast(int) floor(thisXPoint);
+            currentX = cast(int) floor(
+                thisXPoint);
 
             foreach (double zOnRect; 0 .. ceil(entitySize.x) + 1) {
-                double thisZPoint = (zOnRect > entitySize.x) ? entitySize.x : zOnRect;
+                double thisZPoint = (
+                    zOnRect > entitySize
+                        .x) ? entitySize.x : zOnRect;
                 thisZPoint += entityPosition.z - entityHalfWidth;
                 oldZ = currentZ;
-                currentZ = cast(int) floor(thisZPoint);
+                currentZ = cast(int) floor(
+                    thisZPoint);
 
-                foreach (double yOnRect; 0 .. ceil(entitySize.y) + 1) {
-                    double thisYPoint = (yOnRect > entitySize.y) ? entitySize.y : yOnRect;
-                    thisYPoint += entityPosition.y;
+                foreach (
+                    double yOnRect; 0 .. ceil(
+                        entitySize.y) + 1) {
+                    double thisYPoint = (
+                        yOnRect > entitySize
+                            .y) ? entitySize.y : yOnRect;
+                    thisYPoint += entityPosition
+                        .y;
                     oldY = currentY;
-                    currentY = cast(int) floor(thisYPoint);
+                    currentY = cast(
+                        int) floor(
+                        thisYPoint);
 
-                    if (currentY == oldY) {
+                    if (
+                        currentY == oldY) {
                         continue;
                     }
 
                     // debugDrawPoints ~= Vec2d(currentX, currentY);
 
-                    BlockData data = getBlockAtWorldPosition(Vec3d(thisXPoint, thisYPoint, thisZPoint));
+                    BlockData data = getBlockAtWorldPosition(
+                        Vec3d(thisXPoint, thisYPoint, thisZPoint));
 
                     // todo: if solid block collide.
                     // todo: probably custom blocks one day.
@@ -872,26 +942,33 @@ private: //* BEGIN INTERNAL API.
                     // I assure you it is correct.
                     // DrawSphere(Vector3(currentX, currentY, currentZ), 0.01, Colors.BLUE);
 
-                    if (data.blockID == 0) {
+                    if (
+                        data.blockID == 0) {
                         continue;
                     }
 
                     // todo: this needs to iterate through the block sizes on custom blocks.
-                    final switch (axis) {
+                    final switch (
+                            axis) {
                     case CollisionAxis.X:
 
                         Vec3d blockMin = Vec3d(currentX, currentY, currentZ);
-                        Vec3d blockMax = Vec3d(currentX + 1, currentY + 1, currentZ + 1);
+                        Vec3d blockMax = Vec3d(
+                            currentX + 1, currentY + 1, currentZ + 1);
 
                         // import raylib;
 
                         // DrawCube(blockMin.toRaylib(), 0.1, 0.1, 0.1, Colors.DARKPURPLE);
 
-                        CollisionResult result = collideEntityToBlock(entityPosition, entitySize, entityVelocity,
+                        CollisionResult result = collideEntityToBlock(
+                            entityPosition, entitySize, entityVelocity,
                             blockMin, blockMax, axis);
 
-                        if (result.collides) {
-                            entityPosition.x = result.newPosition;
+                        if (
+                            result
+                            .collides) {
+                            entityPosition.x = result
+                                .newPosition;
                             entityVelocity.x = 0;
                         }
 
@@ -900,35 +977,46 @@ private: //* BEGIN INTERNAL API.
                         // writeln("Y ");
 
                         Vec3d blockMin = Vec3d(currentX, currentY, currentZ);
-                        Vec3d blockMax = Vec3d(currentX + 1, currentY + 1, currentZ + 1);
+                        Vec3d blockMax = Vec3d(
+                            currentX + 1, currentY + 1, currentZ + 1);
 
                         // import raylib;
 
                         // DrawCube(blockMin.toRaylib(), 0.1, 0.1, 0.1, Colors.DARKPURPLE);
 
-                        CollisionResult result = collideEntityToBlock(entityPosition, entitySize, entityVelocity,
+                        CollisionResult result = collideEntityToBlock(
+                            entityPosition, entitySize, entityVelocity,
                             blockMin, blockMax, axis);
 
-                        if (result.collides) {
-                            entityPosition.y = result.newPosition;
+                        if (
+                            result
+                            .collides) {
+                            entityPosition.y = result
+                                .newPosition;
                             entityVelocity.y = 0;
-                            hitGround = result.hitGround;
+                            hitGround = result
+                                .hitGround;
                         }
                         break;
                     case CollisionAxis.Z:
 
                         Vec3d blockMin = Vec3d(currentX, currentY, currentZ);
-                        Vec3d blockMax = Vec3d(currentX + 1, currentY + 1, currentZ + 1);
+                        Vec3d blockMax = Vec3d(
+                            currentX + 1, currentY + 1, currentZ + 1);
 
                         // import raylib;
 
                         // DrawCube(blockMin.toRaylib(), 0.1, 0.1, 0.1, Colors.DARKPURPLE);
 
-                        CollisionResult result = collideEntityToBlock(entityPosition, entitySize, entityVelocity,
+                        CollisionResult result = collideEntityToBlock(
+                            entityPosition, entitySize, entityVelocity,
                             blockMin, blockMax, axis);
 
-                        if (result.collides) {
-                            entityPosition.z = result.newPosition;
+                        if (
+                            result
+                            .collides) {
+                            entityPosition.z = result
+                                .newPosition;
                             entityVelocity.z = 0;
                         }
 
