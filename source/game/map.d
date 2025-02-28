@@ -635,106 +635,106 @@ public: //* BEGIN PUBLIC API.
 
         writeln("took: ", sw.peek().total!"usecs", "us");
 
-        struct LightTraversalNode {
-            int x = 0;
-            int y = 0;
-            int z = 0;
-            ubyte lightLevel = 0;
-        }
+        // struct LightTraversalNode {
+        //     int x = 0;
+        //     int y = 0;
+        //     int z = 0;
+        //     ubyte lightLevel = 0;
+        // }
 
-        const static Vec3i[6] DIRECTIONS = [
-            Vec3i(-1, 0, 0),
-            Vec3i(1, 0, 0),
-            Vec3i(0, -1, 0),
-            Vec3i(0, 1, 0),
-            Vec3i(0, 0, -1),
-            Vec3i(0, 0, 1),
-        ];
+        // const static Vec3i[6] DIRECTIONS = [
+        //     Vec3i(-1, 0, 0),
+        //     Vec3i(1, 0, 0),
+        //     Vec3i(0, -1, 0),
+        //     Vec3i(0, 1, 0),
+        //     Vec3i(0, 0, -1),
+        //     Vec3i(0, 0, 1),
+        // ];
 
-        Queue!LightTraversalNode cascadeQueue;
+        // Queue!LightTraversalNode cascadeQueue;
 
-        // This is now working within the space of the box.
+        // // This is now working within the space of the box.
 
-        Option!Vec3i sourceResult;
+        // Option!Vec3i sourceResult;
 
-        SOURCE_LOOP: while (true) {
-            sourceResult = sourceQueue.pop();
+        // SOURCE_LOOP: while (true) {
+        //     sourceResult = sourceQueue.pop();
 
-            // Reached the end of sources.
-            if (sourceResult.isNone()) {
-                break SOURCE_LOOP;
-            }
+        //     // Reached the end of sources.
+        //     if (sourceResult.isNone()) {
+        //         break SOURCE_LOOP;
+        //     }
 
-            //? INITIALIZE CASCADE.
-            const Vec3i thisSource = sourceResult.unwrap();
+        //     //? INITIALIZE CASCADE.
+        //     const Vec3i thisSource = sourceResult.unwrap();
 
-            // Start by pushing this light level in.
-            cascadeQueue.push(LightTraversalNode(thisSource.x, thisSource.y, thisSource.z, LIGHT_LEVEL_MAX));
+        //     // Start by pushing this light level in.
+        //     cascadeQueue.push(LightTraversalNode(thisSource.x, thisSource.y, thisSource.z, LIGHT_LEVEL_MAX));
 
-            CASCADE_LOOP: while (true) {
+        //     CASCADE_LOOP: while (true) {
 
-                Option!LightTraversalNode traversalResult = cascadeQueue.pop();
+        //         Option!LightTraversalNode traversalResult = cascadeQueue.pop();
 
-                // Reached the end of this source spread.
-                if (traversalResult.isNone()) {
-                    break CASCADE_LOOP;
-                }
+        //         // Reached the end of this source spread.
+        //         if (traversalResult.isNone()) {
+        //             break CASCADE_LOOP;
+        //         }
 
-                LightTraversalNode thisNode = traversalResult.unwrap();
+        //         LightTraversalNode thisNode = traversalResult.unwrap();
 
-                // Don't even bother. It'll spread 0. It's already set to 0.
-                if (thisNode.lightLevel <= 1) {
-                    continue CASCADE_LOOP;
-                }
+        //         // Don't even bother. It'll spread 0. It's already set to 0.
+        //         if (thisNode.lightLevel <= 1) {
+        //             continue CASCADE_LOOP;
+        //         }
 
-                const ubyte downStreamLightLevel = cast(ubyte)(thisNode.lightLevel - 1);
+        //         const ubyte downStreamLightLevel = cast(ubyte)(thisNode.lightLevel - 1);
 
-                DIRECTION_LOOP: foreach (dir; DIRECTIONS) {
+        //         DIRECTION_LOOP: foreach (dir; DIRECTIONS) {
 
-                    const int newPosX = thisNode.x + dir.x;
-                    const int newPosY = thisNode.y + dir.y;
-                    const int newPosZ = thisNode.z + dir.z;
+        //             const int newPosX = thisNode.x + dir.x;
+        //             const int newPosY = thisNode.y + dir.y;
+        //             const int newPosZ = thisNode.z + dir.z;
 
-                    // Trying to step out of bounds.
-                    if (newPosX >= BOUNDARY_BOX_MAX || newPosX < 0 ||
-                        newPosZ >= BOUNDARY_BOX_MAX || newPosZ < 0 ||
-                        newPosY >= CHUNK_HEIGHT || newPosY < 0) {
-                        continue DIRECTION_LOOP;
-                    }
+        //             // Trying to step out of bounds.
+        //             if (newPosX >= BOUNDARY_BOX_MAX || newPosX < 0 ||
+        //                 newPosZ >= BOUNDARY_BOX_MAX || newPosZ < 0 ||
+        //                 newPosY >= CHUNK_HEIGHT || newPosY < 0) {
+        //                 continue DIRECTION_LOOP;
+        //             }
 
-                    // In non-air. Which light cannot spread to.
-                    if (!lightPool[newPosX][newPosZ][newPosY].isAir) {
-                        continue DIRECTION_LOOP;
-                    }
+        //             // In non-air. Which light cannot spread to.
+        //             if (!lightPool[newPosX][newPosZ][newPosY].isAir) {
+        //                 continue DIRECTION_LOOP;
+        //             }
 
-                    // This is already a light source. Or is already at the level it would spread to. Don't need to cascade.
-                    if (lightPool[newPosX][newPosZ][newPosY].lightLevel >= thisNode.lightLevel) {
-                        continue DIRECTION_LOOP;
-                    }
+        //             // This is already a light source. Or is already at the level it would spread to. Don't need to cascade.
+        //             if (lightPool[newPosX][newPosZ][newPosY].lightLevel >= thisNode.lightLevel) {
+        //                 continue DIRECTION_LOOP;
+        //             }
 
-                    // Everything checks out. Spread light.
+        //             // Everything checks out. Spread light.
 
-                    lightPool[newPosX][newPosZ][newPosY].lightLevel = cast(
-                        ubyte)(thisNode.lightLevel - 1);
-                    cascadeQueue.push(LightTraversalNode(newPosX, newPosY, newPosZ, downStreamLightLevel));
-                }
-            }
+        //             lightPool[newPosX][newPosZ][newPosY].lightLevel = cast(
+        //                 ubyte)(thisNode.lightLevel - 1);
+        //             cascadeQueue.push(LightTraversalNode(newPosX, newPosY, newPosZ, downStreamLightLevel));
+        //         }
+        //     }
 
-            // writeln("source: ", thisSource.x, ", ", thisSource.y, ", ", thisSource.z);
-        }
+        //     // writeln("source: ", thisSource.x, ", ", thisSource.y, ", ", thisSource.z);
+        // }
 
-        foreach (xRaw; minW .. maxW) {
-            int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
-            int xWorldLocal = xInWorld + xRaw;
-            foreach (zRaw; minW .. maxW) {
-                int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
-                int zWorldLocal = zInWorld + zRaw;
-                foreach (yRaw; 0 .. CHUNK_HEIGHT) {
-                    BlockData* thisBlock = getBlockPointerAtWorldPosition(xWorldLocal, yRaw, zWorldLocal);
-                    thisBlock.naturalLightBank = lightPool[xInBox][zInBox][yRaw].lightLevel;
-                }
-            }
-        }
+        // foreach (xRaw; minW .. maxW) {
+        //     int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
+        //     int xWorldLocal = xInWorld + xRaw;
+        //     foreach (zRaw; minW .. maxW) {
+        //         int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
+        //         int zWorldLocal = zInWorld + zRaw;
+        //         foreach (yRaw; 0 .. CHUNK_HEIGHT) {
+        //             BlockData* thisBlock = getBlockPointerAtWorldPosition(xWorldLocal, yRaw, zWorldLocal);
+        //             thisBlock.naturalLightBank = lightPool[xInBox][zInBox][yRaw].lightLevel;
+        //         }
+        //     }
+        // }
 
     }
 
