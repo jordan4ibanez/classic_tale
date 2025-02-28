@@ -308,7 +308,6 @@ public: //* BEGIN PUBLIC API.
         }
 
         thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = blockID;
-        thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].naturalLightBank = 0;
 
         updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, blockID,
             cast(int) position.x, cast(int) position.z);
@@ -346,7 +345,6 @@ public: //* BEGIN PUBLIC API.
         }
 
         thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][y].blockID = blockID;
-        thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][y].naturalLightBank = 0;
 
         updateHeightMap(thisChunk, xzPosInChunk.x, y, xzPosInChunk.y, blockID, x, z);
 
@@ -387,7 +385,6 @@ public: //* BEGIN PUBLIC API.
         }
 
         thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = thisBlock.id;
-        thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].naturalLightBank = 0;
 
         updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, thisBlock.id,
             cast(int) position.x, cast(int) position.z);
@@ -418,7 +415,6 @@ public: //* BEGIN PUBLIC API.
                         break;
                     } else {
                         thisChunk.data[xInChunk][zInChunk][yScan].isSunlight = true;
-                        thisChunk.data[xInChunk][zInChunk][yScan].naturalLightBank = 15;
                     }
                 }
             }
@@ -436,8 +432,6 @@ public: //* BEGIN PUBLIC API.
                 thisChunk.heightmap[xInChunk][zInChunk] = yInChunk;
                 foreach (yScan; height .. yInChunk) {
                     thisChunk.data[xInChunk][zInChunk][yScan].isSunlight = false;
-                    thisChunk.data[xInChunk][zInChunk][yScan].naturalLightBank = 0;
-                    // thisChunk.data[xInChunk][zInChunk][yScan].blockID = 2;
                 }
             }
         }
