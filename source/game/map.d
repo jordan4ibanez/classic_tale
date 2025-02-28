@@ -801,7 +801,7 @@ public: //* BEGIN PUBLIC API.
             }
         }
 
-        writeln(count);
+        // writeln("count:", count);
 
         foreach (xRaw; minW .. maxW) {
             int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
