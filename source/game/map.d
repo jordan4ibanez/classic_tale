@@ -312,7 +312,7 @@ public: //* BEGIN PUBLIC API.
         updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, blockID,
             cast(int) position.x, cast(int) position.z);
 
-        cascadeNaturalLight(cast(int) floor(position.x), cast(int) floor(position.y), cast(int) floor(
+        cascadeNaturalLight(cast(int) floor(position.x), cast(int) floor(
                 position.z));
 
         // This gets put into a HashSetQueue so it can keep doing it over and over.
@@ -349,7 +349,7 @@ public: //* BEGIN PUBLIC API.
 
         updateHeightMap(thisChunk, xzPosInChunk.x, y, xzPosInChunk.y, blockID, x, z);
 
-        cascadeNaturalLight(x, y, z);
+        cascadeNaturalLight(x, z);
 
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
@@ -391,7 +391,7 @@ public: //* BEGIN PUBLIC API.
         updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, thisBlock.id,
             cast(int) position.x, cast(int) position.z);
 
-        cascadeNaturalLight(cast(int) floor(position.x), cast(int) floor(position.y), cast(int) floor(
+        cascadeNaturalLight(cast(int) floor(position.x), cast(int) floor(
                 position.z));
 
         // This gets put into a HashSetQueue so it can keep doing it over and over.
