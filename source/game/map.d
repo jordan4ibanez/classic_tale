@@ -409,13 +409,16 @@ public: //* BEGIN PUBLIC API.
             // If it was the top, have to scan down.
             //? Note: Subtractive update. Slightly more expensive. Has to scan down.
             if (height == yInChunk) {
-                foreach_reverse (yScan; 0 .. yInChunk) {
+                foreach_reverse (yScan; 0 .. yInChunk + 1) {
                     // Found it. That's it.
                     if (thisChunk.data[xInChunk][zInChunk][yScan].blockID != 0) {
                         thisChunk.heightmap[xInChunk][zInChunk] = yScan;
+                        writeln("new: ",yScan);
+                        break;
                     } else {
                         thisChunk.data[xInChunk][zInChunk][yScan].isSunlight = true;
-                        // thisChunk.data[xInChunk][zInChunk][yScan].blockID = 1;
+                        thisChunk.data[xInChunk][zInChunk][yScan].naturalLightBank = 15;
+
                     }
                 }
             }
