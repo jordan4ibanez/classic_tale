@@ -411,7 +411,6 @@ public: //* BEGIN PUBLIC API.
                     // Found it. That's it.
                     if (thisChunk.data[xInChunk][zInChunk][yScan].blockID != 0) {
                         thisChunk.heightmap[xInChunk][zInChunk] = yScan;
-                        // writeln("new: ", yScan);
                         break;
                     } else {
                         thisChunk.data[xInChunk][zInChunk][yScan].isSunlight = true;
