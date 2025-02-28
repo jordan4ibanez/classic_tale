@@ -504,10 +504,12 @@ public: //* BEGIN PUBLIC API.
                         continue;
                     }
 
-                    // Do not bother if the block is above direct sunlight.
-                    // if (getTopAt(xWorldLocal, zWorldLocal) < yRaw) {
-                    //     continue;
-                    // }
+                    // Do not bother if the block is direct sunlight aka above the height map.
+                    // It already has max light level applied.
+                    if (getTopAt(xWorldLocal, zWorldLocal) < yRaw) {
+                        lightPool[xInBox][zInBox][yRaw].air = false;
+                        continue;
+                    }
 
                     const(const BlockData*) thisBlock = getBlockPointerAtWorldPosition(xWorldLocal, yRaw, zWorldLocal);
 
