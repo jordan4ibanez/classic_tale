@@ -542,6 +542,10 @@ public: //* BEGIN PUBLIC API.
                     ((xWorldLocal + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
                     xWorldLocal / CHUNK_WIDTH)) - minChunkX;
 
+            const int ___doNotUseXRawInChunk = (xWorldLocal % CHUNK_WIDTH);
+            const int xInChunkPointer = (___doNotUseXRawInChunk < 0) ? (
+                ___doNotUseXRawInChunk + CHUNK_WIDTH) : ___doNotUseXRawInChunk;
+
             foreach (const zRaw; minW .. maxW) {
                 const int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
                 const int zWorldLocal = zInWorld + zRaw;
@@ -550,14 +554,18 @@ public: //* BEGIN PUBLIC API.
                         ((zWorldLocal + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
                         zWorldLocal / CHUNK_WIDTH)) - minChunkZ;
 
+                const int ___doNotUseZRawInChunk = (zWorldLocal % CHUNK_WIDTH);
+                const int zInChunkPointer = (___doNotUseZRawInChunk < 0) ? (
+                    ___doNotUseZRawInChunk + CHUNK_WIDTH) : ___doNotUseZRawInChunk;
+
                 //? This is a double check.
                 auto res = calculateChunkAtWorldPosition(cast(double) xWorldLocal, cast(double) zWorldLocal);
                 assert(res.x - minChunkX == chunkXInCache && res.y - minChunkZ == chunkZInCache);
                 assert(chunkXInCache >= 0 && chunkZInCache >= 0 && chunkXInCache <= 2 && chunkZInCache <= 2);
+                auto cz = getXZInChunk(xWorldLocal, zWorldLocal);
+                assert(xInChunkPointer == cz.x && zInChunkPointer == cz.y);
 
-                // const int chunkZ = zWorldLocal / CHUNK_WIDTH;
-
-                // Chunk* thisChunk = 
+                // Chunk * thisChunk =
 
                 foreach (const yRaw; 0 .. CHUNK_HEIGHT) {
 
