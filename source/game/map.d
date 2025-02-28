@@ -541,6 +541,13 @@ public: //* BEGIN PUBLIC API.
 
         writeln("=====");
 
+        struct LightTraversalNode {
+            int x = 0;
+            int y = 0;
+            int z = 0;
+            ubyte lightLevel = 0;
+        }
+
         while (true) {
             Option!Vec3i thisResult = sourceQueue.pop();
 
