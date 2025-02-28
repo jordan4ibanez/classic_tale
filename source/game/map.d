@@ -490,6 +490,63 @@ public: //* BEGIN PUBLIC API.
             writeln("found: ", positionResult.unwrap);
         }
 
+        // writeln("took: ", sw.peek().total!"usecs", "us");
+
+        // Queue!Vec3i inputSourceQueue;
+
+        // Queue!Vec3i searchQueue;
+
+        // const Vec2i origin = Vec2i(x, z);
+
+        // // Get all light sources. (sunlight)
+        // while (true) {
+        //     Option!Vec3i positionResult = searchQueue.pop();
+
+        //     if (positionResult.isNone()) {
+        //         writeln("breaking");
+        //         break;
+        //     }
+
+        //     const Vec3i thisPosition = positionResult.unwrap();
+        //     const BlockData* thisBlock = getBlockPointerAtWorldPosition(thisPosition);
+
+        //     // Not air.
+        //     if (thisBlock.blockID != 0) {
+        //         continue;
+        //     }
+
+        //     const Vec3i left = Vec3i(thisPosition.x - 1, thisPosition.y, thisPosition.z);
+        //     const BlockData* leftBlock = getBlockPointerAtWorldPosition(left);
+
+        //     const Vec3i right = Vec3i(thisPosition.x + 1, thisPosition.y, thisPosition.z);
+        //     const BlockData* rightBlock = getBlockPointerAtWorldPosition(right);
+
+        //     if (thisBlock.isSunlight) {
+        //         inputSourceQueue.push(thisPosition);
+        //     } else if (leftBlock && leftBlock.blockID == 0 && thisBlock.naturalLightBank > 1 && abs(
+        //             origin.x - left.x) == 16) {
+
+        //         writeln("source add -x: ", left.x);
+        //         inputSourceQueue.push(left);
+        //     } else if (rightBlock && rightBlock.blockID == 0 && thisBlock.naturalLightBank > 1 && abs(
+        //             origin.x - right.x) == 16) {
+        //         writeln("source add +x: ", right.x);
+        //         inputSourceQueue.push(right);
+        //     }
+
+        // }
+
+        // while (true) {
+        //     Option!Vec3i positionResult = inputSourceQueue.pop();
+
+        //     if (positionResult.isNone()) {
+        //         writeln("breaking");
+        //         break;
+        //     }
+
+        //     writeln("found: ", positionResult.unwrap);
+        // }
+
         /*
         Cascade down, then out.
         If nothing below, move outwards.
