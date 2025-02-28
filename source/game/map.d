@@ -627,20 +627,13 @@ public: //* BEGIN PUBLIC API.
 
         foreach (xRaw; minW .. maxW) {
             int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
-
             int xWorldLocal = xInWorld + xRaw;
-
             foreach (zRaw; minW .. maxW) {
                 int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
-
                 int zWorldLocal = zInWorld + zRaw;
-
                 foreach (yRaw; 0 .. CHUNK_HEIGHT) {
-
                     BlockData* thisBlock = getBlockPointerAtWorldPosition(xWorldLocal, yRaw, zWorldLocal);
-
                     thisBlock.naturalLightBank = lightPool[xInBox][zInBox][yRaw].lightLevel;
-
                 }
             }
         }
