@@ -191,7 +191,7 @@ public: //* BEGIN PUBLIC API.
 
         // Out of bounds.
         if (yPosInChunk < 0 || yPosInChunk >= CHUNK_HEIGHT) {
-            writeln("WARNING! trying to read out of bounds! " ~ to!string(yPosInChunk));
+            // writeln("WARNING! trying to read out of bounds! " ~ to!string(yPosInChunk));
             return BlockData();
         }
 
@@ -213,7 +213,7 @@ public: //* BEGIN PUBLIC API.
 
         // Out of bounds.
         if (yPosInChunk < 0 || yPosInChunk >= CHUNK_HEIGHT) {
-            writeln("WARNING! trying to read out of bounds! " ~ to!string(yPosInChunk));
+            // writeln("WARNING! trying to read out of bounds! " ~ to!string(yPosInChunk));
             return BlockData();
         }
 
@@ -233,7 +233,7 @@ public: //* BEGIN PUBLIC API.
 
         // Out of bounds.
         if (y < 0 || y >= CHUNK_HEIGHT) {
-            writeln("WARNING! trying to read out of bounds! " ~ to!string(y));
+            // writeln("WARNING! trying to read out of bounds! " ~ to!string(y));
             return BlockData();
         }
 
@@ -253,7 +253,7 @@ public: //* BEGIN PUBLIC API.
 
         // Out of bounds.
         if (y < 0 || y >= CHUNK_HEIGHT) {
-            writeln("WARNING! trying to read out of bounds! " ~ to!string(y));
+            // writeln("WARNING! trying to read out of bounds! " ~ to!string(y));
             return null;
         }
 
@@ -273,7 +273,7 @@ public: //* BEGIN PUBLIC API.
 
         // Out of bounds.
         if (position.y < 0 || position.y >= CHUNK_HEIGHT) {
-            writeln("WARNING! trying to read out of bounds! " ~ to!string(position.y));
+            // writeln("WARNING! trying to read out of bounds! " ~ to!string(position.y));
             return null;
         }
 
