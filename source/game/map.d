@@ -584,6 +584,13 @@ public: //* BEGIN PUBLIC API.
 
                 LightTraversalNode thisNode = traversalResult.unwrap();
 
+                // Don't even bother. It'll spread 0. It's already set to 0.
+                if (thisNode.lightLevel <= 1) {
+                    continue CASCADE_LOOP;
+                }
+
+                const ubyte downStreamLightLevel = cast(ubyte)(thisNode.lightLevel - 1);
+
                 DIRECTION_LOOP: foreach (dir; DIRECTIONS) {
 
                     const int newPosX = thisNode.x + dir.x;
@@ -597,36 +604,46 @@ public: //* BEGIN PUBLIC API.
                         continue DIRECTION_LOOP;
                     }
 
+                    // In non-air. Which light cannot spread to.
+                    if (!lightPool[newPosX][newPosZ][newPosY].isAir) {
+                        continue DIRECTION_LOOP;
+                    }
+
                     // This is already a light source. Or is already at the level it would spread to. Don't need to cascade.
                     if (lightPool[newPosX][newPosZ][newPosY].lightLevel >= thisNode.lightLevel) {
                         continue DIRECTION_LOOP;
                     }
 
+                    // Everything checks out. Spread light.
+
+                    lightPool[newPosX][newPosZ][newPosY].lightLevel = cast(
+                        ubyte)(thisNode.lightLevel - 1);
+                    cascadeQueue.push(LightTraversalNode(newPosX, newPosY, newPosZ, downStreamLightLevel));
                 }
             }
 
-            writeln("source: ", thisSource.x, ", ", thisSource.y, ", ", thisSource.z);
+            // writeln("source: ", thisSource.x, ", ", thisSource.y, ", ", thisSource.z);
         }
 
-        // foreach (xRaw; minW .. maxW) {
-        //     int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
+        foreach (xRaw; minW .. maxW) {
+            int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
 
-        //     int xWorldLocal = xInWorld + xRaw;
+            int xWorldLocal = xInWorld + xRaw;
 
-        //     foreach (zRaw; minW .. maxW) {
-        //         int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
+            foreach (zRaw; minW .. maxW) {
+                int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
 
-        //         int zWorldLocal = zInWorld + zRaw;
+                int zWorldLocal = zInWorld + zRaw;
 
-        //         foreach (yRaw; 0 .. CHUNK_HEIGHT) {
+                foreach (yRaw; 0 .. CHUNK_HEIGHT) {
 
-        //             BlockData* thisBlock = getBlockPointerAtWorldPosition(xWorldLocal, yRaw, zWorldLocal);
+                    BlockData* thisBlock = getBlockPointerAtWorldPosition(xWorldLocal, yRaw, zWorldLocal);
 
-        //             thisBlock.naturalLightBank = lightPool[xInBox][zInBox][yRaw].lightLevel;
+                    thisBlock.naturalLightBank = lightPool[xInBox][zInBox][yRaw].lightLevel;
 
-        //         }
-        //     }
-        // }
+                }
+            }
+        }
 
         writeln("took: ", sw.peek().total!"usecs", "us");
 
