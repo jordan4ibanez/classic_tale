@@ -527,9 +527,26 @@ public: //* BEGIN PUBLIC API.
             const int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
             const int xWorldLocal = xInWorld + xRaw;
 
+            const int chunkXInCache = ((xWorldLocal < 0) ? (
+                    ((xWorldLocal + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
+                    xWorldLocal / CHUNK_WIDTH)) - minChunkX;
+
             foreach (const zRaw; minW .. maxW) {
                 const int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
                 const int zWorldLocal = zInWorld + zRaw;
+
+                const int chunkZInCache = ((zWorldLocal < 0) ? (
+                        ((zWorldLocal + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
+                        zWorldLocal / CHUNK_WIDTH)) - minChunkZ;
+
+                //? This is a double check.
+                auto res = calculateChunkAtWorldPosition(cast(double) xWorldLocal, cast(double) zWorldLocal);
+                assert(res.x - minChunkX == chunkXInCache && res.y - minChunkZ == chunkZInCache);
+                assert(chunkXInCache >= 0 && chunkZInCache >= 0 && chunkXInCache <= 2 && chunkZInCache <= 2);
+
+                // const int chunkZ = zWorldLocal / CHUNK_WIDTH;
+
+                // Chunk* thisChunk = 
 
                 foreach (const yRaw; 0 .. CHUNK_HEIGHT) {
 
