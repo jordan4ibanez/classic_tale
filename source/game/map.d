@@ -535,6 +535,7 @@ public: //* BEGIN PUBLIC API.
         // This is shifting the whole world position into the box position.
         // Accumulating the light data so that the world does not need the be checked again.
         Vec3i cache;
+        BlockData* thisBlock;
         foreach (const xRaw; minW .. maxW) {
             const int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
             const int xWorldLocal = xInWorld + xRaw;
@@ -589,7 +590,7 @@ public: //* BEGIN PUBLIC API.
                     // }
 
                     //!! This is slowing the entire thing down.
-                    const(const BlockData*) thisBlock = &thisChunk
+                    thisBlock = &thisChunk
                         .data[xInChunkPointer][zInChunkPointer][yRaw];
 
                     // Initial binary application.
