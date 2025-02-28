@@ -302,7 +302,7 @@ public: //* BEGIN PUBLIC API.
 
         // Out of bounds.
         if (yPosInChunk < 0 || yPosInChunk >= CHUNK_HEIGHT) {
-            writeln("WARNING! trying to write out of bounds! " ~ to!string(yPosInChunk));
+            // writeln("WARNING! trying to write out of bounds! " ~ to!string(yPosInChunk));
             return;
         }
 
