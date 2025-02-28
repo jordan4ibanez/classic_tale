@@ -494,6 +494,23 @@ public: //* BEGIN PUBLIC API.
             }
         }
 
+        const int _xMin = xInWorld + minW;
+        const int _xMax = xInWorld + maxW;
+        const int _zMin = zInWorld + minW;
+        const int _zMax = zInWorld + maxW;
+
+        const int minChunkX = (_xMin < 0) ? (((_xMin + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
+            _xMin / CHUNK_WIDTH);
+        const int maxChunkX = (_xMax < 0) ? (((_xMax + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
+            _xMax / CHUNK_WIDTH);
+        const int minChunkZ = (_zMin < 0) ? (((_zMin + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
+            _zMin / CHUNK_WIDTH);
+        const int maxChunkZ = (_zMax < 0) ? (((_zMax + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
+            _zMax / CHUNK_WIDTH);
+
+        Chunk*[][] chunkPointers = new Chunk*[][](abs(maxChunkX - minChunkX) + 1, abs(
+                maxChunkZ - minChunkZ) + 1);
+
         Queue!Vec3i sourceQueue;
 
         // Search for air. Binary. Lightsource or darkness.
