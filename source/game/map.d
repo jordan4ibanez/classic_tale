@@ -565,7 +565,7 @@ public: //* BEGIN PUBLIC API.
                 // auto cz = getXZInChunk(xWorldLocal, zWorldLocal);
                 // assert(xInChunkPointer == cz.x && zInChunkPointer == cz.y);
 
-                Chunk * thisChunk = chunkPointers[chunkXInCache][chunkZInCache];
+                Chunk* thisChunk = chunkPointers[chunkXInCache][chunkZInCache];
 
                 foreach (const yRaw; 0 .. CHUNK_HEIGHT) {
 
@@ -587,10 +587,9 @@ public: //* BEGIN PUBLIC API.
                     //     continue;
                     // }
 
-
-
                     //!! This is slowing the entire thing down.
-                    const(const BlockData*) thisBlock = &thisChunk.data[xInChunkPointer][zInChunkPointer][yRaw];
+                    const(const BlockData*) thisBlock = &thisChunk
+                        .data[xInChunkPointer][zInChunkPointer][yRaw];
 
                     // Initial binary application.
                     if (thisBlock && thisBlock.blockID == 0) {
