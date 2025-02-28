@@ -528,6 +528,8 @@ public: //* BEGIN PUBLIC API.
 
                         } else {
 
+                            // This is in the "core" of the box. Can be treated as normal cascade data.
+
                             const bool isSunlight = thisBlock.isSunlight;
 
                             elementPointer.lightLevel = (isSunlight) ? LIGHT_LEVEL_MAX : 0;
