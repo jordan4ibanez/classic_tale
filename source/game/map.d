@@ -726,6 +726,8 @@ public: //* BEGIN PUBLIC API.
 
         uint count = 0;
 
+        LightTraversalNode cacheTraversal;
+
         SOURCE_LOOP: while (true) {
 
             // Reached the end of sources.
@@ -738,7 +740,11 @@ public: //* BEGIN PUBLIC API.
             sourceQueue.popFront();
 
             // Start by pushing this light level in.
-            cascadeQueue.put(LightTraversalNode(thisSource.x, thisSource.y, thisSource.z, LIGHT_LEVEL_MAX));
+            cacheTraversal.x = thisSource.x;
+            cacheTraversal.y = thisSource.y;
+            cacheTraversal.z = thisSource.z;
+            cacheTraversal.lightLevel = LIGHT_LEVEL_MAX;
+            cascadeQueue.put(cacheTraversal);
 
             CASCADE_LOOP: while (true) {
 
@@ -783,10 +789,14 @@ public: //* BEGIN PUBLIC API.
 
                     // Everything checks out. Spread light.
 
-                    lightPool[newPosX][newPosZ][newPosY].lightLevel = cast(
-                        ubyte)(thisNode.lightLevel - 1);
+                    lightPool[newPosX][newPosZ][newPosY].lightLevel = downStreamLightLevel;
 
-                    cascadeQueue.put(LightTraversalNode(newPosX, newPosY, newPosZ, downStreamLightLevel));
+                    cacheTraversal.x = newPosX;
+                    cacheTraversal.y = newPosY;
+                    cacheTraversal.z = newPosZ;
+                    cacheTraversal.lightLevel = downStreamLightLevel;
+
+                    cascadeQueue.put(cacheTraversal);
                 }
             }
 
