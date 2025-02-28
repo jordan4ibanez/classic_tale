@@ -550,6 +550,8 @@ public: //* BEGIN PUBLIC API.
             }
         }
 
+        writeln("took: ", sw.peek().total!"usecs", "us");
+
         struct LightTraversalNode {
             int x = 0;
             int y = 0;
@@ -650,8 +652,6 @@ public: //* BEGIN PUBLIC API.
                 }
             }
         }
-
-        writeln("took: ", sw.peek().total!"usecs", "us");
 
     }
 
