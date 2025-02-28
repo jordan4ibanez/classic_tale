@@ -557,8 +557,10 @@ public: //* BEGIN PUBLIC API.
 
         // This is now working within the space of the box.
 
+        Option!Vec3i sourceResult;
+
         SOURCE_LOOP: while (true) {
-            Option!Vec3i sourceResult = sourceQueue.pop();
+            sourceResult = sourceQueue.pop();
 
             // Reached the end of sources.
             if (sourceResult.isNone()) {
