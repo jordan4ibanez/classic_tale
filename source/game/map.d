@@ -464,7 +464,7 @@ public: //* BEGIN PUBLIC API.
         static const minW = -(LIGHT_LEVEL_MAX + 1);
         static const maxW = LIGHT_LEVEL_MAX + 1;
 
-        Vec2i key = calculateChunkAtWorldPosition(xInWorld, zInWorld);
+        const Vec2i key = calculateChunkAtWorldPosition(xInWorld, zInWorld);
         Vec2i thisKey;
         foreach (x; -1 .. 2) {
             foreach (z; -1 .. 2) {
