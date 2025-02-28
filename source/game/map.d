@@ -572,17 +572,20 @@ public: //* BEGIN PUBLIC API.
             Queue!Vec3i cascadeQueue;
 
             foreach (dir; DIRECTIONS) {
+
+                const int newPosX = thisSource.x + dir.x;
+                const int newPosY = thisSource.y + dir.y;
+                const int newPosZ = thisSource.z + dir.z;
+
                 // Trying to step out of bounds.
-                if (thisSource.x + dir.x >= BOUNDARY_BOX_MAX || thisSource.x + dir.x < 0 ||
-                    thisSource.z + dir.z >= BOUNDARY_BOX_MAX || thisSource.z + dir.z < 0 ||
-                    thisSource.y + dir.y >= CHUNK_HEIGHT || thisSource.y + dir.y < 0) {
+                if (newPosX >= BOUNDARY_BOX_MAX || newPosX < 0 ||
+                    newPosZ >= BOUNDARY_BOX_MAX || newPosZ < 0 ||
+                    newPosY >= CHUNK_HEIGHT || newPosY < 0) {
                     continue;
                 }
 
                 // This is already a light source. Don't need to cascade.
-                if (
-                    lightPool[thisSource.x + dir.x][thisSource.z + dir.z][thisSource.y + dir.y]
-                    .lightLevel == LIGHT_LEVEL_MAX) {
+                if (lightPool[newPosX][newPosZ][newPosY].lightLevel == LIGHT_LEVEL_MAX) {
                     continue;
                 }
 
