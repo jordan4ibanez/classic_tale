@@ -40,7 +40,7 @@ struct BlockData {
     ubyte naturalLightBank = 0;
     //? Artificial light sources like torches or camp fire.
     ubyte artificialLightBank = 0;
-    bool sunlight = false;
+    bool isSunlight = false;
 }
 
 struct Chunk {
@@ -312,6 +312,9 @@ public: //* BEGIN PUBLIC API.
         updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, blockID,
             cast(int) position.x, cast(int) position.z);
 
+        cascadeNaturalLight(cast(int) floor(position.x), cast(int) floor(position.y), cast(int) floor(
+                position.z));
+
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
         updateAdjacentNeighborToPositionInChunk(chunkID, xzPosInChunk);
@@ -345,6 +348,8 @@ public: //* BEGIN PUBLIC API.
         thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][y].naturalLightBank = 0;
 
         updateHeightMap(thisChunk, xzPosInChunk.x, y, xzPosInChunk.y, blockID, x, z);
+
+        cascadeNaturalLight(x, y, z);
 
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
@@ -386,6 +391,9 @@ public: //* BEGIN PUBLIC API.
         updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, thisBlock.id,
             cast(int) position.x, cast(int) position.z);
 
+        cascadeNaturalLight(cast(int) floor(position.x), cast(int) floor(position.y), cast(int) floor(
+                position.z));
+
         // This gets put into a HashSetQueue so it can keep doing it over and over.
         MapGraphics.generate(chunkID);
         updateAdjacentNeighborToPositionInChunk(chunkID, xzPosInChunk);
@@ -404,11 +412,10 @@ public: //* BEGIN PUBLIC API.
                 foreach_reverse (yScan; 0 .. yInChunk) {
                     // Found it. That's it.
                     if (thisChunk.data[xInChunk][zInChunk][yScan].blockID != 0) {
-                        // writeln("Subtractive: height at ", x, ", ", z, " is now ", yScan);
                         thisChunk.heightmap[xInChunk][zInChunk] = yScan;
-                        return cascadeNaturalLight(worldPositionX, height, worldPositionZ);
                     } else {
-                        thisChunk.data[xInChunk][zInChunk][yScan].sunlight = true;
+                        thisChunk.data[xInChunk][zInChunk][yScan].isSunlight = true;
+                        // thisChunk.data[xInChunk][zInChunk][yScan].blockID = 1;
                     }
                 }
             }
@@ -424,35 +431,60 @@ public: //* BEGIN PUBLIC API.
             if (yInChunk > height) {
                 writeln("heightmap update");
                 thisChunk.heightmap[xInChunk][zInChunk] = yInChunk;
-
-                foreach (yScan; height .. yInChunk - 1) {
-                    thisChunk.data[xInChunk][zInChunk][yScan].sunlight = false;
+                foreach (yScan; height .. yInChunk) {
+                    thisChunk.data[xInChunk][zInChunk][yScan].isSunlight = false;
+                    // thisChunk.data[xInChunk][zInChunk][yScan].blockID = 2;
                 }
-                // writeln("Additive: height at ", x, ", ", z, " is now ", y);
-                return cascadeNaturalLight(worldPositionX, yInChunk - 1, worldPositionZ);
             }
         }
     }
 
     void cascadeNaturalLight(int x, int y, int z) {
+        import linked_hash_queue;
         import utility.queue;
 
-        Queue!Vec3i queue;
+        Queue!Vec3i sourceQueue;
+        Queue!Vec3i searchQueue;
 
-        queue.push(Vec3i(x, y, z));
+        const Vec3i origin = Vec3i(x, y, z);
 
+        searchQueue.push(origin);
+
+        // Get all light sources. (sunlight)
         while (true) {
-            Option!Vec3i thisPosition = queue.pop();
+            Option!Vec3i positionResult = searchQueue.pop();
 
-            if (thisPosition.isNone()) {
+            if (positionResult.isNone()) {
                 writeln("breaking");
                 break;
             }
 
-            // Search for any in sun blocks.
+            const Vec3i thisPosition = positionResult.unwrap();
 
-            getBlockPointerAtWorldPosition(thisPosition.unwrap());
+            const BlockData* thisBlock = getBlockPointerAtWorldPosition(thisPosition);
 
+            // Not air.
+            if (thisBlock.blockID != 0) {
+                continue;
+            }
+
+            if (thisBlock.isSunlight) {
+                sourceQueue.push(thisPosition);
+            }
+
+            searchQueue.push(Vec3i(thisPosition.x - 1, thisPosition.y, thisPosition.z));
+            searchQueue.push(Vec3i(thisPosition.x + 1, thisPosition.y, thisPosition.z));
+        }
+
+        while (true) {
+            Option!Vec3i positionResult = sourceQueue.pop();
+
+            if (positionResult.isNone()) {
+                writeln("breaking");
+                break;
+            }
+
+            writeln("found: ", positionResult.unwrap);
         }
 
         /*
@@ -692,7 +724,7 @@ private: //* BEGIN INTERNAL API.
 
                     if (y > selectedHeight) {
                         thisChunk.data[x][z][y].naturalLightBank = 15;
-                        thisChunk.data[x][z][y].sunlight = true;
+                        thisChunk.data[x][z][y].isSunlight = true;
                     } else {
                         if (y == 0) {
                             thisChunk.data[x][z][y].blockID = bedrock.id;
