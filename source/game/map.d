@@ -503,7 +503,7 @@ public: //* BEGIN PUBLIC API.
                     //! do not enable.
                     // It already has max light level applied.
                     // if (yRaw > getTopAt(xWorldLocal, zWorldLocal)) {
-                    //     lightPool[xInBox][zInBox][yRaw].air = false;
+                    //     lightPool[xInBox][zInBox][yRaw].isAir = false;
                     //     continue;
                     // }
 
