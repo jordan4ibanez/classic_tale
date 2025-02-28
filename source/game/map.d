@@ -455,6 +455,7 @@ public: //* BEGIN PUBLIC API.
 
     void cascadeNaturalLight(int xInWorld, int zInWorld) {
         import std.datetime.stopwatch;
+        import std.math.algebraic;
         import utility.queue;
 
         auto sw = StopWatch(AutoStart.yes);
@@ -462,13 +463,15 @@ public: //* BEGIN PUBLIC API.
         static const minW = -(LIGHT_LEVEL_MAX + 1);
         static const maxW = LIGHT_LEVEL_MAX + 1;
 
-        const Vec2i key = calculateChunkAtWorldPosition(xInWorld, zInWorld);
-        Vec2i thisKey;
-        foreach (x; -1 .. 2) {
-            foreach (z; -1 .. 2) {
-                thisKey.x = key.x + x;
-                thisKey.y = key.y + z;
-                MapGraphics.generate(thisKey);
+        // Pointer caching.
+        const int minChunkX = (xInWorld + minW) / CHUNK_WIDTH;
+        const int minChunkZ = (zInWorld + minW) / CHUNK_WIDTH;
+        const int maxChunkX = (xInWorld + maxW) / CHUNK_WIDTH;
+        const int maxChunkZ = (zInWorld + maxW) / CHUNK_WIDTH;
+
+        Chunk*[][] chunkPointers = new Chunk*[][](abs(maxChunkX - minChunkX) + 1, abs(
+                maxChunkZ - minChunkZ) + 1);
+
         {
             // This is an extreme micro optimization.
             // The "shell" of the update is never mutated.
