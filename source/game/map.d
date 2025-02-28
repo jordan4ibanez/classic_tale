@@ -558,37 +558,51 @@ public: //* BEGIN PUBLIC API.
         // This is now working within the space of the box.
 
         SOURCE_LOOP: while (true) {
-            Option!Vec3i thisResult = sourceQueue.pop();
+            Option!Vec3i sourceResult = sourceQueue.pop();
 
-            writeln(thisResult);
-
-            if (thisResult.isNone()) {
+            // Reached the end of sources.
+            if (sourceResult.isNone()) {
                 break SOURCE_LOOP;
             }
 
             //? INITIALIZE CASCADE.
-            const Vec3i thisSource = thisResult.unwrap();
+            const Vec3i thisSource = sourceResult.unwrap();
 
-            Queue!Vec3i cascadeQueue;
+            Queue!LightTraversalNode cascadeQueue;
 
-            foreach (dir; DIRECTIONS) {
+            // Start by pushing this light level in.
+            cascadeQueue.push(LightTraversalNode(thisSource.x, thisSource.y, thisSource.z, LIGHT_LEVEL_MAX));
 
-                const int newPosX = thisSource.x + dir.x;
-                const int newPosY = thisSource.y + dir.y;
-                const int newPosZ = thisSource.z + dir.z;
+            CASCADE_LOOP: while (true) {
 
-                // Trying to step out of bounds.
-                if (newPosX >= BOUNDARY_BOX_MAX || newPosX < 0 ||
-                    newPosZ >= BOUNDARY_BOX_MAX || newPosZ < 0 ||
-                    newPosY >= CHUNK_HEIGHT || newPosY < 0) {
-                    continue;
+                Option!LightTraversalNode traversalResult = cascadeQueue.pop();
+
+                // Reached the end of this source spread.
+                if (traversalResult.isNone()) {
+                    break CASCADE_LOOP;
                 }
 
-                // This is already a light source. Don't need to cascade.
-                if (lightPool[newPosX][newPosZ][newPosY].lightLevel == LIGHT_LEVEL_MAX) {
-                    continue;
-                }
+                LightTraversalNode thisNode = traversalResult.unwrap();
 
+                DIRECTION_LOOP: foreach (dir; DIRECTIONS) {
+
+                    const int newPosX = thisNode.x + dir.x;
+                    const int newPosY = thisNode.y + dir.y;
+                    const int newPosZ = thisNode.z + dir.z;
+
+                    // Trying to step out of bounds.
+                    if (newPosX >= BOUNDARY_BOX_MAX || newPosX < 0 ||
+                        newPosZ >= BOUNDARY_BOX_MAX || newPosZ < 0 ||
+                        newPosY >= CHUNK_HEIGHT || newPosY < 0) {
+                        continue DIRECTION_LOOP;
+                    }
+
+                    // This is already a light source. Or is already at the level it would spread to. Don't need to cascade.
+                    if (lightPool[newPosX][newPosZ][newPosY].lightLevel >= thisNode.lightLevel) {
+                        continue DIRECTION_LOOP;
+                    }
+
+                }
             }
 
             writeln("source: ", thisSource.x, ", ", thisSource.y, ", ", thisSource.z);
