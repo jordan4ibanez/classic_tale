@@ -436,6 +436,7 @@ public: //* BEGIN PUBLIC API.
                 thisChunk.heightmap[xInChunk][zInChunk] = yInChunk;
                 foreach (yScan; height .. yInChunk) {
                     thisChunk.data[xInChunk][zInChunk][yScan].isSunlight = false;
+                    thisChunk.data[xInChunk][zInChunk][yScan].naturalLightBank = 0;
                     // thisChunk.data[xInChunk][zInChunk][yScan].blockID = 2;
                 }
             }
