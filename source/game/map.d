@@ -622,7 +622,7 @@ public: //* BEGIN PUBLIC API.
                     }
 
                     const int neighborTop = neighborBlockChunk
-                        .heightmap[thisXInsideChunkLocal][thisZInsideChunkLocal];
+                        .heightmap[thisXInsideChunkLocal][thisZInsideChunkLocal] + 2;
 
                     if (neighborTop > highPoint) {
                         highPoint = neighborTop;
