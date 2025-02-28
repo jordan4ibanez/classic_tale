@@ -111,7 +111,7 @@ public: //* BEGIN PUBLIC API.
 
         const Vec3d start = CameraHandler.getPosition();
         const Vec3d cameraDir = CameraHandler.getLookVector();
-        const Vec3d end = vec3dAdd(vec3dMultiply(cameraDir, Vec3d(30, 30, 30)), start);
+        const Vec3d end = vec3dAdd(vec3dMultiply(cameraDir, Vec3d(130, 130, 130)), start);
 
         RayResult result = rayCast(start, end);
 
