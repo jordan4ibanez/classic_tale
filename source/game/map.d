@@ -537,8 +537,6 @@ public: //* BEGIN PUBLIC API.
             }
         }
 
-        Queue!Vec3i updateQueue;
-
         struct LightTraversalNode {
             int x = 0;
             int y = 0;
@@ -555,6 +553,8 @@ public: //* BEGIN PUBLIC API.
             Vec3i(0, 0, 1),
         ];
 
+        Queue!LightTraversalNode cascadeQueue;
+
         // This is now working within the space of the box.
 
         SOURCE_LOOP: while (true) {
@@ -567,8 +567,6 @@ public: //* BEGIN PUBLIC API.
 
             //? INITIALIZE CASCADE.
             const Vec3i thisSource = sourceResult.unwrap();
-
-            Queue!LightTraversalNode cascadeQueue;
 
             // Start by pushing this light level in.
             cascadeQueue.push(LightTraversalNode(thisSource.x, thisSource.y, thisSource.z, LIGHT_LEVEL_MAX));
