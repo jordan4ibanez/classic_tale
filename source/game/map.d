@@ -534,7 +534,7 @@ public: //* BEGIN PUBLIC API.
                             }
                         }
                     } else {
-                        lightPool[xInBox][zInBox][yRaw].isAir = false;
+                        elementPointer.isAir = false;
                     }
                 }
             }
