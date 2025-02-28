@@ -442,52 +442,64 @@ public: //* BEGIN PUBLIC API.
         }
     }
 
-    void cascadeNaturalLight(int x, int y, int z) {
+    const ubyte LIGHT_MAX_LEVEL = 15;
+
+    private static immutable boundaryX = (LIGHT_MAX_LEVEL * 2) + 1;
+
+    // Y Z X
+    private static ubyte[CHUNK_HEIGHT][boundaryX][boundaryX] lightPool;
+
+    // todo: accumulate the x and z min and max and reallocate this to utilize the box of that + max light level to do it in one shot.
+
+    void cascadeNaturalLight(int xInWorld, int zInWorld) {
         import linked_hash_queue;
         import utility.queue;
 
-        Queue!Vec3i sourceQueue;
-        Queue!Vec3i searchQueue;
+        import std.datetime.stopwatch;
 
-        const Vec3i origin = Vec3i(x, y, z);
+        auto sw = StopWatch(AutoStart.yes);
 
-        searchQueue.push(origin);
+        const minW = -LIGHT_MAX_LEVEL;
+        const maxW = LIGHT_MAX_LEVEL + 1;
 
-        // Get all light sources. (sunlight)
-        while (true) {
-            Option!Vec3i positionResult = searchQueue.pop();
-
-            if (positionResult.isNone()) {
-                writeln("breaking");
-                break;
+        Vec2i key = calculateChunkAtWorldPosition(xInWorld, zInWorld);
+        foreach (x; -1 .. 2) {
+            foreach (z; -1 .. 2) {
+                Vec2i thisKey = Vec2i(key.x + x, key.y + z);
+                MapGraphics.generate(thisKey);
             }
-
-            const Vec3i thisPosition = positionResult.unwrap();
-
-            const BlockData* thisBlock = getBlockPointerAtWorldPosition(thisPosition);
-
-            // Not air.
-            if (thisBlock.blockID != 0) {
-                continue;
-            }
-
-            if (thisBlock.isSunlight) {
-                sourceQueue.push(thisPosition);
-            }
-
-            searchQueue.push(Vec3i(thisPosition.x - 1, thisPosition.y, thisPosition.z));
-            searchQueue.push(Vec3i(thisPosition.x + 1, thisPosition.y, thisPosition.z));
         }
 
-        while (true) {
-            Option!Vec3i positionResult = sourceQueue.pop();
+        foreach (xRaw; minW .. maxW) {
+            int xInBox = xRaw + LIGHT_MAX_LEVEL;
 
-            if (positionResult.isNone()) {
-                writeln("breaking");
-                break;
+            int xWorldLocal = xInWorld + xRaw;
+
+            foreach (zRaw; minW .. maxW) {
+                int zInBox = zRaw + LIGHT_MAX_LEVEL;
+
+                int zWorldLocal = zInWorld + zRaw;
+
+                foreach (yRaw; 0 .. CHUNK_HEIGHT) {
+
+                    BlockData* thisBlock = getBlockPointerAtWorldPosition(xWorldLocal, yRaw, zWorldLocal);
+
+                    // Do not do corners.
+                    if (yRaw == 0 || yRaw == (CHUNK_HEIGHT - 1)) {
+
+                        if (thisBlock) {
+                            thisBlock.blockID = 1;
+                        }
+
+                    }
+
+                    if (thisBlock) {
+                        // thisBlock.blockID = 1;
+                    }
+
+                    lightPool[xInBox][zInBox][yRaw] = 1;
+                }
             }
-
-            writeln("found: ", positionResult.unwrap);
         }
 
         // writeln("took: ", sw.peek().total!"usecs", "us");
