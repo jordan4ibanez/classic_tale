@@ -418,7 +418,6 @@ public: //* BEGIN PUBLIC API.
                     } else {
                         thisChunk.data[xInChunk][zInChunk][yScan].isSunlight = true;
                         thisChunk.data[xInChunk][zInChunk][yScan].naturalLightBank = 15;
-
                     }
                 }
             }
