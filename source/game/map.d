@@ -578,10 +578,47 @@ public: //* BEGIN PUBLIC API.
                 int highPoint = 0;
 
                 foreach (dir; DIRECTIONS) {
-                    const int localX = xInWorld + dir.x;
-                    const int localZ = xInWorld + dir.y;
 
-                    const int neighborTop = getTopAt(localX, localZ) + 1;
+                    const int localX = xWorldLocal + dir.x;
+                    const int localZ = zWorldLocal + dir.y;
+
+                    // Trying to step out of bounds.
+                    if (localX > _xMax || localX < _xMin ||
+                        localZ > _zMax || localZ < _zMin) {
+                        // writeln("out of bounds");
+                        continue;
+                    }
+
+                    //? Getting which chunk pointer to use.
+
+                    const int xChunkInCacheHeightmap = ((localX < 0) ? (
+                            ((localX + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
+                            localX / CHUNK_WIDTH)) - minChunkX;
+
+                    const int zChunkInCacheHeightmap = ((localZ < 0) ? (
+                            ((localZ + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
+                            localZ / CHUNK_WIDTH)) - minChunkZ;
+
+                    //? Getting the X and Z inside this chunk.
+
+                    const int __tempX = (localX % CHUNK_WIDTH);
+                    const int thisXInsideChunkLocal = (__tempX < 0) ? (
+                        __tempX + CHUNK_WIDTH) : __tempX;
+
+                    const int __tempZ = (localZ % CHUNK_WIDTH);
+                    const int thisZInsideChunkLocal = (__tempZ < 0) ? (
+                        __tempZ + CHUNK_WIDTH) : __tempZ;
+
+                    const Chunk* neighborBlockChunk = chunkPointers[xChunkInCacheHeightmap][zChunkInCacheHeightmap];
+
+                    // Can't get data that does not exist.
+                    if (neighborBlockChunk is null) {
+                        continue;
+                    }
+
+                    const int neighborTop = neighborBlockChunk
+                        .heightmap[thisXInsideChunkLocal][thisZInsideChunkLocal];
+
                     if (neighborTop > highPoint) {
                         highPoint = neighborTop;
                     }
