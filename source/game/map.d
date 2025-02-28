@@ -39,7 +39,7 @@ struct BlockData {
     //? Sun light (and moon light). Basically exposed to open sky straight upwards.
     ubyte naturalLightBank = 0;
     //? Artificial light sources like torches or camp fire.
-    ubyte artificialLightBank = 0;
+    // ubyte artificialLightBank = 0;
     bool isSunlight = false;
 }
 
