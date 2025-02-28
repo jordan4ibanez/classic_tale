@@ -22,6 +22,7 @@ import std.math.algebraic;
 import std.math.rounding;
 import std.random;
 import std.stdio;
+import utility.circular_buffer;
 import utility.window;
 
 // Width is for X and Z.
@@ -448,21 +449,38 @@ public: //* BEGIN PUBLIC API.
         ));
     }
 
+    private struct LightTraversalNode {
+        int x = 0;
+        int y = 0;
+        int z = 0;
+        ubyte lightLevel = 0;
+    }
+
     // Y Z X
     private static MazeElement[CHUNK_HEIGHT][BOUNDARY_BOX_MAX][BOUNDARY_BOX_MAX] lightPool;
+    private static Chunk*[3][3] chunkPointers;
+    private static CircularBuffer!Vec3i sourceQueue;
+    private static CircularBuffer!LightTraversalNode cascadeQueue;
 
     // todo: ?MAYBE? accumulate the x and z min and max and reallocate this to utilize the box of that + max light level to do it in one shot.
 
     void cascadeNaturalLight(int xInWorld, int zInWorld) {
-        import std.container;
+        // import std.container;
         import std.datetime.stopwatch;
         import std.math.algebraic;
-        import utility.queue;
 
-        auto sw = StopWatch(AutoStart.yes);
+        // import utility.queue;
+
+        if (!sourceQueue.initialized) {
+            // ~2 MB.
+            sourceQueue = CircularBuffer!(Vec3i)(100_000);
+            cascadeQueue = CircularBuffer!(LightTraversalNode)(100_000);
+        }
 
         static const minW = -(LIGHT_LEVEL_MAX + 1);
         static const maxW = LIGHT_LEVEL_MAX + 1;
+
+        auto sw = StopWatch(AutoStart.yes);
 
         // Pointer caching.
 
@@ -480,8 +498,7 @@ public: //* BEGIN PUBLIC API.
         const int maxChunkZ = (_zMax < 0) ? (((_zMax + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
             _zMax / CHUNK_WIDTH);
 
-        Chunk*[][] chunkPointers = new Chunk*[][](abs(maxChunkX - minChunkX) + 1, abs(
-                maxChunkZ - minChunkZ) + 1);
+        // The max it can be is 3.
 
         {
             Vec2i cacheKey;
@@ -519,7 +536,6 @@ public: //* BEGIN PUBLIC API.
                 _zMaxUpdate / CHUNK_WIDTH);
 
             Vec2i cacheKey;
-
             foreach (x; updateMinChunkX .. updateMaxChunkX + 1) {
                 foreach (z; updateMinChunkZ .. updateMaxChunkZ + 1) {
                     cacheKey.x = x;
@@ -528,8 +544,6 @@ public: //* BEGIN PUBLIC API.
                 }
             }
         }
-
-        Queue!Vec3i sourceQueue;
 
         // Search for air. Binary. Lightsource or darkness.
         // This is shifting the whole world position into the box position.
@@ -670,7 +684,7 @@ public: //* BEGIN PUBLIC API.
                             cache.y = yRaw;
                             cache.z = zInBox;
 
-                            sourceQueue.push(cache);
+                            sourceQueue.put(cache);
 
                         } else {
 
@@ -686,7 +700,7 @@ public: //* BEGIN PUBLIC API.
                                 cache.y = yRaw;
                                 cache.z = zInBox;
 
-                                sourceQueue.push(cache);
+                                sourceQueue.put(cache);
                             }
                         }
                     } else {
@@ -694,15 +708,6 @@ public: //* BEGIN PUBLIC API.
                     }
                 }
             }
-        }
-
-        writeln("took: ", sw.peek().total!"usecs", "us");
-
-        struct LightTraversalNode {
-            int x = 0;
-            int y = 0;
-            int z = 0;
-            ubyte lightLevel = 0;
         }
 
         const static Vec3i[6] DIRECTIONS = [
@@ -714,38 +719,39 @@ public: //* BEGIN PUBLIC API.
             Vec3i(0, 0, 1),
         ];
 
-        Queue!LightTraversalNode cascadeQueue;
-
         // This is now working within the space of the box.
 
-        Option!Vec3i sourceResult;
+        // Option!Vec3i sourceResult;
+        Vec3i thisSource;
+
+        uint count = 0;
 
         SOURCE_LOOP: while (true) {
-            sourceResult = sourceQueue.pop();
 
             // Reached the end of sources.
-            if (sourceResult.isNone()) {
+            if (sourceQueue.empty()) {
                 break SOURCE_LOOP;
             }
 
             //? INITIALIZE CASCADE.
-            const Vec3i thisSource = sourceResult.unwrap();
+            thisSource = sourceQueue.front();
+            sourceQueue.popFront();
 
             // Start by pushing this light level in.
-            cascadeQueue.push(LightTraversalNode(thisSource.x, thisSource.y, thisSource.z, LIGHT_LEVEL_MAX));
+            cascadeQueue.put(LightTraversalNode(thisSource.x, thisSource.y, thisSource.z, LIGHT_LEVEL_MAX));
 
             CASCADE_LOOP: while (true) {
 
-                Option!LightTraversalNode traversalResult = cascadeQueue.pop();
-
                 // Reached the end of this source spread.
-                if (traversalResult.isNone()) {
+                if (cascadeQueue.empty()) {
                     break CASCADE_LOOP;
                 }
+                count++;
 
-                LightTraversalNode thisNode = traversalResult.unwrap();
+                LightTraversalNode thisNode = cascadeQueue.front();
+                cascadeQueue.popFront();
 
-                // Don't even bother. It'll spread 0. It's already set to 0.
+                // Don't even bother. It'll spread 0.
                 if (thisNode.lightLevel <= 1) {
                     continue CASCADE_LOOP;
                 }
@@ -779,12 +785,15 @@ public: //* BEGIN PUBLIC API.
 
                     lightPool[newPosX][newPosZ][newPosY].lightLevel = cast(
                         ubyte)(thisNode.lightLevel - 1);
-                    cascadeQueue.push(LightTraversalNode(newPosX, newPosY, newPosZ, downStreamLightLevel));
+
+                    cascadeQueue.put(LightTraversalNode(newPosX, newPosY, newPosZ, downStreamLightLevel));
                 }
             }
 
             // writeln("source: ", thisSource.x, ", ", thisSource.y, ", ", thisSource.z);
         }
+
+        writeln(count);
 
         foreach (xRaw; minW .. maxW) {
             int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
@@ -798,6 +807,8 @@ public: //* BEGIN PUBLIC API.
                 }
             }
         }
+
+        writeln("took: ", sw.peek().total!"usecs", "us");
 
     }
 
