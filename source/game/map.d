@@ -451,7 +451,7 @@ public: //* BEGIN PUBLIC API.
     // Y Z X
     private static MazeElement[CHUNK_HEIGHT][BOUNDARY_BOX_MAX][BOUNDARY_BOX_MAX] lightPool;
 
-    // todo: accumulate the x and z min and max and reallocate this to utilize the box of that + max light level to do it in one shot.
+    // todo: ?MAYBE? accumulate the x and z min and max and reallocate this to utilize the box of that + max light level to do it in one shot.
 
     void cascadeNaturalLight(int xInWorld, int zInWorld) {
         import std.datetime.stopwatch;
