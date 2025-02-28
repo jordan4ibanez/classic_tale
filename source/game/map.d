@@ -507,6 +507,7 @@ public: //* BEGIN PUBLIC API.
                     //     continue;
                     // }
 
+                    //!! This is slowing the entire thing down.
                     const(const BlockData*) thisBlock = getBlockPointerAtWorldPosition(xWorldLocal, yRaw, zWorldLocal);
 
                     // Initial binary application.
