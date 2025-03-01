@@ -746,7 +746,8 @@ public: //* BEGIN PUBLIC API.
             cacheTraversal.x = thisSource.x;
             cacheTraversal.y = thisSource.y;
             cacheTraversal.z = thisSource.z;
-            cacheTraversal.lightLevel = LIGHT_LEVEL_MAX;
+            cacheTraversal.lightLevel = lightPool[thisSource.x][thisSource.z][thisSource.y]
+                .lightLevel;
             cascadeQueue.put(cacheTraversal);
 
             CASCADE_LOOP: while (true) {
@@ -845,7 +846,6 @@ public: //* BEGIN PUBLIC API.
         }
 
         // writeln("took: ", sw.peek().total!"usecs", "us");
-
     }
 
     void worldLoad(Vec2i currentPlayerChunk) {
