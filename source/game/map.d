@@ -775,8 +775,9 @@ public: //* BEGIN PUBLIC API.
                     const int newPosZ = thisNode.z + dir.z;
 
                     // Trying to step out of bounds.
-                    if (newPosX >= BOUNDARY_BOX_MAX || newPosX < 0 ||
-                        newPosZ >= BOUNDARY_BOX_MAX || newPosZ < 0 ||
+                    //? Also, do not attempt to modify the edges of the box.
+                    if (newPosX >= BOUNDARY_BOX_MAX - 1 || newPosX < 1 ||
+                        newPosZ >= BOUNDARY_BOX_MAX - 1 || newPosZ < 1 ||
                         newPosY >= CHUNK_HEIGHT || newPosY < 0) {
                         continue DIRECTION_LOOP;
                     }
