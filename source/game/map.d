@@ -815,8 +815,10 @@ public: //* BEGIN PUBLIC API.
                 const int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
                 const int zWorldLocal = zInWorld + zRaw;
 
+                const int highPoint = cacheHeightMap[xInBox][zInBox];
                 
-                foreach (yRaw; 0 .. CHUNK_HEIGHT) {
+
+                foreach (yRaw; 0 .. highPoint) {
                     BlockData* thisBlock = getBlockPointerAtWorldPosition(xWorldLocal, yRaw, zWorldLocal);
                     thisBlock.naturalLightBank = lightPool[xInBox][zInBox][yRaw].lightLevel;
                 }
