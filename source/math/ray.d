@@ -219,7 +219,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
             localDistY = endY - thisPositionY;
             localDistZ = endZ - thisPositionZ;
 
-            const localDistance = sqrt(
+            const double localDistance = sqrt(
                 localDistX * localDistX + localDistY * localDistY + localDistZ * localDistZ);
 
             if (localDistance <= pointDistance) {
