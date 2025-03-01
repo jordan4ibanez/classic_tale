@@ -811,6 +811,7 @@ public: //* BEGIN PUBLIC API.
 
         //? Now, write back the data into the chunk pointers.
         //? Notice: Not writing the edges. They are not modified.
+        //! NOTE: DO NOT +1 THE MAXW!
 
         foreach (xRaw; (minW + 1) .. maxW) {
 
