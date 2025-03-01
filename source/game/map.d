@@ -722,7 +722,8 @@ public: //* BEGIN PUBLIC API.
         // This is now working within the space of the box.
 
         // Option!Vec3i sourceResult;
-        Vec3i thisSource;
+        Vec3i* thisSource;
+        LightTraversalNode* thisNode;
 
         uint count = 0;
 
@@ -754,7 +755,7 @@ public: //* BEGIN PUBLIC API.
                 }
                 count++;
 
-                LightTraversalNode thisNode = cascadeQueue.front();
+                thisNode = cascadeQueue.front();
                 cascadeQueue.popFront();
 
                 // Don't even bother. It'll spread 0.
