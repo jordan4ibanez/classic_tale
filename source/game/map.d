@@ -668,7 +668,6 @@ public: //* BEGIN PUBLIC API.
                     //     continue;
                     // }
 
-                    //!! This is slowing the entire thing down.
                     currentBlockPointer = &thisChunk
                         .data[xInChunkPointer][zInChunkPointer][yRaw];
 
