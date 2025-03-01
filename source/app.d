@@ -179,6 +179,17 @@ void main() {
 		DrawText(toStringz("Z:" ~ format("%.2f", pos.z)), 10, 130, 30, Colors.BLACK);
 		DrawText(toStringz("Z:" ~ format("%.2f", pos.z)), 11, 131, 30, Colors.BLUE);
 
+		ubyte lightLevel = 0;
+		Vec3i blockSelection = Player.getBlockSelectionAbove();
+		if (blockSelection.y != -1) {
+			lightLevel = Map.getBlockPointerAtWorldPosition(blockSelection.x, blockSelection.y, blockSelection
+					.z).naturalLightBank;
+
+			DrawText(toStringz("Light:" ~ to!string(lightLevel)), 10, 160, 30, Colors.BLACK);
+			DrawText(toStringz("Light:" ~ to!string(lightLevel)), 11, 161, 30, Colors.BLUE);
+
+		}
+
 		Crosshair.draw();
 
 		EndDrawing();
