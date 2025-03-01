@@ -188,7 +188,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     ulong currentIndex = 0;
 
-    bool hit = false;
+    // bool hit = false;
 
     while (thisDistance < (distance + 0.01)) {
 
