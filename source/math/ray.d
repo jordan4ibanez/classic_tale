@@ -190,7 +190,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     // bool hit = false;
 
-    ulong hits = 0;
+    // ulong hits = 0;
 
     const double MAX_DISTANCE = distance + 0.01;
 
@@ -283,7 +283,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                 //! This is slowing the entire thing down.
                 const(const BlockData*) thisBlock = Map.getBlockPointerAtWorldPosition(
                     thisLocalX, thisLocalY, thisLocalZ);
-                hits++;
+                // hits++;
 
                 if (thisBlock && thisBlock.blockID != 0) {
 
@@ -491,7 +491,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
     wideBandPoints.rehash();
 
     // writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
-    writeln(hits);
+    // writeln(hits);
 
     return RayResult(rayPoints, currentIndex);
 }
