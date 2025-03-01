@@ -809,7 +809,10 @@ public: //* BEGIN PUBLIC API.
         //? This is kept so if the buffer is ever overflowed it can be tested and retuned.
         // writeln("count:", count);
 
-        foreach (xRaw; minW .. maxW) {
+        //? Now, write back the data into the chunk pointers.
+        //? Notice: Not writing the edges. They are not modified.
+
+        foreach (xRaw; (minW + 1) .. maxW) {
 
             const int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
             const int xWorldLocal = xInWorld + xRaw;
@@ -822,7 +825,7 @@ public: //* BEGIN PUBLIC API.
             const int xInChunkPointer = (___doNotUseXRawInChunk < 0) ? (
                 ___doNotUseXRawInChunk + CHUNK_WIDTH) : ___doNotUseXRawInChunk;
 
-            foreach (zRaw; minW .. maxW) {
+            foreach (zRaw; (minW + 1) .. maxW) {
 
                 const int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
                 const int zWorldLocal = zInWorld + zRaw;
