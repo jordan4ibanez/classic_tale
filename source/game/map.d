@@ -551,7 +551,7 @@ public: //* BEGIN PUBLIC API.
         // Accumulating the light data so that the world does not need the be checked again.
         Vec3i cacheVec3i;
         BlockData* currentBlockPointer;
-        foreach (const xRaw; minW .. maxW) {
+        foreach (const xRaw; minW .. maxW + 1) {
             const int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
             const int xWorldLocal = xInWorld + xRaw;
 
@@ -563,7 +563,7 @@ public: //* BEGIN PUBLIC API.
             const int xInChunkPointer = (___doNotUseXRawInChunk < 0) ? (
                 ___doNotUseXRawInChunk + CHUNK_WIDTH) : ___doNotUseXRawInChunk;
 
-            foreach (const zRaw; minW .. maxW) {
+            foreach (const zRaw; minW .. maxW + 1) {
                 const int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
                 const int zWorldLocal = zInWorld + zRaw;
 
