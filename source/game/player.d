@@ -131,7 +131,7 @@ public: //* BEGIN PUBLIC API.
             thisPositionY = (result.pointsArray + i).blockPosition.y;
             thisPositionZ = (result.pointsArray + i).blockPosition.z;
 
-            const BlockData* blockData = Map.getBlockPointerAtWorldPosition(
+            const(const BlockData*) blockData = Map.getBlockPointerAtWorldPosition(
                 cast(int) floor(thisPositionX),
                 cast(int) floor(thisPositionY),
                 cast(int) floor(thisPositionZ)
@@ -157,7 +157,7 @@ public: //* BEGIN PUBLIC API.
         }
 
         // writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
-        
+
         blockSelection.x = 0;
         blockSelection.y = -1;
         blockSelection.z = 0;
