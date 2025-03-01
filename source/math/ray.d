@@ -241,13 +241,6 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                 double sizeY = 1.0;
                 double sizeZ = 1.0;
 
-                const double xMin = thisLocalX;
-                const double xMax = thisLocalX + sizeX;
-                const double yMin = thisLocalY;
-                const double yMax = thisLocalY + sizeY;
-                const double zMin = thisLocalZ;
-                const double zMax = thisLocalZ + sizeZ;
-
                 // This is just to drop all these variables off the stack.
                 {
                     const double xMinLocal = (thisLocalX - startX) * divisorDirectionX;
@@ -275,6 +268,13 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         continue;
                     }
                 }
+
+                const double xMin = thisLocalX;
+                const double xMax = thisLocalX + sizeX;
+                const double yMin = thisLocalY;
+                const double yMax = thisLocalY + sizeY;
+                const double zMin = thisLocalZ;
+                const double zMax = thisLocalZ + sizeZ;
 
                 //? Narrow band.
                 //? If here, the ray is definitively intersecting the AABB.
