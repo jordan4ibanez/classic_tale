@@ -808,18 +808,38 @@ public: //* BEGIN PUBLIC API.
         // writeln("count:", count);
 
         foreach (xRaw; minW .. maxW) {
+
             const int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
             const int xWorldLocal = xInWorld + xRaw;
+
+            const int chunkXInCache = ((xWorldLocal < 0) ? (
+                    ((xWorldLocal + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
+                    xWorldLocal / CHUNK_WIDTH)) - minChunkX;
+
+            const int ___doNotUseXRawInChunk = (xWorldLocal % CHUNK_WIDTH);
+            const int xInChunkPointer = (___doNotUseXRawInChunk < 0) ? (
+                ___doNotUseXRawInChunk + CHUNK_WIDTH) : ___doNotUseXRawInChunk;
+
             foreach (zRaw; minW .. maxW) {
+
                 const int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
                 const int zWorldLocal = zInWorld + zRaw;
 
+                const int chunkZInCache = ((zWorldLocal < 0) ? (
+                        ((zWorldLocal + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
+                        zWorldLocal / CHUNK_WIDTH)) - minChunkZ;
+
+                const int ___doNotUseZRawInChunk = (zWorldLocal % CHUNK_WIDTH);
+                const int zInChunkPointer = (___doNotUseZRawInChunk < 0) ? (
+                    ___doNotUseZRawInChunk + CHUNK_WIDTH) : ___doNotUseZRawInChunk;
+
                 const int highPoint = cacheHeightMap[xInBox][zInBox];
-                
+
+                Chunk* thisChunk = chunkPointers[chunkXInCache][chunkZInCache];
 
                 foreach (yRaw; 0 .. highPoint) {
-                    BlockData* thisBlock = getBlockPointerAtWorldPosition(xWorldLocal, yRaw, zWorldLocal);
-                    thisBlock.naturalLightBank = lightPool[xInBox][zInBox][yRaw].lightLevel;
+                    thisChunk.data[xInChunkPointer][zInChunkPointer][yRaw].naturalLightBank =
+                        lightPool[xInBox][zInBox][yRaw].lightLevel;
                 }
             }
         }
