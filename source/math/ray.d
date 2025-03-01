@@ -190,6 +190,8 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
     // bool hit = false;
 
+    ulong hits = 0;
+
     while (thisDistance < (distance + 0.01)) {
 
         floatingPositionX = (directionX * thisDistance) + startX;
@@ -283,6 +285,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                 // todo: make this process the selection box on more complex blocks.
 
+                hits++;
 
                 if (Map.getBlockAtWorldPosition(thisLocalX, thisLocalY, thisLocalZ).blockID != 0) {
 
@@ -491,6 +494,7 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
     wideBandPoints.rehash();
 
     // writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
+    writeln(hits);
 
     return RayResult(rayPoints, currentIndex);
 }
