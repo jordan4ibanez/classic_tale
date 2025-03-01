@@ -453,7 +453,6 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                         (rayPoints + currentIndex).blockPosition.z = thisLocalZ;
 
                         currentIndex++;
-
                     }
                 }
             }
