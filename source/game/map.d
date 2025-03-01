@@ -461,6 +461,7 @@ public: //* BEGIN PUBLIC API.
     private static Chunk*[3][3] chunkPointers;
     private static CircularBuffer!Vec3i sourceQueue;
     private static CircularBuffer!LightTraversalNode cascadeQueue;
+    
 
     // todo: ?MAYBE? accumulate the x and z min and max and reallocate this to utilize the box of that + max light level to do it in one shot.
 
@@ -802,8 +803,10 @@ public: //* BEGIN PUBLIC API.
             }
         }
 
+        //? This is kept so if the buffer is ever overflowed it can be tested and retuned.
         // writeln("count:", count);
 
+        
         foreach (xRaw; minW .. maxW) {
             int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
             int xWorldLocal = xInWorld + xRaw;
