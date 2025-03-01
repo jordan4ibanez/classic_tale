@@ -808,13 +808,14 @@ public: //* BEGIN PUBLIC API.
         //? This is kept so if the buffer is ever overflowed it can be tested and retuned.
         // writeln("count:", count);
 
-        
         foreach (xRaw; minW .. maxW) {
-            int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
-            int xWorldLocal = xInWorld + xRaw;
+            const int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
+            const int xWorldLocal = xInWorld + xRaw;
             foreach (zRaw; minW .. maxW) {
-                int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
-                int zWorldLocal = zInWorld + zRaw;
+                const int zInBox = zRaw + LIGHT_LEVEL_MAX + 1;
+                const int zWorldLocal = zInWorld + zRaw;
+
+                
                 foreach (yRaw; 0 .. CHUNK_HEIGHT) {
                     BlockData* thisBlock = getBlockPointerAtWorldPosition(xWorldLocal, yRaw, zWorldLocal);
                     thisBlock.naturalLightBank = lightPool[xInBox][zInBox][yRaw].lightLevel;
