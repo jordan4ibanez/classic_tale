@@ -107,7 +107,6 @@ public: //* BEGIN PUBLIC API.
     }
 
     void raycast() {
-        import raylib;
         // import std.datetime.stopwatch;
 
         const Vec3d start = CameraHandler.getPosition();
