@@ -467,7 +467,7 @@ public: //* BEGIN PUBLIC API.
 
     void cascadeNaturalLight(int xInWorld, int zInWorld) {
         // import std.container;
-        import std.datetime.stopwatch;
+        // import std.datetime.stopwatch;
         import std.math.algebraic;
 
         // import utility.queue;
@@ -481,7 +481,7 @@ public: //* BEGIN PUBLIC API.
         static const minW = -(LIGHT_LEVEL_MAX + 1);
         static const maxW = LIGHT_LEVEL_MAX + 1;
 
-        auto sw = StopWatch(AutoStart.yes);
+        // auto sw = StopWatch(AutoStart.yes);
 
         // Pointer caching.
 
@@ -844,7 +844,7 @@ public: //* BEGIN PUBLIC API.
             }
         }
 
-        writeln("took: ", sw.peek().total!"usecs", "us");
+        // writeln("took: ", sw.peek().total!"usecs", "us");
 
     }
 
