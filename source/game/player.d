@@ -108,43 +108,57 @@ public: //* BEGIN PUBLIC API.
 
     void raycast() {
         import raylib;
+        // import std.datetime.stopwatch;
 
         const Vec3d start = CameraHandler.getPosition();
         const Vec3d cameraDir = CameraHandler.getLookVector();
         const Vec3d end = vec3dAdd(vec3dMultiply(cameraDir, Vec3d(130, 130, 130)), start);
 
-        RayResult result = rayCast(start, end);
+        const RayResult result = rayCast(start, end);
+
+        // auto sw = StopWatch(AutoStart.yes);
+
+        double thisPositionX;
+        double thisPositionY;
+        double thisPositionZ;
+
+        double thisPositionAboveX;
+        double thisPositionAboveY;
+        double thisPositionAboveZ;
 
         for (ulong i = 0; i < result.arrayLength; i++) {
 
-            Vec3d thisPosition;
+            thisPositionX = (result.pointsArray + i).blockPosition.x;
+            thisPositionY = (result.pointsArray + i).blockPosition.y;
+            thisPositionZ = (result.pointsArray + i).blockPosition.z;
 
-            thisPosition.x = (result.pointsArray + i).blockPosition.x;
-            thisPosition.y = (result.pointsArray + i).blockPosition.y;
-            thisPosition.z = (result.pointsArray + i).blockPosition.z;
+            const BlockData* blockData = Map.getBlockPointerAtWorldPosition(
+                cast(int) floor(thisPositionX),
+                cast(int) floor(thisPositionY),
+                cast(int) floor(thisPositionZ)
+            );
 
-            const BlockData = Map.getBlockAtWorldPosition(thisPosition);
+            if (blockData && blockData.blockID != 0) {
 
-            Vec3d thisPositionAbove;
+                thisPositionAboveX = thisPositionX + (result.pointsArray + i).faceDirection.x;
+                thisPositionAboveY = thisPositionY + (result.pointsArray + i).faceDirection.y;
+                thisPositionAboveZ = thisPositionZ + (result.pointsArray + i).faceDirection.z;
 
-            thisPositionAbove.x = thisPosition.x + (result.pointsArray + i).faceDirection.x;
-            thisPositionAbove.y = thisPosition.y + (result.pointsArray + i).faceDirection.y;
-            thisPositionAbove.z = thisPosition.z + (result.pointsArray + i).faceDirection.z;
+                blockSelection.x = cast(int) floor(thisPositionX);
+                blockSelection.y = cast(int) floor(thisPositionY);
+                blockSelection.z = cast(int) floor(thisPositionZ);
 
-            if (BlockData.blockID != 0) {
+                blockSelectionAbove.x = cast(int) floor(thisPositionAboveX);
+                blockSelectionAbove.y = cast(int) floor(thisPositionAboveY);
+                blockSelectionAbove.z = cast(int) floor(thisPositionAboveZ);
 
-                blockSelection.x = cast(int) floor(thisPosition.x);
-                blockSelection.y = cast(int) floor(thisPosition.y);
-                blockSelection.z = cast(int) floor(thisPosition.z);
-
-                blockSelectionAbove.x = cast(int) floor(thisPositionAbove.x);
-                blockSelectionAbove.y = cast(int) floor(thisPositionAbove.y);
-                blockSelectionAbove.z = cast(int) floor(thisPositionAbove.z);
-
+                // writeln("took: ", cast(double) sw.peek().total!"hnsecs", " hnsecs");
                 return;
             }
         }
 
+        // writeln("took: ", cast(double) sw.peek().total!"usecs", " usecs");
+        
         blockSelection.x = 0;
         blockSelection.y = -1;
         blockSelection.z = 0;
