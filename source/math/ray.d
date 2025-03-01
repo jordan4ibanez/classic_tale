@@ -1,6 +1,7 @@
 module math.ray;
 
 import core.memory;
+import game.map;
 import math.aabb;
 import math.vec3d;
 import math.vec3i;
@@ -282,7 +283,6 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
 
                 // todo: make this process the selection box on more complex blocks.
 
-                import game.map;
 
                 if (Map.getBlockAtWorldPosition(thisLocalX, thisLocalY, thisLocalZ).blockID != 0) {
 
