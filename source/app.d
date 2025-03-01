@@ -185,8 +185,11 @@ void main() {
 		ubyte lightLevel = 0;
 		Vec3i blockSelection = Player.getBlockSelectionAbove();
 		if (blockSelection.y != -1) {
-			lightLevel = Map.getBlockPointerAtWorldPosition(blockSelection.x, blockSelection.y, blockSelection
-					.z).naturalLightBank;
+			const(const BlockData*) thisBlock = Map.getBlockPointerAtWorldPosition(
+				blockSelection.x, blockSelection.y, blockSelection.z);
+			if (thisBlock) {
+				lightLevel = thisBlock.naturalLightBank;
+			}
 
 			DrawText(toStringz("Light:" ~ to!string(lightLevel)), 10, 160, 30, Colors.BLACK);
 			DrawText(toStringz("Light:" ~ to!string(lightLevel)), 11, 161, 30, Colors.BLUE);
