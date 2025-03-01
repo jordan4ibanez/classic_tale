@@ -461,7 +461,7 @@ public: //* BEGIN PUBLIC API.
     private static Chunk*[3][3] chunkPointers;
     private static CircularBuffer!Vec3i sourceQueue;
     private static CircularBuffer!LightTraversalNode cascadeQueue;
-    
+    private static int[BOUNDARY_BOX_MAX][BOUNDARY_BOX_MAX] cacheHeightMap;
 
     // todo: ?MAYBE? accumulate the x and z min and max and reallocate this to utilize the box of that + max light level to do it in one shot.
 
@@ -645,6 +645,8 @@ public: //* BEGIN PUBLIC API.
                         highPoint = neighborTop;
                     }
                 }
+
+                cacheHeightMap[xInBox][zInBox] = highPoint;
 
                 foreach (const yRaw; 0 .. highPoint) {
 
