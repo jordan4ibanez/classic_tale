@@ -281,9 +281,11 @@ RayResult rayCast(const Vec3d startingPoint, const Vec3d endingPoint) {
                 // todo: make this process the selection box on more complex blocks.
 
                 //! This is slowing the entire thing down.
+                const(const BlockData*) thisBlock = Map.getBlockPointerAtWorldPosition(
+                    thisLocalX, thisLocalY, thisLocalZ);
                 hits++;
 
-                if (Map.getBlockAtWorldPosition(thisLocalX, thisLocalY, thisLocalZ).blockID != 0) {
+                if (thisBlock && thisBlock.blockID != 0) {
 
                     bool collisionX = false;
                     bool collisionY = false;
