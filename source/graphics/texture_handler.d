@@ -132,8 +132,8 @@ public: //* BEGIN PUBLIC API.
         return id in texturePointIndexDatabase;
     }
 
-    const(Texture2D*) getAtlasPointer() {
-        return &atlas;
+    Texture2D getAtlas() {
+        return atlas;
     }
 
     void terminate() {

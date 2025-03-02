@@ -3,6 +3,3 @@ https://github.com/oilboi/Crafter-Minetest/tree/master/mods/torch
 Textures and Meshes/Models:
 CC-BY 3.0 BlockMen
 
-But, I literally refabricated the entire thing in blender and then not only rewrote the mod in D from scratch, but also, the API it uses.
-I am just putting this here to let you know where I started and to credit BlockMen, even though he has abandoned Minetest development and will probably never read this.
-
