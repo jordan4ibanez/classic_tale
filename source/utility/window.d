@@ -27,7 +27,7 @@ public: //* BEGIN PUBLIC API.
         int monitorHeight = GetMonitorHeight(currentMonitor);
         CloseWindow();
 
-        InitWindow(monitorWidth / 2, monitorHeight / 2, "cube thing");
+        InitWindow(monitorWidth / 2, monitorHeight / 2, "Classic Tale");
     }
 
     void terminate() {
