@@ -31,6 +31,7 @@ private static immutable enum Normal : Vec3d {
 
 // Each level down is %20 less than the previous.
 // This seems to mimic real life based on lux measurements https://arxiv.org/pdf/1903.10053
+// Based on this data it appears to be logarithmic.
 private static immutable ubyte[16] LIGHT_LEVEL_CHART = [
     8, // 0
     11, // 1
