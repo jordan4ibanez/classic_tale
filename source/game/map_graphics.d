@@ -29,6 +29,27 @@ private static immutable enum Normal : Vec3d {
     Bottom = Vec3d(0, -1, 0)
 }
 
+// Each level down is %20 less than the previous.
+// This seems to mimic real life based on lux measurements https://arxiv.org/pdf/1903.10053
+private static immutable ubyte[16] LIGHT_LEVEL_CHART = [
+    8, // 0
+    11, // 1
+    14, // 2
+    18, // 3
+    21, // 4
+    27, // 5
+    34, // 6
+    43, // 7
+    53, // 8
+    67, // 9
+    84, // 10
+    104, // 11
+    131, // 12
+    163, // 13
+    204, // 14
+    255, // 15
+];
+
 struct FaceGeneration {
     mixin(bitfields!(
             bool, "front", 1,
@@ -524,7 +545,9 @@ private:
 
             // Tri 1 colors.
 
-            const ubyte outputColor = cast(ubyte)(lightValue * cast(ubyte)16);
+            const ubyte outputColor = LIGHT_LEVEL_CHART[lightValue];
+            writeln(outputColor);
+            // const ubyte outputColor = cast(ubyte)(lightValue * cast(ubyte) 16);
 
             // 0
             colors[colorIndex] = outputColor;
