@@ -183,6 +183,8 @@ public: //* BEGIN PUBLIC API.
             return outputFileName;
         }();
 
+        writeln("Loading model: [", location, "] as [", fileName, "]");
+
         thisModel = LoadModel(toStringz(location));
 
         if (!IsModelValid(thisModel)) {
@@ -284,7 +286,6 @@ private: //* BEGIN INTERNAL API.
 
         foreach (string thisFilePathString; dirEntries("models", "*.{obj,gltf,glb,iqm,vox,m3d}", SpanMode
                 .depth)) {
-            writeln("Loading model: ", thisFilePathString);
 
             loadModelFromFile(thisFilePathString);
         }
