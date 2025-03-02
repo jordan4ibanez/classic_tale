@@ -1127,8 +1127,8 @@ private: //* BEGIN INTERNAL API.
 
                     // debugDrawPoints ~= Vec2d(currentX, currentY);
 
-                    BlockData data = getBlockAtWorldPosition(
-                        Vec3d(thisXPoint, thisYPoint, thisZPoint));
+                    BlockData data = getBlockAtWorldPosition(cast(int) floor(thisXPoint), cast(int) floor(
+                            thisYPoint), cast(int) floor(thisZPoint));
 
                     // todo: if solid block collide.
                     // todo: probably custom blocks one day.
