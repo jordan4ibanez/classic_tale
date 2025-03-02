@@ -29,6 +29,7 @@ public: //* BEGIN PUBLIC API.
 
     void initialize() {
         textureAtlasPointer = TextureHandler.getAtlas();
+        loadModelsInModelsFolder();
     }
 
     bool modelExists(string name) {
@@ -277,6 +278,16 @@ public: //* BEGIN PUBLIC API.
     }
 
 private: //* BEGIN INTERNAL API.
+
+    void loadModelsInModelsFolder() {
+        import std.file;
+        foreach (string thisFilePathString; dirEntries("models", "*.{obj,gltf,glb,iqm,vox,m3d}", SpanMode.depth)) {
+            writeln(thisFilePathString);
+
+            // loadTexture(thisFilePathString, database);
+        }
+
+    }
 
     void destroyModel(string modelName, Model* thisModel) {
         // If we were using the D runtime to make this model, we'll customize
