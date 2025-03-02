@@ -281,10 +281,12 @@ private: //* BEGIN INTERNAL API.
 
     void loadModelsInModelsFolder() {
         import std.file;
-        foreach (string thisFilePathString; dirEntries("models", "*.{obj,gltf,glb,iqm,vox,m3d}", SpanMode.depth)) {
-            writeln(thisFilePathString);
 
-            // loadTexture(thisFilePathString, database);
+        foreach (string thisFilePathString; dirEntries("models", "*.{obj,gltf,glb,iqm,vox,m3d}", SpanMode
+                .depth)) {
+            writeln("Loading model: ", thisFilePathString);
+
+            loadModelFromFile(thisFilePathString);
         }
 
     }
