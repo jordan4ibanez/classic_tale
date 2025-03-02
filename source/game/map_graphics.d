@@ -546,8 +546,6 @@ private:
             // Tri 1 colors.
 
             const ubyte outputColor = LIGHT_LEVEL_CHART[lightValue];
-            writeln(outputColor);
-            // const ubyte outputColor = cast(ubyte)(lightValue * cast(ubyte) 16);
 
             // 0
             colors[colorIndex] = outputColor;
