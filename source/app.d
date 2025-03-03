@@ -80,14 +80,18 @@ void main() {
 
 			UpdateCamera(&cam, CameraMode.CAMERA_ORBITAL);
 
+			// ModelHandler.
+
 			BeginDrawing();
 			ClearBackground(Colors.BLACK);
 
 			BeginMode3D(cam);
 			{
 
-				DrawCube(Vector3(0, 0, 0), 1, 1, 1, Colors.RED);
-				DrawCubeWires(Vector3(0, 0, 0), 1, 1, 1, Colors.BLACK);
+				ModelHandler.draw("torch.glb", Vec3d(0,0,0));
+
+				// DrawCube(Vector3(0, 0, 0), 1, 1, 1, Colors.RED);
+				// DrawCubeWires(Vector3(0, 0, 0), 1, 1, 1, Colors.BLACK);
 
 			}
 			EndMode3D();
