@@ -67,11 +67,40 @@ void main() {
 		}
 	}
 
-	// auto rand = Random(unpredictableSeed());
+	//! BEGIN DEBUG DRAWING TORCH.
+	{
+		Camera3D cam;
+		cam.fovy = 55;
+		cam.position = Vector3(0, 4, 4);
+		cam.target = Vector3(0, 0, 0);
+		cam.up = Vector3(0, 1, 0);
+		cam.projection = CameraProjection.CAMERA_PERSPECTIVE;
+
+		while (Window.shouldStayOpen()) {
+
+			UpdateCamera(&cam, CameraMode.CAMERA_ORBITAL);
+
+			BeginDrawing();
+			ClearBackground(Colors.BLACK);
+
+			BeginMode3D(cam);
+			{
+
+				DrawCube(Vector3(0, 0, 0), 1, 1, 1, Colors.RED);
+				DrawCubeWires(Vector3(0, 0, 0), 1, 1, 1, Colors.BLACK);
+
+			}
+			EndMode3D();
+
+			EndDrawing();
+		}
+
+	}
+	//! END DEBUG DRAWING TORCH.
 
 	bool drawWorld = true;
 
-	while (Window.shouldStayOpen()) {
+	while (!Window.shouldStayOpen()) {
 
 		if (Keyboard.isPressed(KeyboardKey.KEY_F1)) {
 			Window.toggleMaximize();
