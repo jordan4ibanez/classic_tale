@@ -76,6 +76,11 @@ void main() {
 		cam.up = Vector3(0, 1, 0);
 		cam.projection = CameraProjection.CAMERA_PERSPECTIVE;
 
+		Model* torchModel = ModelHandler.getModelPointer("torch.glb");
+		Texture2D torchTexture = LoadTexture("textures/torch.png");
+
+		torchModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = torchTexture;
+
 		while (Window.shouldStayOpen()) {
 
 			UpdateCamera(&cam, CameraMode.CAMERA_ORBITAL);
@@ -88,7 +93,8 @@ void main() {
 			BeginMode3D(cam);
 			{
 
-				ModelHandler.draw("torch.glb", Vec3d(0,0,0));
+				DrawModel(*torchModel, Vector3(0, 0, 0), 1, Colors.WHITE);
+				// ModelHandler.draw("torch.glb", Vec3d(0, 0, 0));
 
 				// DrawCube(Vector3(0, 0, 0), 1, 1, 1, Colors.RED);
 				// DrawCubeWires(Vector3(0, 0, 0), 1, 1, 1, Colors.BLACK);
