@@ -193,6 +193,51 @@ public: //* BEGIN PUBLIC API.
             throw new Error("[ModelHandler]: Invalid model loaded from file. " ~ location);
         }
 
+        // Enforce all textures are loaded.
+        if (thisModel.meshCount != textures.length) {
+            throw new Error("Attempted to load [" ~ location ~ "] with mesh count [" ~ to!string(
+                    thisModel.meshCount) ~ "] with [" ~ to!string(
+                    textures.length) ~ "] textures. Not please add or remove textures.");
+        }
+
+        // Map to texture atlas.
+        foreach (currentMeshIndex; 0 .. thisModel.meshCount) {
+
+            const string thisTexture = textures[currentMeshIndex];
+
+            const(Rect*) textureRectangle = TextureHandler.getRect(thisTexture);
+
+            Mesh* thisMesh = &thisModel.meshes[currentMeshIndex];
+
+            const ulong textureCount = thisMesh.vertexCount;
+
+            foreach (__indexInto; 0 .. textureCount) {
+                // X Y
+                const ulong i = __indexInto * 2;
+
+                const double oldX = thisMesh.texcoords[i];
+                const double oldY = thisMesh.texcoords[i + 1];
+
+                const double xInRect = textureRectangle.width * oldX;
+                const double yInRect = textureRectangle.height * oldY;
+
+                const double xInAtlas = textureRectangle.x + xInRect;
+                const double yInAtlas = textureRectangle.y + yInRect;
+
+                thisMesh.texcoords[i] = xInAtlas;
+                thisMesh.texcoords[i + 1] = yInAtlas;
+            }
+
+            UpdateMeshBuffer(*thisMesh, 1, thisMesh.texcoords, cast(int)(
+                    thisMesh.vertexCount * 2 * float.sizeof), 0);
+        }
+
+        // Set texture to texture atlas.
+        foreach (index; 0 .. thisModel.materialCount) {
+            thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = textureAtlas;
+        }
+
+        // Animations.
         int animationCount;
         ModelAnimation* thisAnimationData = LoadModelAnimations(toStringz(location), &animationCount);
         AnimationContainer thisModelAnimation = AnimationContainer();
