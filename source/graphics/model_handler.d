@@ -11,6 +11,7 @@ import std.container;
 import std.conv;
 import std.stdio;
 import std.string;
+import utility.uuid;
 
 struct AnimationContainer {
     int animationCount = 0;
@@ -23,7 +24,7 @@ static:
 private:
 
     Model[string] stringDatabase;
-    // Model[ulong] database;
+    Model[ulong] numberDatabase;
     bool[string] isCustomDatabase;
     AnimationContainer[string] animationDatabase;
     Texture2D textureAtlas;
