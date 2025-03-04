@@ -80,7 +80,7 @@ void main() {
 
 		while (Window.shouldStayOpen()) {
 
-			UpdateCamera(&cam, CameraMode.CAMERA_ORBITAL);
+			// UpdateCamera(&cam, CameraMode.CAMERA_ORBITAL);
 
 			// ModelHandler.
 
