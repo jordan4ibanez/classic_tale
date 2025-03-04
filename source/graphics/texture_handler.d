@@ -93,12 +93,10 @@ public: //* BEGIN PUBLIC API.
     }
 
     Vec2d getSize(string textureName) {
-
         Rect* thisRect = textureName in textureRectangleDatabase;
         if (thisRect is null) {
             throw new Error("Tried to get null texture size of " ~ textureName);
         }
-
         return Vec2d(thisRect.width, thisRect.height);
     }
 
@@ -117,21 +115,17 @@ public: //* BEGIN PUBLIC API.
 
     const(TexturePoints!(Vec2d)*) getPoints(string name) {
         const TexturePoints!(Vec2d)* output = name in texturePointDatabase;
-
         if (output is null) {
             throw new Error("Tried to get null texture points for " ~ name);
         }
-
         return output;
     }
 
     int getIDFromName(string name) {
         int* thisID = name in nameToIndexDatabase;
-
         if (thisID is null) {
             throw new Error("Tried to get ID of null texture " ~ name);
         }
-
         return *thisID;
     }
 
