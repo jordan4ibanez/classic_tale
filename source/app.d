@@ -77,9 +77,14 @@ void main() {
 		cam.projection = CameraProjection.CAMERA_PERSPECTIVE;
 
 		Model* torchModel = ModelHandler.getModelPointer("torch.glb");
-		Texture2D torchTexture = LoadTexture("textures/torch.png");
+		Texture2D atlas = TextureHandler.getAtlas();
+		torchModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = atlas;
 
-		torchModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = torchTexture;
+		TexPoints points = TextureHandler.getPoints("torch.png");
+		Vec2d size = TextureHandler.getSize("torch.png");
+		const(Rect*) rect = TextureHandler.getRect("torch.png");
+
+		
 
 		while (Window.shouldStayOpen()) {
 
