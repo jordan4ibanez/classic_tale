@@ -102,6 +102,14 @@ public: //* BEGIN PUBLIC API.
         return Vec2d(thisRect.width, thisRect.height);
     }
 
+    const(Rect*) getRect(string textureName) {
+        const Rect* thisRect = textureName in textureRectangleDatabase;
+        if (thisRect is null) {
+            throw new Error("Tried to get null texture rect of " ~ textureName);
+        }
+        return thisRect;
+    }
+
     const(Vec2d*) getSizeByID(int ID) {
         //? Note: this is tuned for speed. Don't use this in mods.
         return ID in textureSizeDatabase;
