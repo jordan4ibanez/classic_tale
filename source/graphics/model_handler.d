@@ -31,7 +31,6 @@ public: //* BEGIN PUBLIC API.
 
     void initialize() {
         textureAtlasPointer = TextureHandler.getAtlas();
-        loadModelsInModelsFolder();
     }
 
     bool modelExists(string name) {
