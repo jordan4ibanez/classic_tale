@@ -98,7 +98,7 @@ void main() {
 
 				// Rotation 0 faces -Z, clockwise, 4 position states
 
-				ModelHandler.draw("torch_wall.glb", Vec3d(0, 0, 0.5), Vec3d(0, (PI / -2.0) * 3, 0));
+				ModelHandler.draw("torch_wall.glb", Vec3d(0, 0, 0.5), Vec3d(0, (PI / -2.0) * 0, 0));
 
 			}
 			EndMode3D();
