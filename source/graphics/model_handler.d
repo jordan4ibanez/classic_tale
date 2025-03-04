@@ -188,6 +188,7 @@ public: //* BEGIN PUBLIC API.
 
         thisModel = LoadModel(toStringz(location));
 
+        // Something went horribly wrong.
         if (!IsModelValid(thisModel)) {
             throw new Error("[ModelHandler]: Invalid model loaded from file. " ~ location);
         }
