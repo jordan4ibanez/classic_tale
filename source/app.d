@@ -71,7 +71,7 @@ void main() {
 	{
 		Camera3D cam;
 		cam.fovy = 55;
-		cam.position = Vector3(0, 4, 4);
+		cam.position = Vector3(0, 2, 2);
 		cam.target = Vector3(0, 0, 0);
 		cam.up = Vector3(0, 1, 0);
 		cam.projection = CameraProjection.CAMERA_PERSPECTIVE;
@@ -103,10 +103,16 @@ void main() {
 
 				const double xInRect = textureRectangle.width * oldX;
 				const double yInRect = textureRectangle.height * oldY;
-				
 
+				const double xInAtlas = textureRectangle.x + xInRect;
+				const double yInAtlas = textureRectangle.y + yInRect;
+
+				thisMesh.texcoords[i] = xInAtlas;
+				thisMesh.texcoords[i + 1] = yInAtlas;
 			}
 		}
+
+		ModelHandler.updateModelInGPU("torch.glb");
 
 		while (Window.shouldStayOpen()) {
 
