@@ -2,6 +2,7 @@ module mods.cube_thing.main;
 
 import game.biome_database;
 import game.block_database;
+import graphics.model_handler;
 import std.stdio;
 
 private immutable string nameOfMod = "CubeThing";
@@ -40,6 +41,9 @@ void cubeThingMain() {
         "grass.png", "dirt.png"
     ];
     BlockDatabase.registerBlock(grass);
+
+    //? Models.
+    ModelHandler.loadModelFromFile("models/torch/torch.glb", "torch.png");
 
     //? Biomes.
 
