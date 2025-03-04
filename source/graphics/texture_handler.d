@@ -121,6 +121,10 @@ public: //* BEGIN PUBLIC API.
         return output;
     }
 
+    Vec2d getAtlasSize() {
+        return Vec2d(atlasWidth, atlasHeight);
+    }
+
     int getIDFromName(string name) {
         int* thisID = name in nameToIndexDatabase;
         if (thisID is null) {
