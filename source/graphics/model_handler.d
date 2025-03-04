@@ -25,12 +25,12 @@ private:
     Model[string] database;
     bool[string] isCustomDatabase;
     AnimationContainer[string] animationDatabase;
-    Texture2D textureAtlasPointer;
+    Texture2D textureAtlas;
 
 public: //* BEGIN PUBLIC API.
 
     void initialize() {
-        textureAtlasPointer = TextureHandler.getAtlas();
+        textureAtlas = TextureHandler.getAtlas();
     }
 
     bool modelExists(string name) {
@@ -107,7 +107,7 @@ public: //* BEGIN PUBLIC API.
         isCustomDatabase[modelName] = true;
 
         foreach (index; 0 .. thisModel.materialCount) {
-            thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = textureAtlasPointer;
+            thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = textureAtlas;
         }
 
         if (immediateWipe) {
@@ -154,7 +154,7 @@ public: //* BEGIN PUBLIC API.
         isCustomDatabase[modelName] = true;
 
         foreach (index; 0 .. thisModel.materialCount) {
-            thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = textureAtlasPointer;
+            thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = textureAtlas;
         }
 
         if (immediateWipe) {
