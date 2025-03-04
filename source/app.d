@@ -76,43 +76,45 @@ void main() {
 		cam.up = Vector3(0, 1, 0);
 		cam.projection = CameraProjection.CAMERA_PERSPECTIVE;
 
-		Model* torchModel = ModelHandler.getModelPointer("torch.glb");
-		Texture2D atlas = TextureHandler.getAtlas();
-		torchModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = atlas;
+		ModelHandler.loadModelFromFile("models/torch/torch.glb", "torch.png");
 
-		// TexPoints points = TextureHandler.getPoints("torch.png");
-		// Vec2d size = TextureHandler.getSize("torch.png");
-		const(Rect*) textureRectangle = TextureHandler.getRect("torch.png");
+		// Model* torchModel = ModelHandler.getModelPointer("torch.glb");
+		// Texture2D atlas = TextureHandler.getAtlas();
+		// torchModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = atlas;
 
-		const Vec2d atlasSize = TextureHandler.getAtlasSize();
+		// // TexPoints points = TextureHandler.getPoints("torch.png");
+		// // Vec2d size = TextureHandler.getSize("torch.png");
+		// const(Rect*) textureRectangle = TextureHandler.getRect("torch.png");
 
-		// Now, assign into the texture atlas. Shifting the texture coordinates to match.
-		foreach (currentMeshIndex; 0 .. torchModel.meshCount) {
+		// const Vec2d atlasSize = TextureHandler.getAtlasSize();
 
-			writeln("=====");
-			Mesh* thisMesh = &torchModel.meshes[currentMeshIndex];
+		// // Now, assign into the texture atlas. Shifting the texture coordinates to match.
+		// foreach (currentMeshIndex; 0 .. torchModel.meshCount) {
 
-			const ulong textureCount = thisMesh.vertexCount;
+		// 	writeln("=====");
+		// 	Mesh* thisMesh = &torchModel.meshes[currentMeshIndex];
 
-			foreach (__indexInto; 0 .. textureCount) {
-				// X Y
-				const ulong i = __indexInto * 2;
+		// 	const ulong textureCount = thisMesh.vertexCount;
 
-				const double oldX = thisMesh.texcoords[i];
-				const double oldY = thisMesh.texcoords[i + 1];
+		// 	foreach (__indexInto; 0 .. textureCount) {
+		// 		// X Y
+		// 		const ulong i = __indexInto * 2;
 
-				const double xInRect = textureRectangle.width * oldX;
-				const double yInRect = textureRectangle.height * oldY;
+		// 		const double oldX = thisMesh.texcoords[i];
+		// 		const double oldY = thisMesh.texcoords[i + 1];
 
-				const double xInAtlas = textureRectangle.x + xInRect;
-				const double yInAtlas = textureRectangle.y + yInRect;
+		// 		const double xInRect = textureRectangle.width * oldX;
+		// 		const double yInRect = textureRectangle.height * oldY;
 
-				thisMesh.texcoords[i] = xInAtlas;
-				thisMesh.texcoords[i + 1] = yInAtlas;
-			}
-		}
+		// 		const double xInAtlas = textureRectangle.x + xInRect;
+		// 		const double yInAtlas = textureRectangle.y + yInRect;
 
-		ModelHandler.updateModelInGPU("torch.glb");
+		// 		thisMesh.texcoords[i] = xInAtlas;
+		// 		thisMesh.texcoords[i + 1] = yInAtlas;
+		// 	}
+		// }
+
+		// ModelHandler.updateModelInGPU("torch.glb");
 
 		while (Window.shouldStayOpen()) {
 
@@ -126,8 +128,9 @@ void main() {
 			BeginMode3D(cam);
 			{
 
-				DrawModel(*torchModel, Vector3(0, 0, 0), 1, Colors.WHITE);
-				// ModelHandler.draw("torch.glb", Vec3d(0, 0, 0));
+
+				// DrawModel(*torchModel, Vector3(0, 0, 0), 1, Colors.WHITE);
+				ModelHandler.draw("torch.glb", Vec3d(0, 0, 0));
 
 				// DrawCube(Vector3(0, 0, 0), 1, 1, 1, Colors.RED);
 				// DrawCubeWires(Vector3(0, 0, 0), 1, 1, 1, Colors.BLACK);
