@@ -90,10 +90,13 @@ void main() {
 			BeginMode3D(cam);
 			{
 
-				DrawCube(Vector3(0, 0.5, -1), 1, 1, 1, Colors.RED);
-				DrawCubeWires(Vector3(0, 0.5, -1), 1, 1, 1, Colors.BLACK);
+				DrawCube(Vector3(0, 0.5, -0.5), 1, 1, 1, Colors.RED);
+				DrawCubeWires(Vector3(0, 0.5, -0.5), 1, 1, 1, Colors.BLACK);
 
-				ModelHandler.draw("torch_wall.glb", Vec3d(0, 0, 0));
+				DrawCube(Vector3(0, 0.5, -0.5), 1, 1, 1, Colors.RED);
+				DrawCubeWires(Vector3(0, 0.5, -0.5), 1, 1, 1, Colors.BLACK);
+
+				ModelHandler.draw("torch_wall.glb", Vec3d(0, 0, 0.5), Vec3d(0, (PI / -2.0) * 3, 0));
 
 			}
 			EndMode3D();
