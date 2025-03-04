@@ -4,9 +4,11 @@ public import raylib : Model;
 import graphics.shader_handler;
 import graphics.texture_handler;
 import math.quat;
+import math.rect;
 import math.vec3d;
 import raylib;
 import std.container;
+import std.conv;
 import std.stdio;
 import std.string;
 
