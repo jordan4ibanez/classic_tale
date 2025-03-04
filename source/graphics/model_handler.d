@@ -22,7 +22,8 @@ static final const class ModelHandler {
 static:
 private:
 
-    Model[string] database;
+    Model[string] stringDatabase;
+    // Model[ulong] database;
     bool[string] isCustomDatabase;
     AnimationContainer[string] animationDatabase;
     Texture2D textureAtlas;
@@ -34,14 +35,14 @@ public: //* BEGIN PUBLIC API.
     }
 
     bool modelExists(string name) {
-        return (name in database) !is null;
+        return (name in stringDatabase) !is null;
     }
 
     void draw(
         string modelName, Vec3d position, Vec3d rotation = Vec3d(0, 0, 0),
         float scale = 1.0, Color color = Colors.WHITE) {
 
-        Model* thisModel = modelName in database;
+        Model* thisModel = modelName in stringDatabase;
 
         if (thisModel is null) {
             throw new Error("[ModelManager]: Cannot draw model that does not exist. " ~ modelName);
@@ -59,7 +60,7 @@ public: //* BEGIN PUBLIC API.
 
     void drawIgnoreMissing(string modelName, Vec3d position, Vec3d rotation = Vec3d(0, 0, 0),
         float scale = 1.0, Color color = Colors.WHITE) {
-        Model* thisModel = modelName in database;
+        Model* thisModel = modelName in stringDatabase;
 
         if (thisModel is null) {
             // writeln("missing " ~ modelName ~ ", aborting");
@@ -82,7 +83,7 @@ public: //* BEGIN PUBLIC API.
     */
     void newModelFromMesh(string modelName, float[] vertices, float[] textureCoordinates, bool immediateWipe = true) {
 
-        if (modelName in database) {
+        if (modelName in stringDatabase) {
             throw new Error(
                 "[ModelManager]: Tried to overwrite mesh [" ~ modelName ~ "]. Delete it first.");
         }
@@ -103,7 +104,7 @@ public: //* BEGIN PUBLIC API.
             throw new Error("[ModelHandler]: Invalid model loaded from mesh. " ~ modelName);
         }
 
-        database[modelName] = thisModel;
+        stringDatabase[modelName] = thisModel;
         isCustomDatabase[modelName] = true;
 
         foreach (index; 0 .. thisModel.materialCount) {
@@ -127,7 +128,7 @@ public: //* BEGIN PUBLIC API.
     void newModelFromMeshPointers(string modelName, float* vertices, immutable ulong verticesLength,
         float* textureCoordinates, float* normals, ubyte* colors, bool immediateWipe = true) {
 
-        if (modelName in database) {
+        if (modelName in stringDatabase) {
             throw new Error(
                 "[ModelManager]: Tried to overwrite mesh [" ~ modelName ~ "]. Delete it first.");
         }
@@ -150,7 +151,7 @@ public: //* BEGIN PUBLIC API.
             throw new Error("[ModelHandler]: Invalid model loaded from mesh. " ~ modelName);
         }
 
-        database[modelName] = thisModel;
+        stringDatabase[modelName] = thisModel;
         isCustomDatabase[modelName] = true;
 
         foreach (index; 0 .. thisModel.materialCount) {
@@ -246,14 +247,14 @@ public: //* BEGIN PUBLIC API.
         thisModelAnimation.hasAnimation = thisAnimationData != null;
 
         // Insert into database.
-        database[fileName] = thisModel;
+        stringDatabase[fileName] = thisModel;
         isCustomDatabase[fileName] = false;
         animationDatabase[fileName] = thisModelAnimation;
     }
 
     void setModelShader(string modelName, string shaderName) {
 
-        Model* thisModel = modelName in database;
+        Model* thisModel = modelName in stringDatabase;
 
         if (thisModel is null) {
             throw new Error(
@@ -267,7 +268,7 @@ public: //* BEGIN PUBLIC API.
     }
 
     Model* getModelPointer(string modelName) {
-        Model* thisModel = modelName in database;
+        Model* thisModel = modelName in stringDatabase;
 
         if (thisModel is null) {
             throw new Error(
@@ -278,7 +279,7 @@ public: //* BEGIN PUBLIC API.
     }
 
     void destroy(string modelName) {
-        Model* thisModel = modelName in database;
+        Model* thisModel = modelName in stringDatabase;
 
         if (thisModel is null) {
             throw new Error("[ModelManager]: Tried to destroy non-existent model. " ~ modelName);
@@ -286,23 +287,23 @@ public: //* BEGIN PUBLIC API.
 
         destroyModel(modelName, thisModel);
 
-        database.remove(modelName);
+        stringDatabase.remove(modelName);
         isCustomDatabase.remove(modelName);
         animationDatabase.remove(modelName);
     }
 
     void terminate() {
-        foreach (modelName, thisModel; database) {
+        foreach (modelName, thisModel; stringDatabase) {
             destroyModel(modelName, &thisModel);
         }
-        database.clear();
+        stringDatabase.clear();
         isCustomDatabase.clear();
         animationDatabase.clear();
     }
 
     void playAnimation(string modelName, int index, int frame) {
 
-        Model* thisModel = modelName in database;
+        Model* thisModel = modelName in stringDatabase;
 
         if (thisModel is null) {
             throw new Error(
@@ -329,7 +330,7 @@ public: //* BEGIN PUBLIC API.
 
     void updateModelInGPU(string modelName) {
 
-        const Model* thisModel = modelName in database;
+        const Model* thisModel = modelName in stringDatabase;
 
         if (thisModel is null) {
             throw new Error(
