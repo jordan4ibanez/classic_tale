@@ -279,6 +279,34 @@ public: //* BEGIN PUBLIC API.
         return thisAnimation;
     }
 
+    void updateModelInGPU(string modelName) {
+
+        const Model* thisModel = modelName in database;
+
+        if (thisModel is null) {
+            throw new Error(
+                "[ModelManager]: Tried to update non-existent model [" ~ modelName ~ "]");
+        }
+
+        /*
+    #define RL_DEFAULT_SHADER_ATTRIB_LOCATION_POSITION    0
+    #define RL_DEFAULT_SHADER_ATTRIB_LOCATION_TEXCOORD    1
+    #define RL_DEFAULT_SHADER_ATTRIB_LOCATION_NORMAL      2
+    #define RL_DEFAULT_SHADER_ATTRIB_LOCATION_COLOR       3
+    #define RL_DEFAULT_SHADER_ATTRIB_LOCATION_TANGENT     4
+    #define RL_DEFAULT_SHADER_ATTRIB_LOCATION_TEXCOORD2   5
+    #define RL_DEFAULT_SHADER_ATTRIB_LOCATION_INDICES     6
+            */
+
+        foreach (i, thisMesh; thisModel.meshes[0 .. thisModel.meshCount]) {
+            UpdateMeshBuffer(cast(Mesh) thisMesh, 0, thisMesh.vertices, cast(int)(
+                    thisMesh.vertexCount * 3 * float.sizeof), 0);
+
+            UpdateMeshBuffer(cast(Mesh) thisMesh, 1, thisMesh.texcoords, cast(int)(
+                    thisMesh.vertexCount * 2 * float.sizeof), 0);
+        }
+    }
+
 private: //* BEGIN INTERNAL API.
 
     void loadModelsInModelsFolder() {
@@ -313,33 +341,5 @@ private: //* BEGIN INTERNAL API.
             }
         }
     }
-
-    //     void updateModelInGPU(string modelName) {
-
-    //         const Model* thisModel = database[modelName];
-
-    //         if (thisModel is null) {
-    //             throw new Error(
-    //                 "[ModelManager]: Tried to update non-existent model [" ~ modelName ~ "]");
-    //         }
-
-    //         /*
-    // #define RL_DEFAULT_SHADER_ATTRIB_LOCATION_POSITION    0
-    // #define RL_DEFAULT_SHADER_ATTRIB_LOCATION_TEXCOORD    1
-    // #define RL_DEFAULT_SHADER_ATTRIB_LOCATION_NORMAL      2
-    // #define RL_DEFAULT_SHADER_ATTRIB_LOCATION_COLOR       3
-    // #define RL_DEFAULT_SHADER_ATTRIB_LOCATION_TANGENT     4
-    // #define RL_DEFAULT_SHADER_ATTRIB_LOCATION_TEXCOORD2   5
-    // #define RL_DEFAULT_SHADER_ATTRIB_LOCATION_INDICES     6
-    //         */
-
-    //         foreach (i, thisMesh; thisModel.meshes[0 .. thisModel.meshCount]) {
-    //             UpdateMeshBuffer(cast(Mesh) thisMesh, 0, thisMesh.vertices, cast(int)(
-    //                     thisMesh.vertexCount * 3 * float.sizeof), 0);
-
-    //             UpdateMeshBuffer(cast(Mesh) thisMesh, 1, thisMesh.texcoords, cast(int)(
-    //                     thisMesh.vertexCount * 2 * float.sizeof), 0);
-    //         }
-    //     }
 
 }
