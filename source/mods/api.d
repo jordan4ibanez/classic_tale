@@ -21,8 +21,6 @@ private: //* BEGIN INTERNAL API.
     void finalize() {
         BlockDatabase.finalize();
         BiomeDatabase.finalize();
-    
-
     }
 
 }
