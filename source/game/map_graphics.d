@@ -176,7 +176,6 @@ private:
             foreach (immutable z; 0 .. CHUNK_WIDTH) {
                 foreach (immutable y; 0 .. CHUNK_HEIGHT) {
 
-                    // todo: undo this worst case scenario prototyping.
                     const BlockData* thisData = &thisChunk.data[x][z][y];
 
                     if (thisData.blockID == 0) {
