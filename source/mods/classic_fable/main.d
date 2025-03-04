@@ -44,6 +44,7 @@ void cubeThingMain() {
 
     //? Models.
     ModelHandler.loadModelFromFile("models/torch/torch.glb", "torch.png");
+    ModelHandler.loadModelFromFile("models/torch/torch_wall.glb", "torch.png");
 
     //? Biomes.
 
