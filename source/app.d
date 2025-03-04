@@ -80,11 +80,33 @@ void main() {
 		Texture2D atlas = TextureHandler.getAtlas();
 		torchModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = atlas;
 
-		TexPoints points = TextureHandler.getPoints("torch.png");
-		Vec2d size = TextureHandler.getSize("torch.png");
-		const(Rect*) rect = TextureHandler.getRect("torch.png");
+		// TexPoints points = TextureHandler.getPoints("torch.png");
+		// Vec2d size = TextureHandler.getSize("torch.png");
+		const(Rect*) textureRectangle = TextureHandler.getRect("torch.png");
 
-		
+		const Vec2d atlasSize = TextureHandler.getAtlasSize();
+
+		// Now, assign into the texture atlas. Shifting the texture coordinates to match.
+		foreach (currentMeshIndex; 0 .. torchModel.meshCount) {
+
+			writeln("=====");
+			Mesh* thisMesh = &torchModel.meshes[currentMeshIndex];
+
+			const ulong textureCount = thisMesh.vertexCount;
+
+			foreach (__indexInto; 0 .. textureCount) {
+				// X Y
+				const ulong i = __indexInto * 2;
+
+				const double oldX = thisMesh.texcoords[i];
+				const double oldY = thisMesh.texcoords[i + 1];
+
+				const double xInRect = textureRectangle.width * oldX;
+				const double yInRect = textureRectangle.height * oldY;
+				
+
+			}
+		}
 
 		while (Window.shouldStayOpen()) {
 
