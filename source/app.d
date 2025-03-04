@@ -143,7 +143,7 @@ void main() {
 
 	bool drawWorld = true;
 
-	while (!Window.shouldStayOpen()) {
+	while (Window.shouldStayOpen()) {
 
 		if (Keyboard.isPressed(KeyboardKey.KEY_F1)) {
 			Window.toggleMaximize();
