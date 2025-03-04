@@ -199,6 +199,7 @@ public: //* BEGIN PUBLIC API.
         thisModelAnimation.animationData = thisAnimationData;
         thisModelAnimation.hasAnimation = thisAnimationData != null;
 
+        // Insert into database.
         database[fileName] = thisModel;
         isCustomDatabase[fileName] = false;
         animationDatabase[fileName] = thisModelAnimation;
