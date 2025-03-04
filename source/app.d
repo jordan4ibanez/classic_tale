@@ -96,6 +96,8 @@ void main() {
 				DrawCube(Vector3(0, 0.5, -0.5), 1, 1, 1, Colors.RED);
 				DrawCubeWires(Vector3(0, 0.5, -0.5), 1, 1, 1, Colors.BLACK);
 
+				// Rotation 0 faces -Z, clockwise, 4 position states
+
 				ModelHandler.draw("torch_wall.glb", Vec3d(0, 0, 0.5), Vec3d(0, (PI / -2.0) * 3, 0));
 
 			}
