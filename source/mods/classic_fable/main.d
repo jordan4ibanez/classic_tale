@@ -43,8 +43,8 @@ void cubeThingMain() {
     BlockDatabase.registerBlock(grass);
 
     //? Models.
-    ModelHandler.loadModelFromFile("models/torch/torch.glb", "torch.png");
-    ModelHandler.loadModelFromFile("models/torch/torch_wall.glb", "torch.png");
+    ModelHandler.loadModelFromFileStatic("models/torch/torch.glb", "torch.png");
+    ModelHandler.loadModelFromFileStatic("models/torch/torch_wall.glb", "torch.png");
 
     //? Biomes.
 

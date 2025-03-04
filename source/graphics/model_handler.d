@@ -170,7 +170,7 @@ public: //* BEGIN PUBLIC API.
         }
     }
 
-    void loadModelFromFile(string location, string[] textures...) {
+    void loadModelFromFileStatic(string location, string[] textures...) {
         Model thisModel = Model();
 
         // Extract the file name from the location.

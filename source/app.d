@@ -76,7 +76,7 @@ void main() {
 		cam.up = Vector3(0, 1, 0);
 		cam.projection = CameraProjection.CAMERA_PERSPECTIVE;
 
-		ModelHandler.loadModelFromFile("models/torch/torch.glb", "torch.png");
+		ModelHandler.loadModelFromFileStatic("models/torch/torch.glb", "torch.png");
 
 		while (Window.shouldStayOpen()) {
 
