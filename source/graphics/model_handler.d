@@ -310,16 +310,13 @@ public: //* BEGIN PUBLIC API.
 
 private: //* BEGIN INTERNAL API.
 
-    void loadModelsInModelsFolder() {
-        import std.file;
-
-        foreach (string thisFilePathString; dirEntries("models", "*.{obj,gltf,glb,iqm,vox,m3d}", SpanMode
-                .depth)) {
-
-            loadModelFromFile(thisFilePathString);
-        }
-
-    }
+    // void loadModelsInModelsFolder() {
+    //     import std.file;
+    //     foreach (string thisFilePathString; dirEntries("models", "*.{obj,gltf,glb,iqm,vox,m3d}", SpanMode
+    //             .depth)) {
+    //         loadModelFromFile(thisFilePathString);
+    //     }
+    // }
 
     void destroyModel(string modelName, Model* thisModel) {
         // If we were using the D runtime to make this model, we'll customize
