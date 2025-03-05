@@ -46,15 +46,12 @@ struct BlockData {
 }
 
 struct Chunk {
-    string meshKey = null;
+    ulong meshKey = 0;
     // Y, Z, X
     BlockData[CHUNK_HEIGHT][CHUNK_WIDTH][CHUNK_WIDTH] data;
     // Z, X
     int[CHUNK_WIDTH][CHUNK_WIDTH] heightmap;
 
-    this(const string meshKey) {
-        this.meshKey = meshKey;
-    }
 }
 
 static final const class Map {
