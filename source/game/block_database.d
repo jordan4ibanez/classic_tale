@@ -5,6 +5,13 @@ import std.conv;
 import std.stdio;
 import std.string;
 
+enum Drawtype {
+    Air,
+    Normal,
+    Model,
+    Liquid
+}
+
 class BlockDefinition {
     string name = null;
     string modName = null;
