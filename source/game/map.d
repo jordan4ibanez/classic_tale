@@ -861,7 +861,7 @@ private: //* BEGIN INTERNAL API.
             return;
         }
         // todo: try to read from mongoDB.
-        Chunk newChunk = Chunk(generateKey(chunkPosition));
+        Chunk newChunk = Chunk();
         generateChunkData(chunkPosition, newChunk);
         database[chunkPosition] = newChunk;
         MapGraphics.generate(
