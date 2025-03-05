@@ -200,6 +200,10 @@ public: //* BEGIN PUBLIC API.
             return outputFileName;
         }();
 
+        if (fileName in stringToIDDatabase) {
+            throw new Error("Tried to override existing model " ~ fileName);
+        }
+
         writeln("Loading model: [", location, "] as [", fileName, "]");
 
         thisModel = LoadModel(toStringz(location));
