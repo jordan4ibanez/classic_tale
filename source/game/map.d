@@ -46,7 +46,7 @@ struct BlockData {
 }
 
 struct Chunk {
-    ulong meshKey = 0;
+    ulong modelKey = 0;
     // Y, Z, X
     BlockData[CHUNK_HEIGHT][CHUNK_WIDTH][CHUNK_WIDTH] data;
     // Z, X
@@ -71,14 +71,14 @@ public: //* BEGIN PUBLIC API.
         noise.seed = 1_010_010;
     }
 
-    void setChunkMesh(const ref Vec2i chunkID, const ulong modelKey) {
+    void setChunkModel(const ref Vec2i chunkID, const ulong modelKey) {
         Chunk* thisChunk = chunkID in database;
 
         if (thisChunk is null) {
             throw new Error("Tried to set a chunk that does not exist. " ~ to!string(chunkID));
         }
 
-        thisChunk.meshKey = modelKey;
+        thisChunk.modelKey = modelKey;
     }
 
     void draw() {
@@ -95,7 +95,7 @@ public: //* BEGIN PUBLIC API.
             const double maxZ = position.z + CHUNK_WIDTH;
 
             if (CameraHandler.aabbInFrustum(position.x, position.y, position.z, maxX, maxY, maxZ)) {
-                ModelHandler.drawIgnoreMissing(thisChunk.meshKey, position);
+                ModelHandler.draw(thisChunk.modelKey, position);
             }
         }
     }
