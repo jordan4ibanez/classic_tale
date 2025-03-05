@@ -66,17 +66,20 @@ public: //* BEGIN PUBLIC API.
             throw new Error("Mod name is null for block " ~ newBlock.name);
         }
 
-        foreach (index, const string thisTexture; newBlock.textures) {
+        if (newBlock.drawtype != Drawtype.Air && newBlock.drawtype != Drawtype.Model) {
+            foreach (index, const string thisTexture; newBlock.textures) {
 
-            if (thisTexture is null) {
-                throw new Error(
-                    "Texture is null for block " ~ newBlock.name ~ " index: " ~ to!string(index));
-            }
+                if (thisTexture is null) {
+                    throw new Error(
+                        "Texture is null for block " ~ newBlock.name ~ " index: " ~ to!string(
+                            index));
+                }
 
-            if (!TextureHandler.hasTexture(thisTexture)) {
-                throw new Error(
-                    "Texture " ~ thisTexture ~ "for block " ~ newBlock.name ~ " index: " ~ to!string(
-                        index) ~ " does not exist");
+                if (!TextureHandler.hasTexture(thisTexture)) {
+                    throw new Error(
+                        "Texture " ~ thisTexture ~ "for block " ~ newBlock.name ~ " index: " ~ to!string(
+                            index) ~ " does not exist");
+                }
             }
         }
 
@@ -110,17 +113,17 @@ public: //* BEGIN PUBLIC API.
                 continue;
             }
 
-            foreach (index, textureName; thisDefinition.textures) {
-                thisDefinition.textureIDs[index] = TextureHandler.getIDFromName(textureName);
+            if (thisDefinition.drawtype == Drawtype.Model) {
+                thisDefinition.modelID = ModelHandler.getIDFromName(thisDefinition.model);
+            } else {
+                foreach (index, textureName; thisDefinition.textures) {
+                    thisDefinition.textureIDs[index] = TextureHandler.getIDFromName(textureName);
+                }
             }
 
             // todo: do the match thing below when mongoDB is added in.
             thisDefinition.id = nextID();
             idDatabase[thisDefinition.id] = thisDefinition;
-
-            if (thisDefinition.drawtype == Drawtype.Model) {
-                thisDefinition.modelID = ModelHandler.getIDFromName(thisDefinition.model);
-            }
 
             debugWrite(thisDefinition);
         }
