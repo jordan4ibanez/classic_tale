@@ -143,7 +143,7 @@ public:
             }
             const Vec2i chunkKey = thisResult.unwrap;
 
-            const ulong newModelID = createChunkMesh(chunkKey);
+            const ulong newModelID = createChunkModel(chunkKey);
             if (newModelID != 0) {
                 Map.setChunkMesh(chunkKey, newModelID);
             } else {
@@ -154,7 +154,7 @@ public:
 
 private:
 
-    ulong createChunkMesh(Vec2i chunkKey) {
+    ulong createChunkModel(Vec2i chunkKey) {
         const(Chunk*) thisChunk = Map.getChunkPointer(chunkKey);
 
         if (thisChunk is null) {
