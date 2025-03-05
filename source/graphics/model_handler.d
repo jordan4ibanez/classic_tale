@@ -23,10 +23,11 @@ static final const class ModelHandler {
 static:
 private:
 
-    Model[string] stringDatabase;
+    ulong[string] stringToIDDatabase;
+
     Model[ulong] numberDatabase;
-    bool[string] isCustomDatabase;
-    AnimationContainer[string] animationDatabase;
+    bool[ulong] isCustomDatabase;
+    AnimationContainer[ulong] animationDatabase;
     Texture2D textureAtlas;
 
 public: //* BEGIN PUBLIC API.
@@ -35,18 +36,18 @@ public: //* BEGIN PUBLIC API.
         textureAtlas = TextureHandler.getAtlas();
     }
 
-    bool modelExists(string name) {
-        return (name in stringDatabase) !is null;
+    bool modelExists(ulong id) {
+        return (id in numberDatabase) !is null;
     }
 
-    void draw(
-        string modelName, Vec3d position, Vec3d rotation = Vec3d(0, 0, 0),
+    void draw(ulong modelID, Vec3d position, Vec3d rotation = Vec3d(0, 0, 0),
         float scale = 1.0, Color color = Colors.WHITE) {
 
-        Model* thisModel = modelName in stringDatabase;
+        Model* thisModel = modelID in numberDatabase;
 
         if (thisModel is null) {
-            throw new Error("[ModelManager]: Cannot draw model that does not exist. " ~ modelName);
+            throw new Error(
+                "[ModelManager]: Cannot draw model that does not exist. " ~ to!string(modelID));
         }
 
         // Have to jump through some hoops to rotate the model correctly.
@@ -59,9 +60,9 @@ public: //* BEGIN PUBLIC API.
             Vector3(scale, scale, scale), color);
     }
 
-    void drawIgnoreMissing(string modelName, Vec3d position, Vec3d rotation = Vec3d(0, 0, 0),
+    void drawIgnoreMissing(ulong modelID, Vec3d position, Vec3d rotation = Vec3d(0, 0, 0),
         float scale = 1.0, Color color = Colors.WHITE) {
-        Model* thisModel = modelName in stringDatabase;
+        Model* thisModel = modelID in numberDatabase;
 
         if (thisModel is null) {
             // writeln("missing " ~ modelName ~ ", aborting");
@@ -82,57 +83,61 @@ public: //* BEGIN PUBLIC API.
     Immediate wipe will instantly replace the mesh data with null pointers so the
     GC can work it's magic.
     */
-    void newModelFromMesh(string modelName, float[] vertices, float[] textureCoordinates, bool immediateWipe = true) {
+    // void newModelFromMesh(float[] vertices, float[] textureCoordinates, bool immediateWipe = true) {
 
-        if (modelName in stringDatabase) {
-            throw new Error(
-                "[ModelManager]: Tried to overwrite mesh [" ~ modelName ~ "]. Delete it first.");
-        }
+    //     const ulong thisID = UUID.get();
 
-        Mesh thisMesh = Mesh();
+    //     // if (modelName in numberDatabase) {
+    //     //     throw new Error(
+    //     //         "[ModelManager]: Tried to overwrite mesh [" ~ modelName ~ "]. Delete it first.");
+    //     // }
 
-        thisMesh.vertexCount = cast(int) vertices.length / 3;
-        thisMesh.triangleCount = thisMesh.vertexCount / 3;
-        thisMesh.vertices = vertices.ptr;
-        thisMesh.texcoords = textureCoordinates.ptr;
+    //     Mesh thisMesh = Mesh();
 
-        UploadMesh(&thisMesh, false);
+    //     thisMesh.vertexCount = cast(int) vertices.length / 3;
+    //     thisMesh.triangleCount = thisMesh.vertexCount / 3;
+    //     thisMesh.vertices = vertices.ptr;
+    //     thisMesh.texcoords = textureCoordinates.ptr;
 
-        Model thisModel = Model();
-        thisModel = LoadModelFromMesh(thisMesh);
+    //     UploadMesh(&thisMesh, false);
 
-        if (!IsModelValid(thisModel)) {
-            throw new Error("[ModelHandler]: Invalid model loaded from mesh. " ~ modelName);
-        }
+    //     Model thisModel = Model();
+    //     thisModel = LoadModelFromMesh(thisMesh);
 
-        stringDatabase[modelName] = thisModel;
-        isCustomDatabase[modelName] = true;
+    //     if (!IsModelValid(thisModel)) {
+    //         throw new Error("[ModelHandler]: Invalid model loaded from mesh. " ~ to!string(thisID));
+    //     }
 
-        foreach (index; 0 .. thisModel.materialCount) {
-            thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = textureAtlas;
-        }
+    //     numberDatabase[thisID] = thisModel;
+    //     isCustomDatabase[thisID] = true;
 
-        if (immediateWipe) {
-            // This looks a bit silly, because it is. I just like to double check. :)
-            thisMesh.vertices = null;
-            thisMesh.texcoords = null;
-            thisModel.meshes[0].vertices = null;
-            thisModel.meshes[0].texcoords = null;
-        }
-    }
+    //     foreach (index; 0 .. thisModel.materialCount) {
+    //         thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = textureAtlas;
+    //     }
+
+    //     if (immediateWipe) {
+    //         // This looks a bit silly, because it is. I just like to double check. :)
+    //         thisMesh.vertices = null;
+    //         thisMesh.texcoords = null;
+    //         thisModel.meshes[0].vertices = null;
+    //         thisModel.meshes[0].texcoords = null;
+    //     }
+    // }
 
     /*
     Immediate wipe will instantly replace the mesh data with null pointers so the
     GC can work it's magic.
     ? This is pretty much exclusively used for the map model generator.
     */
-    void newModelFromMeshPointers(string modelName, float* vertices, immutable ulong verticesLength,
-        float* textureCoordinates, float* normals, ubyte* colors, bool immediateWipe = true) {
+    ulong newModelFromMeshPointers(float* vertices, immutable ulong verticesLength,
+        float* textureCoordinates, float* normals, ubyte* colors) {
 
-        if (modelName in stringDatabase) {
-            throw new Error(
-                "[ModelManager]: Tried to overwrite mesh [" ~ modelName ~ "]. Delete it first.");
-        }
+        const ulong thisID = UUID.get();
+
+        // if (modelName in numberDatabase) {
+        //     throw new Error(
+        //         "[ModelManager]: Tried to overwrite mesh [" ~ modelName ~ "]. Delete it first.");
+        // }
 
         Mesh thisMesh = Mesh();
 
@@ -149,30 +154,31 @@ public: //* BEGIN PUBLIC API.
         thisModel = LoadModelFromMesh(thisMesh);
 
         if (!IsModelValid(thisModel)) {
-            throw new Error("[ModelHandler]: Invalid model loaded from mesh. " ~ modelName);
+            throw new Error("[ModelHandler]: Invalid model loaded from mesh. " ~ to!string(thisID));
         }
 
-        stringDatabase[modelName] = thisModel;
-        isCustomDatabase[modelName] = true;
+        numberDatabase[thisID] = thisModel;
+        isCustomDatabase[thisID] = true;
 
         foreach (index; 0 .. thisModel.materialCount) {
             thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = textureAtlas;
         }
 
-        if (immediateWipe) {
-            // This looks a bit silly, because it is. I just like to double check. :)
-            thisMesh.vertices = null;
-            thisMesh.texcoords = null;
-            thisMesh.normals = null;
-            thisMesh.colors = null;
-            thisModel.meshes[0].vertices = null;
-            thisModel.meshes[0].texcoords = null;
-            thisModel.meshes[0].normals = null;
-            thisModel.meshes[0].colors = null;
-        }
+        // Launch the GC into action to clean the data we no longer need.
+        // This looks a bit silly, because it is. I just like to double check. :)
+        thisMesh.vertices = null;
+        thisMesh.texcoords = null;
+        thisMesh.normals = null;
+        thisMesh.colors = null;
+        thisModel.meshes[0].vertices = null;
+        thisModel.meshes[0].texcoords = null;
+        thisModel.meshes[0].normals = null;
+        thisModel.meshes[0].colors = null;
+
+        return thisID;
     }
 
-    void loadModelFromFileStatic(string location, string[] textures...) {
+    ulong loadModelFromFile(string location, string[] textures...) {
         Model thisModel = Model();
 
         // Extract the file name from the location.
@@ -247,19 +253,26 @@ public: //* BEGIN PUBLIC API.
         thisModelAnimation.animationData = thisAnimationData;
         thisModelAnimation.hasAnimation = thisAnimationData != null;
 
+        const ulong thisID = UUID.get();
+
         // Insert into database.
-        stringDatabase[fileName] = thisModel;
-        isCustomDatabase[fileName] = false;
-        animationDatabase[fileName] = thisModelAnimation;
+        numberDatabase[thisID] = thisModel;
+        isCustomDatabase[thisID] = false;
+        animationDatabase[thisID] = thisModelAnimation;
+
+        stringToIDDatabase[fileName] = thisID;
+
+        return thisID;
     }
 
-    void setModelShader(string modelName, string shaderName) {
+    void setModelShader(ulong modelID, string shaderName) {
 
-        Model* thisModel = modelName in stringDatabase;
+        Model* thisModel = modelID in numberDatabase;
 
         if (thisModel is null) {
             throw new Error(
-                "[ModelManager]: Tried to set shader on non-existent model [" ~ modelName ~ "]");
+                "[ModelManager]: Tried to set shader on non-existent model [" ~ to!string(
+                    modelID) ~ "]");
         }
 
         Shader* thisShader = ShaderHandler.getShaderPointer(shaderName);
@@ -268,74 +281,79 @@ public: //* BEGIN PUBLIC API.
         }
     }
 
-    Model* getModelPointer(string modelName) {
-        Model* thisModel = modelName in stringDatabase;
+    Model* getModelPointer(ulong modelID) {
+        Model* thisModel = modelID in numberDatabase;
 
         if (thisModel is null) {
             throw new Error(
-                "[ModelManager]: Tried to set get non-existent model pointer [" ~ modelName ~ "]");
+                "[ModelManager]: Tried to set get non-existent model pointer [" ~ to!string(
+                    modelID) ~ "]");
         }
 
         return thisModel;
     }
 
-    void destroy(string modelName) {
-        Model* thisModel = modelName in stringDatabase;
+    void destroy(ulong modelID) {
+        Model* thisModel = modelID in numberDatabase;
 
         if (thisModel is null) {
-            throw new Error("[ModelManager]: Tried to destroy non-existent model. " ~ modelName);
+            throw new Error(
+                "[ModelManager]: Tried to destroy non-existent model. " ~ to!string(modelID));
         }
 
-        destroyModel(modelName, thisModel);
+        destroyModel(modelID, thisModel);
 
-        stringDatabase.remove(modelName);
-        isCustomDatabase.remove(modelName);
-        animationDatabase.remove(modelName);
+        numberDatabase.remove(modelID);
+        isCustomDatabase.remove(modelID);
+        animationDatabase.remove(modelID);
     }
 
     void terminate() {
-        foreach (modelName, thisModel; stringDatabase) {
+        foreach (modelName, thisModel; numberDatabase) {
             destroyModel(modelName, &thisModel);
         }
-        stringDatabase.clear();
+        numberDatabase.clear();
         isCustomDatabase.clear();
         animationDatabase.clear();
     }
 
-    void playAnimation(string modelName, int index, int frame) {
+    void playAnimation(ulong modelID, int index, int frame) {
 
-        Model* thisModel = modelName in stringDatabase;
+        Model* thisModel = modelID in numberDatabase;
 
         if (thisModel is null) {
             throw new Error(
-                "[ModelManager]: Tried to play animation on non-existent model. " ~ modelName);
+                "[ModelManager]: Tried to play animation on non-existent model. " ~ to!string(
+                    modelID));
         }
 
-        AnimationContainer* thisAnimation = modelName in animationDatabase;
+        AnimationContainer* thisAnimation = modelID in animationDatabase;
 
         if (thisAnimation is null) {
             throw new Error(
-                "[ModelManager]: Tried to play animation on model with no animation. " ~ modelName);
+                "[ModelManager]: Tried to play animation on model with no animation. " ~ to!string(
+                    modelID));
         }
         UpdateModelAnimation(*thisModel, thisAnimation.animationData[index], frame);
     }
 
-    const(AnimationContainer*) getAnimationContainer(string modelName) {
-        AnimationContainer* thisAnimation = modelName in animationDatabase;
+    const(AnimationContainer*) getAnimationContainer(ulong modelID) {
+        AnimationContainer* thisAnimation = modelID in animationDatabase;
         if (thisAnimation is null) {
             throw new Error(
-                "[ModelManager]: Tried to get non-existent animation container. " ~ modelName);
+                "[ModelManager]: Tried to get non-existent animation container. " ~ to!string(
+                    modelID));
         }
         return thisAnimation;
     }
 
-    void updateModelInGPU(string modelName) {
+    void updateModelInGPU(ulong modelID) {
 
-        const Model* thisModel = modelName in stringDatabase;
+        const Model* thisModel = modelID in numberDatabase;
 
         if (thisModel is null) {
             throw new Error(
-                "[ModelManager]: Tried to update non-existent model [" ~ modelName ~ "]");
+                "[ModelManager]: Tried to update non-existent model [" ~ to!string(modelID) ~ "]");
         }
 
         /*
@@ -359,10 +377,10 @@ public: //* BEGIN PUBLIC API.
 
 private: //* BEGIN INTERNAL API.
 
-    void destroyModel(string modelName, Model* thisModel) {
+    void destroyModel(ulong modelID, Model* thisModel) {
         // If we were using the D runtime to make this model, we'll customize
         // the way we free the items. This makes the GC auto clear.
-        if (isCustomDatabase[modelName]) {
+        if (isCustomDatabase[modelID]) {
             Mesh thisMeshInModel = thisModel.meshes[0];
             thisMeshInModel.vertexCount = 0;
             thisMeshInModel.vertices = null;
@@ -374,7 +392,7 @@ private: //* BEGIN INTERNAL API.
         } else {
             UnloadModel(*thisModel);
 
-            AnimationContainer* thisAnimations = modelName in animationDatabase;
+            AnimationContainer* thisAnimations = modelID in animationDatabase;
             if (thisAnimations !is null && thisAnimations.hasAnimation) {
                 UnloadModelAnimation(*thisAnimations.animationData);
             }
