@@ -178,6 +178,14 @@ public: //* BEGIN PUBLIC API.
         return thisID;
     }
 
+    ulong getIDFromName(string modelName) {
+        const ulong* thisModelID = modelName in stringToIDDatabase;
+        if (thisModelID is null) {
+            throw new Error("Tried to get ID of non-existent model " ~ modelName);
+        }
+        return *thisModelID;
+    }
+
     ulong loadModelFromFile(string location, string[] textures...) {
         Model thisModel = Model();
 
