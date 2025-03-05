@@ -56,7 +56,7 @@ void main() {
 
 	// rlDisableBackfaceCulling();
 
-	// Mouse.lock();
+	Mouse.lock();
 
 	immutable int renderDistance = 16;
 	foreach (immutable x; -renderDistance .. renderDistance) {
