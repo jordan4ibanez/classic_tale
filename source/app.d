@@ -172,7 +172,7 @@ void main() {
 					DrawCubeWires(blockSelectionABove.toRaylib(), 0.05, 0.05, 0.05, Colors.RED);
 					if (!aabbCollision(possiblePositionBox, playerCollisionBox)) {
 
-						Map.setBlockAtWorldPositionByName(blockSelectionABove, "bedrock");
+						Map.setBlockAtWorldPositionByName(blockSelectionABove, "torch");
 
 						Vec3d aboveAbove = blockSelectionABove;
 						aboveAbove.x += 0.5;
