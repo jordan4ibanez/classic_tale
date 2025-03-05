@@ -145,7 +145,7 @@ public:
 
             const ulong newModelID = createChunkModel(chunkKey);
             if (newModelID != 0) {
-                Map.setChunkMesh(chunkKey, newModelID);
+                Map.setChunkModel(chunkKey, newModelID);
             } else {
                 writeln("null model in generator");
             }
@@ -421,8 +421,8 @@ private:
 
         // writeln("took: ", sw.peek().total!"usecs", "us");
 
-        if (ModelHandler.modelExists(thisChunk.meshKey)) {
-            ModelHandler.destroy(thisChunk.meshKey);
+        if (ModelHandler.modelExists(thisChunk.modelKey)) {
+            ModelHandler.destroy(thisChunk.modelKey);
         }
 
         // writeln("does not exist, creating");
