@@ -68,45 +68,45 @@ void main() {
 	}
 
 	//! BEGIN DEBUG DRAWING TORCH.
-	{
-		Camera3D cam;
-		cam.fovy = 55;
-		cam.position = Vector3(0, 3, 3);
-		cam.target = Vector3(0, 0, 0);
-		cam.up = Vector3(0, 1, 0);
-		cam.projection = CameraProjection.CAMERA_PERSPECTIVE;
+	// {
+	// 	Camera3D cam;
+	// 	cam.fovy = 55;
+	// 	cam.position = Vector3(0, 3, 3);
+	// 	cam.target = Vector3(0, 0, 0);
+	// 	cam.up = Vector3(0, 1, 0);
+	// 	cam.projection = CameraProjection.CAMERA_PERSPECTIVE;
 
-		ulong torchModel = ModelHandler.loadModelFromFile("models/torch/torch.glb", "torch.png");
+	// 	ulong torchModel = ModelHandler.getIDFromName("torch_wall.glb");
 
-		while (Window.shouldStayOpen()) {
+	// 	while (Window.shouldStayOpen()) {
 
-			// UpdateCamera(&cam, CameraMode.CAMERA_ORBITAL);
+	// 		// UpdateCamera(&cam, CameraMode.CAMERA_ORBITAL);
 
-			// ModelHandler.
+	// 		// ModelHandler.
 
-			BeginDrawing();
-			ClearBackground(Colors.BLACK);
+	// 		BeginDrawing();
+	// 		ClearBackground(Colors.BLACK);
 
-			BeginMode3D(cam);
-			{
+	// 		BeginMode3D(cam);
+	// 		{
 
-				DrawCube(Vector3(0, 0.5, -0.5), 1, 1, 1, Colors.RED);
-				DrawCubeWires(Vector3(0, 0.5, -0.5), 1, 1, 1, Colors.BLACK);
+	// 			DrawCube(Vector3(0, 0.5, -0.5), 1, 1, 1, Colors.RED);
+	// 			DrawCubeWires(Vector3(0, 0.5, -0.5), 1, 1, 1, Colors.BLACK);
 
-				DrawCube(Vector3(0, 0.5, -0.5), 1, 1, 1, Colors.RED);
-				DrawCubeWires(Vector3(0, 0.5, -0.5), 1, 1, 1, Colors.BLACK);
+	// 			DrawCube(Vector3(0, 0.5, -0.5), 1, 1, 1, Colors.RED);
+	// 			DrawCubeWires(Vector3(0, 0.5, -0.5), 1, 1, 1, Colors.BLACK);
 
-				// Rotation 0 faces -Z, clockwise, 4 position states
+	// 			// Rotation 0 faces -Z, clockwise, 4 position states
 
-				ModelHandler.draw(torchModel, Vec3d(0, 0, 0.5), Vec3d(0, (PI / -2.0) * 0, 0));
+	// 			ModelHandler.draw(torchModel, Vec3d(0, 0, 0.5), Vec3d(0, (PI / -2.0) * 0, 0));
 
-			}
-			EndMode3D();
+	// 		}
+	// 		EndMode3D();
 
-			EndDrawing();
-		}
+	// 		EndDrawing();
+	// 	}
 
-	}
+	// }
 	//! END DEBUG DRAWING TORCH.
 
 	bool drawWorld = true;
