@@ -188,7 +188,6 @@ private:
                         continue;
                     }
                     // Todo: this needs a visual check.
-                    // Todo: this needs a neighbor check.
 
                     // Front.
                     if (z - 1 < 0) {
