@@ -419,7 +419,7 @@ private:
         // }
         // writeln("took: ", total, "ms average");
 
-        // writeln("took: ", sw.peek().total!"usecs", "us");
+        writeln("took: ", sw.peek().total!"usecs", "us");
 
         if (ModelHandler.modelExists(thisChunk.modelKey)) {
             ModelHandler.destroy(thisChunk.modelKey);
