@@ -22,7 +22,9 @@ class BlockDefinition {
     int id = -1;
 
     // Visual properties.
+    // Clear means light passes through it.
     bool clear = false;
+    Drawtype drawtype = Drawtype.Normal;
 
     // Physical properties.
     double friction = 2.0;
