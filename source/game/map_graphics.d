@@ -141,20 +141,26 @@ public:
             if (thisResult.isNone()) {
                 return;
             }
-            // writeln(thisResult.unwrap);
-            createChunkMesh(thisResult.unwrap);
+            const Vec2i chunkKey = thisResult.unwrap;
+
+            const ulong newModelID = createChunkMesh(chunkKey);
+            if (newModelID != 0) {
+                Map.setChunkMesh(chunkKey, newModelID);
+            } else {
+                writeln("null model in generator");
+            }
         }
     }
 
 private:
 
-    void createChunkMesh(Vec2i chunkKey) {
+    ulong createChunkMesh(Vec2i chunkKey) {
         const(Chunk*) thisChunk = Map.getChunkPointer(chunkKey);
 
         if (thisChunk is null) {
             writeln("aborting, chunk " ~ to!string(chunkKey.x) ~ " " ~ to!string(
                     chunkKey.y) ~ " does not exist.");
-            return;
+            return 0;
         }
 
         // writeln("Generating chunk mesh " ~ to!string(chunkKey.x) ~ " " ~ to!string(chunkKey.y));
@@ -420,7 +426,7 @@ private:
         }
 
         // writeln("does not exist, creating");
-        ModelHandler.newModelFromMeshPointers(thisChunk.meshKey, vertices, allocation * 18, textureCoordinates,
+        return ModelHandler.newModelFromMeshPointers(vertices, allocation * 18, textureCoordinates,
             normals, colors);
     }
 
