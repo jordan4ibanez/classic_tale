@@ -87,6 +87,10 @@ public: //* BEGIN PUBLIC API.
         Vec3d position;
 
         foreach (const chunkPos, const ref thisChunk; database) {
+            if (thisChunk.modelKey == 0) {
+                continue;
+            }
+
             position.x = chunkPos.x * CHUNK_WIDTH;
             position.z = chunkPos.y * CHUNK_WIDTH;
 
