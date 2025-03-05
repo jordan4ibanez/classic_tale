@@ -17,18 +17,22 @@ class BlockDefinition {
     string modName = null;
     // Front, back, left, right, top, bottom.
     string[6] textures = null;
-    // This is reserved.
-    int[6] textureIDs = -1;
-    int id = -1;
 
     // Visual properties.
     // Clear means light passes through it.
     bool clear = false;
     Drawtype drawtype = Drawtype.Normal;
+    // If it is drawtype model, it will use this.
+    string model = null;
 
     // Physical properties.
     double friction = 2.0;
     double maxSpeed = 3.0;
+
+    // These are reserved.
+    int[6] textureIDs = -1;
+    int id = -1;
+    ulong modelID = 0;
 }
 
 static final const class BlockDatabase {
