@@ -76,7 +76,7 @@ void main() {
 		cam.up = Vector3(0, 1, 0);
 		cam.projection = CameraProjection.CAMERA_PERSPECTIVE;
 
-		ModelHandler.loadModelFromFileStatic("models/torch/torch.glb", "torch.png");
+		ulong torchModel = ModelHandler.loadModelFromFile("models/torch/torch.glb", "torch.png");
 
 		while (Window.shouldStayOpen()) {
 
@@ -98,7 +98,7 @@ void main() {
 
 				// Rotation 0 faces -Z, clockwise, 4 position states
 
-				ModelHandler.draw("torch_wall.glb", Vec3d(0, 0, 0.5), Vec3d(0, (PI / -2.0) * 0, 0));
+				ModelHandler.draw(torchModel, Vec3d(0, 0, 0.5), Vec3d(0, (PI / -2.0) * 0, 0));
 
 			}
 			EndMode3D();
