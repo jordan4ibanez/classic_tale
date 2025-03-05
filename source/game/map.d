@@ -71,6 +71,16 @@ public: //* BEGIN PUBLIC API.
         noise.seed = 1_010_010;
     }
 
+    void setChunkMesh(const ref Vec2i chunkID, const ulong modelKey) {
+        Chunk* thisChunk = chunkID in database;
+
+        if (thisChunk is null) {
+            throw new Error("Tried to set a chunk that does not exist. " ~ to!string(chunkID));
+        }
+
+        thisChunk.meshKey = modelKey;
+    }
+
     void draw() {
         // todo: this should probably order by distance. Lucky D has that built in. :D
 
