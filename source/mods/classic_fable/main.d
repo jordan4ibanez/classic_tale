@@ -42,6 +42,12 @@ void cubeThingMain() {
     ];
     BlockDatabase.registerBlock(grass);
 
+    CubeThingBlock torch = new CubeThingBlock();
+    torch.name = "torch";
+    torch.drawtype = Drawtype.Model;
+    torch.model = "torch.glb";
+    BlockDatabase.registerBlock(torch);
+
     //? Models.
     ModelHandler.loadModelFromFile("models/torch/torch.glb", "torch.png");
     ModelHandler.loadModelFromFile("models/torch/torch_wall.glb", "torch.png");
