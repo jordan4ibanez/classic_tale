@@ -3,7 +3,7 @@ module utility.uuid;
 static final const class UUID {
 static:
 private:
-    ulong id = 0;
+    ulong id = 1;
 
 public:
 
@@ -12,5 +12,4 @@ public:
         id++;
         return id;
     }
-
 }
