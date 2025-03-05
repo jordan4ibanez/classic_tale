@@ -1,5 +1,6 @@
 module game.block_database;
 
+import graphics.model_handler;
 import graphics.texture_handler;
 import std.conv;
 import std.stdio;
@@ -116,6 +117,10 @@ public: //* BEGIN PUBLIC API.
             // todo: do the match thing below when mongoDB is added in.
             thisDefinition.id = nextID();
             idDatabase[thisDefinition.id] = thisDefinition;
+
+            if (thisDefinition.drawtype == Drawtype.Model) {
+                thisDefinition.modelID = ModelHandler.getIDFromName(thisDefinition.model);
+            }
 
             debugWrite(thisDefinition);
         }
