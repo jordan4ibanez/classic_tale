@@ -339,10 +339,6 @@ private:
                     // 2 [xy], 6 [2 tris], 6 faces
                     // textureCoordAllocation += 72;
 
-                    // const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
-                    //     0
-                    // );
-
                 }
             }
         }
