@@ -123,6 +123,10 @@ public: //* BEGIN PUBLIC API.
         return thisID;
     }
 
+    const(Model*) getUltraFastStatic() {
+        return staticDatabase;
+    }
+
     void lockStatic() {
         this.lock = true;
     }
