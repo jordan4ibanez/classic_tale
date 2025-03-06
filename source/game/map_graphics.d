@@ -177,6 +177,7 @@ private:
         const(Chunk*) neighborLeft = Map.getChunkPointer(chunkKey.x - 1, chunkKey.y);
         const(Chunk*) neighborRight = Map.getChunkPointer(chunkKey.x + 1, chunkKey.y);
 
+        const(BlockDefinition)* neighborDefinition;
         //? Preallocation.
         foreach (immutable x; 0 .. CHUNK_WIDTH) {
             foreach (immutable z; 0 .. CHUNK_WIDTH) {
@@ -200,7 +201,7 @@ private:
                             // Front.
                             if (z - 1 < 0) {
                                 if (neighborFront) {
-                                    const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
+                                    neighborDefinition = BlockDatabase.getBlockByID(
                                         neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID
                                     );
 
@@ -212,7 +213,7 @@ private:
                                 }
                             } else {
 
-                                const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
+                                neighborDefinition = BlockDatabase.getBlockByID(
                                     thisChunk.data[x][z - 1][y].blockID
                                 );
 
@@ -226,7 +227,7 @@ private:
                             // Back.
                             if (z + 1 >= CHUNK_WIDTH) {
                                 if (neighborBack) {
-                                    const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
+                                    neighborDefinition = BlockDatabase.getBlockByID(
                                         neighborBack.data[x][0][y].blockID
                                     );
 
@@ -237,7 +238,7 @@ private:
                                     }
                                 }
                             } else if (thisChunk.data[x][z + 1][y].blockID == 0) {
-                                const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
+                                neighborDefinition = BlockDatabase.getBlockByID(
                                     thisChunk.data[x][z + 1][y].blockID
                                 );
 
@@ -251,7 +252,7 @@ private:
                             // Left.
                             if (x - 1 < 0) {
                                 if (neighborLeft) {
-                                    const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
+                                    neighborDefinition = BlockDatabase.getBlockByID(
                                         neighborLeft.data[CHUNK_WIDTH - 1][z][y].blockID
                                     );
                                     if (neighborDefinition.drawtype == Drawtype.Air) {
@@ -261,7 +262,7 @@ private:
                                     }
                                 }
                             } else {
-                                const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
+                                neighborDefinition = BlockDatabase.getBlockByID(
                                     thisChunk.data[x - 1][z][y].blockID
                                 );
                                 if (neighborDefinition.drawtype == Drawtype.Air) {
@@ -274,7 +275,7 @@ private:
                             // Right.
                             if (x + 1 >= CHUNK_WIDTH) {
                                 if (neighborRight) {
-                                    const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
+                                    neighborDefinition = BlockDatabase.getBlockByID(
                                         neighborRight.data[0][z][y].blockID
                                     );
                                     if (neighborDefinition.drawtype == Drawtype.Air) {
@@ -284,7 +285,7 @@ private:
                                     }
                                 }
                             } else {
-                                const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
+                                neighborDefinition = BlockDatabase.getBlockByID(
                                     thisChunk.data[x + 1][z][y].blockID
                                 );
                                 if (neighborDefinition.drawtype == Drawtype.Air) {
@@ -301,7 +302,7 @@ private:
                                 // vertexAllocation += 18;
                                 // textureCoordAllocation += 12;
                             } else {
-                                const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
+                                neighborDefinition = BlockDatabase.getBlockByID(
                                     thisChunk.data[x][z][y + 1].blockID
                                 );
                                 if (neighborDefinition.drawtype == Drawtype.Air) {
@@ -316,7 +317,7 @@ private:
                                 // Do not draw the bottom of the world.
                                 // The player should never fall out the bottom of the world.
                             } else {
-                                const(BlockDefinition)* neighborDefinition = BlockDatabase.getBlockByID(
+                                neighborDefinition = BlockDatabase.getBlockByID(
                                     thisChunk.data[x][z][y - 1].blockID
                                 );
                                 if (neighborDefinition.drawtype == Drawtype.Air) {
