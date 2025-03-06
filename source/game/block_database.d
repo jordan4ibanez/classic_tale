@@ -34,7 +34,7 @@ class BlockDefinition {
     // These are reserved.
     int[6] textureIDs = -1;
     uint blockID = 0;
-    ulong modelID = 0;
+    ulong modelIndex = 0;
 }
 
 static final const class BlockDatabase {
@@ -118,7 +118,7 @@ public: //* BEGIN PUBLIC API.
             }
 
             if (thisDefinition.drawtype == Drawtype.Model) {
-                thisDefinition.modelID = ModelHandler.getStaticIndexFromName(thisDefinition.model);
+                thisDefinition.modelIndex = ModelHandler.getStaticIndexFromName(thisDefinition.model);
             } else {
                 foreach (index, textureName; thisDefinition.textures) {
                     thisDefinition.textureIDs[index] = TextureHandler.getIDFromName(textureName);
