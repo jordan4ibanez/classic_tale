@@ -285,35 +285,35 @@ public: //* BEGIN PUBLIC API.
         animationDatabase.clear();
     }
 
-    void playAnimation(ulong modelID, int index, int frame) {
+    // void playAnimation(ulong modelID, int index, int frame) {
 
-        Model* thisModel = modelID in dynamicDatabase;
+    //     Model* thisModel = modelID in dynamicDatabase;
 
-        if (thisModel is null) {
-            throw new Error(
-                "[ModelManager]: Tried to play animation on non-existent model. " ~ to!string(
-                    modelID));
-        }
+    //     if (thisModel is null) {
+    //         throw new Error(
+    //             "[ModelManager]: Tried to play animation on non-existent model. " ~ to!string(
+    //                 modelID));
+    //     }
 
-        AnimationContainer* thisAnimation = modelID in animationDatabase;
+    //     AnimationContainer* thisAnimation = modelID in animationDatabase;
 
-        if (thisAnimation is null) {
-            throw new Error(
-                "[ModelManager]: Tried to play animation on model with no animation. " ~ to!string(
-                    modelID));
-        }
-        UpdateModelAnimation(*thisModel, thisAnimation.animationData[index], frame);
-    }
+    //     if (thisAnimation is null) {
+    //         throw new Error(
+    //             "[ModelManager]: Tried to play animation on model with no animation. " ~ to!string(
+    //                 modelID));
+    //     }
+    //     UpdateModelAnimation(*thisModel, thisAnimation.animationData[index], frame);
+    // }
 
-    const(AnimationContainer*) getAnimationContainer(ulong modelID) {
-        AnimationContainer* thisAnimation = modelID in animationDatabase;
-        if (thisAnimation is null) {
-            throw new Error(
-                "[ModelManager]: Tried to get non-existent animation container. " ~ to!string(
-                    modelID));
-        }
-        return thisAnimation;
-    }
+    // const(AnimationContainer*) getAnimationContainer(ulong modelID) {
+    //     AnimationContainer* thisAnimation = modelID in animationDatabase;
+    //     if (thisAnimation is null) {
+    //         throw new Error(
+    //             "[ModelManager]: Tried to get non-existent animation container. " ~ to!string(
+    //                 modelID));
+    //     }
+    //     return thisAnimation;
+    // }
 
     void updateModelInGPU(ulong modelID) {
 
