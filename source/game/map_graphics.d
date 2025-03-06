@@ -208,7 +208,7 @@ private:
                                     neighborDefinition = ultraFastAccess +
                                         neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID;
 
-                                    if (neighborDefinition.drawtype == Drawtype.Air) {
+                                    if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         allocation++;
                                         // vertexAllocation += 18;
                                         // textureCoordAllocation += 12;
@@ -219,7 +219,7 @@ private:
                                 neighborDefinition = ultraFastAccess +
                                     thisChunk.data[x][z - 1][y].blockID;
 
-                                if (neighborDefinition.drawtype == Drawtype.Air) {
+                                if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation++;
                                 }
                                 // vertexAllocation += 18;
@@ -232,7 +232,7 @@ private:
                                     neighborDefinition = ultraFastAccess +
                                         neighborBack.data[x][0][y].blockID;
 
-                                    if (neighborDefinition.drawtype == Drawtype.Air) {
+                                    if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         allocation++;
                                         // vertexAllocation += 18;
                                         // textureCoordAllocation += 12;
@@ -242,7 +242,7 @@ private:
                                 neighborDefinition = ultraFastAccess +
                                     thisChunk.data[x][z + 1][y].blockID;
 
-                                if (neighborDefinition.drawtype == Drawtype.Air) {
+                                if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation++;
                                 }
                                 // vertexAllocation += 18;
@@ -255,7 +255,7 @@ private:
                                     neighborDefinition = ultraFastAccess +
                                         neighborLeft.data[CHUNK_WIDTH - 1][z][y].blockID;
 
-                                    if (neighborDefinition.drawtype == Drawtype.Air) {
+                                    if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         allocation++;
                                         // vertexAllocation += 18;
                                         // textureCoordAllocation += 12;
@@ -265,7 +265,7 @@ private:
                                 neighborDefinition = ultraFastAccess +
                                     thisChunk.data[x - 1][z][y].blockID;
 
-                                if (neighborDefinition.drawtype == Drawtype.Air) {
+                                if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation++;
                                 }
                                 // vertexAllocation += 18;
@@ -278,7 +278,7 @@ private:
                                     neighborDefinition = ultraFastAccess +
                                         neighborRight.data[0][z][y].blockID;
 
-                                    if (neighborDefinition.drawtype == Drawtype.Air) {
+                                    if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         allocation++;
                                         // vertexAllocation += 18;
                                         // textureCoordAllocation += 12;
@@ -288,7 +288,7 @@ private:
                                 neighborDefinition = ultraFastAccess +
                                     thisChunk.data[x + 1][z][y].blockID;
 
-                                if (neighborDefinition.drawtype == Drawtype.Air) {
+                                if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation++;
                                 }
                                 // vertexAllocation += 18;
@@ -305,7 +305,7 @@ private:
                                 neighborDefinition = ultraFastAccess +
                                     thisChunk.data[x][z][y + 1].blockID;
 
-                                if (neighborDefinition.drawtype == Drawtype.Air) {
+                                if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation++;
                                 }
                                 // vertexAllocation += 18;
@@ -320,7 +320,7 @@ private:
                                 neighborDefinition = ultraFastAccess +
                                     thisChunk.data[x][z][y - 1].blockID;
 
-                                if (neighborDefinition.drawtype == Drawtype.Air) {
+                                if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation++;
                                 }
                                 // vertexAllocation += 18;
