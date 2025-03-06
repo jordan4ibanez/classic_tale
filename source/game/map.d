@@ -99,7 +99,7 @@ public: //* BEGIN PUBLIC API.
             const double maxZ = position.z + CHUNK_WIDTH;
 
             if (CameraHandler.aabbInFrustum(position.x, position.y, position.z, maxX, maxY, maxZ)) {
-                ModelHandler.draw(thisChunk.modelKey, position);
+                ModelHandler.drawDynamic(thisChunk.modelKey, position);
             }
         }
     }
