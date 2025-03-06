@@ -33,7 +33,7 @@ class BlockDefinition {
 
     // These are reserved.
     int[6] textureIDs = -1;
-    int id = -1;
+    uint blockID = 0;
     ulong modelID = 0;
 }
 
@@ -48,7 +48,7 @@ private:
     // This is only intended to be used for the map model generator.
     BlockDefinition* ultraFastAccess;
 
-    int currentID = 2;
+    uint currentID = 2;
 
 public: //* BEGIN PUBLIC API.
 
@@ -90,16 +90,16 @@ public: //* BEGIN PUBLIC API.
         nameDatabase[newBlock.name] = newBlock;
     }
 
-    bool hasBlockID(int id) {
-        return (id in idDatabase) !is null;
+    bool hasBlockID(uint blockID) {
+        return (blockID in idDatabase) !is null;
     }
 
     bool hasBlockName(string name) {
         return (name in nameDatabase) !is null;
     }
 
-    const(BlockDefinition*) getBlockByID(int id) {
-        return id in idDatabase;
+    const(BlockDefinition*) getBlockByID(uint blockID) {
+        return blockID in idDatabase;
     }
 
     const(BlockDefinition*) getBlockByName(string name) {
@@ -126,8 +126,8 @@ public: //* BEGIN PUBLIC API.
             }
 
             // todo: do the match thing below when mongoDB is added in.
-            thisDefinition.id = nextID();
-            idDatabase[thisDefinition.id] = thisDefinition;
+            thisDefinition.blockID = nextID();
+            idDatabase[thisDefinition.blockID] = thisDefinition;
 
             debugWrite(thisDefinition);
         }
@@ -167,12 +167,12 @@ private: //* BEGIN INTERNAL API.
         // air.textures = "air.png";
 
         // todo: do the match thing below when mongoDB is added in.
-        air.id = 0;
+        air.blockID = 0;
 
         debugWrite(air);
 
         nameDatabase[air.name] = air;
-        idDatabase[air.id] = air;
+        idDatabase[air.blockID] = air;
     }
 
     void makeBedrock() {
@@ -182,24 +182,24 @@ private: //* BEGIN INTERNAL API.
         bedrock.textures = "bedrock.png";
         bedrock.textureIDs = TextureHandler.getIDFromName("bedrock.png");
         // todo: do the match thing below when mongoDB is added in.
-        bedrock.id = 1;
+        bedrock.blockID = 1;
 
         debugWrite(bedrock);
 
         nameDatabase[bedrock.name] = bedrock;
-        idDatabase[bedrock.id] = bedrock;
+        idDatabase[bedrock.blockID] = bedrock;
     }
 
     void debugWrite(BlockDefinition definition) {
-        writeln("Block " ~ definition.name ~ " at ID " ~ to!string(definition.id));
+        writeln("Block " ~ definition.name ~ " at ID " ~ to!string(definition.blockID));
     }
 
     // todo: make this pull the standard IDs into an associative array from the mongoDB.
     // todo: mongoDB should store the MAX current ID and restore it.
     // todo: Then, match to it. If it doesn't match, this is a new block.
     // todo: Then you'd call into this. :)
-    int nextID() {
-        int thisID = currentID;
+    uint nextID() {
+        uint thisID = currentID;
         currentID++;
         return thisID;
     }
