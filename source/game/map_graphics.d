@@ -375,8 +375,8 @@ private:
                         continue;
                     }
 
-                    thisDefinition = BlockDatabase.getBlockByID(
-                        thisData.blockID);
+                    thisDefinition = ultraFastAccess +
+                        thisData.blockID;
 
                     faceTextures.update(thisDefinition.textureIDs.ptr);
 
