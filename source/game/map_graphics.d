@@ -591,39 +591,58 @@ private:
 
                             const(Mesh*) thisMesh = (thisModel.meshes + thisIndex);
 
-                            const ulong vertexCount = thisMesh.vertexCount;
-                            const ulong vertexAmount = vertexCount * 3;
+                            // const ulong vertexCount = thisMesh.vertexCount;
+                            const ulong triangleCount = thisMesh.triangleCount;
 
-                            const ulong colorAmount = vertexCount * 4;
+                            const ulong vertexAmount = triangleCount * 9;
+
+                            const ulong colorAmount = triangleCount * 12;
                             const ulong currentColorIndex = colorIndex;
 
-                            const ulong texAmount = vertexCount * 2;
+                            const ulong texAmount = triangleCount * 6;
                             const ulong currentTexIndex = textIndex;
 
                             const ulong currentVertIndex = vertIndex;
-                            writeln("HIT ======");
-                            writeln("at: ", currentVertIndex);
+                            // writeln("HIT ======");
+                            // writeln("at: ", currentVertIndex);
+
+                            // writeln("position? ", pos);
 
                             ulong vertPosInMaster = 0;
                             ulong texPosInMaster = 0;
                             ulong colorPosInMaster = 0;
 
-                            foreach (indicesIndex; 0 .. thisMesh.vertexCount) {
-                                const ulong i = *(thisMesh.indices + indicesIndex);
+                            foreach (indicesIndex; 0 .. thisMesh.vertexCount * 3) {
 
-                                writeln(i);
+                                const ulong i = *(thisMesh.indices + indicesIndex);
+                                // const ulong i = indicesIndex;
+
+                                // writeln(i);
 
                                 // Positions.
                                 const ulong vertPos = i * 3;
 
-                                *(vertices + ((currentVertIndex) + vertPosInMaster + 0)) = *(
-                                    thisMesh.vertices + vertPos + 0) + pos.x + 0.5;
+                                *(vertices + ((currentVertIndex) + vertPosInMaster + 0)) = (
+                                    *(
+                                        thisMesh.vertices + vertPos + 0)) + pos.x + 0.5;
 
-                                *(vertices + ((currentVertIndex) + vertPosInMaster + 1)) = *(
-                                    thisMesh.vertices + vertPos + 1) + pos.y;
+                                *(vertices + ((currentVertIndex) + vertPosInMaster + 1)) = (
+                                    *(
+                                        thisMesh.vertices + vertPos + 1)) + pos.y;
 
-                                *(vertices + ((currentVertIndex) + vertPosInMaster + 2)) = *(
-                                    thisMesh.vertices + vertPos + 2) + pos.z + 0.5;
+                                *(vertices + ((currentVertIndex) + vertPosInMaster + 2)) = (
+                                    *(
+                                        thisMesh.vertices + vertPos + 2)) + pos.z + 0.5;
+
+                                // if (!debugLock) {
+                                //     debugData ~= Vec3d(
+                                //         (*(vertices + ((currentVertIndex) + vertPosInMaster + 0))) + (
+                                //             chunkKey.x * CHUNK_WIDTH),
+                                //         *(vertices + ((currentVertIndex) + vertPosInMaster + 1)),
+                                //         (*(vertices + ((currentVertIndex) + vertPosInMaster + 2))) + (
+                                //             chunkKey.y * CHUNK_WIDTH)
+                                //     );
+                                // }
 
                                 vertPosInMaster += 3;
 
@@ -634,8 +653,6 @@ private:
                                     thisMesh.texcoords + texPos + 0);
                                 *(textureCoordinates + ((currentTexIndex) + texPosInMaster + 1)) = *(
                                     thisMesh.texcoords + texPos + 1);
-                                *(textureCoordinates + ((currentTexIndex) + texPosInMaster + 2)) = *(
-                                    thisMesh.texcoords + texPos + 2);
 
                                 texPosInMaster += 2;
 
@@ -650,6 +667,7 @@ private:
                                 colorPosInMaster += 4;
 
                             }
+                            // debugLock = true;
 
                             vertIndex += vertexAmount;
                             textIndex += texAmount;
