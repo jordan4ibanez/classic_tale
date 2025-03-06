@@ -372,95 +372,112 @@ private:
                     thisDefinition = ultraFastAccess +
                         thisData.blockID;
 
-                    faceTextures.update(thisDefinition.textureIDs.ptr);
+                    final switch (thisDefinition.drawtype) {
+                    case Drawtype.Air, Drawtype.Liquid:
+                        continue;
+                    case Drawtype.Normal: {
 
-                    faceGen.front = false;
-                    faceGen.back = false;
-                    faceGen.left = false;
-                    faceGen.right = false;
-                    faceGen.top = false;
-                    faceGen.bottom = false;
+                            faceTextures.update(thisDefinition.textureIDs.ptr);
 
-                    // Front.
-                    if (z - 1 < 0) {
-                        if (neighborFront) {
-                            if (neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID == 0) {
+                            faceGen.front = false;
+                            faceGen.back = false;
+                            faceGen.left = false;
+                            faceGen.right = false;
+                            faceGen.top = false;
+                            faceGen.bottom = false;
+
+                            // Front.
+                            if (z - 1 < 0) {
+                                if (neighborFront) {
+                                    if (neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID == 0) {
+                                        faceGen.front = true;
+                                        faceGen.lightLevelFront = neighborFront.data[x][CHUNK_WIDTH - 1][y]
+                                            .naturalLightBank;
+                                    }
+                                }
+                            } else if (thisChunk.data[x][z - 1][y].blockID == 0) {
                                 faceGen.front = true;
-                                faceGen.lightLevelFront = neighborFront.data[x][CHUNK_WIDTH - 1][y]
+                                faceGen.lightLevelFront = thisChunk.data[x][z - 1][y]
                                     .naturalLightBank;
                             }
-                        }
-                    } else if (thisChunk.data[x][z - 1][y].blockID == 0) {
-                        faceGen.front = true;
-                        faceGen.lightLevelFront = thisChunk.data[x][z - 1][y].naturalLightBank;
-                    }
 
-                    // Back.
-                    if (z + 1 >= CHUNK_WIDTH) {
-                        if (neighborBack) {
-                            if (neighborBack.data[x][0][y].blockID == 0) {
+                            // Back.
+                            if (z + 1 >= CHUNK_WIDTH) {
+                                if (neighborBack) {
+                                    if (neighborBack.data[x][0][y].blockID == 0) {
+                                        faceGen.back = true;
+                                        faceGen.lightLevelBack = neighborBack
+                                            .data[x][0][y].naturalLightBank;
+                                    }
+                                }
+                            } else if (thisChunk.data[x][z + 1][y].blockID == 0) {
                                 faceGen.back = true;
-                                faceGen.lightLevelBack = neighborBack
-                                    .data[x][0][y].naturalLightBank;
-                            }
-                        }
-                    } else if (thisChunk.data[x][z + 1][y].blockID == 0) {
-                        faceGen.back = true;
-                        faceGen.lightLevelBack = thisChunk.data[x][z + 1][y].naturalLightBank;
-                    }
-
-                    // Left.
-                    if (x - 1 < 0) {
-                        if (neighborLeft) {
-                            if (neighborLeft.data[CHUNK_WIDTH - 1][z][y].blockID == 0) {
-                                faceGen.left = true;
-                                faceGen.lightLevelLeft = neighborLeft.data[CHUNK_WIDTH - 1][z][y]
+                                faceGen.lightLevelBack = thisChunk.data[x][z + 1][y]
                                     .naturalLightBank;
                             }
-                        }
-                    } else if (thisChunk.data[x - 1][z][y].blockID == 0) {
-                        faceGen.left = true;
-                        faceGen.lightLevelLeft = thisChunk.data[x - 1][z][y].naturalLightBank;
-                    }
 
-                    // Right.
-                    if (x + 1 >= CHUNK_WIDTH) {
-                        if (neighborRight) {
-                            if (neighborRight.data[0][z][y].blockID == 0) {
-                                faceGen.right = true;
-                                faceGen.lightLevelRight = neighborRight
-                                    .data[0][z][y].naturalLightBank;
+                            // Left.
+                            if (x - 1 < 0) {
+                                if (neighborLeft) {
+                                    if (neighborLeft.data[CHUNK_WIDTH - 1][z][y].blockID == 0) {
+                                        faceGen.left = true;
+                                        faceGen.lightLevelLeft = neighborLeft.data[CHUNK_WIDTH - 1][z][y]
+                                            .naturalLightBank;
+                                    }
+                                }
+                            } else if (thisChunk.data[x - 1][z][y].blockID == 0) {
+                                faceGen.left = true;
+                                faceGen.lightLevelLeft = thisChunk.data[x - 1][z][y]
+                                    .naturalLightBank;
                             }
+
+                            // Right.
+                            if (x + 1 >= CHUNK_WIDTH) {
+                                if (neighborRight) {
+                                    if (neighborRight.data[0][z][y].blockID == 0) {
+                                        faceGen.right = true;
+                                        faceGen.lightLevelRight = neighborRight
+                                            .data[0][z][y].naturalLightBank;
+                                    }
+                                }
+                            } else if (thisChunk.data[x + 1][z][y].blockID == 0) {
+                                faceGen.right = true;
+                                faceGen.lightLevelRight = thisChunk.data[x + 1][z][y]
+                                    .naturalLightBank;
+                            }
+
+                            // Top.
+                            if (y + 1 >= CHUNK_HEIGHT) {
+                                // Draw it, that's the top of the map.
+                                faceGen.top = true;
+                            } else if (thisChunk.data[x][z][y + 1].blockID == 0) {
+                                faceGen.top = true;
+                                faceGen.lightLevelTop = thisChunk.data[x][z][y + 1]
+                                    .naturalLightBank;
+                            }
+
+                            // Bottom.
+                            if (y - 1 < 0) {
+                                // Do not draw the bottom of the world.
+                                // The player should never fall out the bottom of the world.
+                            } else if (thisChunk.data[x][z][y - 1].blockID == 0) {
+                                faceGen.bottom = true;
+                                faceGen.lightLevelBottom = thisChunk.data[x][z][y - 1]
+                                    .naturalLightBank;
+                            }
+
+                            pos.x = x;
+                            pos.y = y;
+                            pos.z = z;
+
+                            makeCube(vertIndex, textIndex, colorIndex, vertices, textureCoordinates, normals, colors,
+                                pos, min, max, &faceGen, &faceTextures);
+
+                            // neighborDefinition = ultraFastAccess + ;
                         }
-                    } else if (thisChunk.data[x + 1][z][y].blockID == 0) {
-                        faceGen.right = true;
-                        faceGen.lightLevelRight = thisChunk.data[x + 1][z][y].naturalLightBank;
+                        break;
+                    case Drawtype.Model:
                     }
-
-                    // Top.
-                    if (y + 1 >= CHUNK_HEIGHT) {
-                        // Draw it, that's the top of the map.
-                        faceGen.top = true;
-                    } else if (thisChunk.data[x][z][y + 1].blockID == 0) {
-                        faceGen.top = true;
-                        faceGen.lightLevelTop = thisChunk.data[x][z][y + 1].naturalLightBank;
-                    }
-
-                    // Bottom.
-                    if (y - 1 < 0) {
-                        // Do not draw the bottom of the world.
-                        // The player should never fall out the bottom of the world.
-                    } else if (thisChunk.data[x][z][y - 1].blockID == 0) {
-                        faceGen.bottom = true;
-                        faceGen.lightLevelBottom = thisChunk.data[x][z][y - 1].naturalLightBank;
-                    }
-
-                    pos.x = x;
-                    pos.y = y;
-                    pos.z = z;
-
-                    makeCube(vertIndex, textIndex, colorIndex, vertices, textureCoordinates, normals, colors, pos, min,
-                        max, &faceGen, &faceTextures);
 
                 }
             }
