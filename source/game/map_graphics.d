@@ -548,7 +548,7 @@ private:
         writeln("took: ", sw.peek().total!"usecs", "us");
 
         if (ModelHandler.modelExists(thisChunk.modelKey)) {
-            ModelHandler.destroy(thisChunk.modelKey);
+            ModelHandler.destroyDynamic(thisChunk.modelKey);
         }
 
         // writeln("does not exist, creating");
