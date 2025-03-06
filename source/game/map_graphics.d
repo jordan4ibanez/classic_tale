@@ -177,6 +177,9 @@ private:
         const(Chunk*) neighborLeft = Map.getChunkPointer(chunkKey.x - 1, chunkKey.y);
         const(Chunk*) neighborRight = Map.getChunkPointer(chunkKey.x + 1, chunkKey.y);
 
+        // Ultra fast accessor.
+        const(BlockDefinition*) ultraFastAccess = BlockDatabase.getUltraFastAccess();
+
         const(BlockDefinition)* neighborDefinition;
         //? Preallocation.
         foreach (immutable x; 0 .. CHUNK_WIDTH) {
@@ -201,9 +204,8 @@ private:
                             // Front.
                             if (z - 1 < 0) {
                                 if (neighborFront) {
-                                    neighborDefinition = BlockDatabase.getBlockByID(
-                                        neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID
-                                    );
+                                    neighborDefinition = ultraFastAccess +
+                                        neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID;
 
                                     if (neighborDefinition.drawtype == Drawtype.Air) {
                                         allocation++;
@@ -213,9 +215,8 @@ private:
                                 }
                             } else {
 
-                                neighborDefinition = BlockDatabase.getBlockByID(
-                                    thisChunk.data[x][z - 1][y].blockID
-                                );
+                                neighborDefinition = ultraFastAccess +
+                                    thisChunk.data[x][z - 1][y].blockID;
 
                                 if (neighborDefinition.drawtype == Drawtype.Air) {
                                     allocation++;
@@ -227,9 +228,8 @@ private:
                             // Back.
                             if (z + 1 >= CHUNK_WIDTH) {
                                 if (neighborBack) {
-                                    neighborDefinition = BlockDatabase.getBlockByID(
-                                        neighborBack.data[x][0][y].blockID
-                                    );
+                                    neighborDefinition = ultraFastAccess +
+                                        neighborBack.data[x][0][y].blockID;
 
                                     if (neighborDefinition.drawtype == Drawtype.Air) {
                                         allocation++;
@@ -237,10 +237,9 @@ private:
                                         // textureCoordAllocation += 12;
                                     }
                                 }
-                            } else if (thisChunk.data[x][z + 1][y].blockID == 0) {
-                                neighborDefinition = BlockDatabase.getBlockByID(
-                                    thisChunk.data[x][z + 1][y].blockID
-                                );
+                            } else {
+                                neighborDefinition = ultraFastAccess +
+                                    thisChunk.data[x][z + 1][y].blockID;
 
                                 if (neighborDefinition.drawtype == Drawtype.Air) {
                                     allocation++;
@@ -252,9 +251,9 @@ private:
                             // Left.
                             if (x - 1 < 0) {
                                 if (neighborLeft) {
-                                    neighborDefinition = BlockDatabase.getBlockByID(
-                                        neighborLeft.data[CHUNK_WIDTH - 1][z][y].blockID
-                                    );
+                                    neighborDefinition = ultraFastAccess +
+                                        neighborLeft.data[CHUNK_WIDTH - 1][z][y].blockID;
+
                                     if (neighborDefinition.drawtype == Drawtype.Air) {
                                         allocation++;
                                         // vertexAllocation += 18;
@@ -262,9 +261,9 @@ private:
                                     }
                                 }
                             } else {
-                                neighborDefinition = BlockDatabase.getBlockByID(
-                                    thisChunk.data[x - 1][z][y].blockID
-                                );
+                                neighborDefinition = ultraFastAccess +
+                                    thisChunk.data[x - 1][z][y].blockID;
+
                                 if (neighborDefinition.drawtype == Drawtype.Air) {
                                     allocation++;
                                 }
@@ -275,9 +274,9 @@ private:
                             // Right.
                             if (x + 1 >= CHUNK_WIDTH) {
                                 if (neighborRight) {
-                                    neighborDefinition = BlockDatabase.getBlockByID(
-                                        neighborRight.data[0][z][y].blockID
-                                    );
+                                    neighborDefinition = ultraFastAccess +
+                                        neighborRight.data[0][z][y].blockID;
+
                                     if (neighborDefinition.drawtype == Drawtype.Air) {
                                         allocation++;
                                         // vertexAllocation += 18;
@@ -285,9 +284,9 @@ private:
                                     }
                                 }
                             } else {
-                                neighborDefinition = BlockDatabase.getBlockByID(
-                                    thisChunk.data[x + 1][z][y].blockID
-                                );
+                                neighborDefinition = ultraFastAccess +
+                                    thisChunk.data[x + 1][z][y].blockID;
+
                                 if (neighborDefinition.drawtype == Drawtype.Air) {
                                     allocation++;
                                 }
@@ -302,9 +301,9 @@ private:
                                 // vertexAllocation += 18;
                                 // textureCoordAllocation += 12;
                             } else {
-                                neighborDefinition = BlockDatabase.getBlockByID(
-                                    thisChunk.data[x][z][y + 1].blockID
-                                );
+                                neighborDefinition = ultraFastAccess +
+                                    thisChunk.data[x][z][y + 1].blockID;
+
                                 if (neighborDefinition.drawtype == Drawtype.Air) {
                                     allocation++;
                                 }
@@ -317,9 +316,9 @@ private:
                                 // Do not draw the bottom of the world.
                                 // The player should never fall out the bottom of the world.
                             } else {
-                                neighborDefinition = BlockDatabase.getBlockByID(
-                                    thisChunk.data[x][z][y - 1].blockID
-                                );
+                                neighborDefinition = ultraFastAccess +
+                                    thisChunk.data[x][z][y - 1].blockID;
+
                                 if (neighborDefinition.drawtype == Drawtype.Air) {
                                     allocation++;
                                 }
