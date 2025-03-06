@@ -310,9 +310,7 @@ private:
                     case Drawtype.Model:
                         const(Model*) thisModel = (modelDatabaseStatic + thisDefinition.modelIndex);
                         foreach (i; 0 .. thisModel.meshCount) {
-
-                            // thisModel.meshes.vertexCount;
-
+                            allocation += thisModel.meshes[i].vertexCount;
                         }
                     }
 
