@@ -384,12 +384,14 @@ private:
                                 }
                             } else {
 
+                                blockDataNeighbor = &thisChunk.data[x][z - 1][y];
+
                                 neighborDefinition = ultraFastAccess +
-                                    thisChunk.data[x][z - 1][y].blockID;
+                                    blockDataNeighbor.blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.front = true;
-                                    faceGen.lightLevelFront = thisChunk.data[x][z - 1][y]
+                                    faceGen.lightLevelFront = blockDataNeighbor
                                         .naturalLightBank;
                                 }
                             }
