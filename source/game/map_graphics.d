@@ -420,8 +420,6 @@ private:
                             faceGen.top = false;
                             faceGen.bottom = false;
 
-                            // todo: cache the neighbor's data pointer.
-
                             // Front.
                             if (z - 1 < 0) {
                                 if (neighborFront) {
