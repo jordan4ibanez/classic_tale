@@ -28,8 +28,6 @@ private:
     Model[ulong] dynamicDatabase;
 
     // ulong[string] stringToIDDatabase;
-    // bool[ulong] isCustomDatabase;
-
     AnimationContainer[ulong] animationDatabase;
     Texture2D textureAtlas;
 
