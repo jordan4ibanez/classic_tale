@@ -1,5 +1,6 @@
 module game.block_database;
 
+import core.memory;
 import graphics.model_handler;
 import graphics.texture_handler;
 import std.conv;
@@ -43,6 +44,8 @@ private:
     // Faster access based on ID or name.
     BlockDefinition[string] nameDatabase;
     BlockDefinition[int] idDatabase;
+    // If you use this in your mods I'm not helping you.
+    // This is only to be used for the map model generator.
     BlockDefinition* ultraFastAccess;
 
     int currentID = 2;
@@ -132,9 +135,22 @@ public: //* BEGIN PUBLIC API.
         // Final rehash.
         idDatabase = idDatabase.rehash();
         nameDatabase = nameDatabase.rehash();
+
+        // This is so the map generator can speed wayyy up.
+        mapToPointerArray();
     }
 
 private: //* BEGIN INTERNAL API.
+
+    void mapToPointerArray() {
+        // currentID is assumed to be at the max ID defined. 
+        // todo: If there are holes, and a segfault has brought you here, that MUST be fixed.
+        ultraFastAccess = cast(BlockDefinition*) GC.malloc(BlockDefinition.sizeof * currentID);
+
+        foreach (i; 0 .. currentID) {
+            *(ultraFastAccess + i) = idDatabase[i];
+        }
+    }
 
     void makeAir() {
         BlockDefinition air = new BlockDefinition();
