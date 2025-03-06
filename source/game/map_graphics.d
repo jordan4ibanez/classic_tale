@@ -364,6 +364,8 @@ private:
                             faceGen.top = false;
                             faceGen.bottom = false;
 
+                            // todo: cache the neighbor's data pointer.
+
                             // Front.
                             if (z - 1 < 0) {
                                 if (neighborFront) {
@@ -391,16 +393,25 @@ private:
                             // Back.
                             if (z + 1 >= CHUNK_WIDTH) {
                                 if (neighborBack) {
-                                    if (neighborBack.data[x][0][y].blockID == 0) {
+                                    neighborDefinition = ultraFastAccess +
+                                        neighborBack.data[x][0][y].blockID;
+
+                                    if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.back = true;
                                         faceGen.lightLevelBack = neighborBack
                                             .data[x][0][y].naturalLightBank;
                                     }
                                 }
-                            } else if (thisChunk.data[x][z + 1][y].blockID == 0) {
-                                faceGen.back = true;
-                                faceGen.lightLevelBack = thisChunk.data[x][z + 1][y]
-                                    .naturalLightBank;
+                            } else {
+
+                                neighborDefinition = ultraFastAccess +
+                                    thisChunk.data[x][z + 1][y].blockID;
+
+                                if (neighborDefinition.drawtype != Drawtype.Normal) {
+                                    faceGen.back = true;
+                                    faceGen.lightLevelBack = thisChunk.data[x][z + 1][y]
+                                        .naturalLightBank;
+                                }
                             }
 
                             // Left.
