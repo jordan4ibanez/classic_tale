@@ -180,20 +180,23 @@ private:
         // Ultra fast accessor.
         const(BlockDefinition*) ultraFastAccess = BlockDatabase.getUltraFastAccess();
 
+        const(BlockData)* thisData;
         const(BlockDefinition)* neighborDefinition;
+        const(BlockDefinition)* thisDefinition;
+
         //? Preallocation.
         foreach (immutable x; 0 .. CHUNK_WIDTH) {
             foreach (immutable z; 0 .. CHUNK_WIDTH) {
                 foreach (immutable y; 0 .. CHUNK_HEIGHT) {
 
-                    const BlockData* thisData = &thisChunk.data[x][z][y];
+                    thisData = &thisChunk.data[x][z][y];
 
                     if (thisData.blockID == 0) {
                         continue;
                     }
 
-                    const BlockDefinition* thisDefinition = BlockDatabase.getBlockByID(
-                        thisData.blockID);
+                    thisDefinition = neighborDefinition = ultraFastAccess +
+                        thisData.blockID;
 
                     // Todo: this needs a visual check.
 
@@ -362,13 +365,11 @@ private:
         Vec3d min = Vec3d(0, 0, 0);
         Vec3d max = Vec3d(1, 1, 1);
 
-        const(BlockDefinition)* thisDefinition;
-
         foreach (immutable x; 0 .. CHUNK_WIDTH) {
             foreach (immutable z; 0 .. CHUNK_WIDTH) {
                 foreach (immutable y; 0 .. CHUNK_HEIGHT) {
 
-                    const BlockData* thisData = &thisChunk.data[x][z][y];
+                    thisData = &thisChunk.data[x][z][y];
 
                     if (thisData.blockID == 0) {
                         continue;
