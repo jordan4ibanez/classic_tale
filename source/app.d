@@ -122,7 +122,6 @@ void main() {
 
 		if (Keyboard.isPressed(KeyboardKey.KEY_F3)) {
 			drawWorld = !drawWorld;
-
 		}
 
 		// foreach (_; 0 .. uniform(1_000, 100_000, rand)) {
