@@ -261,7 +261,7 @@ public: //* BEGIN PUBLIC API.
         return thisModel;
     }
 
-    void destroy(ulong modelID) {
+    void destroyDynamic(ulong modelID) {
         Model* thisModel = modelID in dynamicDatabase;
 
         if (thisModel is null) {
