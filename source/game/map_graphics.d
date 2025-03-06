@@ -504,12 +504,14 @@ private:
                                 // The player should never fall out the bottom of the world.
                             } else {
 
+                                blockDataNeighbor = &thisChunk.data[x][z][y - 1];
+
                                 neighborDefinition = ultraFastAccess +
-                                    thisChunk.data[x][z][y - 1].blockID;
+                                    blockDataNeighbor.blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.bottom = true;
-                                    faceGen.lightLevelBottom = thisChunk.data[x][z][y - 1]
+                                    faceGen.lightLevelBottom = blockDataNeighbor
                                         .naturalLightBank;
                                 }
                             }
