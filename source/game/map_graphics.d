@@ -367,16 +367,25 @@ private:
                             // Front.
                             if (z - 1 < 0) {
                                 if (neighborFront) {
-                                    if (neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID == 0) {
+                                    neighborDefinition = ultraFastAccess +
+                                        neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID;
+
+                                    if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.front = true;
                                         faceGen.lightLevelFront = neighborFront.data[x][CHUNK_WIDTH - 1][y]
                                             .naturalLightBank;
                                     }
                                 }
-                            } else if (thisChunk.data[x][z - 1][y].blockID == 0) {
-                                faceGen.front = true;
-                                faceGen.lightLevelFront = thisChunk.data[x][z - 1][y]
-                                    .naturalLightBank;
+                            } else {
+
+                                neighborDefinition = ultraFastAccess +
+                                    thisChunk.data[x][z - 1][y].blockID;
+
+                                if (neighborDefinition.drawtype != Drawtype.Normal) {
+                                    faceGen.front = true;
+                                    faceGen.lightLevelFront = thisChunk.data[x][z - 1][y]
+                                        .naturalLightBank;
+                                }
                             }
 
                             // Back.
