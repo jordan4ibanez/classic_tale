@@ -364,8 +364,6 @@ private:
                         continue;
                     case Drawtype.Normal: {
 
-                            faceTextures.update(thisDefinition.textureIDs.ptr);
-
                             faceGen.front = false;
                             faceGen.back = false;
                             faceGen.left = false;
@@ -522,6 +520,12 @@ private:
                                         .naturalLightBank;
                                 }
                             }
+
+                            if (faceGen.nothing()) {
+                                continue;
+                            }
+
+                            faceTextures.update(thisDefinition.textureIDs.ptr);
 
                             pos.x = x;
                             pos.y = y;
