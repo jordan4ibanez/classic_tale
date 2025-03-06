@@ -85,6 +85,10 @@ struct FaceGeneration {
         this.top = top;
         this.bottom = bottom;
     }
+
+    bool nothing() {
+        return !front && !back && !left && !right && !top && !bottom;
+    }
 }
 
 alias AllFaces = Alias!(FaceGeneration(true));
