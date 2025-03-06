@@ -27,8 +27,12 @@ private:
     // They cannot have animation data. (Too complicated for now)
     Model[ulong] dynamicDatabase;
 
-    // ulong[string] stringToIDDatabase;
-    AnimationContainer[ulong] animationDatabase;
+    // Static models exist from the start to the end of the game's lifetime.
+    // They can have animation data.
+    Model* staticDatabase;
+    ulong countStaticDatabase = 0;
+    // Todo: synchronize this.
+    // AnimationContainer[ulong] animationDatabase;
     Texture2D textureAtlas;
 
 public: //* BEGIN PUBLIC API.
