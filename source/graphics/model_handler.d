@@ -1,6 +1,6 @@
 module graphics.model_handler;
 
-public import raylib : Model;
+public import raylib : Mesh, Model;
 import core.memory;
 import graphics.shader_handler;
 import graphics.texture_handler;
