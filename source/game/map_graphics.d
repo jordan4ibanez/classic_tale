@@ -429,23 +429,27 @@ private:
                             if (x - 1 < 0) {
                                 if (neighborLeft) {
 
+                                    blockDataNeighbor = &neighborLeft.data[CHUNK_WIDTH - 1][z][y];
+
                                     neighborDefinition = ultraFastAccess +
-                                        neighborLeft.data[CHUNK_WIDTH - 1][z][y].blockID;
+                                        blockDataNeighbor.blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.left = true;
-                                        faceGen.lightLevelLeft = neighborLeft.data[CHUNK_WIDTH - 1][z][y]
+                                        faceGen.lightLevelLeft = blockDataNeighbor
                                             .naturalLightBank;
                                     }
                                 }
                             } else {
 
+                                blockDataNeighbor = &thisChunk.data[x - 1][z][y];
+
                                 neighborDefinition = ultraFastAccess +
-                                    thisChunk.data[x - 1][z][y].blockID;
+                                    blockDataNeighbor.blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.left = true;
-                                    faceGen.lightLevelLeft = thisChunk.data[x - 1][z][y]
+                                    faceGen.lightLevelLeft = blockDataNeighbor
                                         .naturalLightBank;
                                 }
                             }
