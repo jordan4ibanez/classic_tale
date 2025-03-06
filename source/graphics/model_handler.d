@@ -41,7 +41,7 @@ public: //* BEGIN PUBLIC API.
         return (id in dynamicDatabase) !is null;
     }
 
-    void draw(ulong modelID, Vec3d position, Vec3d rotation = Vec3d(0, 0, 0),
+    void drawDynamic(ulong modelID, Vec3d position, Vec3d rotation = Vec3d(0, 0, 0),
         float scale = 1.0, Color color = Colors.WHITE) {
 
         Model* thisModel = modelID in dynamicDatabase;
