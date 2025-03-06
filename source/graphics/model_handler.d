@@ -262,6 +262,11 @@ public: //* BEGIN PUBLIC API.
     }
 
     void destroyDynamic(ulong modelID) {
+        // 0 is reserved for null;
+        if (modelID == 0) {
+            return;
+        }
+
         Model* thisModel = modelID in dynamicDatabase;
 
         if (thisModel is null) {
