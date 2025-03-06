@@ -547,9 +547,7 @@ private:
 
         writeln("took: ", sw.peek().total!"usecs", "us");
 
-        if (ModelHandler.modelExists(thisChunk.modelKey)) {
-            ModelHandler.destroyDynamic(thisChunk.modelKey);
-        }
+        ModelHandler.destroyDynamic(thisChunk.modelKey);
 
         // writeln("does not exist, creating");
         return ModelHandler.newModelFromMeshPointers(vertices, allocation * 18, textureCoordinates,
