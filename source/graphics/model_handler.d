@@ -23,6 +23,8 @@ static final const class ModelHandler {
 static:
 private:
 
+    // Dynamic models can be created and destroyed freely.
+    // They cannot have animation data. (Too complicated for now)
     Model[ulong] dynamicDatabase;
 
     // ulong[string] stringToIDDatabase;
