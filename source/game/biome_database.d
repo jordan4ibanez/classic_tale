@@ -91,9 +91,9 @@ public: //* BEGIN PUBLIC API.
                     "Biome " ~ thisBiome.name ~ " stone layer " ~ thisBiome.stoneLayer ~ " is not a registered block");
             }
 
-            thisBiome.grassLayerID = grass.id;
-            thisBiome.dirtLayerID = dirt.id;
-            thisBiome.stoneLayerID = stone.id;
+            thisBiome.grassLayerID = grass.blockID;
+            thisBiome.dirtLayerID = dirt.blockID;
+            thisBiome.stoneLayerID = stone.blockID;
 
             // todo: do the match thing below when mongoDB is added in.
             thisBiome.id = nextID();
