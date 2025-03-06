@@ -534,12 +534,118 @@ private:
                             makeCube(vertIndex, textIndex, colorIndex, vertices, textureCoordinates, normals,
                                 colors, pos, min, max, &faceGen, &faceTextures);
 
-                            // neighborDefinition = ultraFastAccess + ;
                         }
                         break;
                     case Drawtype.Model:
-                    }
 
+                        const(Model*) thisModel = (modelDatabaseStatic + thisDefinition.modelIndex);
+
+                        pos.x = x;
+                        pos.y = y;
+                        pos.z = z;
+
+                        foreach (thisIndex; 0 .. thisModel.meshCount) {
+
+                            const(Mesh*) thisMesh = (thisModel.meshes + thisIndex);
+
+                            const ulong vertexCount = thisMesh.vertexCount;
+                            const ulong vertexAmount = vertexCount * 3;
+
+                            const ulong colorAmount = vertexCount * 4;
+                            const ulong currentColorIndex = colorIndex;
+
+                            const ulong texAmount = vertexCount * 2;
+                            const ulong currentTexIndex = textIndex;
+
+                            const ulong currentVertIndex = vertIndex;
+                            writeln("HIT ======");
+                            writeln("at: ", currentVertIndex);
+
+                            ulong vertPosInMaster = 0;
+                            ulong texPosInMaster = 0;
+                            ulong colorPosInMaster = 0;
+
+                            foreach (indicesIndex; 0 .. thisMesh.vertexCount) {
+                                const ulong i = *(thisMesh.indices + indicesIndex);
+
+                                // Positions.
+                                const ulong vertPos = i * 3;
+
+                                *(vertices + ((currentVertIndex) + vertPosInMaster + 0)) = *(
+                                    thisMesh.vertices + vertPos + 0) + pos.x + 0.5;
+
+                                *(vertices + ((currentVertIndex) + vertPosInMaster + 1)) = *(
+                                    thisMesh.vertices + vertPos + 1) + pos.y;
+
+                                *(vertices + ((currentVertIndex) + vertPosInMaster + 2)) = *(
+                                    thisMesh.vertices + vertPos + 2) + pos.z + 0.5;
+
+                                vertPosInMaster += 3;
+
+                                // Texture coordinates.
+                                const ulong texPos = i * 2;
+
+                                *(textureCoordinates + ((currentTexIndex) + texPosInMaster + 0)) = *(
+                                    thisMesh.texcoords + texPos + 0);
+                                *(textureCoordinates + ((currentTexIndex) + texPosInMaster + 1)) = *(
+                                    thisMesh.texcoords + texPos + 1);
+                                *(textureCoordinates + ((currentTexIndex) + texPosInMaster + 2)) = *(
+                                    thisMesh.texcoords + texPos + 2);
+
+                                texPosInMaster += 2;
+
+                                // Colors.
+                                const ulong colorPos = i * 4;
+
+                                *(colors + ((currentColorIndex) + colorPosInMaster + 0)) = 255;
+                                *(colors + ((currentColorIndex) + colorPosInMaster + 1)) = 255;
+                                *(colors + ((currentColorIndex) + colorPosInMaster + 2)) = 255;
+                                *(colors + ((currentColorIndex) + colorPosInMaster + 3)) = 255;
+
+                                colorPosInMaster += 4;
+
+                            }
+
+                            // foreach (i; 0 .. vertexCount) {
+                            //     writeln(*(thisMesh.vertices + i));
+                            // }
+
+                            // // Normals.
+                            // foreach (i; 0 .. vertexAmount) {
+                            //     *(normals + ((currentVertIndex) + i)) = *(thisMesh.normals + i);
+                            // }
+
+                            // // Colors.
+                            // foreach (i; 0 .. colorAmount) {
+                            //     *(colors + ((currentColorIndex) + i)) = 255;
+                            //     // final switch (i % 4) {
+                            //     //     // R.
+                            //     // case 0: {
+                            //     //         *(colors + ((currentColorIndex) + i)) = 255;
+                            //     //     }
+                            //     //     break;
+                            //     //     // G.
+                            //     // case 1: {
+                            //     //         *(colors + ((currentColorIndex) + i)) = 255;
+                            //     //     }
+                            //     //     break;
+                            //     //     // B.
+                            //     // case 2: {
+                            //     //         *(colors + ((currentColorIndex) + i)) = 255;
+                            //     //     }
+                            //     //     break;
+                            //     //     // A.
+                            //     // case 3: {
+                            //     //         *(colors + ((currentColorIndex) + i)) = 255;
+                            //     //     }
+                            //     // }
+                            // }
+
+                            vertIndex += vertexAmount;
+                            textIndex += texAmount;
+                            colorIndex += colorAmount;
+                        }
+                    }
                 }
             }
         }
