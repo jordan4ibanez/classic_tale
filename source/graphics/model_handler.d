@@ -134,13 +134,13 @@ public: //* BEGIN PUBLIC API.
         return thisID;
     }
 
-    ulong getIDFromName(string modelName) {
-        const ulong* thisModelID = modelName in stringToIDDatabase;
-        if (thisModelID is null) {
-            throw new Error("Tried to get ID of non-existent model " ~ modelName);
-        }
-        return *thisModelID;
-    }
+    // ulong getIDFromName(string modelName) {
+    //     const ulong* thisModelID = modelName in stringToIDDatabase;
+    //     if (thisModelID is null) {
+    //         throw new Error("Tried to get ID of non-existent model " ~ modelName);
+    //     }
+    //     return *thisModelID;
+    // }
 
     // ulong loadModelFromFile(string location, string[] textures...) {
     //     Model thisModel = Model();
@@ -274,7 +274,7 @@ public: //* BEGIN PUBLIC API.
                 "[ModelManager]: Tried to destroy non-existent model. " ~ to!string(modelID));
         }
 
-        destroyModel(modelID, thisModel);
+        destroyModelDynamic(thisModel);
 
         dynamicDatabase.remove(modelID);
         // isCustomDatabase.remove(modelID);
@@ -282,8 +282,8 @@ public: //* BEGIN PUBLIC API.
     }
 
     void terminate() {
-        foreach (modelName, thisModel; dynamicDatabase) {
-            destroyModel(modelName, &thisModel);
+        foreach (thisModel; dynamicDatabase) {
+            destroyModelDynamic(&thisModel);
         }
         dynamicDatabase.clear();
         // isCustomDatabase.clear();
@@ -350,7 +350,7 @@ public: //* BEGIN PUBLIC API.
 
 private: //* BEGIN INTERNAL API.
 
-    void destroyModel(ulong modelID, Model* thisModel) {
+    void destroyModelDynamic(Model* thisModel) {
         // If we were using the D runtime to make this model, we'll customize
         // the way we free the items. This makes the GC auto clear.
         // if (isCustomDatabase[modelID]) {
