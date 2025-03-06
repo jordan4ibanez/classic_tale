@@ -142,6 +142,11 @@ public: //* BEGIN PUBLIC API.
         return thisID;
     }
 
+    
+    void lockStatic() {
+        this.lock = true;
+    }
+
     /// Gives you the index into the static model pointer array.
     ulong getStaticIndexFromName(string modelName) {
         const ulong* thisModelIndex = modelName in modelNameToIndex;
@@ -152,6 +157,8 @@ public: //* BEGIN PUBLIC API.
     }
 
     ulong loadModelFromFile(string location, string[] textures...) {
+        // The lock is not here to stop you from being creative.
+        // The lock is here to stop the engine from blowing up. :P
         if (lock) {
             throw new Error("Do not create models during runtime");
         }
