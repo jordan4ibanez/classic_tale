@@ -44,8 +44,8 @@ private:
     // Faster access based on ID or name.
     BlockDefinition[string] nameDatabase;
     BlockDefinition[int] idDatabase;
-    // If you use this in your mods I'm not helping you.
-    // This is only to be used for the map model generator.
+    /// If you use this in your mods I'm not helping you with segfaults.
+    // This is only intended to be used for the map model generator.
     BlockDefinition* ultraFastAccess;
 
     int currentID = 2;
