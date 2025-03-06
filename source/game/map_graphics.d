@@ -210,8 +210,6 @@ private:
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         allocation++;
-                                        // vertexAllocation += 18;
-                                        // textureCoordAllocation += 12;
                                     }
                                 }
                             } else {
@@ -222,8 +220,6 @@ private:
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation++;
                                 }
-                                // vertexAllocation += 18;
-                                // textureCoordAllocation += 12;
                             }
 
                             // Back.
@@ -234,8 +230,6 @@ private:
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         allocation++;
-                                        // vertexAllocation += 18;
-                                        // textureCoordAllocation += 12;
                                     }
                                 }
                             } else {
@@ -245,8 +239,6 @@ private:
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation++;
                                 }
-                                // vertexAllocation += 18;
-                                // textureCoordAllocation += 12;
                             }
 
                             // Left.
@@ -257,8 +249,6 @@ private:
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         allocation++;
-                                        // vertexAllocation += 18;
-                                        // textureCoordAllocation += 12;
                                     }
                                 }
                             } else {
@@ -268,8 +258,6 @@ private:
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation++;
                                 }
-                                // vertexAllocation += 18;
-                                // textureCoordAllocation += 12;
                             }
 
                             // Right.
@@ -280,8 +268,6 @@ private:
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         allocation++;
-                                        // vertexAllocation += 18;
-                                        // textureCoordAllocation += 12;
                                     }
                                 }
                             } else {
@@ -291,16 +277,12 @@ private:
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation++;
                                 }
-                                // vertexAllocation += 18;
-                                // textureCoordAllocation += 12;
                             }
 
                             // Top.
                             if (y + 1 >= CHUNK_HEIGHT) {
                                 // Draw it, that's the top of the map.
                                 allocation++;
-                                // vertexAllocation += 18;
-                                // textureCoordAllocation += 12;
                             } else {
                                 neighborDefinition = ultraFastAccess +
                                     thisChunk.data[x][z][y + 1].blockID;
@@ -308,8 +290,6 @@ private:
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation++;
                                 }
-                                // vertexAllocation += 18;
-                                // textureCoordAllocation += 12;
                             }
 
                             // Bottom.
@@ -323,8 +303,6 @@ private:
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation++;
                                 }
-                                // vertexAllocation += 18;
-                                // textureCoordAllocation += 12;
                             }
                         }
                         break;
