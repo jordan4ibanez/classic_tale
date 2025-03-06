@@ -118,7 +118,8 @@ public: //* BEGIN PUBLIC API.
             }
 
             if (thisDefinition.drawtype == Drawtype.Model) {
-                thisDefinition.modelIndex = ModelHandler.getStaticIndexFromName(thisDefinition.model);
+                thisDefinition.modelIndex = ModelHandler.getStaticIndexFromName(
+                    thisDefinition.model);
             } else {
                 foreach (index, textureName; thisDefinition.textures) {
                     thisDefinition.textureIDs[index] = TextureHandler.getIDFromName(textureName);
@@ -163,6 +164,7 @@ private: //* BEGIN INTERNAL API.
         air.name = "air";
         air.modName = "engine";
         air.drawtype = Drawtype.Air;
+        air.clear = true;
         // Air doesn't get any textures, it's never rendered.
         // air.textures = "air.png";
 
