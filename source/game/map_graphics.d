@@ -187,6 +187,10 @@ private:
                     if (thisData.blockID == 0) {
                         continue;
                     }
+
+                    const BlockDefinition* thisDefinition = BlockDatabase.getBlockByID(
+                        thisData.blockID);
+
                     // Todo: this needs a visual check.
 
                     // Front.
