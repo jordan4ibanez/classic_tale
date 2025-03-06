@@ -178,7 +178,7 @@ private:
         const(Chunk*) neighborRight = Map.getChunkPointer(chunkKey.x + 1, chunkKey.y);
 
         // Ultra fast accessor.
-        const(BlockDefinition*) ultraFastAccess = BlockDatabase.getUltraFastAccess();
+        const(BlockDefinition*) ultraFastBlockDatabaseAccess = BlockDatabase.getUltraFastAccess();
 
         const(BlockData)* thisData;
         const(BlockDefinition)* neighborDefinition;
@@ -195,7 +195,7 @@ private:
                         continue;
                     }
 
-                    thisDefinition = neighborDefinition = ultraFastAccess +
+                    thisDefinition = neighborDefinition = ultraFastBlockDatabaseAccess +
                         thisData.blockID;
 
                     final switch (thisDefinition.drawtype) {
@@ -205,7 +205,7 @@ private:
                             // Front.
                             if (z - 1 < 0) {
                                 if (neighborFront) {
-                                    neighborDefinition = ultraFastAccess +
+                                    neighborDefinition = ultraFastBlockDatabaseAccess +
                                         neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -214,7 +214,7 @@ private:
                                 }
                             } else {
 
-                                neighborDefinition = ultraFastAccess +
+                                neighborDefinition = ultraFastBlockDatabaseAccess +
                                     thisChunk.data[x][z - 1][y].blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -225,7 +225,7 @@ private:
                             // Back.
                             if (z + 1 >= CHUNK_WIDTH) {
                                 if (neighborBack) {
-                                    neighborDefinition = ultraFastAccess +
+                                    neighborDefinition = ultraFastBlockDatabaseAccess +
                                         neighborBack.data[x][0][y].blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -233,7 +233,7 @@ private:
                                     }
                                 }
                             } else {
-                                neighborDefinition = ultraFastAccess +
+                                neighborDefinition = ultraFastBlockDatabaseAccess +
                                     thisChunk.data[x][z + 1][y].blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -244,7 +244,7 @@ private:
                             // Left.
                             if (x - 1 < 0) {
                                 if (neighborLeft) {
-                                    neighborDefinition = ultraFastAccess +
+                                    neighborDefinition = ultraFastBlockDatabaseAccess +
                                         neighborLeft.data[CHUNK_WIDTH - 1][z][y].blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -252,7 +252,7 @@ private:
                                     }
                                 }
                             } else {
-                                neighborDefinition = ultraFastAccess +
+                                neighborDefinition = ultraFastBlockDatabaseAccess +
                                     thisChunk.data[x - 1][z][y].blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -263,7 +263,7 @@ private:
                             // Right.
                             if (x + 1 >= CHUNK_WIDTH) {
                                 if (neighborRight) {
-                                    neighborDefinition = ultraFastAccess +
+                                    neighborDefinition = ultraFastBlockDatabaseAccess +
                                         neighborRight.data[0][z][y].blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -271,7 +271,7 @@ private:
                                     }
                                 }
                             } else {
-                                neighborDefinition = ultraFastAccess +
+                                neighborDefinition = ultraFastBlockDatabaseAccess +
                                     thisChunk.data[x + 1][z][y].blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -284,7 +284,7 @@ private:
                                 // Draw it, that's the top of the map.
                                 allocation++;
                             } else {
-                                neighborDefinition = ultraFastAccess +
+                                neighborDefinition = ultraFastBlockDatabaseAccess +
                                     thisChunk.data[x][z][y + 1].blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -297,7 +297,7 @@ private:
                                 // Do not draw the bottom of the world.
                                 // The player should never fall out the bottom of the world.
                             } else {
-                                neighborDefinition = ultraFastAccess +
+                                neighborDefinition = ultraFastBlockDatabaseAccess +
                                     thisChunk.data[x][z][y - 1].blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -349,7 +349,7 @@ private:
                         continue;
                     }
 
-                    thisDefinition = ultraFastAccess +
+                    thisDefinition = ultraFastBlockDatabaseAccess +
                         thisData.blockID;
 
                     final switch (thisDefinition.drawtype) {
@@ -373,7 +373,7 @@ private:
                                 if (neighborFront) {
                                     blockDataNeighbor = &neighborFront.data[x][CHUNK_WIDTH - 1][y];
 
-                                    neighborDefinition = ultraFastAccess +
+                                    neighborDefinition = ultraFastBlockDatabaseAccess +
                                         blockDataNeighbor.blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -386,7 +386,7 @@ private:
 
                                 blockDataNeighbor = &thisChunk.data[x][z - 1][y];
 
-                                neighborDefinition = ultraFastAccess +
+                                neighborDefinition = ultraFastBlockDatabaseAccess +
                                     blockDataNeighbor.blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -402,7 +402,7 @@ private:
 
                                     blockDataNeighbor = &neighborBack.data[x][0][y];
 
-                                    neighborDefinition = ultraFastAccess +
+                                    neighborDefinition = ultraFastBlockDatabaseAccess +
                                         blockDataNeighbor.blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -415,7 +415,7 @@ private:
 
                                 blockDataNeighbor = &thisChunk.data[x][z + 1][y];
 
-                                neighborDefinition = ultraFastAccess +
+                                neighborDefinition = ultraFastBlockDatabaseAccess +
                                     blockDataNeighbor.blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -431,7 +431,7 @@ private:
 
                                     blockDataNeighbor = &neighborLeft.data[CHUNK_WIDTH - 1][z][y];
 
-                                    neighborDefinition = ultraFastAccess +
+                                    neighborDefinition = ultraFastBlockDatabaseAccess +
                                         blockDataNeighbor.blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -444,7 +444,7 @@ private:
 
                                 blockDataNeighbor = &thisChunk.data[x - 1][z][y];
 
-                                neighborDefinition = ultraFastAccess +
+                                neighborDefinition = ultraFastBlockDatabaseAccess +
                                     blockDataNeighbor.blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -459,7 +459,7 @@ private:
                                 if (neighborRight) {
                                     blockDataNeighbor = &neighborRight.data[0][z][y];
 
-                                    neighborDefinition = ultraFastAccess +
+                                    neighborDefinition = ultraFastBlockDatabaseAccess +
                                         blockDataNeighbor.blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -472,7 +472,7 @@ private:
 
                                 blockDataNeighbor = &thisChunk.data[x + 1][z][y];
 
-                                neighborDefinition = ultraFastAccess +
+                                neighborDefinition = ultraFastBlockDatabaseAccess +
                                     blockDataNeighbor.blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -488,7 +488,7 @@ private:
                                 faceGen.top = true;
                             } else {
                                 blockDataNeighbor = &thisChunk.data[x][z][y + 1];
-                                neighborDefinition = ultraFastAccess +
+                                neighborDefinition = ultraFastBlockDatabaseAccess +
                                     blockDataNeighbor.blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -506,7 +506,7 @@ private:
 
                                 blockDataNeighbor = &thisChunk.data[x][z][y - 1];
 
-                                neighborDefinition = ultraFastAccess +
+                                neighborDefinition = ultraFastBlockDatabaseAccess +
                                     blockDataNeighbor.blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
