@@ -467,10 +467,15 @@ private:
                             if (y + 1 >= CHUNK_HEIGHT) {
                                 // Draw it, that's the top of the map.
                                 faceGen.top = true;
-                            } else if (thisChunk.data[x][z][y + 1].blockID == 0) {
-                                faceGen.top = true;
-                                faceGen.lightLevelTop = thisChunk.data[x][z][y + 1]
-                                    .naturalLightBank;
+                            } else {
+                                neighborDefinition = ultraFastAccess +
+                                    thisChunk.data[x][z][y + 1].blockID;
+
+                                if (neighborDefinition.drawtype != Drawtype.Normal) {
+                                    faceGen.top = true;
+                                    faceGen.lightLevelTop = thisChunk.data[x][z][y + 1]
+                                        .naturalLightBank;
+                                }
                             }
 
                             // Bottom.
