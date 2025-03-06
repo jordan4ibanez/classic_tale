@@ -141,7 +141,7 @@ public: //* BEGIN PUBLIC API.
     }
 
     /// If you use this in your mods I'm not helping you with segfaults.
-    // This is only intended to be used for the map model generator.
+    /// This is only intended to be used for the map model generator.
     const(BlockDefinition*) getUltraFastAccess() {
         return ultraFastAccess;
     }
