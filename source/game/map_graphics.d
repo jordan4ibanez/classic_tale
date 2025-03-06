@@ -94,6 +94,49 @@ struct FaceGeneration {
 alias AllFaces = Alias!(FaceGeneration(true));
 alias NoFaces = Alias!(FaceGeneration(false));
 
+// bool debugLock = false;
+// Vec3d[] debugData;
+
+// void debugDraw() {
+//     if (debugData.length == 0)
+//         return;
+//     import raylib;
+
+//     // writeln("drawing");
+
+//     DrawSphere(debugData[0].toRaylib(), 10.0, Colors.LIME);
+
+//     // writeln(debugData[0]);
+
+//     foreach (i; 0 .. (debugData.length) - 1) {
+//         DrawLine3D(debugData[i].toRaylib(), debugData[i + 1].toRaylib(), Colors.BLACK);
+//     }
+
+//     bool yellow = false;
+
+//     foreach (blef; 0 .. (debugData.length) / 3) {
+//         const i = blef * 3;
+
+//         DrawTriangle3D(
+//             debugData[i + 0].toRaylib,
+//             debugData[i + 1].toRaylib,
+//             debugData[i + 2].toRaylib,
+//             yellow ? Color(255, 255, 0, 255) : Color(255, 0, 0, 255)
+//         );
+
+//         yellow = !yellow;
+
+//         // DrawLine3D(debugData[i].toRaylib(), debugData[i + 1].toRaylib(), Colors.BLACK);
+//     }
+
+//     // DrawTriangle3D()
+// }
+
+// void resetDebug() {
+//     debugData = [];
+//     debugLock = false;
+// }
+
 struct FaceTextures {
     int front = -1;
     int back = -1;
