@@ -399,23 +399,28 @@ private:
                             // Back.
                             if (z + 1 >= CHUNK_WIDTH) {
                                 if (neighborBack) {
+
+                                    blockDataNeighbor = &neighborBack.data[x][0][y];
+
                                     neighborDefinition = ultraFastAccess +
-                                        neighborBack.data[x][0][y].blockID;
+                                        blockDataNeighbor.blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.back = true;
-                                        faceGen.lightLevelBack = neighborBack
-                                            .data[x][0][y].naturalLightBank;
+                                        faceGen.lightLevelBack = blockDataNeighbor
+                                            .naturalLightBank;
                                     }
                                 }
                             } else {
 
+                                blockDataNeighbor = &thisChunk.data[x][z + 1][y];
+
                                 neighborDefinition = ultraFastAccess +
-                                    thisChunk.data[x][z + 1][y].blockID;
+                                    blockDataNeighbor.blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.back = true;
-                                    faceGen.lightLevelBack = thisChunk.data[x][z + 1][y]
+                                    faceGen.lightLevelBack = blockDataNeighbor
                                         .naturalLightBank;
                                 }
                             }
