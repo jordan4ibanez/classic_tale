@@ -513,7 +513,8 @@ public: //* BEGIN PUBLIC API.
             }
         }
 
-        // Search for air. Binary. Lightsource or darkness.
+        const(BlockDefinition*) ultraFastBlockDatabaseAccess = BlockDatabase.getUltraFastAccess();
+
         // Search for light propogation blocks. Binary. Lightsource or darkness.
         // This is shifting the whole world position into the box position.
         // Accumulating the light data so that the world does not need the be checked again.
