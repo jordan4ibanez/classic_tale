@@ -34,6 +34,7 @@ private:
     Model* staticDatabase;
     ulong countStaticDatabase = 0;
     ulong[string] modelNameToIndex;
+    bool lock = false;
     // Todo: synchronize this.
     // AnimationContainer[ulong] animationDatabase;
     Texture2D textureAtlas;
@@ -151,6 +152,9 @@ public: //* BEGIN PUBLIC API.
     }
 
     ulong loadModelFromFile(string location, string[] textures...) {
+        if (lock) {
+            throw new Error("Do not create models during runtime");
+        }
         Model thisModel = Model();
 
         // Extract the file name from the location.
