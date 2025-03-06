@@ -417,16 +417,26 @@ private:
                             // Left.
                             if (x - 1 < 0) {
                                 if (neighborLeft) {
-                                    if (neighborLeft.data[CHUNK_WIDTH - 1][z][y].blockID == 0) {
+
+                                    neighborDefinition = ultraFastAccess +
+                                        neighborLeft.data[CHUNK_WIDTH - 1][z][y].blockID;
+
+                                    if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.left = true;
                                         faceGen.lightLevelLeft = neighborLeft.data[CHUNK_WIDTH - 1][z][y]
                                             .naturalLightBank;
                                     }
                                 }
-                            } else if (thisChunk.data[x - 1][z][y].blockID == 0) {
-                                faceGen.left = true;
-                                faceGen.lightLevelLeft = thisChunk.data[x - 1][z][y]
-                                    .naturalLightBank;
+                            } else {
+
+                                neighborDefinition = ultraFastAccess +
+                                    thisChunk.data[x - 1][z][y].blockID;
+
+                                if (neighborDefinition.drawtype != Drawtype.Normal) {
+                                    faceGen.left = true;
+                                    faceGen.lightLevelLeft = thisChunk.data[x - 1][z][y]
+                                        .naturalLightBank;
+                                }
                             }
 
                             // Right.
