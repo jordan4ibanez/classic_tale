@@ -23,10 +23,11 @@ static final const class ModelHandler {
 static:
 private:
 
-    ulong[string] stringToIDDatabase;
+    Model[ulong] dynamicDatabase;
 
-    Model[ulong] numberDatabase;
-    bool[ulong] isCustomDatabase;
+    // ulong[string] stringToIDDatabase;
+    // bool[ulong] isCustomDatabase;
+
     AnimationContainer[ulong] animationDatabase;
     Texture2D textureAtlas;
 
@@ -37,13 +38,13 @@ public: //* BEGIN PUBLIC API.
     }
 
     bool modelExists(ulong id) {
-        return (id in numberDatabase) !is null;
+        return (id in dynamicDatabase) !is null;
     }
 
     void draw(ulong modelID, Vec3d position, Vec3d rotation = Vec3d(0, 0, 0),
         float scale = 1.0, Color color = Colors.WHITE) {
 
-        Model* thisModel = modelID in numberDatabase;
+        Model* thisModel = modelID in dynamicDatabase;
 
         if (thisModel is null) {
             throw new Error(
@@ -62,7 +63,7 @@ public: //* BEGIN PUBLIC API.
 
     void drawIgnoreMissing(ulong modelID, Vec3d position, Vec3d rotation = Vec3d(0, 0, 0),
         float scale = 1.0, Color color = Colors.WHITE) {
-        Model* thisModel = modelID in numberDatabase;
+        Model* thisModel = modelID in dynamicDatabase;
 
         if (thisModel is null) {
             // writeln("missing " ~ modelName ~ ", aborting");
@@ -78,51 +79,6 @@ public: //* BEGIN PUBLIC API.
         DrawModelEx(*thisModel, position.toRaylib(), axisRotation.toRaylib(), RAD2DEG * angle,
             Vector3(scale, scale, scale), color);
     }
-
-    /*
-    Immediate wipe will instantly replace the mesh data with null pointers so the
-    GC can work it's magic.
-    */
-    // void newModelFromMesh(float[] vertices, float[] textureCoordinates, bool immediateWipe = true) {
-
-    //     const ulong thisID = UUID.get();
-
-    //     // if (modelName in numberDatabase) {
-    //     //     throw new Error(
-    //     //         "[ModelManager]: Tried to overwrite mesh [" ~ modelName ~ "]. Delete it first.");
-    //     // }
-
-    //     Mesh thisMesh = Mesh();
-
-    //     thisMesh.vertexCount = cast(int) vertices.length / 3;
-    //     thisMesh.triangleCount = thisMesh.vertexCount / 3;
-    //     thisMesh.vertices = vertices.ptr;
-    //     thisMesh.texcoords = textureCoordinates.ptr;
-
-    //     UploadMesh(&thisMesh, false);
-
-    //     Model thisModel = Model();
-    //     thisModel = LoadModelFromMesh(thisMesh);
-
-    //     if (!IsModelValid(thisModel)) {
-    //         throw new Error("[ModelHandler]: Invalid model loaded from mesh. " ~ to!string(thisID));
-    //     }
-
-    //     numberDatabase[thisID] = thisModel;
-    //     isCustomDatabase[thisID] = true;
-
-    //     foreach (index; 0 .. thisModel.materialCount) {
-    //         thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = textureAtlas;
-    //     }
-
-    //     if (immediateWipe) {
-    //         // This looks a bit silly, because it is. I just like to double check. :)
-    //         thisMesh.vertices = null;
-    //         thisMesh.texcoords = null;
-    //         thisModel.meshes[0].vertices = null;
-    //         thisModel.meshes[0].texcoords = null;
-    //     }
-    // }
 
     /*
     Immediate wipe will instantly replace the mesh data with null pointers so the
@@ -157,8 +113,8 @@ public: //* BEGIN PUBLIC API.
             throw new Error("[ModelHandler]: Invalid model loaded from mesh. " ~ to!string(thisID));
         }
 
-        numberDatabase[thisID] = thisModel;
-        isCustomDatabase[thisID] = true;
+        dynamicDatabase[thisID] = thisModel;
+        // isCustomDatabase[thisID] = true;
 
         foreach (index; 0 .. thisModel.materialCount) {
             thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = textureAtlas;
@@ -186,100 +142,100 @@ public: //* BEGIN PUBLIC API.
         return *thisModelID;
     }
 
-    ulong loadModelFromFile(string location, string[] textures...) {
-        Model thisModel = Model();
+    // ulong loadModelFromFile(string location, string[] textures...) {
+    //     Model thisModel = Model();
 
-        // Extract the file name from the location.
-        string fileName = () {
-            string[] items = location.split("/");
-            int len = cast(int) items.length;
-            if (len <= 1) {
-                throw new Error("[ModelManager]: Model must not be in root directory.");
-            }
-            string outputFileName = items[len - 1];
-            return outputFileName;
-        }();
+    //     // Extract the file name from the location.
+    //     string fileName = () {
+    //         string[] items = location.split("/");
+    //         int len = cast(int) items.length;
+    //         if (len <= 1) {
+    //             throw new Error("[ModelManager]: Model must not be in root directory.");
+    //         }
+    //         string outputFileName = items[len - 1];
+    //         return outputFileName;
+    //     }();
 
-        if (fileName in stringToIDDatabase) {
-            throw new Error("Tried to override existing model " ~ fileName);
-        }
+    //     if (fileName in stringToIDDatabase) {
+    //         throw new Error("Tried to override existing model " ~ fileName);
+    //     }
 
-        writeln("Loading model: [", location, "] as [", fileName, "]");
+    //     writeln("Loading model: [", location, "] as [", fileName, "]");
 
-        thisModel = LoadModel(toStringz(location));
+    //     thisModel = LoadModel(toStringz(location));
 
-        // Something went horribly wrong.
-        if (!IsModelValid(thisModel)) {
-            throw new Error("[ModelHandler]: Invalid model loaded from file. " ~ location);
-        }
+    //     // Something went horribly wrong.
+    //     if (!IsModelValid(thisModel)) {
+    //         throw new Error("[ModelHandler]: Invalid model loaded from file. " ~ location);
+    //     }
 
-        // Enforce all textures are loaded.
-        if (thisModel.meshCount != textures.length) {
-            throw new Error("Attempted to load [" ~ location ~ "] with mesh count [" ~ to!string(
-                    thisModel.meshCount) ~ "] with [" ~ to!string(
-                    textures.length) ~ "] textures. Not please add or remove textures.");
-        }
+    //     // Enforce all textures are loaded.
+    //     if (thisModel.meshCount != textures.length) {
+    //         throw new Error("Attempted to load [" ~ location ~ "] with mesh count [" ~ to!string(
+    //                 thisModel.meshCount) ~ "] with [" ~ to!string(
+    //                 textures.length) ~ "] textures. Not please add or remove textures.");
+    //     }
 
-        // Map to texture atlas.
-        foreach (currentMeshIndex; 0 .. thisModel.meshCount) {
+    //     // Map to texture atlas.
+    //     foreach (currentMeshIndex; 0 .. thisModel.meshCount) {
 
-            const string thisTexture = textures[currentMeshIndex];
+    //         const string thisTexture = textures[currentMeshIndex];
 
-            const(Rect*) textureRectangle = TextureHandler.getRect(thisTexture);
+    //         const(Rect*) textureRectangle = TextureHandler.getRect(thisTexture);
 
-            Mesh* thisMesh = &thisModel.meshes[currentMeshIndex];
+    //         Mesh* thisMesh = &thisModel.meshes[currentMeshIndex];
 
-            const ulong textureCount = thisMesh.vertexCount;
+    //         const ulong textureCount = thisMesh.vertexCount;
 
-            foreach (__indexInto; 0 .. textureCount) {
-                // X Y
-                const ulong i = __indexInto * 2;
+    //         foreach (__indexInto; 0 .. textureCount) {
+    //             // X Y
+    //             const ulong i = __indexInto * 2;
 
-                const double oldX = thisMesh.texcoords[i];
-                const double oldY = thisMesh.texcoords[i + 1];
+    //             const double oldX = thisMesh.texcoords[i];
+    //             const double oldY = thisMesh.texcoords[i + 1];
 
-                const double xInRect = textureRectangle.width * oldX;
-                const double yInRect = textureRectangle.height * oldY;
+    //             const double xInRect = textureRectangle.width * oldX;
+    //             const double yInRect = textureRectangle.height * oldY;
 
-                const double xInAtlas = textureRectangle.x + xInRect;
-                const double yInAtlas = textureRectangle.y + yInRect;
+    //             const double xInAtlas = textureRectangle.x + xInRect;
+    //             const double yInAtlas = textureRectangle.y + yInRect;
 
-                thisMesh.texcoords[i] = xInAtlas;
-                thisMesh.texcoords[i + 1] = yInAtlas;
-            }
+    //             thisMesh.texcoords[i] = xInAtlas;
+    //             thisMesh.texcoords[i + 1] = yInAtlas;
+    //         }
 
-            UpdateMeshBuffer(*thisMesh, 1, thisMesh.texcoords, cast(int)(
-                    thisMesh.vertexCount * 2 * float.sizeof), 0);
-        }
+    //         UpdateMeshBuffer(*thisMesh, 1, thisMesh.texcoords, cast(int)(
+    //                 thisMesh.vertexCount * 2 * float.sizeof), 0);
+    //     }
 
-        // Set texture to texture atlas.
-        foreach (index; 0 .. thisModel.materialCount) {
-            thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = textureAtlas;
-        }
+    //     // Set texture to texture atlas.
+    //     foreach (index; 0 .. thisModel.materialCount) {
+    //         thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = textureAtlas;
+    //     }
 
-        // Animations.
-        int animationCount;
-        ModelAnimation* thisAnimationData = LoadModelAnimations(toStringz(location), &animationCount);
-        AnimationContainer thisModelAnimation = AnimationContainer();
-        thisModelAnimation.animationCount = animationCount;
-        thisModelAnimation.animationData = thisAnimationData;
-        thisModelAnimation.hasAnimation = thisAnimationData != null;
+    //     // Animations.
+    //     int animationCount;
+    //     ModelAnimation* thisAnimationData = LoadModelAnimations(toStringz(location), &animationCount);
+    //     AnimationContainer thisModelAnimation = AnimationContainer();
+    //     thisModelAnimation.animationCount = animationCount;
+    //     thisModelAnimation.animationData = thisAnimationData;
+    //     thisModelAnimation.hasAnimation = thisAnimationData != null;
 
-        const ulong thisID = UUID.get();
+    //     const ulong thisID = UUID.get();
 
-        // Insert into database.
-        numberDatabase[thisID] = thisModel;
-        isCustomDatabase[thisID] = false;
-        animationDatabase[thisID] = thisModelAnimation;
+    //     // Insert into database.
+    //     numberDatabase[thisID] = thisModel;
+    //     isCustomDatabase[thisID] = false;
+    //     animationDatabase[thisID] = thisModelAnimation;
 
-        stringToIDDatabase[fileName] = thisID;
+    //     stringToIDDatabase[fileName] = thisID;
 
-        return thisID;
-    }
+    //     return thisID;
+    // }
 
     void setModelShader(ulong modelID, string shaderName) {
 
-        Model* thisModel = modelID in numberDatabase;
+        Model* thisModel = modelID in dynamicDatabase;
 
         if (thisModel is null) {
             throw new Error(
@@ -294,7 +250,7 @@ public: //* BEGIN PUBLIC API.
     }
 
     Model* getModelPointer(ulong modelID) {
-        Model* thisModel = modelID in numberDatabase;
+        Model* thisModel = modelID in dynamicDatabase;
 
         if (thisModel is null) {
             throw new Error(
@@ -306,7 +262,7 @@ public: //* BEGIN PUBLIC API.
     }
 
     void destroy(ulong modelID) {
-        Model* thisModel = modelID in numberDatabase;
+        Model* thisModel = modelID in dynamicDatabase;
 
         if (thisModel is null) {
             throw new Error(
@@ -315,23 +271,23 @@ public: //* BEGIN PUBLIC API.
 
         destroyModel(modelID, thisModel);
 
-        numberDatabase.remove(modelID);
-        isCustomDatabase.remove(modelID);
+        dynamicDatabase.remove(modelID);
+        // isCustomDatabase.remove(modelID);
         animationDatabase.remove(modelID);
     }
 
     void terminate() {
-        foreach (modelName, thisModel; numberDatabase) {
+        foreach (modelName, thisModel; dynamicDatabase) {
             destroyModel(modelName, &thisModel);
         }
-        numberDatabase.clear();
-        isCustomDatabase.clear();
+        dynamicDatabase.clear();
+        // isCustomDatabase.clear();
         animationDatabase.clear();
     }
 
     void playAnimation(ulong modelID, int index, int frame) {
 
-        Model* thisModel = modelID in numberDatabase;
+        Model* thisModel = modelID in dynamicDatabase;
 
         if (thisModel is null) {
             throw new Error(
@@ -361,7 +317,7 @@ public: //* BEGIN PUBLIC API.
 
     void updateModelInGPU(ulong modelID) {
 
-        const Model* thisModel = modelID in numberDatabase;
+        const Model* thisModel = modelID in dynamicDatabase;
 
         if (thisModel is null) {
             throw new Error(
@@ -392,23 +348,23 @@ private: //* BEGIN INTERNAL API.
     void destroyModel(ulong modelID, Model* thisModel) {
         // If we were using the D runtime to make this model, we'll customize
         // the way we free the items. This makes the GC auto clear.
-        if (isCustomDatabase[modelID]) {
-            Mesh thisMeshInModel = thisModel.meshes[0];
-            thisMeshInModel.vertexCount = 0;
-            thisMeshInModel.vertices = null;
-            thisMeshInModel.texcoords = null;
-            UnloadMesh(thisMeshInModel);
-            thisModel.meshes = null;
-            thisModel.meshCount = 0;
-            UnloadModel(*thisModel);
-        } else {
-            UnloadModel(*thisModel);
+        // if (isCustomDatabase[modelID]) {
+        Mesh thisMeshInModel = thisModel.meshes[0];
+        thisMeshInModel.vertexCount = 0;
+        thisMeshInModel.vertices = null;
+        thisMeshInModel.texcoords = null;
+        UnloadMesh(thisMeshInModel);
+        thisModel.meshes = null;
+        thisModel.meshCount = 0;
+        UnloadModel(*thisModel);
+        // } else {
+        //     UnloadModel(*thisModel);
 
-            AnimationContainer* thisAnimations = modelID in animationDatabase;
-            if (thisAnimations !is null && thisAnimations.hasAnimation) {
-                UnloadModelAnimation(*thisAnimations.animationData);
-            }
-        }
+        //     AnimationContainer* thisAnimations = modelID in animationDatabase;
+        //     if (thisAnimations !is null && thisAnimations.hasAnimation) {
+        //         UnloadModelAnimation(*thisAnimations.animationData);
+        //     }
+        // }
     }
 
     // void loadModelsInModelsFolder() {
