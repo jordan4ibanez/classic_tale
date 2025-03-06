@@ -124,6 +124,10 @@ void main() {
 			drawWorld = !drawWorld;
 		}
 
+		// if (Keyboard.isPressed(KeyboardKey.KEY_E)) {
+		// 	resetDebug();
+		// }
+
 		// foreach (_; 0 .. uniform(1_000, 100_000, rand)) {
 		// 	Vec3d target;
 		// 	target.x = uniform(0.0, 48.0, rand);
@@ -198,6 +202,8 @@ void main() {
 				Map.draw();
 			}
 			// Player.draw();
+
+			// debugDraw();
 
 			if (playerBlockSelection.y != -1) {
 				DrawCubeWires(vec3dAdd(Vec3d(playerBlockSelection.x, playerBlockSelection.y, playerBlockSelection
