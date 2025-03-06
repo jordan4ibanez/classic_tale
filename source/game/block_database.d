@@ -21,7 +21,7 @@ class BlockDefinition {
     string[6] textures = null;
 
     // Visual properties.
-    // Clear means light passes through it.
+    // lightPropagates means light passes through it.
     bool lightPropagates = false;
     Drawtype drawtype = Drawtype.Normal;
     // If it is drawtype model, it will use this.
