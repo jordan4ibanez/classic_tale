@@ -6,14 +6,14 @@ class BiomeDefinition {
     string name = null;
     string modName = null;
 
-    int id = -1;
+    uint id = 0;
 
     string grassLayer = null;
-    int grassLayerID = -1;
+    uint grassLayerID = 0;
     string dirtLayer = null;
-    int dirtLayerID = -1;
+    uint dirtLayerID = 0;
     string stoneLayer = null;
-    int stoneLayerID = -1;
+    uint stoneLayerID = 0;
 
     // todo: noise parameters.
 
