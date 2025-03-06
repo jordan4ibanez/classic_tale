@@ -43,6 +43,7 @@ private:
     // Faster access based on ID or name.
     BlockDefinition[string] nameDatabase;
     BlockDefinition[int] idDatabase;
+    BlockDefinition* ultraFastAccess;
 
     int currentID = 2;
 
