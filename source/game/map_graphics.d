@@ -224,14 +224,22 @@ private:
                             // Back.
                             if (z + 1 >= CHUNK_WIDTH) {
                                 if (neighborBack) {
-                                    if (neighborBack.data[x][0][y].blockID == 0) {
+                                    const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
+                                        neighborBack.data[x][0][y].blockID);
+
+                                    if (neighborDefinition.drawtype == Drawtype.Air) {
                                         allocation++;
                                         // vertexAllocation += 18;
                                         // textureCoordAllocation += 12;
                                     }
                                 }
                             } else if (thisChunk.data[x][z + 1][y].blockID == 0) {
-                                allocation++;
+                                const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
+                                    thisChunk.data[x][z + 1][y].blockID);
+
+                                if (neighborDefinition.drawtype == Drawtype.Air) {
+                                    allocation++;
+                                }
                                 // vertexAllocation += 18;
                                 // textureCoordAllocation += 12;
                             }
