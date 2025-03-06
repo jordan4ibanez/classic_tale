@@ -362,6 +362,8 @@ private:
         Vec3d min = Vec3d(0, 0, 0);
         Vec3d max = Vec3d(1, 1, 1);
 
+        const(BlockDefinition)* thisDefinition;
+
         foreach (immutable x; 0 .. CHUNK_WIDTH) {
             foreach (immutable z; 0 .. CHUNK_WIDTH) {
                 foreach (immutable y; 0 .. CHUNK_HEIGHT) {
@@ -372,7 +374,7 @@ private:
                         continue;
                     }
 
-                    const BlockDefinition* thisDefinition = BlockDatabase.getBlockByID(
+                    thisDefinition = BlockDatabase.getBlockByID(
                         thisData.blockID);
 
                     faceTextures.update(thisDefinition.textureIDs.ptr);
