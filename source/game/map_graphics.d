@@ -177,7 +177,7 @@ private:
         const(Chunk*) neighborLeft = Map.getChunkPointer(chunkKey.x - 1, chunkKey.y);
         const(Chunk*) neighborRight = Map.getChunkPointer(chunkKey.x + 1, chunkKey.y);
 
-        // Preallocation.
+        //? Preallocation.
         foreach (immutable x; 0 .. CHUNK_WIDTH) {
             foreach (immutable z; 0 .. CHUNK_WIDTH) {
                 foreach (immutable y; 0 .. CHUNK_HEIGHT) {
