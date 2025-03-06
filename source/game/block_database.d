@@ -139,6 +139,7 @@ private: //* BEGIN INTERNAL API.
         BlockDefinition air = new BlockDefinition();
         air.name = "air";
         air.modName = "engine";
+        air.drawtype = Drawtype.Air;
         // Air doesn't get any textures, it's never rendered.
         // air.textures = "air.png";
 
