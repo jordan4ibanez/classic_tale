@@ -531,8 +531,8 @@ private:
                             pos.y = y;
                             pos.z = z;
 
-                            makeCube(vertIndex, textIndex, colorIndex, vertices, textureCoordinates, normals, colors,
-                                pos, min, max, &faceGen, &faceTextures);
+                            makeCube(vertIndex, textIndex, colorIndex, vertices, textureCoordinates, normals,
+                                colors, pos, min, max, &faceGen, &faceTextures);
 
                             // neighborDefinition = ultraFastAccess + ;
                         }
