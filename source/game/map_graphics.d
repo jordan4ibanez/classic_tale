@@ -442,16 +442,25 @@ private:
                             // Right.
                             if (x + 1 >= CHUNK_WIDTH) {
                                 if (neighborRight) {
-                                    if (neighborRight.data[0][z][y].blockID == 0) {
+                                    neighborDefinition = ultraFastAccess +
+                                        neighborRight.data[0][z][y].blockID;
+
+                                    if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.right = true;
                                         faceGen.lightLevelRight = neighborRight
                                             .data[0][z][y].naturalLightBank;
                                     }
                                 }
-                            } else if (thisChunk.data[x + 1][z][y].blockID == 0) {
-                                faceGen.right = true;
-                                faceGen.lightLevelRight = thisChunk.data[x + 1][z][y]
-                                    .naturalLightBank;
+                            } else {
+
+                                neighborDefinition = ultraFastAccess +
+                                    thisChunk.data[x + 1][z][y].blockID;
+
+                                if (neighborDefinition.drawtype != Drawtype.Normal) {
+                                    faceGen.right = true;
+                                    faceGen.lightLevelRight = thisChunk.data[x + 1][z][y]
+                                        .naturalLightBank;
+                                }
                             }
 
                             // Top.
