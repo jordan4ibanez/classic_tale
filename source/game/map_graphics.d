@@ -235,7 +235,10 @@ private:
         //? Preallocation.
         foreach (immutable x; 0 .. CHUNK_WIDTH) {
             foreach (immutable z; 0 .. CHUNK_WIDTH) {
-                foreach (immutable y; 0 .. CHUNK_HEIGHT) {
+
+                const int thisColumnHeight = thisChunk.heightmap[x][z] + 1;
+
+                foreach (immutable y; 0 .. thisColumnHeight) {
 
                     thisData = &thisChunk.data[x][z][y];
 
@@ -391,7 +394,10 @@ private:
 
         foreach (immutable x; 0 .. CHUNK_WIDTH) {
             foreach (immutable z; 0 .. CHUNK_WIDTH) {
-                foreach (immutable y; 0 .. CHUNK_HEIGHT) {
+
+                const int thisColumnHeight = thisChunk.heightmap[x][z] + 1;
+
+                foreach (immutable y; 0 .. thisColumnHeight) {
 
                     thisData = &thisChunk.data[x][z][y];
 
