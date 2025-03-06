@@ -482,10 +482,16 @@ private:
                             if (y - 1 < 0) {
                                 // Do not draw the bottom of the world.
                                 // The player should never fall out the bottom of the world.
-                            } else if (thisChunk.data[x][z][y - 1].blockID == 0) {
-                                faceGen.bottom = true;
-                                faceGen.lightLevelBottom = thisChunk.data[x][z][y - 1]
-                                    .naturalLightBank;
+                            } else {
+
+                                neighborDefinition = ultraFastAccess +
+                                    thisChunk.data[x][z][y - 1].blockID;
+
+                                if (neighborDefinition.drawtype != Drawtype.Normal) {
+                                    faceGen.bottom = true;
+                                    faceGen.lightLevelBottom = thisChunk.data[x][z][y - 1]
+                                        .naturalLightBank;
+                                }
                             }
 
                             pos.x = x;
