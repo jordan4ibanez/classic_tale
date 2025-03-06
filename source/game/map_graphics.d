@@ -568,6 +568,8 @@ private:
                             foreach (indicesIndex; 0 .. thisMesh.vertexCount) {
                                 const ulong i = *(thisMesh.indices + indicesIndex);
 
+                                writeln(i);
+
                                 // Positions.
                                 const ulong vertPos = i * 3;
 
@@ -606,6 +608,10 @@ private:
 
                             }
 
+                            vertIndex += vertexAmount;
+                            textIndex += texAmount;
+                            colorIndex += colorAmount;
+
                             // foreach (i; 0 .. vertexCount) {
                             //     writeln(*(thisMesh.vertices + i));
                             // }
@@ -641,9 +647,6 @@ private:
                             //     // }
                             // }
 
-                            vertIndex += vertexAmount;
-                            textIndex += texAmount;
-                            colorIndex += colorAmount;
                         }
                     }
                 }
