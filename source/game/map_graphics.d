@@ -201,16 +201,22 @@ private:
                             if (z - 1 < 0) {
                                 if (neighborFront) {
                                     const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
-                                        thisData.blockID);
+                                        neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID);
 
-                                    if (neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID == 0) {
+                                    if (neighborDefinition.drawtype == Drawtype.Air) {
                                         allocation++;
                                         // vertexAllocation += 18;
                                         // textureCoordAllocation += 12;
                                     }
                                 }
-                            } else if (thisChunk.data[x][z - 1][y].blockID == 0) {
-                                allocation++;
+                            } else {
+
+                                const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
+                                    thisChunk.data[x][z - 1][y].blockID);
+
+                                if (neighborDefinition.drawtype == Drawtype.Air) {
+                                    allocation++;
+                                }
                                 // vertexAllocation += 18;
                                 // textureCoordAllocation += 12;
                             }
