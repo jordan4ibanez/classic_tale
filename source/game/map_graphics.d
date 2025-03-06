@@ -201,7 +201,8 @@ private:
                             if (z - 1 < 0) {
                                 if (neighborFront) {
                                     const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
-                                        neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID);
+                                        neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID
+                                    );
 
                                     if (neighborDefinition.drawtype == Drawtype.Air) {
                                         allocation++;
@@ -212,7 +213,8 @@ private:
                             } else {
 
                                 const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
-                                    thisChunk.data[x][z - 1][y].blockID);
+                                    thisChunk.data[x][z - 1][y].blockID
+                                );
 
                                 if (neighborDefinition.drawtype == Drawtype.Air) {
                                     allocation++;
@@ -225,7 +227,8 @@ private:
                             if (z + 1 >= CHUNK_WIDTH) {
                                 if (neighborBack) {
                                     const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
-                                        neighborBack.data[x][0][y].blockID);
+                                        neighborBack.data[x][0][y].blockID
+                                    );
 
                                     if (neighborDefinition.drawtype == Drawtype.Air) {
                                         allocation++;
@@ -235,7 +238,8 @@ private:
                                 }
                             } else if (thisChunk.data[x][z + 1][y].blockID == 0) {
                                 const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
-                                    thisChunk.data[x][z + 1][y].blockID);
+                                    thisChunk.data[x][z + 1][y].blockID
+                                );
 
                                 if (neighborDefinition.drawtype == Drawtype.Air) {
                                     allocation++;
