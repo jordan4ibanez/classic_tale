@@ -12,7 +12,7 @@ import math.vec3d;
 import std.array;
 import std.bitmanip;
 import std.conv;
-import std.datetime.stopwatch;
+// import std.datetime.stopwatch;
 import std.meta;
 import std.stdio;
 
@@ -214,7 +214,7 @@ private:
 
         FaceTextures faceTextures;
 
-        auto sw = StopWatch(AutoStart.yes);
+        // auto sw = StopWatch(AutoStart.yes);
 
         ulong allocation = 0;
 
@@ -730,7 +730,7 @@ private:
         // }
         // writeln("took: ", total, "ms average");
 
-        writeln("took: ", sw.peek().total!"usecs", "us");
+        // writeln("took: ", sw.peek().total!"usecs", "us");
 
         ModelHandler.destroyDynamic(thisChunk.modelKey);
 
