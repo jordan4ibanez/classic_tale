@@ -198,8 +198,6 @@ private:
                     thisDefinition = neighborDefinition = ultraFastAccess +
                         thisData.blockID;
 
-                    // Todo: this needs a visual check.
-
                     final switch (thisDefinition.drawtype) {
                     case Drawtype.Air, Drawtype.Liquid:
                         continue;
