@@ -22,7 +22,7 @@ class BlockDefinition {
 
     // Visual properties.
     // Clear means light passes through it.
-    bool clear = false;
+    bool lightPropagates = false;
     Drawtype drawtype = Drawtype.Normal;
     // If it is drawtype model, it will use this.
     string model = null;
@@ -164,7 +164,7 @@ private: //* BEGIN INTERNAL API.
         air.name = "air";
         air.modName = "engine";
         air.drawtype = Drawtype.Air;
-        air.clear = true;
+        air.lightPropagates = true;
         // Air doesn't get any textures, it's never rendered.
         // air.textures = "air.png";
 
