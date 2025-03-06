@@ -487,12 +487,13 @@ private:
                                 // Draw it, that's the top of the map.
                                 faceGen.top = true;
                             } else {
+                                blockDataNeighbor = &thisChunk.data[x][z][y + 1];
                                 neighborDefinition = ultraFastAccess +
-                                    thisChunk.data[x][z][y + 1].blockID;
+                                    blockDataNeighbor.blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.top = true;
-                                    faceGen.lightLevelTop = thisChunk.data[x][z][y + 1]
+                                    faceGen.lightLevelTop = blockDataNeighbor
                                         .naturalLightBank;
                                 }
                             }
