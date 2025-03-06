@@ -35,7 +35,7 @@ private string generateKey(const ref Vec2i input) {
 }
 
 struct BlockData {
-    int blockID = 0;
+    uint blockID = 0;
     // Uses banked lighting. 
     //~ The banked lighting is blended together in the shader.
     //? Sun light (and moon light). Basically exposed to open sky straight upwards.
@@ -249,7 +249,7 @@ public: //* BEGIN PUBLIC API.
         return &thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][position.y];
     }
 
-    void setBlockAtWorldPositionByID(Vec3d position, int blockID) {
+    void setBlockAtWorldPositionByID(Vec3d position, uint blockID) {
         if (!BlockDatabase.hasBlockID(blockID)) {
             throw new Error("Cannot set to block ID " ~ to!string(blockID) ~ ", ID does not exist.");
         }
@@ -288,7 +288,7 @@ public: //* BEGIN PUBLIC API.
         updateAdjacentNeighborToPositionInChunk(chunkID, xzPosInChunk);
     }
 
-    void setBlockAtWorldPositionByID(int x, int y, int z, int blockID) {
+    void setBlockAtWorldPositionByID(int x, int y, int z, uint blockID) {
         if (!BlockDatabase.hasBlockID(blockID)) {
             throw new Error("Cannot set to block ID " ~ to!string(blockID) ~ ", ID does not exist.");
         }
@@ -352,9 +352,9 @@ public: //* BEGIN PUBLIC API.
             throw new Error("Cannot set to block " ~ name ~ ", does not exist.");
         }
 
-        thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = thisBlock.id;
+        thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = thisBlock.blockID;
 
-        updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, thisBlock.id,
+        updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, thisBlock.blockID,
             cast(int) position.x, cast(int) position.z);
 
         cascadeNaturalLight(cast(int) floor(position.x), cast(int) floor(
@@ -1005,36 +1005,24 @@ private: //* BEGIN INTERNAL API.
                         thisChunk.data[x][z][y].isSunlight = true;
                     } else {
                         if (y == 0) {
-                            thisChunk.data[x][z][y]
-                                .blockID = bedrock
-                                .id;
+                            thisChunk.data[x][z][y].blockID = bedrock.blockID;
                         } else if (
                             y <= 2) {
                             if (
                                 y <= bedRockSelectedHeight) {
-                                thisChunk.data[x][z][y]
-                                    .blockID = bedrock
-                                    .id;
+                                thisChunk.data[x][z][y].blockID = bedrock.blockID;
                             } else {
-                                thisChunk.data[x][z][y]
-                                    .blockID = stone
-                                    .id;
+                                thisChunk.data[x][z][y].blockID = stone.blockID;
                             }
                         } else if (
                             y < dirtLayer) {
-                            thisChunk.data[x][z][y]
-                                .blockID = stone
-                                .id;
+                            thisChunk.data[x][z][y].blockID = stone.blockID;
                         } else if (
                             y < grassLayer) {
-                            thisChunk.data[x][z][y]
-                                .blockID = dirt
-                                .id;
+                            thisChunk.data[x][z][y].blockID = dirt.blockID;
                         } else if (
                             y == grassLayer) {
-                            thisChunk.data[x][z][y]
-                                .blockID = grass
-                                .id;
+                            thisChunk.data[x][z][y].blockID = grass.blockID;
                         }
                     }
                 }
