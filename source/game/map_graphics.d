@@ -300,8 +300,13 @@ private:
                                 allocation++;
                                 // vertexAllocation += 18;
                                 // textureCoordAllocation += 12;
-                            } else if (thisChunk.data[x][z][y + 1].blockID == 0) {
-                                allocation++;
+                            } else {
+                                const BlockDefinition* neighborDefinition = BlockDatabase.getBlockByID(
+                                    thisChunk.data[x][z][y + 1].blockID
+                                );
+                                if (neighborDefinition.drawtype == Drawtype.Air) {
+                                    allocation++;
+                                }
                                 // vertexAllocation += 18;
                                 // textureCoordAllocation += 12;
                             }
