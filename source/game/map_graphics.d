@@ -337,6 +337,8 @@ private:
         Vec3d min = Vec3d(0, 0, 0);
         Vec3d max = Vec3d(1, 1, 1);
 
+        const(BlockData)* blockDataNeighbor;
+
         foreach (immutable x; 0 .. CHUNK_WIDTH) {
             foreach (immutable z; 0 .. CHUNK_WIDTH) {
                 foreach (immutable y; 0 .. CHUNK_HEIGHT) {
@@ -369,12 +371,14 @@ private:
                             // Front.
                             if (z - 1 < 0) {
                                 if (neighborFront) {
+                                    blockDataNeighbor = &neighborFront.data[x][CHUNK_WIDTH - 1][y];
+
                                     neighborDefinition = ultraFastAccess +
-                                        neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID;
+                                        blockDataNeighbor.blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.front = true;
-                                        faceGen.lightLevelFront = neighborFront.data[x][CHUNK_WIDTH - 1][y]
+                                        faceGen.lightLevelFront = blockDataNeighbor
                                             .naturalLightBank;
                                     }
                                 }
