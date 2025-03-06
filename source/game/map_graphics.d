@@ -179,6 +179,7 @@ private:
 
         // Ultra fast accessor.
         const(BlockDefinition*) ultraFastBlockDatabaseAccess = BlockDatabase.getUltraFastAccess();
+        const(Model*) modelDatabaseStatic = ModelHandler.getUltraFastStatic;
 
         const(BlockData)* thisData;
         const(BlockDefinition)* neighborDefinition;
@@ -209,7 +210,7 @@ private:
                                         neighborFront.data[x][CHUNK_WIDTH - 1][y].blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
-                                        allocation++;
+                                        allocation += 6;
                                     }
                                 }
                             } else {
@@ -218,7 +219,7 @@ private:
                                     thisChunk.data[x][z - 1][y].blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
-                                    allocation++;
+                                    allocation += 6;
                                 }
                             }
 
@@ -229,7 +230,7 @@ private:
                                         neighborBack.data[x][0][y].blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
-                                        allocation++;
+                                        allocation += 6;
                                     }
                                 }
                             } else {
@@ -237,7 +238,7 @@ private:
                                     thisChunk.data[x][z + 1][y].blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
-                                    allocation++;
+                                    allocation += 6;
                                 }
                             }
 
@@ -248,7 +249,7 @@ private:
                                         neighborLeft.data[CHUNK_WIDTH - 1][z][y].blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
-                                        allocation++;
+                                        allocation += 6;
                                     }
                                 }
                             } else {
@@ -256,7 +257,7 @@ private:
                                     thisChunk.data[x - 1][z][y].blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
-                                    allocation++;
+                                    allocation += 6;
                                 }
                             }
 
@@ -267,7 +268,7 @@ private:
                                         neighborRight.data[0][z][y].blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
-                                        allocation++;
+                                        allocation += 6;
                                     }
                                 }
                             } else {
@@ -275,20 +276,20 @@ private:
                                     thisChunk.data[x + 1][z][y].blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
-                                    allocation++;
+                                    allocation += 6;
                                 }
                             }
 
                             // Top.
                             if (y + 1 >= CHUNK_HEIGHT) {
                                 // Draw it, that's the top of the map.
-                                allocation++;
+                                allocation += 6;
                             } else {
                                 neighborDefinition = ultraFastBlockDatabaseAccess +
                                     thisChunk.data[x][z][y + 1].blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
-                                    allocation++;
+                                    allocation += 6;
                                 }
                             }
 
@@ -301,12 +302,18 @@ private:
                                     thisChunk.data[x][z][y - 1].blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
-                                    allocation++;
+                                    allocation += 6;
                                 }
                             }
                         }
                         break;
                     case Drawtype.Model:
+                        const(Model*) thisModel = (modelDatabaseStatic + thisDefinition.modelIndex);
+                        foreach (i; 0 .. thisModel.meshCount) {
+
+                            // thisModel.meshes.vertexCount;
+
+                        }
                     }
 
                     // 3 [xyz], 6 [2 tris], 6 faces
@@ -320,12 +327,12 @@ private:
         }
 
         // Vertices and normals are synced. The normal is the direction of the vertex.
-        float* vertices = cast(float*) GC.malloc(float.sizeof * (allocation * 18));
-        float* normals = cast(float*) GC.malloc(float.sizeof * (allocation * 18));
+        float* vertices = cast(float*) GC.malloc(float.sizeof * (allocation * 3));
+        float* normals = cast(float*) GC.malloc(float.sizeof * (allocation * 3));
 
-        ubyte* colors = cast(ubyte*) GC.malloc(ubyte.sizeof * (allocation * 24));
+        ubyte* colors = cast(ubyte*) GC.malloc(ubyte.sizeof * (allocation * 4));
 
-        float* textureCoordinates = cast(float*) GC.malloc(float.sizeof * (allocation * 12));
+        float* textureCoordinates = cast(float*) GC.malloc(float.sizeof * (allocation * 2));
 
         ulong vertIndex = 0;
         ulong textIndex = 0;
@@ -550,7 +557,7 @@ private:
         ModelHandler.destroyDynamic(thisChunk.modelKey);
 
         // writeln("does not exist, creating");
-        return ModelHandler.newModelFromMeshPointers(vertices, allocation * 18, textureCoordinates,
+        return ModelHandler.newModelFromMeshPointers(vertices, allocation * 3, textureCoordinates,
             normals, colors);
     }
 
