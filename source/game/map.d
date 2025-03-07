@@ -622,12 +622,12 @@ public: //* BEGIN PUBLIC API.
                     MazeElement* elementPointer = &lightPool[xInBox][zInBox][yRaw];
 
                     // Do not do corners.
-                    if ((xRaw == minW || xRaw == maxW - 1) &&
-                        (zRaw == minW || zRaw == maxW - 1) &&
-                        (yRaw == 0 || yRaw == (CHUNK_HEIGHT - 1))) {
-                        elementPointer.isAir = false;
-                        continue;
-                    }
+                    // if ((xRaw == minW || xRaw == maxW - 1) &&
+                    //     (zRaw == minW || zRaw == maxW - 1) &&
+                    //     (yRaw == 0 || yRaw == (CHUNK_HEIGHT - 1))) {
+                    //     elementPointer.isAir = false;
+                    //     continue;
+                    // }
 
                     // Do not bother if the block is direct sunlight aka above the height map.
                     //! do not enable.
