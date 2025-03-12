@@ -46,6 +46,7 @@ void cubeThingMain() {
     torch.name = "torch";
     torch.drawtype = Drawtype.Model;
     torch.model = "torch.glb";
+    torch.lightPropagates = true;
     BlockDatabase.registerBlock(torch);
 
     //? Models.
