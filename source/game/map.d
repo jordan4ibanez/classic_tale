@@ -369,19 +369,33 @@ public: //* BEGIN PUBLIC API.
     void updateHeightMap(Chunk* thisChunk, int xInChunk, int yInChunk, int zInChunk, int newID,
         int worldPositionX, int worldPositionZ) {
 
+        const(BlockDefinition*) ultraFastBlockDatabaseAccess = BlockDatabase.getUltraFastAccess();
+
         const int height = thisChunk.heightmap[xInChunk][zInChunk];
         // ID was set to air. (removed/dug)
         if (newID == 0) {
             // If it was the top, have to scan down.
             //? Note: Subtractive update. Slightly more expensive. Has to scan down.
             if (height == yInChunk) {
+
+                bool found = false;
                 foreach_reverse (yScan; 0 .. yInChunk + 1) {
-                    // Found it. That's it.
-                    if (thisChunk.data[xInChunk][zInChunk][yScan].blockID != 0) {
+
+                    BlockData* thisBlock = &thisChunk.data[xInChunk][zInChunk][yScan];
+
+                    // Mark new heightmap height.
+                    if (!found && thisBlock.blockID != 0) {
                         thisChunk.heightmap[xInChunk][zInChunk] = yScan;
-                        break;
+                        found = true;
+                    }
+
+                    // Cascade downwards direct sunlight until solid (non propagating) block found.
+                    // This is used as a light source for calculating natural light cascade.
+                    if ((ultraFastBlockDatabaseAccess + thisBlock.blockID).lightPropagates) {
+                        thisBlock.isSunlight = true;
                     } else {
-                        thisChunk.data[xInChunk][zInChunk][yScan].isSunlight = true;
+                        writeln((ultraFastBlockDatabaseAccess + thisBlock.blockID).name);
+                        break;
                     }
                 }
             }
