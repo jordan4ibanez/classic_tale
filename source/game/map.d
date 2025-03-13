@@ -440,7 +440,7 @@ public: //* BEGIN PUBLIC API.
         int x = 0;
         int y = 0;
         int z = 0;
-        ubyte lightLevel = 0;
+        ubyte naturalLightLevel = 0;
     }
 
     // Y Z X
@@ -742,7 +742,7 @@ public: //* BEGIN PUBLIC API.
             cacheTraversal.x = thisSource.x;
             cacheTraversal.y = thisSource.y;
             cacheTraversal.z = thisSource.z;
-            cacheTraversal.lightLevel = lightPool[thisSource.x][thisSource.z][thisSource.y]
+            cacheTraversal.naturalLightLevel = lightPool[thisSource.x][thisSource.z][thisSource.y]
                 .naturalLightLevel;
             cascadeQueue.put(cacheTraversal);
 
@@ -758,11 +758,11 @@ public: //* BEGIN PUBLIC API.
                 cascadeQueue.popFront();
 
                 // Don't even bother. It'll spread 0.
-                if (thisNode.lightLevel <= 1) {
+                if (thisNode.naturalLightLevel <= 1) {
                     continue CASCADE_LOOP;
                 }
 
-                const ubyte downStreamLightLevel = cast(ubyte)(thisNode.lightLevel - 1);
+                const ubyte downStreamLightLevel = cast(ubyte)(thisNode.naturalLightLevel - 1);
 
                 DIRECTION_LOOP: foreach (dir; DIRECTIONS) {
 
@@ -786,7 +786,7 @@ public: //* BEGIN PUBLIC API.
                     // This is already a light source. Or is already at the level it would spread to. Don't need to cascade.
                     if (
                         lightPool[newPosX][newPosZ][newPosY].naturalLightLevel >= thisNode
-                        .lightLevel) {
+                        .naturalLightLevel) {
                         continue DIRECTION_LOOP;
                     }
 
@@ -797,7 +797,7 @@ public: //* BEGIN PUBLIC API.
                     cacheTraversal.x = newPosX;
                     cacheTraversal.y = newPosY;
                     cacheTraversal.z = newPosZ;
-                    cacheTraversal.lightLevel = downStreamLightLevel;
+                    cacheTraversal.naturalLightLevel = downStreamLightLevel;
 
                     cascadeQueue.put(cacheTraversal);
                 }
