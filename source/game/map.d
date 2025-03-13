@@ -486,8 +486,8 @@ public: //* BEGIN PUBLIC API.
         const int maxChunkZ = (_zMax < 0) ? (((_zMax + 1) - CHUNK_WIDTH) / CHUNK_WIDTH) : (
             _zMax / CHUNK_WIDTH);
 
-        // The max it can be is 3.
-
+        // The max it can be is 3x3 wide.
+        //? This is scoped on purpose.
         {
             Vec2i cacheKey;
             foreach (x; minChunkX .. maxChunkX + 1) {
@@ -499,11 +499,12 @@ public: //* BEGIN PUBLIC API.
             }
         }
 
+        // This is an extreme micro optimization.
+        // The "shell" of the update is never mutated.
+        // In certain scenarios this would have created a few extra
+        // mesh updates. This stops that.
+        //? This is scoped on purpose.
         {
-            // This is an extreme micro optimization.
-            // The "shell" of the update is never mutated.
-            // In certain scenarios this would have created a few extra
-            // mesh updates. This stops that.
 
             const int _xMinUpdate = xInWorld + minW;
             const int _xMaxUpdate = xInWorld + maxW;
