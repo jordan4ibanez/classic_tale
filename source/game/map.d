@@ -412,7 +412,7 @@ public: //* BEGIN PUBLIC API.
 
                 thisChunk.heightmap[xInChunk][zInChunk] = yInChunk;
 
-                BlockData* thisBlock = &thisChunk.data[xInChunk][zInChunk][yInChunk];
+                const BlockData* thisBlock = &thisChunk.data[xInChunk][zInChunk][yInChunk];
 
                 // If light propagates, the blocks below are still under sunlight.
                 if (!(ultraFastBlockDatabaseAccess + thisBlock.blockID).lightPropagates) {
