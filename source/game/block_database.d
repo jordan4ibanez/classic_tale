@@ -30,6 +30,8 @@ class BlockDefinition {
     double maxSpeed = 3.0;
     // lightPropagates means light passes through it.
     bool lightPropagates = false;
+    bool isLightSource = false;
+    ubyte lightSourceLevel = 0;
 
     // These are reserved.
     int[6] textureIDs = -1;
@@ -68,6 +70,16 @@ public: //* BEGIN PUBLIC API.
 
         if (newBlock.modName is null) {
             throw new Error("Mod name is null for block " ~ newBlock.name);
+        }
+
+        if (newBlock.isLightSource) {
+            if (newBlock.lightSourceLevel > 14) {
+                throw new Error("Light source can not be as bright as sunlight");
+            }
+
+            if (newBlock.lightSourceLevel < 2) {
+                writeln("warning: block [" ~ newBlock.name ~ "] will not emit any light");
+            }
         }
 
         if (newBlock.drawtype != Drawtype.Air && newBlock.drawtype != Drawtype.Model) {
