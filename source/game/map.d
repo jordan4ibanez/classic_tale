@@ -661,8 +661,11 @@ public: //* BEGIN PUBLIC API.
                     currentBlockPointer = &thisChunk
                         .data[xInChunkPointer][zInChunkPointer][yRaw];
 
+                    const BlockDefinition* thisDefinition = ultraFastBlockDatabaseAccess + currentBlockPointer
+                        .blockID;
+
                     // Initial binary application.
-                    if (currentBlockPointer && currentBlockPointer.blockID == 0) {
+                    if (thisDefinition.lightPropagates) {
 
                         // The walls are all light sources or else we'd infinitely be checking the world. Must assume their data is correct.
                         if ((xRaw == minW || xRaw == maxW - 1) ||
