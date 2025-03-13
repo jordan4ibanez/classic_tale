@@ -431,7 +431,7 @@ public: //* BEGIN PUBLIC API.
     private struct MazeElement {
         mixin(bitfields!(
                 bool, "isAir", 1,
-                ubyte, "lightLevel", 4,
+                ubyte, "naturalLightLevel", 4,
                 bool, "", 3
         ));
     }
@@ -672,7 +672,7 @@ public: //* BEGIN PUBLIC API.
                             (zRaw == minW || zRaw == maxW - 1) ||
                             (yRaw == 0 || yRaw == (CHUNK_HEIGHT - 1))) {
 
-                            elementPointer.lightLevel = currentBlockPointer.naturalLightBank;
+                            elementPointer.naturalLightLevel = currentBlockPointer.naturalLightBank;
                             elementPointer.isAir = true;
 
                             cacheVec3i.x = xInBox;
@@ -689,7 +689,7 @@ public: //* BEGIN PUBLIC API.
 
                             const bool isArtificialLightSource = thisDefinition.isLightSource;
 
-                            elementPointer.lightLevel = (isSunlight) ? LIGHT_LEVEL_MAX : 0;
+                            elementPointer.naturalLightLevel = (isSunlight) ? LIGHT_LEVEL_MAX : 0;
                             //? Anything that propagates light "is air" as far as this algorithm is concerned.
                             elementPointer.isAir = true;
 
@@ -743,7 +743,7 @@ public: //* BEGIN PUBLIC API.
             cacheTraversal.y = thisSource.y;
             cacheTraversal.z = thisSource.z;
             cacheTraversal.lightLevel = lightPool[thisSource.x][thisSource.z][thisSource.y]
-                .lightLevel;
+                .naturalLightLevel;
             cascadeQueue.put(cacheTraversal);
 
             CASCADE_LOOP: while (true) {
@@ -784,13 +784,15 @@ public: //* BEGIN PUBLIC API.
                     }
 
                     // This is already a light source. Or is already at the level it would spread to. Don't need to cascade.
-                    if (lightPool[newPosX][newPosZ][newPosY].lightLevel >= thisNode.lightLevel) {
+                    if (
+                        lightPool[newPosX][newPosZ][newPosY].naturalLightLevel >= thisNode
+                        .lightLevel) {
                         continue DIRECTION_LOOP;
                     }
 
                     // Everything checks out. Spread light.
 
-                    lightPool[newPosX][newPosZ][newPosY].lightLevel = downStreamLightLevel;
+                    lightPool[newPosX][newPosZ][newPosY].naturalLightLevel = downStreamLightLevel;
 
                     cacheTraversal.x = newPosX;
                     cacheTraversal.y = newPosY;
@@ -841,7 +843,7 @@ public: //* BEGIN PUBLIC API.
 
                 foreach (yRaw; 0 .. highPoint) {
                     thisChunk.data[xInChunkPointer][zInChunkPointer][yRaw].naturalLightBank =
-                        lightPool[xInBox][zInBox][yRaw].lightLevel;
+                        lightPool[xInBox][zInBox][yRaw].naturalLightLevel;
                 }
             }
         }
