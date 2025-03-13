@@ -21,8 +21,6 @@ class BlockDefinition {
     string[6] textures = null;
 
     // Visual properties.
-    // lightPropagates means light passes through it.
-    bool lightPropagates = false;
     Drawtype drawtype = Drawtype.Normal;
     // If it is drawtype model, it will use this.
     string model = null;
@@ -30,6 +28,8 @@ class BlockDefinition {
     // Physical properties.
     double friction = 2.0;
     double maxSpeed = 3.0;
+    // lightPropagates means light passes through it.
+    bool lightPropagates = false;
 
     // These are reserved.
     int[6] textureIDs = -1;
