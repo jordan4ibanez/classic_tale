@@ -697,6 +697,10 @@ public: //* BEGIN PUBLIC API.
                             const bool isArtificialLightSource = thisDefinition.isLightSource;
 
                             elementPointer.naturalLightLevel = (isSunlight) ? LIGHT_LEVEL_MAX : 0;
+
+                            elementPointer.artificialLightLevel = (isArtificialLightSource) ? thisDefinition
+                                .lightSourceLevel : 0;
+
                             //? Anything that propagates light "is air" as far as this algorithm is concerned.
                             elementPointer.isAir = true;
 
