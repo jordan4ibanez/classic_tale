@@ -801,21 +801,21 @@ public: //* BEGIN PUBLIC API.
                     lookingAtNeighbor = &lightPool[newPosX][newPosZ][newPosY];
 
                     // In non-air. Which light cannot spread to.
-                    if (!lightPool[newPosX][newPosZ][newPosY].isAir) {
+                    if (!lookingAtNeighbor.isAir) {
                         continue DIRECTION_LOOP;
                     }
 
                     // This is already a light source. Or is already at the level it would spread to. Don't need to cascade.
                     if (
-                        lightPool[newPosX][newPosZ][newPosY].naturalLightLevel >= downStreamNaturalLightLevel
-                        && lightPool[newPosX][newPosZ][newPosY].artificialLightLevel >=
+                        lookingAtNeighbor.naturalLightLevel >= downStreamNaturalLightLevel
+                        && lookingAtNeighbor.artificialLightLevel >=
                         downStreamArtificialLightLevel) {
                         continue DIRECTION_LOOP;
                     }
 
                     // Everything checks out. Spread light.
 
-                    lightPool[newPosX][newPosZ][newPosY].naturalLightLevel = downStreamNaturalLightLevel;
+                    lookingAtNeighbor.naturalLightLevel = downStreamNaturalLightLevel;
 
                     cacheTraversalNode.x = newPosX;
                     cacheTraversalNode.y = newPosY;
