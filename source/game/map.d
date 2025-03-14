@@ -782,6 +782,8 @@ public: //* BEGIN PUBLIC API.
                 const ubyte downStreamArtificialLightLevel = cast(ubyte)(
                     thisNode.artificialLightLevel - 1);
 
+                MazeElement* lookingAtNeighbor;
+
                 DIRECTION_LOOP: foreach (dir; DIRECTIONS) {
 
                     const int newPosX = thisNode.x + dir.x;
@@ -795,6 +797,8 @@ public: //* BEGIN PUBLIC API.
                         newPosY >= CHUNK_HEIGHT || newPosY < 0) {
                         continue DIRECTION_LOOP;
                     }
+
+                    lookingAtNeighbor = &lightPool[newPosX][newPosZ][newPosY];
 
                     // In non-air. Which light cannot spread to.
                     if (!lightPool[newPosX][newPosZ][newPosY].isAir) {
