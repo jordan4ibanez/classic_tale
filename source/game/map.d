@@ -678,6 +678,8 @@ public: //* BEGIN PUBLIC API.
                             (yRaw == 0 || yRaw == (CHUNK_HEIGHT - 1))) {
 
                             elementPointer.naturalLightLevel = currentBlockPointer.naturalLightBank;
+                            elementPointer.artificialLightLevel = currentBlockPointer
+                                .artificialLightBank;
                             elementPointer.isAir = true;
 
                             cacheVec3i.x = xInBox;
