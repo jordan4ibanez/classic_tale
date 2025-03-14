@@ -778,7 +778,7 @@ public: //* BEGIN PUBLIC API.
                     continue CASCADE_LOOP;
                 }
 
-                const ubyte downStreamLightLevel = cast(ubyte)(thisNode.naturalLightLevel - 1);
+                const ubyte downStreamNaturalLightLevel = cast(ubyte)(thisNode.naturalLightLevel - 1);
 
                 DIRECTION_LOOP: foreach (dir; DIRECTIONS) {
 
@@ -808,12 +808,12 @@ public: //* BEGIN PUBLIC API.
 
                     // Everything checks out. Spread light.
 
-                    lightPool[newPosX][newPosZ][newPosY].naturalLightLevel = downStreamLightLevel;
+                    lightPool[newPosX][newPosZ][newPosY].naturalLightLevel = downStreamNaturalLightLevel;
 
                     cacheTraversalNode.x = newPosX;
                     cacheTraversalNode.y = newPosY;
                     cacheTraversalNode.z = newPosZ;
-                    cacheTraversalNode.naturalLightLevel = downStreamLightLevel;
+                    cacheTraversalNode.naturalLightLevel = downStreamNaturalLightLevel;
 
                     cascadeQueue.put(cacheTraversalNode);
                 }
