@@ -12,6 +12,7 @@ import math.vec3d;
 import std.array;
 import std.bitmanip;
 import std.conv;
+
 // import std.datetime.stopwatch;
 import std.meta;
 import std.stdio;
@@ -431,7 +432,7 @@ private:
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.front = true;
                                         faceGen.lightLevelFront = blockDataNeighbor
-                                            .naturalLightBank;
+                                            .artificialLightBank;
                                     }
                                 }
                             } else {
@@ -444,7 +445,7 @@ private:
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.front = true;
                                     faceGen.lightLevelFront = blockDataNeighbor
-                                        .naturalLightBank;
+                                        .artificialLightBank;
                                 }
                             }
 
@@ -460,7 +461,7 @@ private:
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.back = true;
                                         faceGen.lightLevelBack = blockDataNeighbor
-                                            .naturalLightBank;
+                                            .artificialLightBank;
                                     }
                                 }
                             } else {
@@ -473,7 +474,7 @@ private:
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.back = true;
                                     faceGen.lightLevelBack = blockDataNeighbor
-                                        .naturalLightBank;
+                                        .artificialLightBank;
                                 }
                             }
 
@@ -489,7 +490,7 @@ private:
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.left = true;
                                         faceGen.lightLevelLeft = blockDataNeighbor
-                                            .naturalLightBank;
+                                            .artificialLightBank;
                                     }
                                 }
                             } else {
@@ -502,7 +503,7 @@ private:
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.left = true;
                                     faceGen.lightLevelLeft = blockDataNeighbor
-                                        .naturalLightBank;
+                                        .artificialLightBank;
                                 }
                             }
 
@@ -517,7 +518,7 @@ private:
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.right = true;
                                         faceGen.lightLevelRight = blockDataNeighbor
-                                            .naturalLightBank;
+                                            .artificialLightBank;
                                     }
                                 }
                             } else {
@@ -530,7 +531,7 @@ private:
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.right = true;
                                     faceGen.lightLevelRight = blockDataNeighbor
-                                        .naturalLightBank;
+                                        .artificialLightBank;
                                 }
                             }
 
@@ -546,7 +547,7 @@ private:
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.top = true;
                                     faceGen.lightLevelTop = blockDataNeighbor
-                                        .naturalLightBank;
+                                        .artificialLightBank;
                                 }
                             }
 
@@ -564,7 +565,7 @@ private:
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.bottom = true;
                                     faceGen.lightLevelBottom = blockDataNeighbor
-                                        .naturalLightBank;
+                                        .artificialLightBank;
                                 }
                             }
 
