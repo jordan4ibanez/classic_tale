@@ -814,6 +814,7 @@ public: //* BEGIN PUBLIC API.
                     }
 
                     // Everything checks out. Spread light.
+                    //! Never else this. It can be both.
 
                     lookingAtNeighbor.naturalLightLevel = downStreamNaturalLightLevel;
 
