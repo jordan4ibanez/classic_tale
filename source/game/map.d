@@ -774,7 +774,7 @@ public: //* BEGIN PUBLIC API.
                 cascadeQueue.popFront();
 
                 // Don't even bother. It'll spread 0.
-                if (thisNode.naturalLightLevel <= 1) {
+                if (thisNode.naturalLightLevel <= 1 && thisNode.artificialLightLevel <= 1) {
                     continue CASCADE_LOOP;
                 }
 
