@@ -778,9 +778,13 @@ public: //* BEGIN PUBLIC API.
                     continue CASCADE_LOOP;
                 }
 
-                const ubyte downStreamNaturalLightLevel = cast(ubyte)(thisNode.naturalLightLevel - 1);
-                const ubyte downStreamArtificialLightLevel = cast(ubyte)(
-                    thisNode.artificialLightLevel - 1);
+                const ubyte downStreamNaturalLightLevel = (thisNode.naturalLightLevel == 0) ? 0 : cast(
+                    ubyte)(thisNode.naturalLightLevel - 1);
+
+                const ubyte downStreamArtificialLightLevel = (thisNode.artificialLightLevel == 0) ? 0 : cast(
+                    ubyte)(thisNode.artificialLightLevel - 1);
+
+                // writeln(downStreamArtificialLightLevel);
 
                 MazeElement* lookingAtNeighbor;
 
@@ -816,12 +820,20 @@ public: //* BEGIN PUBLIC API.
                     // Everything checks out. Spread light.
                     //! Never else this. It can be both.
 
-                    lookingAtNeighbor.naturalLightLevel = downStreamNaturalLightLevel;
+                    if (lookingAtNeighbor.naturalLightLevel < downStreamNaturalLightLevel) {
+                        lookingAtNeighbor.naturalLightLevel = downStreamNaturalLightLevel;
+                    }
+
+                    if (lookingAtNeighbor.artificialLightLevel < downStreamArtificialLightLevel) {
+                        lookingAtNeighbor.artificialLightLevel = downStreamArtificialLightLevel;
+                    }
 
                     cacheTraversalNode.x = newPosX;
                     cacheTraversalNode.y = newPosY;
                     cacheTraversalNode.z = newPosZ;
+
                     cacheTraversalNode.naturalLightLevel = downStreamNaturalLightLevel;
+                    cacheTraversalNode.artificialLightLevel = downStreamArtificialLightLevel;
 
                     cascadeQueue.put(cacheTraversalNode);
                 }
@@ -866,8 +878,14 @@ public: //* BEGIN PUBLIC API.
                 Chunk* thisChunk = chunkPointers[chunkXInCache][chunkZInCache];
 
                 foreach (yRaw; 0 .. highPoint) {
-                    thisChunk.data[xInChunkPointer][zInChunkPointer][yRaw].naturalLightBank =
-                        lightPool[xInBox][zInBox][yRaw].naturalLightLevel;
+                    BlockData* thisBlockData = &thisChunk
+                        .data[xInChunkPointer][zInChunkPointer][yRaw];
+
+                    MazeElement* thisMazeElement = &lightPool[xInBox][zInBox][yRaw];
+
+                    thisBlockData.naturalLightBank = thisMazeElement.naturalLightLevel;
+
+                    thisBlockData.artificialLightBank = thisMazeElement.artificialLightLevel;
                 }
             }
         }
