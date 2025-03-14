@@ -227,17 +227,28 @@ void main() {
 		DrawText(toStringz("Z:" ~ format("%.2f", pos.z)), 10, 130, 30, Colors.BLACK);
 		DrawText(toStringz("Z:" ~ format("%.2f", pos.z)), 11, 131, 30, Colors.BLUE);
 
-		ubyte lightLevel = 0;
+		ubyte naturalLightLevel = 0;
+		ubyte artificialLightLevel = 0;
 		Vec3i blockSelection = Player.getBlockSelectionAbove();
+
 		if (blockSelection.y != -1) {
 			const(const BlockData*) thisBlock = Map.getBlockPointerAtWorldPosition(
 				blockSelection.x, blockSelection.y, blockSelection.z);
+
 			if (thisBlock) {
-				lightLevel = thisBlock.naturalLightBank;
+				naturalLightLevel = thisBlock.naturalLightBank;
+				artificialLightLevel = thisBlock.artificialLightBank;
 			}
 
-			DrawText(toStringz("Light:" ~ to!string(lightLevel)), 10, 160, 30, Colors.BLACK);
-			DrawText(toStringz("Light:" ~ to!string(lightLevel)), 11, 161, 30, Colors.BLUE);
+			DrawText(toStringz("Natural Light:" ~ to!string(naturalLightLevel)), 10, 160, 30, Colors
+					.BLACK);
+			DrawText(toStringz("Natural Light:" ~ to!string(naturalLightLevel)), 11, 161, 30, Colors
+					.BLUE);
+
+			DrawText(toStringz("Artificial Light:" ~ to!string(artificialLightLevel)), 10, 190, 30, Colors
+					.BLACK);
+			DrawText(toStringz("Artificial Light:" ~ to!string(artificialLightLevel)), 11, 191, 30, Colors
+					.BLUE);
 
 		}
 
