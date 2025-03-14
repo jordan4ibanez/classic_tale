@@ -446,6 +446,7 @@ public: //* BEGIN PUBLIC API.
         int y = 0;
         int z = 0;
         ubyte naturalLightLevel = 0;
+        ubyte artificialLightLevel = 0;
     }
 
     // Y Z X
@@ -755,6 +756,7 @@ public: //* BEGIN PUBLIC API.
             cacheTraversal.z = thisSource.z;
             cacheTraversal.naturalLightLevel = lightPool[thisSource.x][thisSource.z][thisSource.y]
                 .naturalLightLevel;
+
             cascadeQueue.put(cacheTraversal);
 
             CASCADE_LOOP: while (true) {
