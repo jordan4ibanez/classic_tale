@@ -757,6 +757,9 @@ public: //* BEGIN PUBLIC API.
             cacheTraversalNode.naturalLightLevel = lightPool[thisSource.x][thisSource.z][thisSource
                     .y].naturalLightLevel;
 
+            cacheTraversalNode.artificialLightLevel = lightPool[thisSource.x][thisSource.z][thisSource
+                    .y].artificialLightLevel;
+
             cascadeQueue.put(cacheTraversalNode);
 
             CASCADE_LOOP: while (true) {
