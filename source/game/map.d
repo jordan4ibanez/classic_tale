@@ -430,8 +430,8 @@ public: //* BEGIN PUBLIC API.
 
     private struct MazeElement {
         bool isAir = false;
-        ubyte naturalLightLevel = false;
-        ubyte artificialLightLevel = false;
+        ubyte naturalLightLevel = 0;
+        ubyte artificialLightLevel = 0;
 
         // mixin(bitfields!(
         //         bool, "isAir", 1,
