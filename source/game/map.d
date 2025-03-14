@@ -779,6 +779,8 @@ public: //* BEGIN PUBLIC API.
                 }
 
                 const ubyte downStreamNaturalLightLevel = cast(ubyte)(thisNode.naturalLightLevel - 1);
+                const ubyte downStreamArtificialLightLevel = cast(ubyte)(
+                    thisNode.artificialLightLevel - 1);
 
                 DIRECTION_LOOP: foreach (dir; DIRECTIONS) {
 
