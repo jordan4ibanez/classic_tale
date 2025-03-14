@@ -803,8 +803,7 @@ public: //* BEGIN PUBLIC API.
 
                     // This is already a light source. Or is already at the level it would spread to. Don't need to cascade.
                     if (
-                        lightPool[newPosX][newPosZ][newPosY].naturalLightLevel >= thisNode
-                        .naturalLightLevel) {
+                        lightPool[newPosX][newPosZ][newPosY].naturalLightLevel >= downStreamNaturalLightLevel) {
                         continue DIRECTION_LOOP;
                     }
 
