@@ -193,8 +193,8 @@ void main() {
 
 		BeginDrawing();
 
-		ClearBackground(Color(120, 166, 255, 255));
-		// ClearBackground(Color(0, 1, 25, 255));
+		// ClearBackground(Color(120, 166, 255, 255));
+		ClearBackground(Color(0, 1, 25, 255));
 
 		CameraHandler.begin();
 		{
