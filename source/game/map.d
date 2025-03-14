@@ -705,7 +705,7 @@ public: //* BEGIN PUBLIC API.
                             //? Anything that propagates light "is air" as far as this algorithm is concerned.
                             elementPointer.isAir = true;
 
-                            if (isSunlight) {
+                            if (isSunlight || isArtificialLightSource) {
                                 cacheVec3i.x = xInBox;
                                 cacheVec3i.y = yRaw;
                                 cacheVec3i.z = zInBox;
