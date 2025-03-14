@@ -429,11 +429,16 @@ public: //* BEGIN PUBLIC API.
     private static immutable BOUNDARY_BOX_MAX = ((LIGHT_LEVEL_MAX + 1) * 2) + 1;
 
     private struct MazeElement {
-        mixin(bitfields!(
-                bool, "isAir", 1,
-                ubyte, "naturalLightLevel", 4,
-                bool, "", 3
-        ));
+        bool isAir = false;
+        ubyte naturalLightLevel = false;
+        ubyte artificialLightLevel = false;
+
+        // mixin(bitfields!(
+        //         bool, "isAir", 1,
+        //         ubyte, "naturalLightLevel", 4,
+        //         ubyte, "artificialLightLevel", 4,
+        //         bool, "", 7
+        // ));
     }
 
     private struct LightTraversalNode {
