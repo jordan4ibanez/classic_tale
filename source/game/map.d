@@ -441,11 +441,20 @@ public: //* BEGIN PUBLIC API.
     }
 
     private struct LightTraversalNode {
-        int x = 0;
-        int y = 0;
-        int z = 0;
-        ubyte naturalLightLevel = 0;
-        ubyte artificialLightLevel = 0;
+        // int x = 0;
+        // int y = 0;
+        // int z = 0;
+        // ubyte naturalLightLevel = 0;
+        // ubyte artificialLightLevel = 0;
+
+        mixin(bitfields!(
+                int, "x", 16,
+                int, "y", 16,
+                int, "z", 16,
+                ubyte, "naturalLightLevel", 4,
+                ubyte, "artificialLightLevel", 4,
+                bool, "", 8
+        ));
     }
 
     // Y Z X
