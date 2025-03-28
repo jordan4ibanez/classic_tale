@@ -13,7 +13,6 @@ static:
 private:
 
     bool maximized = false;
-    
 
 public: //* BEGIN PUBLIC API.
 
@@ -21,13 +20,14 @@ public: //* BEGIN PUBLIC API.
         SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
 
         // This is a hack to get the resolution.
-        InitWindow(1, 1, "");
+        InitWindow(1, 1, "Classic Tale");
         int currentMonitor = GetCurrentMonitor();
         int monitorWidth = GetMonitorWidth(currentMonitor);
         int monitorHeight = GetMonitorHeight(currentMonitor);
-        CloseWindow();
 
-        InitWindow(monitorWidth / 2, monitorHeight / 2, "Classic Tale");
+        // You can thank fyrstikkeske for this fix.
+        SetWindowSize(monitorWidth / 2, monitorHeight / 2);
+        SetWindowPosition(monitorWidth / 4, monitorHeight / 4);
     }
 
     void terminate() {
