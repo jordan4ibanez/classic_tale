@@ -25,9 +25,15 @@ public: //* BEGIN PUBLIC API.
         int monitorWidth = GetMonitorWidth(currentMonitor);
         int monitorHeight = GetMonitorHeight(currentMonitor);
 
-        // You can thank fyrstikkeske for this fix.
+        // You can thank fyrstikkeske for this fix. I simply added onto it.
         SetWindowSize(monitorWidth / 2, monitorHeight / 2);
-        SetWindowPosition(monitorWidth / 4, monitorHeight / 4);
+
+        Vector2 currentMonitorPosition = GetMonitorPosition(currentMonitor);
+
+        SetWindowPosition(
+            cast(int) currentMonitorPosition.x + (monitorWidth / 4),
+            cast(int) currentMonitorPosition.y + (monitorHeight / 4));
+
     }
 
     void terminate() {
