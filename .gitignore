@@ -15,6 +15,7 @@ classic_tale-test-*
 *.obj
 *.lst
 libraylib.so*
+screenshots/*
 atlas.png
 models/torch/torch.blend1
 models/torch/torch_wall.blend1

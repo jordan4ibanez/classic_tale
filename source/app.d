@@ -18,6 +18,7 @@ import math.vec3d;
 import math.vec3i;
 import mods.api;
 import raylib;
+import source.utility.screenshot;
 import std.conv;
 import std.format;
 import std.random;
@@ -51,6 +52,8 @@ void main() {
 	}
 
 	Crosshair.initialize();
+
+	Screenshot.initialize();
 
 	Api.initialize();
 
@@ -123,6 +126,8 @@ void main() {
 		if (Keyboard.isPressed(KeyboardKey.KEY_F3)) {
 			drawWorld = !drawWorld;
 		}
+
+		Screenshot.listen();
 
 		// if (Keyboard.isPressed(KeyboardKey.KEY_E)) {
 		// 	resetDebug();

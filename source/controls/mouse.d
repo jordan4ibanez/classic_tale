@@ -12,9 +12,7 @@ private:
 
     bool mouseLocked = false;
 
-    //? I like to have specific modules for things.
-
-public: //* BEGIN PUBLIC API.
+public:
 
     Vec2d getDelta() {
         return Vec2d(GetMouseDelta());
@@ -56,7 +54,5 @@ public: //* BEGIN PUBLIC API.
     bool isLocked() {
         return mouseLocked;
     }
-
-private: //* BEGIN INTERNAL API.
 
 }
