@@ -14,7 +14,7 @@ private:
     immutable double spacing = -1;
     double currentFontSize = 1;
 
-public: //* BEGIN PUBLIC API.
+public:
 
     void initialize() {
         font = new Font();
@@ -49,6 +49,6 @@ public: //* BEGIN PUBLIC API.
         currentFontSize = font.baseSize * (GUI.getGUIScale() * 0.75);
     }
 
-private: //* BEGIN INTERNAL API.
+private:
 
 }

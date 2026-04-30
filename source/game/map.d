@@ -65,7 +65,7 @@ private:
     // Vec2d[] debugDrawPoints = [];
     double gravity = 20.0;
 
-public: //* BEGIN PUBLIC API.
+public:
 
     void initialize() {
         noise.seed = 1_010_010;
@@ -922,7 +922,7 @@ public: //* BEGIN PUBLIC API.
         loadChunk(Vec2i(x, z));
     }
 
-private: //* BEGIN INTERNAL API.
+private:
 
     void unloadOldChunks(Vec2i currentPlayerChunk) {
 

@@ -39,7 +39,7 @@ private:
     // AnimationContainer[ulong] animationDatabase;
     Texture2D textureAtlas;
 
-public: //* BEGIN PUBLIC API.
+public:
 
     void initialize() {
         textureAtlas = TextureHandler.getAtlas();
@@ -359,7 +359,7 @@ public: //* BEGIN PUBLIC API.
         }
     }
 
-private: //* BEGIN INTERNAL API.
+private:
 
     void destroyModelDynamic(Model* thisModel) {
         // If we were using the D runtime to make this model, we'll customize
