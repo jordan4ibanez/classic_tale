@@ -31,7 +31,7 @@ private:
     int atlasWidth = 0;
     int atlasHeight = 0;
 
-public: //* BEGIN PUBLIC API.
+public:
 
     void initialize() {
 
@@ -146,7 +146,7 @@ public: //* BEGIN PUBLIC API.
         UnloadTexture(atlas);
     }
 
-private: //* BEGIN INTERNAL API.
+private:
 
     void loadTexture(string location, ref TexturePacker!string database) {
 

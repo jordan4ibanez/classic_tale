@@ -10,7 +10,7 @@ private:
     immutable Vec2d standardSize = Vec2d(1920.0, 1080.0);
     double currentGUIScale = 1.0;
 
-public: //* BEGIN PUBLIC API.
+public:
 
     double getGUIScale() {
         return currentGUIScale;
@@ -28,5 +28,5 @@ public: //* BEGIN PUBLIC API.
         }
     }
 
-private: //* BEGIN INTERNAL API.
+private:
 }

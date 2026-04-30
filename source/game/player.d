@@ -61,7 +61,7 @@ private:
     bool skidding = false;
     bool onGround = false;
 
-public: //* BEGIN PUBLIC API.
+public:
 
     Vec2d getSize() {
         return size;
@@ -429,6 +429,6 @@ public: //* BEGIN PUBLIC API.
         return inChunk;
     }
 
-private: //* BEGIN INTERNAL API.
+private:
 
 }

@@ -14,7 +14,7 @@ private:
 
     bool maximized = false;
 
-public: //* BEGIN PUBLIC API.
+public:
 
     void initialize() {
         SetConfigFlags(ConfigFlags.FLAG_WINDOW_RESIZABLE);
@@ -77,7 +77,7 @@ public: //* BEGIN PUBLIC API.
         }
     }
 
-private: //* BEGIN INTERNAL API.
+private:
 
     void updateSystem() {
         Delta.__calculateDelta();

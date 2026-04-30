@@ -30,7 +30,7 @@ private:
 
     int currentID = 0;
 
-public: //* BEGIN PUBLIC API.
+public:
 
     void registerBiome(BiomeDefinition newBiome) {
 
@@ -104,7 +104,7 @@ public: //* BEGIN PUBLIC API.
         }
     }
 
-private: //* BEGIN INTERNAL API.
+private:
 
     void debugWrite(BiomeDefinition biome) {
         import std.conv;

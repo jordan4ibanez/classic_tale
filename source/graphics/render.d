@@ -9,7 +9,7 @@ static final const class Render {
 static:
 private:
 
-public: //* BEGIN PUBLIC API.
+public:
 
     void rectangle(Vec2d position, Vec2d size, Color color) {
         DrawRectangleV(invertPosition(position).toRaylib(), size.toRaylib(), color);
@@ -26,7 +26,7 @@ public: //* BEGIN PUBLIC API.
         DrawCircleV(invertedPosition.toRaylib(), radius, color);
     }
 
-private: //* BEGIN INTERNAL API.
+private:
 
     Vec2d invertPosition(Vec2d position) {
         return Vec2d(position.x, -position.y);

@@ -10,7 +10,7 @@ private:
 
     Shader[string] database;
 
-    //* BEGIN PUBLIC API.
+public:
 
     public void newShader(string shaderName, string vertCodeLocation, string fragCodeLocation) {
         if (shaderName in database) {
@@ -95,5 +95,4 @@ private:
         database.clear();
     }
 
-    //* BEGIN INTERNAL API.
 }

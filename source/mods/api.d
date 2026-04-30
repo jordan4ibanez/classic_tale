@@ -9,7 +9,7 @@ static final const class Api {
 static:
 private:
 
-public: //* BEGIN PUBLIC API.
+public:
 
     void initialize() {
         cubeThingMain();
@@ -17,7 +17,7 @@ public: //* BEGIN PUBLIC API.
         finalize();
     }
 
-private: //* BEGIN INTERNAL API.
+private:
 
     void finalize() {
         BlockDatabase.finalize();

@@ -20,7 +20,7 @@ private:
     Camera3D camera;
     Frustum frustum;
 
-public: //* BEGIN PUBLIC API.
+public:
 
     double realZoom = 100.0;
     double yaw = 0;
@@ -168,6 +168,6 @@ public: //* BEGIN PUBLIC API.
         // camera.zoom = realZoom * GUI.getGUIScale();
     }
 
-private: //* BEGIN INTERNAL API.
+private:
 
 }

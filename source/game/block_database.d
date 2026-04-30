@@ -52,7 +52,7 @@ private:
 
     uint currentID = 2;
 
-public: //* BEGIN PUBLIC API.
+public:
 
     void registerBlock(BlockDefinition newBlock) {
 
@@ -159,7 +159,7 @@ public: //* BEGIN PUBLIC API.
         return ultraFastAccess;
     }
 
-private: //* BEGIN INTERNAL API.
+private:
 
     void mapToPointerArray() {
         // currentID is assumed to be at the max ID defined. 
