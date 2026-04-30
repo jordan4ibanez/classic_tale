@@ -29,9 +29,32 @@ import utility.window;
 immutable public int CHUNK_WIDTH = 16;
 immutable public int CHUNK_HEIGHT = 256;
 
+immutable public int CHUNK_STRIDE = CHUNK_WIDTH * CHUNK_HEIGHT;
+
 pragma(inline, true)
 private string generateKey(const ref Vec2i input) {
     return "Chunk:" ~ to!string(input.x) ~ "|" ~ to!string(input.y);
+}
+
+/// Get a position from an index in a chunk.
+public Vec3i indexToPosition(int index) {
+    return Vec3i(
+        index / CHUNK_STRIDE,
+        (index % CHUNK_HEIGHT),
+        (index % CHUNK_STRIDE) / CHUNK_HEIGHT
+    );
+}
+
+/// Get an index from a position within a chunk.
+pragma(inline, true)
+public int positionToIndex(Vec3i position) {
+    return (position.x * CHUNK_STRIDE) + (position.z * CHUNK_HEIGHT) + position.y;
+}
+
+/// Get an index from a position within a chunk.
+pragma(inline, true)
+public int positionToIndex(int positionX, int positionY, int positionZ) {
+    return (positionX * CHUNK_STRIDE) + (positionZ * CHUNK_HEIGHT) + positionY;
 }
 
 struct BlockData {
@@ -47,8 +70,11 @@ struct BlockData {
 
 struct Chunk {
     ulong modelKey = 0;
+
+    // todo: these need to be 1D.
+
     // Y, Z, X
-    BlockData[CHUNK_HEIGHT][CHUNK_WIDTH][CHUNK_WIDTH] data;
+    BlockData[CHUNK_HEIGHT * CHUNK_WIDTH * CHUNK_WIDTH] data;
     // Z, X
     int[CHUNK_WIDTH][CHUNK_WIDTH] heightmap;
 
@@ -206,7 +232,7 @@ public:
             return BlockData();
         }
 
-        return thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][y];
+        return thisChunk.data[positionToIndex(xzPosInChunk.x, y, xzPosInChunk.y)];
     }
 
     BlockData* getBlockPointerAtWorldPosition(int x, int y, int z) {
@@ -226,7 +252,7 @@ public:
             return null;
         }
 
-        return &thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][y];
+        return &thisChunk.data[positionToIndex(xzPosInChunk.x, y, xzPosInChunk.y)];
     }
 
     BlockData* getBlockPointerAtWorldPosition(Vec3i position) {
@@ -246,12 +272,13 @@ public:
             return null;
         }
 
-        return &thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][position.y];
+        return &thisChunk.data[positionToIndex(xzPosInChunk.x, position.y, xzPosInChunk.y)];
     }
 
     void setBlockAtWorldPositionByID(Vec3d position, uint blockID) {
         if (!BlockDatabase.hasBlockID(blockID)) {
-            throw new Error("Cannot set to block ID " ~ to!string(blockID) ~ ", ID does not exist.");
+            throw new Error("Cannot set to block ID " ~ to!string(
+                    blockID) ~ ", ID does not exist.");
         }
 
         Vec2i chunkID = calculateChunkAtWorldPosition(position);
@@ -275,7 +302,7 @@ public:
             return;
         }
 
-        thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = blockID;
+        thisChunk.data[positionToIndex(xzPosInChunk.x, yPosInChunk, xzPosInChunk.y)].blockID = blockID;
 
         updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, blockID,
             cast(int) position.x, cast(int) position.z);
@@ -290,7 +317,8 @@ public:
 
     void setBlockAtWorldPositionByID(int x, int y, int z, uint blockID) {
         if (!BlockDatabase.hasBlockID(blockID)) {
-            throw new Error("Cannot set to block ID " ~ to!string(blockID) ~ ", ID does not exist.");
+            throw new Error("Cannot set to block ID " ~ to!string(
+                    blockID) ~ ", ID does not exist.");
         }
 
         Vec2i chunkID = calculateChunkAtWorldPosition(x, z);
@@ -312,7 +340,7 @@ public:
             return;
         }
 
-        thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][y].blockID = blockID;
+        thisChunk.data[positionToIndex(xzPosInChunk.x, y, xzPosInChunk.y)].blockID = blockID;
 
         updateHeightMap(thisChunk, xzPosInChunk.x, y, xzPosInChunk.y, blockID, x, z);
 
@@ -352,7 +380,8 @@ public:
             throw new Error("Cannot set to block " ~ name ~ ", does not exist.");
         }
 
-        thisChunk.data[xzPosInChunk.x][xzPosInChunk.y][yPosInChunk].blockID = thisBlock.blockID;
+        thisChunk.data[positionToIndex(xzPosInChunk.x, yPosInChunk, xzPosInChunk.y)].blockID = thisBlock
+            .blockID;
 
         updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, thisBlock.blockID,
             cast(int) position.x, cast(int) position.z);
@@ -381,7 +410,7 @@ public:
                 bool found = false;
                 foreach_reverse (yScan; 0 .. yInChunk + 1) {
 
-                    BlockData* thisBlock = &thisChunk.data[xInChunk][zInChunk][yScan];
+                    BlockData* thisBlock = &thisChunk.data[positionToIndex(xInChunk, yScan, zInChunk)];
 
                     // Mark new heightmap height.
                     if (!found && thisBlock.blockID != 0) {
@@ -412,12 +441,12 @@ public:
 
                 thisChunk.heightmap[xInChunk][zInChunk] = yInChunk;
 
-                const BlockData* thisBlock = &thisChunk.data[xInChunk][zInChunk][yInChunk];
+                const BlockData* thisBlock = &thisChunk.data[positionToIndex(xInChunk, yInChunk, zInChunk)];
 
                 // If light propagates, the blocks below are still under sunlight.
                 if (!(ultraFastBlockDatabaseAccess + thisBlock.blockID).lightPropagates) {
                     foreach (yScan; height .. yInChunk) {
-                        thisChunk.data[xInChunk][zInChunk][yScan].isSunlight = false;
+                        thisChunk.data[positionToIndex(xInChunk, yScan, zInChunk)].isSunlight = false;
                     }
                 }
             }
@@ -673,7 +702,7 @@ public:
                     // }
 
                     currentBlockPointer = &thisChunk
-                        .data[xInChunkPointer][zInChunkPointer][yRaw];
+                        .data[positionToIndex(xInChunkPointer, yRaw, zInChunkPointer)];
 
                     const BlockDefinition* thisDefinition = ultraFastBlockDatabaseAccess + currentBlockPointer
                         .blockID;
@@ -686,7 +715,8 @@ public:
                             (zRaw == minW || zRaw == maxW - 1) ||
                             (yRaw == 0 || yRaw == (CHUNK_HEIGHT - 1))) {
 
-                            elementPointer.naturalLightLevel = currentBlockPointer.naturalLightBank;
+                            elementPointer.naturalLightLevel = currentBlockPointer
+                                .naturalLightBank;
                             elementPointer.artificialLightLevel = currentBlockPointer
                                 .artificialLightBank;
                             elementPointer.isAir = true;
@@ -703,7 +733,8 @@ public:
 
                             const bool isSunlight = currentBlockPointer.isSunlight;
 
-                            const bool isArtificialLightSource = thisDefinition.isLightSource;
+                            const bool isArtificialLightSource = thisDefinition
+                                .isLightSource;
 
                             elementPointer.naturalLightLevel = (isSunlight) ? LIGHT_LEVEL_MAX : 0;
 
@@ -789,8 +820,10 @@ public:
                 const ubyte downStreamNaturalLightLevel = (thisNode.naturalLightLevel == 0) ? 0 : cast(
                     ubyte)(thisNode.naturalLightLevel - 1);
 
-                const ubyte downStreamArtificialLightLevel = (thisNode.artificialLightLevel == 0) ? 0 : cast(
-                    ubyte)(thisNode.artificialLightLevel - 1);
+                const ubyte downStreamArtificialLightLevel = (
+                    thisNode.artificialLightLevel == 0) ? 0 : cast(
+                    ubyte)(
+                    thisNode.artificialLightLevel - 1);
 
                 // writeln(downStreamArtificialLightLevel);
 
@@ -832,7 +865,8 @@ public:
                         lookingAtNeighbor.naturalLightLevel = downStreamNaturalLightLevel;
                     }
 
-                    if (lookingAtNeighbor.artificialLightLevel < downStreamArtificialLightLevel) {
+                    if (
+                        lookingAtNeighbor.artificialLightLevel < downStreamArtificialLightLevel) {
                         lookingAtNeighbor.artificialLightLevel = downStreamArtificialLightLevel;
                     }
 
@@ -887,13 +921,14 @@ public:
 
                 foreach (yRaw; 0 .. highPoint) {
                     BlockData* thisBlockData = &thisChunk
-                        .data[xInChunkPointer][zInChunkPointer][yRaw];
+                        .data[positionToIndex(xInChunkPointer, yRaw, zInChunkPointer)];
 
                     MazeElement* thisMazeElement = &lightPool[xInBox][zInBox][yRaw];
 
                     thisBlockData.naturalLightBank = thisMazeElement.naturalLightLevel;
 
-                    thisBlockData.artificialLightBank = thisMazeElement.artificialLightLevel;
+                    thisBlockData.artificialLightBank = thisMazeElement
+                        .artificialLightLevel;
                 }
             }
         }
@@ -1081,29 +1116,29 @@ private:
 
                     if (
                         y > selectedHeight) {
-                        thisChunk.data[x][z][y]
+                        thisChunk.data[positionToIndex(x, y, z)]
                             .naturalLightBank = 15;
-                        thisChunk.data[x][z][y].isSunlight = true;
+                        thisChunk.data[positionToIndex(x, y, z)].isSunlight = true;
                     } else {
                         if (y == 0) {
-                            thisChunk.data[x][z][y].blockID = bedrock.blockID;
+                            thisChunk.data[positionToIndex(x, y, z)].blockID = bedrock.blockID;
                         } else if (
                             y <= 2) {
                             if (
                                 y <= bedRockSelectedHeight) {
-                                thisChunk.data[x][z][y].blockID = bedrock.blockID;
+                                thisChunk.data[positionToIndex(x, y, z)].blockID = bedrock.blockID;
                             } else {
-                                thisChunk.data[x][z][y].blockID = stone.blockID;
+                                thisChunk.data[positionToIndex(x, y, z)].blockID = stone.blockID;
                             }
                         } else if (
                             y < dirtLayer) {
-                            thisChunk.data[x][z][y].blockID = stone.blockID;
+                            thisChunk.data[positionToIndex(x, y, z)].blockID = stone.blockID;
                         } else if (
                             y < grassLayer) {
-                            thisChunk.data[x][z][y].blockID = dirt.blockID;
+                            thisChunk.data[positionToIndex(x, y, z)].blockID = dirt.blockID;
                         } else if (
                             y == grassLayer) {
-                            thisChunk.data[x][z][y].blockID = grass.blockID;
+                            thisChunk.data[positionToIndex(x, y, z)].blockID = grass.blockID;
                         }
                     }
                 }
@@ -1163,7 +1198,8 @@ private:
 
                     // debugDrawPoints ~= Vec2d(currentX, currentY);
 
-                    BlockData data = getBlockAtWorldPosition(cast(int) floor(thisXPoint), cast(int) floor(
+                    BlockData data = getBlockAtWorldPosition(cast(int) floor(thisXPoint), cast(
+                            int) floor(
                             thisYPoint), cast(int) floor(thisZPoint));
 
                     // todo: if solid block collide.
@@ -1265,4 +1301,75 @@ private:
         return hitGround;
     }
 
+}
+
+// Testing 3D -> 1D packing calculation.
+unittest {
+    int[CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_WIDTH] database;
+    int realIndex = 0;
+    auto rng = Random(unpredictableSeed());
+    foreach (x; 0 .. CHUNK_WIDTH) {
+        foreach (z; 0 .. CHUNK_WIDTH) {
+            foreach (y; 0 .. CHUNK_HEIGHT) {
+                const Vec3i realPosition = Vec3i(x, y, z);
+                const int calculatedIndex = positionToIndex(realPosition);
+                const int calculatedIndexLiteral = positionToIndex(realPosition);
+                assert(realIndex == calculatedIndex, i"Index not correct. Real: $(
+                        realIndex) vs $(
+                        calculatedIndex)".text);
+                assert(realIndex == calculatedIndexLiteral);
+                const Vec3i calculatedPosition = indexToPosition(realIndex);
+                assert(realPosition == calculatedPosition, i"Position not correct. real $(
+                        realPosition) vs $(calculatedPosition) ".text);
+                // Triple check.
+                assert(realIndex == positionToIndex(calculatedPosition));
+                // Quadruple check. (Dumb)
+                assert(indexToPosition(calculatedIndex) ==
+                        indexToPosition(
+                            positionToIndex(calculatedPosition)));
+                // And I have no idea why I even added this one at this point.
+                assert(positionToIndex(indexToPosition(
+                        calculatedIndex)) == positionToIndex(calculatedPosition));
+                //! Now, to calculate some data.
+                const testData = uniform(0, 1_000_000, rng);
+                database[realIndex] = testData;
+                assert(database[realIndex] == testData);
+                assert(database[calculatedIndex] == testData);
+                assert(database[positionToIndex(indexToPosition(realIndex))] == testData);
+                assert(database[positionToIndex(realPosition)] == testData);
+                assert(database[positionToIndex(calculatedPosition)] == testData);
+                realIndex++;
+            }
+        }
+    }
+    // Next step is randomized position as a baseline.
+    immutable int sampleSize = 10_000_000;
+    foreach (_; 0 .. sampleSize) {
+        const Vec3i realPosition = Vec3i(
+            uniform(0, CHUNK_WIDTH, rng),
+            uniform(0, CHUNK_HEIGHT, rng),
+            uniform(0, CHUNK_WIDTH, rng),
+        );
+        const calculatedIndex = positionToIndex(realPosition);
+        const calculatedIndexRaw = positionToIndex(realPosition.x, realPosition.y, realPosition.z);
+        const calculatedPosition = indexToPosition(calculatedIndex);
+        assert(realPosition == calculatedPosition);
+        const reverseCalculatedIndex = positionToIndex(calculatedPosition);
+        assert(reverseCalculatedIndex == calculatedIndex);
+        assert(calculatedIndex == calculatedIndexRaw);
+        const testData = uniform(0, 1_000_000, rng);
+        database[calculatedIndex] = testData;
+        assert(database[calculatedIndex] == testData);
+        assert(database[reverseCalculatedIndex] == testData);
+        assert(positionToIndex(
+                indexToPosition(
+                reverseCalculatedIndex)) == positionToIndex(realPosition));
+        assert(reverseCalculatedIndex == positionToIndex(
+                indexToPosition(reverseCalculatedIndex)));
+        assert(calculatedIndex == positionToIndex(
+                indexToPosition(reverseCalculatedIndex)));
+        assert(positionToIndex(
+                indexToPosition(reverseCalculatedIndex)) == positionToIndex(realPosition.x, realPosition.y, realPosition
+                .z));
+    }
 }

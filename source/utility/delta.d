@@ -15,7 +15,7 @@ private:
     // Minimum is 5 FPS.
     double maxDelta = 1.0 / 5.0;
 
-public: //* BEGIN PUBLIC API.
+public:
 
     void __calculateDelta() {
         after = MonoTime.currTime;
@@ -41,7 +41,5 @@ public: //* BEGIN PUBLIC API.
     void setMaxDeltaFPS(double FPS) {
         maxDelta = 1.0 / FPS;
     }
-
-private: //* BEGIN INTERNAL API.
 
 }
