@@ -27,6 +27,7 @@ import std.format;
 import std.random;
 import std.stdio;
 import std.string;
+import utility.flat_container_2d;
 import utility.garbage_collector;
 import utility.window;
 

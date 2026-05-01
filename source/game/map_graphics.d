@@ -12,10 +12,11 @@ import math.vec3d;
 import std.array;
 import std.bitmanip;
 import std.conv;
-
-// import std.datetime.stopwatch;
 import std.meta;
 import std.stdio;
+import utility.flat_container_3d;
+
+// import std.datetime.stopwatch;
 
 // immutable ulong averager = 200;
 // double[averager] timer = 0;
@@ -237,11 +238,11 @@ private:
         foreach (immutable x; 0 .. CHUNK_WIDTH) {
             foreach (immutable z; 0 .. CHUNK_WIDTH) {
 
-                const int thisColumnHeight = thisChunk.heightmap[x][z] + 1;
+                const int thisColumnHeight = thisChunk.heightmap.get(x, z) + 1;
 
                 foreach (immutable y; 0 .. thisColumnHeight) {
 
-                    thisData = &thisChunk.data[positionToIndex(x, y, z)];
+                    thisData = thisChunk.data.getRef(x, y, z);
 
                     if (thisData.blockID == 0) {
                         continue;
@@ -258,7 +259,7 @@ private:
                             if (z - 1 < 0) {
                                 if (neighborFront) {
                                     neighborDefinition = ultraFastBlockDatabaseAccess +
-                                        neighborFront.data[positionToIndex(x, y, CHUNK_WIDTH - 1)]
+                                        neighborFront.data.get(x, y, CHUNK_WIDTH - 1)
                                             .blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -268,7 +269,7 @@ private:
                             } else {
 
                                 neighborDefinition = ultraFastBlockDatabaseAccess +
-                                    thisChunk.data[positionToIndex(x, y, z - 1)].blockID;
+                                    thisChunk.data.get(x, y, z - 1).blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation += 6;
@@ -279,7 +280,7 @@ private:
                             if (z + 1 >= CHUNK_WIDTH) {
                                 if (neighborBack) {
                                     neighborDefinition = ultraFastBlockDatabaseAccess +
-                                        neighborBack.data[positionToIndex(x, y, 0)].blockID;
+                                        neighborBack.data.get(x, y, 0).blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         allocation += 6;
@@ -287,7 +288,7 @@ private:
                                 }
                             } else {
                                 neighborDefinition = ultraFastBlockDatabaseAccess +
-                                    thisChunk.data[positionToIndex(x, y, z + 1)].blockID;
+                                    thisChunk.data.get(x, y, z + 1).blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation += 6;
@@ -298,7 +299,8 @@ private:
                             if (x - 1 < 0) {
                                 if (neighborLeft) {
                                     neighborDefinition = ultraFastBlockDatabaseAccess +
-                                        neighborLeft.data[positionToIndex(CHUNK_WIDTH - 1, y, z)]
+                                        neighborLeft.data.get(
+                                            CHUNK_WIDTH - 1, y, z)
                                             .blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
@@ -307,7 +309,7 @@ private:
                                 }
                             } else {
                                 neighborDefinition = ultraFastBlockDatabaseAccess +
-                                    thisChunk.data[positionToIndex(x - 1, y, z)].blockID;
+                                    thisChunk.data.get(x - 1, y, z).blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation += 6;
@@ -318,7 +320,7 @@ private:
                             if (x + 1 >= CHUNK_WIDTH) {
                                 if (neighborRight) {
                                     neighborDefinition = ultraFastBlockDatabaseAccess +
-                                        neighborRight.data[positionToIndex(0, y, z)].blockID;
+                                        neighborRight.data.get(0, y, z).blockID;
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         allocation += 6;
@@ -326,7 +328,7 @@ private:
                                 }
                             } else {
                                 neighborDefinition = ultraFastBlockDatabaseAccess +
-                                    thisChunk.data[positionToIndex(x + 1, y, z)].blockID;
+                                    thisChunk.data.get(x + 1, y, z).blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation += 6;
@@ -339,7 +341,7 @@ private:
                                 allocation += 6;
                             } else {
                                 neighborDefinition = ultraFastBlockDatabaseAccess +
-                                    thisChunk.data[positionToIndex(x, y + 1, z)].blockID;
+                                    thisChunk.data.get(x, y + 1, z).blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation += 6;
@@ -352,7 +354,7 @@ private:
                                 // The player should never fall out the bottom of the world.
                             } else {
                                 neighborDefinition = ultraFastBlockDatabaseAccess +
-                                    thisChunk.data[positionToIndex(x, y - 1, z)].blockID;
+                                    thisChunk.data.get(x, y - 1, z).blockID;
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     allocation += 6;
@@ -398,11 +400,11 @@ private:
         foreach (immutable x; 0 .. CHUNK_WIDTH) {
             foreach (immutable z; 0 .. CHUNK_WIDTH) {
 
-                const int thisColumnHeight = thisChunk.heightmap[x][z] + 1;
+                const int thisColumnHeight = thisChunk.heightmap.get(x, z) + 1;
 
                 foreach (immutable y; 0 .. thisColumnHeight) {
 
-                    thisData = &thisChunk.data[positionToIndex(x, y, z)];
+                    thisData = thisChunk.data.getRef(x, y, z);
 
                     if (thisData.blockID == 0) {
                         continue;
@@ -426,7 +428,7 @@ private:
                             // Front.
                             if (z - 1 < 0) {
                                 if (neighborFront) {
-                                    blockDataNeighbor = &neighborFront.data[positionToIndex(x, y, CHUNK_WIDTH - 1)];
+                                    blockDataNeighbor = neighborFront.data.getRef(x, y, CHUNK_WIDTH - 1);
 
                                     neighborDefinition = ultraFastBlockDatabaseAccess +
                                         blockDataNeighbor.blockID;
@@ -439,7 +441,7 @@ private:
                                 }
                             } else {
 
-                                blockDataNeighbor = &thisChunk.data[positionToIndex(x, y, z - 1)];
+                                blockDataNeighbor = thisChunk.data.getRef(x, y, z - 1);
 
                                 neighborDefinition = ultraFastBlockDatabaseAccess +
                                     blockDataNeighbor.blockID;
@@ -455,7 +457,7 @@ private:
                             if (z + 1 >= CHUNK_WIDTH) {
                                 if (neighborBack) {
 
-                                    blockDataNeighbor = &neighborBack.data[positionToIndex(x, y, 0)];
+                                    blockDataNeighbor = neighborBack.data.getRef(x, y, 0);
 
                                     neighborDefinition = ultraFastBlockDatabaseAccess +
                                         blockDataNeighbor.blockID;
@@ -468,7 +470,7 @@ private:
                                 }
                             } else {
 
-                                blockDataNeighbor = &thisChunk.data[positionToIndex(x, y, z + 1)];
+                                blockDataNeighbor = thisChunk.data.getRef(x, y, z + 1);
 
                                 neighborDefinition = ultraFastBlockDatabaseAccess +
                                     blockDataNeighbor.blockID;
@@ -484,7 +486,7 @@ private:
                             if (x - 1 < 0) {
                                 if (neighborLeft) {
 
-                                    blockDataNeighbor = &neighborLeft.data[positionToIndex(CHUNK_WIDTH - 1, y, z)];
+                                    blockDataNeighbor = neighborLeft.data.getRef(CHUNK_WIDTH - 1, y, z);
 
                                     neighborDefinition = ultraFastBlockDatabaseAccess +
                                         blockDataNeighbor.blockID;
@@ -497,7 +499,7 @@ private:
                                 }
                             } else {
 
-                                blockDataNeighbor = &thisChunk.data[positionToIndex(x - 1, y, z)];
+                                blockDataNeighbor = thisChunk.data.getRef(x - 1, y, z);
 
                                 neighborDefinition = ultraFastBlockDatabaseAccess +
                                     blockDataNeighbor.blockID;
@@ -512,7 +514,7 @@ private:
                             // Right.
                             if (x + 1 >= CHUNK_WIDTH) {
                                 if (neighborRight) {
-                                    blockDataNeighbor = &neighborRight.data[positionToIndex(0, y, z)];
+                                    blockDataNeighbor = neighborRight.data.getRef(0, y, z);
 
                                     neighborDefinition = ultraFastBlockDatabaseAccess +
                                         blockDataNeighbor.blockID;
@@ -525,7 +527,7 @@ private:
                                 }
                             } else {
 
-                                blockDataNeighbor = &thisChunk.data[positionToIndex(x + 1, y, z)];
+                                blockDataNeighbor = thisChunk.data.getRef(x + 1, y, z);
 
                                 neighborDefinition = ultraFastBlockDatabaseAccess +
                                     blockDataNeighbor.blockID;
@@ -542,7 +544,7 @@ private:
                                 // Draw it, that's the top of the map.
                                 faceGen.top = true;
                             } else {
-                                blockDataNeighbor = &thisChunk.data[positionToIndex(x, y + 1, z)];
+                                blockDataNeighbor = thisChunk.data.getRef(x, y + 1, z);
                                 neighborDefinition = ultraFastBlockDatabaseAccess +
                                     blockDataNeighbor.blockID;
 
@@ -559,7 +561,7 @@ private:
                                 // The player should never fall out the bottom of the world.
                             } else {
 
-                                blockDataNeighbor = &thisChunk.data[positionToIndex(x, y - 1, z)];
+                                blockDataNeighbor = thisChunk.data.getRef(x, y - 1, z);
 
                                 neighborDefinition = ultraFastBlockDatabaseAccess +
                                     blockDataNeighbor.blockID;
