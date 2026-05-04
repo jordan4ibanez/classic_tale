@@ -1,5 +1,6 @@
 module game.map;
 
+public import game.chunk;
 public import math.aabb : CollisionAxis;
 import fast_noise;
 import game.biome_database;
@@ -25,59 +26,9 @@ import std.stdio;
 import utility.circular_buffer;
 import utility.window;
 
-// Width is for X and Z.
-immutable public int CHUNK_WIDTH = 16;
-immutable public int CHUNK_HEIGHT = 256;
-
-immutable public int CHUNK_STRIDE = CHUNK_WIDTH * CHUNK_HEIGHT;
-
 pragma(inline, true)
 private string generateKey(const ref Vec2i input) {
     return "Chunk:" ~ to!string(input.x) ~ "|" ~ to!string(input.y);
-}
-
-/// Get a position from an index in a chunk.
-public Vec3i indexToPosition(int index) {
-    return Vec3i(
-        index / CHUNK_STRIDE,
-        (index % CHUNK_HEIGHT),
-        (index % CHUNK_STRIDE) / CHUNK_HEIGHT
-    );
-}
-
-/// Get an index from a position within a chunk.
-pragma(inline, true)
-public int positionToIndex(Vec3i position) {
-    return (position.x * CHUNK_STRIDE) + (position.z * CHUNK_HEIGHT) + position.y;
-}
-
-/// Get an index from a position within a chunk.
-pragma(inline, true)
-public int positionToIndex(int positionX, int positionY, int positionZ) {
-    return (positionX * CHUNK_STRIDE) + (positionZ * CHUNK_HEIGHT) + positionY;
-}
-
-struct BlockData {
-    uint blockID = 0;
-    // Uses banked lighting. 
-    //~ The banked lighting is blended together in the shader.
-    //? Sun light (and moon light). Basically exposed to open sky straight upwards.
-    ubyte naturalLightBank = 0;
-    //? Artificial light sources like torches or camp fire.
-    ubyte artificialLightBank = 0;
-    bool isSunlight = false;
-}
-
-struct Chunk {
-    ulong modelKey = 0;
-
-    // todo: these need to be 1D.
-
-    // Y, Z, X
-    BlockData[CHUNK_HEIGHT * CHUNK_WIDTH * CHUNK_WIDTH] data;
-    // Z, X
-    int[CHUNK_WIDTH][CHUNK_WIDTH] heightmap;
-
 }
 
 static final const class Map {

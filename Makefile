@@ -1,3 +1,5 @@
+export DC := ldc2
+
 default:
 	@dub run
 

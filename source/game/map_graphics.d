@@ -12,10 +12,10 @@ import math.vec3d;
 import std.array;
 import std.bitmanip;
 import std.conv;
-
-// import std.datetime.stopwatch;
 import std.meta;
 import std.stdio;
+
+// import std.datetime.stopwatch;
 
 // immutable ulong averager = 200;
 // double[averager] timer = 0;
