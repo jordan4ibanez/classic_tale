@@ -93,3 +93,74 @@ struct Chunk {
 // int positionToIndex(Vec2i position) const {
 //     return positionToIndex(position.x, position.y);
 // }
+
+// Testing 3D -> 1D packing calculation.
+unittest {
+    int[CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_WIDTH] database;
+    int realIndex = 0;
+    auto rng = Random(unpredictableSeed());
+    foreach (x; 0 .. CHUNK_WIDTH) {
+        foreach (z; 0 .. CHUNK_WIDTH) {
+            foreach (y; 0 .. CHUNK_HEIGHT) {
+                const Vec3i realPosition = Vec3i(x, y, z);
+                const int calculatedIndex = positionToIndex(realPosition);
+                const int calculatedIndexLiteral = positionToIndex(realPosition);
+                assert(realIndex == calculatedIndex, i"Index not correct. Real: $(
+                        realIndex) vs $(
+                        calculatedIndex)".text);
+                assert(realIndex == calculatedIndexLiteral);
+                const Vec3i calculatedPosition = indexToPosition(realIndex);
+                assert(realPosition == calculatedPosition, i"Position not correct. real $(
+                        realPosition) vs $(calculatedPosition) ".text);
+                // Triple check.
+                assert(realIndex == positionToIndex(calculatedPosition));
+                // Quadruple check. (Dumb)
+                assert(indexToPosition(calculatedIndex) ==
+                        indexToPosition(
+                            positionToIndex(calculatedPosition)));
+                // And I have no idea why I even added this one at this point.
+                assert(positionToIndex(indexToPosition(
+                        calculatedIndex)) == positionToIndex(calculatedPosition));
+                //! Now, to calculate some data.
+                const testData = uniform(0, 1_000_000, rng);
+                database[realIndex] = testData;
+                assert(database[realIndex] == testData);
+                assert(database[calculatedIndex] == testData);
+                assert(database[positionToIndex(indexToPosition(realIndex))] == testData);
+                assert(database[positionToIndex(realPosition)] == testData);
+                assert(database[positionToIndex(calculatedPosition)] == testData);
+                realIndex++;
+            }
+        }
+    }
+    // Next step is randomized position as a baseline.
+    immutable int sampleSize = 10_000_000;
+    foreach (_; 0 .. sampleSize) {
+        const Vec3i realPosition = Vec3i(
+            uniform(0, CHUNK_WIDTH, rng),
+            uniform(0, CHUNK_HEIGHT, rng),
+            uniform(0, CHUNK_WIDTH, rng),
+        );
+        const calculatedIndex = positionToIndex(realPosition);
+        const calculatedIndexRaw = positionToIndex(realPosition.x, realPosition.y, realPosition.z);
+        const calculatedPosition = indexToPosition(calculatedIndex);
+        assert(realPosition == calculatedPosition);
+        const reverseCalculatedIndex = positionToIndex(calculatedPosition);
+        assert(reverseCalculatedIndex == calculatedIndex);
+        assert(calculatedIndex == calculatedIndexRaw);
+        const testData = uniform(0, 1_000_000, rng);
+        database[calculatedIndex] = testData;
+        assert(database[calculatedIndex] == testData);
+        assert(database[reverseCalculatedIndex] == testData);
+        assert(positionToIndex(
+                indexToPosition(
+                reverseCalculatedIndex)) == positionToIndex(realPosition));
+        assert(reverseCalculatedIndex == positionToIndex(
+                indexToPosition(reverseCalculatedIndex)));
+        assert(calculatedIndex == positionToIndex(
+                indexToPosition(reverseCalculatedIndex)));
+        assert(positionToIndex(
+                indexToPosition(reverseCalculatedIndex)) == positionToIndex(realPosition.x, realPosition.y, realPosition
+                .z));
+    }
+}
