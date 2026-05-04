@@ -2,6 +2,7 @@ module graphics.shader_handler;
 
 import math.vec3d;
 import raylib;
+import std.stdio;
 import std.string;
 
 static final const class ShaderHandler {
@@ -22,6 +23,8 @@ public:
 
         if (!IsShaderValid(thisShader)) {
             throw new Error("[ShaderHandler]: Invalid shader. " ~ shaderName);
+        } else {
+            writeln("Loaded shader ", shaderName);
         }
 
         database[shaderName] = thisShader;

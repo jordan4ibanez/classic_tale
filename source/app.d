@@ -2,6 +2,7 @@ import controls.keyboard;
 import controls.mouse;
 import core.memory;
 import game.block_database;
+import game.light;
 import game.map;
 import game.map_graphics;
 import game.player;
@@ -120,6 +121,11 @@ void main() {
 
 	Mouse.lock();
 
+	ShaderHandler.newShader("chunk", "./shaders/chunk.vs", "./shaders/chunk.fs");
+
+	// This needs the chunk shader.
+	Light.initialize();
+
 	immutable int renderDistance = 16;
 	foreach (immutable x; -renderDistance .. renderDistance) {
 		foreach (immutable z; -renderDistance .. renderDistance) {
@@ -199,31 +205,23 @@ void main() {
 
 			double delta = Delta.getDelta();
 
-			debugTimer += delta;
-
-			if (debugTimer > 1) {
-				debugTimer -= 1;
-
-				const MAX_LIGHT = Light.LIGHT_LEVEL_MAX;
-
-				if (brighter) {
-					ubyte level = Light.getCurrentLightLevel();
-					level++;
-					if (level >= MAX_LIGHT) {
-						level = MAX_LIGHT;
-						brighter = false;
-					}
-					Light.setCurrentLightLevel(level);
-				} else {
-					ubyte level = Light.getCurrentLightLevel();
-					level--;
-					if (level <= 0) {
-						level = 0;
-						brighter = true;
-					}
-					Light.setCurrentLightLevel(level);
+			if (brighter) {
+				float level = Light.getCurrentLightLevel();
+				level += delta * 0.25;
+				if (level >= Light.GLOBAL_LIGHT_MAX) {
+					level = Light.GLOBAL_LIGHT_MAX;
+					brighter = false;
 				}
-
+				Light.setCurrentLightLevel(level);
+				writeln(level);
+			} else {
+				float level = Light.getCurrentLightLevel();
+				level -= delta * 0.25;
+				if (level <= Light.GLOBAL_LIGHT_MIN) {
+					level = Light.GLOBAL_LIGHT_MIN;
+					brighter = true;
+				}
+				Light.setCurrentLightLevel(level);
 			}
 		}
 

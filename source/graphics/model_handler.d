@@ -73,9 +73,12 @@ public:
     Immediate wipe will instantly replace the mesh data with null pointers so the
     GC can work it's magic.
     ? This is pretty much exclusively used for the map model generator.
+    lighting is embedded in colors:
+    X = natural lighting
+    Y = artificial lighting
     */
-    ulong newModelFromMeshPointers(float* vertices, immutable ulong verticesLength,
-        float* textureCoordinates, float* normals, ubyte* colors) {
+    ulong newChunkModel(float* vertices, immutable ulong verticesLength,
+        float* textureCoordinates, float* normals, ubyte* colors, string optionalShader = "") {
 
         const ulong thisID = UUID.get();
 
@@ -119,6 +122,68 @@ public:
         thisModel.meshes[0].texcoords = null;
         thisModel.meshes[0].normals = null;
         thisModel.meshes[0].colors = null;
+
+        if (optionalShader != "") {
+            thisModel.materials[0].shader = *ShaderHandler.getShaderPointer(optionalShader);
+        }
+
+        return thisID;
+    }
+
+    /*
+    Immediate wipe will instantly replace the mesh data with null pointers so the
+    GC can work it's magic.
+    ? This is pretty much exclusively used for the map model generator.
+    */
+    ulong newModelFromMeshPointers(float* vertices, immutable ulong verticesLength,
+        float* textureCoordinates, float* normals, ubyte* colors, string optionalShader = "") {
+
+        const ulong thisID = UUID.get();
+
+        // if (modelName in numberDatabase) {
+        //     throw new Error(
+        //         "[ModelManager]: Tried to overwrite mesh [" ~ modelName ~ "]. Delete it first.");
+        // }
+
+        Mesh thisMesh = Mesh();
+
+        thisMesh.vertexCount = cast(int) verticesLength / 3;
+        thisMesh.triangleCount = thisMesh.vertexCount / 3;
+        thisMesh.vertices = vertices;
+        thisMesh.texcoords = textureCoordinates;
+        thisMesh.normals = normals;
+        thisMesh.colors = colors;
+
+        UploadMesh(&thisMesh, false);
+
+        Model thisModel = Model();
+        thisModel = LoadModelFromMesh(thisMesh);
+
+        if (!IsModelValid(thisModel)) {
+            throw new Error("[ModelHandler]: Invalid model loaded from mesh. " ~ to!string(thisID));
+        }
+
+        dynamicDatabase[thisID] = thisModel;
+        // isCustomDatabase[thisID] = true;
+
+        foreach (index; 0 .. thisModel.materialCount) {
+            thisModel.materials[index].maps[MATERIAL_MAP_DIFFUSE].texture = textureAtlas;
+        }
+
+        // Launch the GC into action to clean the data we no longer need.
+        // This looks a bit silly, because it is. I just like to double check. :)
+        thisMesh.vertices = null;
+        thisMesh.texcoords = null;
+        thisMesh.normals = null;
+        thisMesh.colors = null;
+        thisModel.meshes[0].vertices = null;
+        thisModel.meshes[0].texcoords = null;
+        thisModel.meshes[0].normals = null;
+        thisModel.meshes[0].colors = null;
+
+        if (optionalShader != "") {
+            thisModel.materials[0].shader = *ShaderHandler.getShaderPointer(optionalShader);
+        }
 
         return thisID;
     }

@@ -61,13 +61,20 @@ struct FaceGeneration {
             bool, "right", 1,
             bool, "top", 1,
             bool, "bottom", 1,
-            ubyte, "lightLevelFront", 4,
-            ubyte, "lightLevelBack", 4,
-            ubyte, "lightLevelLeft", 4,
-            ubyte, "lightLevelRight", 4,
-            ubyte, "lightLevelTop", 4,
-            ubyte, "lightLevelBottom", 4,
-            bool, "", 2,
+            ubyte, "lightLevelFrontNatural", 4,
+            ubyte, "lightLevelBackNatural", 4,
+            ubyte, "lightLevelLeftNatural", 4,
+            ubyte, "lightLevelRightNatural", 4,
+            ubyte, "lightLevelTopNatural", 4,
+            ubyte, "lightLevelBottomNatural", 4,
+
+            ubyte, "lightLevelFrontArtificial", 4,
+            ubyte, "lightLevelBackArtificial", 4,
+            ubyte, "lightLevelLeftArtificial", 4,
+            ubyte, "lightLevelRightArtificial", 4,
+            ubyte, "lightLevelTopArtificial", 4,
+            ubyte, "lightLevelBottomArtificial", 4,
+            bool, "", 10,
     ));
 
     this(bool input) {
@@ -168,25 +175,25 @@ private struct PopResult {
     Vec2i data;
 }
 
-private ubyte mixLight(ubyte artificialLight, ubyte naturalLight) {
+// private ubyte mixLight(ubyte artificialLight, ubyte naturalLight) {
 
-    import game.light;
-    import std.algorithm;
+//     import game.light;
+//     import std.algorithm;
 
-    const ubyte rawGlobalNatural = Light.getCurrentLightLevel();
+//     const ubyte rawGlobalNatural = Light.getCurrentLightLevel();
 
-    // Get a subtrahend to subtract from the natural light value to limit it to the global sun value.
-    const ubyte naturalSubtrahend = cast(ubyte) clamp(
-        Light.LIGHT_LEVEL_MAX - rawGlobalNatural, 0, Light
-            .LIGHT_LEVEL_MAX);
+//     // Get a subtrahend to subtract from the natural light value to limit it to the global sun value.
+//     const ubyte naturalSubtrahend = cast(ubyte) clamp(
+//         Light.LIGHT_LEVEL_MAX - rawGlobalNatural, 0, Light
+//             .LIGHT_LEVEL_MAX);
 
-    // Mix it and clamp it.
-    const ubyte calculatedNatural = cast(ubyte) clamp(naturalLight - naturalSubtrahend, cast(ubyte) 0,
-        Light.LIGHT_LEVEL_MAX);
+//     // Mix it and clamp it.
+//     const ubyte calculatedNatural = cast(ubyte) clamp(naturalLight - naturalSubtrahend, cast(ubyte) 0,
+//         Light.LIGHT_LEVEL_MAX);
 
-    // Then clamp it to the artificial light level to see which one gives more light. (torch or sun)
-    return max(artificialLight, calculatedNatural);
-}
+//     // Then clamp it to the artificial light level to see which one gives more light. (torch or sun)
+//     return artificialLight;
+// }
 
 static final const class MapGraphics {
 static:
@@ -458,9 +465,11 @@ private:
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.front = true;
 
-                                        faceGen.lightLevelFront = mixLight(
-                                            blockDataNeighbor.artificialLightBank,
-                                            blockDataNeighbor.naturalLightBank);
+                                        faceGen.lightLevelFrontNatural = blockDataNeighbor
+                                            .naturalLightBank;
+
+                                        faceGen.lightLevelFrontArtificial = blockDataNeighbor
+                                            .artificialLightBank;
                                     }
                                 }
                             } else {
@@ -472,9 +481,12 @@ private:
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.front = true;
-                                    faceGen.lightLevelFront = mixLight(
-                                        blockDataNeighbor.artificialLightBank,
-                                        blockDataNeighbor.naturalLightBank);
+
+                                    faceGen.lightLevelFrontNatural = blockDataNeighbor
+                                        .naturalLightBank;
+
+                                    faceGen.lightLevelFrontArtificial = blockDataNeighbor
+                                        .artificialLightBank;
                                 }
                             }
 
@@ -489,9 +501,12 @@ private:
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.back = true;
-                                        faceGen.lightLevelBack = mixLight(
-                                            blockDataNeighbor.artificialLightBank,
-                                            blockDataNeighbor.naturalLightBank);
+
+                                        faceGen.lightLevelBackNatural = blockDataNeighbor
+                                            .naturalLightBank;
+
+                                        faceGen.lightLevelBackArtificial = blockDataNeighbor
+                                            .artificialLightBank;
                                     }
                                 }
                             } else {
@@ -503,9 +518,12 @@ private:
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.back = true;
-                                    faceGen.lightLevelBack = mixLight(
-                                        blockDataNeighbor.artificialLightBank,
-                                        blockDataNeighbor.naturalLightBank);
+
+                                    faceGen.lightLevelBackNatural = blockDataNeighbor
+                                        .naturalLightBank;
+
+                                    faceGen.lightLevelBackArtificial = blockDataNeighbor
+                                        .artificialLightBank;
                                 }
                             }
 
@@ -520,9 +538,12 @@ private:
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.left = true;
-                                        faceGen.lightLevelLeft = mixLight(
-                                            blockDataNeighbor.artificialLightBank,
-                                            blockDataNeighbor.naturalLightBank);
+
+                                        faceGen.lightLevelLeftNatural = blockDataNeighbor
+                                            .naturalLightBank;
+
+                                        faceGen.lightLevelLeftArtificial = blockDataNeighbor
+                                            .artificialLightBank;
                                     }
                                 }
                             } else {
@@ -534,9 +555,12 @@ private:
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.left = true;
-                                    faceGen.lightLevelLeft = mixLight(
-                                        blockDataNeighbor.artificialLightBank,
-                                        blockDataNeighbor.naturalLightBank);
+
+                                    faceGen.lightLevelLeftNatural = blockDataNeighbor
+                                        .naturalLightBank;
+
+                                    faceGen.lightLevelLeftArtificial = blockDataNeighbor
+                                        .artificialLightBank;
                                 }
                             }
 
@@ -550,9 +574,12 @@ private:
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.right = true;
-                                        faceGen.lightLevelRight = mixLight(
-                                            blockDataNeighbor.artificialLightBank,
-                                            blockDataNeighbor.naturalLightBank);
+
+                                        faceGen.lightLevelRightNatural = blockDataNeighbor
+                                            .naturalLightBank;
+
+                                        faceGen.lightLevelRightArtificial = blockDataNeighbor
+                                            .artificialLightBank;
                                     }
                                 }
                             } else {
@@ -564,9 +591,12 @@ private:
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.right = true;
-                                    faceGen.lightLevelRight = mixLight(
-                                        blockDataNeighbor.artificialLightBank,
-                                        blockDataNeighbor.naturalLightBank);
+
+                                    faceGen.lightLevelRightNatural = blockDataNeighbor
+                                        .naturalLightBank;
+
+                                    faceGen.lightLevelRightArtificial = blockDataNeighbor
+                                        .artificialLightBank;
                                 }
                             }
 
@@ -581,9 +611,12 @@ private:
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.top = true;
-                                    faceGen.lightLevelTop = mixLight(
-                                        blockDataNeighbor.artificialLightBank,
-                                        blockDataNeighbor.naturalLightBank);
+
+                                    faceGen.lightLevelTopNatural = blockDataNeighbor
+                                        .naturalLightBank;
+
+                                    faceGen.lightLevelTopArtificial = blockDataNeighbor
+                                        .artificialLightBank;
                                 }
                             }
 
@@ -600,9 +633,12 @@ private:
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.bottom = true;
-                                    faceGen.lightLevelBottom = mixLight(
-                                        blockDataNeighbor.artificialLightBank,
-                                        blockDataNeighbor.naturalLightBank);
+
+                                    faceGen.lightLevelBottomNatural = blockDataNeighbor
+                                        .naturalLightBank;
+
+                                    faceGen.lightLevelBottomArtificial = blockDataNeighbor
+                                        .artificialLightBank;
                                 }
                             }
 
@@ -774,7 +810,7 @@ private:
 
         // writeln("does not exist, creating");
         return ModelHandler.newModelFromMeshPointers(vertices, allocation * 3, textureCoordinates,
-            normals, colors);
+            normals, colors, "chunk");
     }
 
     // Maybe this can have a numeric AA or array to hash this in immediate mode?
@@ -824,7 +860,8 @@ private:
             const Vec3d bottomRight, /*2*/
             const Vec3d topRight, /*3*/
             const Normal thisNormal,
-            const ubyte lightValue) {
+            const ubyte __levelNaturalLight,
+            const ubyte __levelArtificialLight) {
 
             // Done like this to attempt to improve cache performance.
 
@@ -898,45 +935,47 @@ private:
 
             // Tri 1 colors.
 
-            const ubyte outputColor = LIGHT_LEVEL_CHART[lightValue];
+            // This is the literal value passed to the shader. It doesn't look right without modification.
+            const ubyte naturalLightValue = LIGHT_LEVEL_CHART[__levelNaturalLight];
+            const ubyte artificialLightValue = LIGHT_LEVEL_CHART[__levelArtificialLight];
 
             // 0
-            colors[colorIndex] = outputColor;
-            colors[colorIndex + 1] = outputColor;
-            colors[colorIndex + 2] = outputColor;
-            colors[colorIndex + 3] = 255;
+            colors[colorIndex] = naturalLightValue;
+            colors[colorIndex + 1] = artificialLightValue;
+            // colors[colorIndex + 2] = naturalLightValue;
+            // colors[colorIndex + 3] = 255;
 
             // 1
-            colors[colorIndex + 4] = outputColor;
-            colors[colorIndex + 5] = outputColor;
-            colors[colorIndex + 6] = outputColor;
-            colors[colorIndex + 7] = 255;
+            colors[colorIndex + 4] = naturalLightValue;
+            colors[colorIndex + 5] = artificialLightValue;
+            // colors[colorIndex + 6] = naturalLightValue;
+            // colors[colorIndex + 7] = 255;
 
             // 2
-            colors[colorIndex + 8] = outputColor;
-            colors[colorIndex + 9] = outputColor;
-            colors[colorIndex + 10] = outputColor;
-            colors[colorIndex + 11] = 255;
+            colors[colorIndex + 8] = naturalLightValue;
+            colors[colorIndex + 9] = artificialLightValue;
+            // colors[colorIndex + 10] = naturalLightValue;
+            // colors[colorIndex + 11] = 255;
 
             // Tri 2 colors.
 
             // 2
-            colors[colorIndex + 12] = outputColor;
-            colors[colorIndex + 13] = outputColor;
-            colors[colorIndex + 14] = outputColor;
-            colors[colorIndex + 15] = 255;
+            colors[colorIndex + 12] = naturalLightValue;
+            colors[colorIndex + 13] = artificialLightValue;
+            // colors[colorIndex + 14] = naturalLightValue;
+            // colors[colorIndex + 15] = 255;
 
             // 3
-            colors[colorIndex + 16] = outputColor;
-            colors[colorIndex + 17] = outputColor;
-            colors[colorIndex + 18] = outputColor;
-            colors[colorIndex + 19] = 255;
+            colors[colorIndex + 16] = naturalLightValue;
+            colors[colorIndex + 17] = artificialLightValue;
+            // colors[colorIndex + 18] = naturalLightValue;
+            // colors[colorIndex + 19] = 255;
 
             // 0
-            colors[colorIndex + 20] = outputColor;
-            colors[colorIndex + 21] = outputColor;
-            colors[colorIndex + 22] = outputColor;
-            colors[colorIndex + 23] = 255;
+            colors[colorIndex + 20] = naturalLightValue;
+            colors[colorIndex + 21] = artificialLightValue;
+            // colors[colorIndex + 22] = naturalLightValue;
+            // colors[colorIndex + 23] = 255;
 
             vertIndex += 18;
             colorIndex += 24;
@@ -1001,7 +1040,8 @@ private:
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMin.z),
                 Normal.Front,
-                faceGeneration.lightLevelFront
+                faceGeneration.lightLevelFrontNatural,
+                faceGeneration.lightLevelFrontArtificial,
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.front);
@@ -1029,7 +1069,8 @@ private:
                 Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z),
                 Normal.Back,
-                faceGeneration.lightLevelBack
+                faceGeneration.lightLevelBackNatural,
+                faceGeneration.lightLevelBackArtificial,
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.back);
@@ -1057,7 +1098,8 @@ private:
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMax.y, chunkPositionMax.z),
                 Normal.Left,
-                faceGeneration.lightLevelLeft
+                faceGeneration.lightLevelLeftNatural,
+                faceGeneration.lightLevelLeftArtificial,
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.left);
@@ -1087,7 +1129,8 @@ private:
                 Vec3d(chunkPositionMax.x, chunkPositionMin.y, chunkPositionMin.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z),
                 Normal.Right,
-                faceGeneration.lightLevelRight
+                faceGeneration.lightLevelRightNatural,
+                faceGeneration.lightLevelRightArtificial,
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.right);
@@ -1116,7 +1159,8 @@ private:
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMax.x, chunkPositionMax.y, chunkPositionMin.z),
                 Normal.Top,
-                faceGeneration.lightLevelTop
+                faceGeneration.lightLevelTopNatural,
+                faceGeneration.lightLevelTopArtificial,
             );
 
             TexPoints points = TextureHandler.getPointsByID(textures.top);
@@ -1146,7 +1190,8 @@ private:
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMax.z),
                 Vec3d(chunkPositionMin.x, chunkPositionMin.y, chunkPositionMin.z),
                 Normal.Bottom,
-                faceGeneration.lightLevelBottom
+                faceGeneration.lightLevelBottomNatural,
+                faceGeneration.lightLevelBottomArtificial,
             );
 
             // This face is extremely confusing to visualize because one axis is inverted,

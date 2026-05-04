@@ -47,7 +47,8 @@ private:
     immutable minW = -(LIGHT_LEVEL_MAX + 1);
     immutable maxW = LIGHT_LEVEL_MAX + 1;
 
-    ubyte currentLightLevel = 0;
+    float globalAmbientLightLevel = 1.0;
+    int ambientLightLevelUniformLocation = -1000;
 
     immutable Vec2i[4] CHUNK_DIRECTIONS = [
         Vec2i(-1, 0),
@@ -75,16 +76,26 @@ public:
 
     immutable ubyte LIGHT_LEVEL_MAX = 15;
 
-    ubyte getCurrentLightLevel() {
-        return currentLightLevel;
+    immutable float GLOBAL_LIGHT_MIN = 0.0;
+    immutable float GLOBAL_LIGHT_MAX = 1.0;
+
+    void initialize() {
+        import graphics.shader_handler;
+
+        ambientLightLevelUniformLocation = ShaderHandler.getUniformLocation("chunk", "globalLightLevel");
     }
 
-    void setCurrentLightLevel(ubyte newValue) {
+    float getCurrentLightLevel() {
+        return globalAmbientLightLevel;
+    }
+
+    void setCurrentLightLevel(float newValue) {
+        import graphics.shader_handler;
         import std.algorithm;
 
-        currentLightLevel = cast(ubyte) clamp(newValue, cast(ubyte) 0, LIGHT_LEVEL_MAX);
+        globalAmbientLightLevel = clamp(newValue, GLOBAL_LIGHT_MIN, GLOBAL_LIGHT_MAX);
 
-        Map.regenerateWorld();
+        ShaderHandler.setUniformFloat("chunk", ambientLightLevelUniformLocation, globalAmbientLightLevel);
     }
 
     void cascadeNaturalLight(int xInWorld, int zInWorld) {

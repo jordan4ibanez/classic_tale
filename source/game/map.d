@@ -436,9 +436,9 @@ public:
 
     void regenerateWorld() {
         writeln("Regenerating world.");
-        foreach (Vec2i key; database.byKey()) {
-            MapGraphics.generate(key);
-        }
+        // foreach (Vec2i key; database.byKey()) {
+        //     MapGraphics.generate(key);
+        // }
     }
 
 private:
