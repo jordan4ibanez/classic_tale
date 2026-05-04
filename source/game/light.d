@@ -47,6 +47,8 @@ private:
     immutable minW = -(LIGHT_LEVEL_MAX + 1);
     immutable maxW = LIGHT_LEVEL_MAX + 1;
 
+    ubyte currentLightLevel = 0;
+
     immutable Vec2i[4] CHUNK_DIRECTIONS = [
         Vec2i(-1, 0),
         Vec2i(1, 0),
@@ -72,6 +74,18 @@ private:
 public:
 
     immutable ubyte LIGHT_LEVEL_MAX = 15;
+
+    ubyte getCurrentLightLevel() {
+        return currentLightLevel;
+    }
+
+    void setCurrentLightLevel(ubyte newValue) {
+        import std.algorithm;
+
+        currentLightLevel = cast(ubyte) clamp(newValue, cast(ubyte) 0, LIGHT_LEVEL_MAX);
+
+        Map.regenerateWorld();
+    }
 
     void cascadeNaturalLight(int xInWorld, int zInWorld) {
         // import std.datetime.stopwatch;

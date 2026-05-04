@@ -173,6 +173,9 @@ void main() {
 
 	bool drawWorld = true;
 
+	bool brighter = true;
+	float debugTimer = 0;
+
 	while (Window.shouldStayOpen()) {
 
 		if (Keyboard.isPressed(KeyboardKey.KEY_F1)) {
@@ -187,6 +190,44 @@ void main() {
 		}
 
 		Screenshot.listen();
+
+		//! Debug daylight cycle.
+
+		{
+			import game.light;
+			import utility.delta;
+
+			double delta = Delta.getDelta();
+
+			debugTimer += delta;
+
+			if (debugTimer > 1) {
+				debugTimer -= 1;
+
+				const MAX_LIGHT = Light.LIGHT_LEVEL_MAX;
+
+				if (brighter) {
+					ubyte level = Light.getCurrentLightLevel();
+					level++;
+					if (level >= MAX_LIGHT) {
+						level = MAX_LIGHT;
+						brighter = false;
+					}
+					Light.setCurrentLightLevel(level);
+				} else {
+					ubyte level = Light.getCurrentLightLevel();
+					level--;
+					if (level <= 0) {
+						level = 0;
+						brighter = true;
+					}
+					Light.setCurrentLightLevel(level);
+				}
+
+			}
+		}
+
+		//! End debug daylight cycle.
 
 		// if (Keyboard.isPressed(KeyboardKey.KEY_E)) {
 		// 	resetDebug();

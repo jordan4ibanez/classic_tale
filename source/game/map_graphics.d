@@ -1,5 +1,6 @@
 module game.map_graphics;
 
+import core.internal.util.math;
 import core.memory;
 import game.block_database;
 import game.map;
@@ -165,6 +166,26 @@ struct FaceTextures {
 private struct PopResult {
     bool exists = false;
     Vec2i data;
+}
+
+private ubyte mixLight(ubyte artificialLight, ubyte naturalLight) {
+
+    import game.light;
+    import std.algorithm;
+
+    const ubyte rawGlobalNatural = Light.getCurrentLightLevel();
+
+    // Get a subtrahend to subtract from the natural light value to limit it to the global sun value.
+    const ubyte naturalSubtrahend = cast(ubyte) clamp(
+        Light.LIGHT_LEVEL_MAX - rawGlobalNatural, 0, Light
+            .LIGHT_LEVEL_MAX);
+
+    // Mix it and clamp it.
+    const ubyte calculatedNatural = cast(ubyte) clamp(naturalLight - naturalSubtrahend, cast(ubyte) 0,
+        Light.LIGHT_LEVEL_MAX);
+
+    // Then clamp it to the artificial light level to see which one gives more light. (torch or sun)
+    return max(artificialLight, calculatedNatural);
 }
 
 static final const class MapGraphics {
@@ -390,8 +411,11 @@ private:
         FaceGeneration faceGen = AllFaces;
 
         Vec3d pos;
-        Vec3d min = Vec3d(0, 0, 0);
-        Vec3d max = Vec3d(1, 1, 1);
+        // These are cube position min and max.
+        // This can be used for generating blockbox models.
+        // todo: this should probably be somewhere else in this file though. (closer to the function)
+        Vec3d minCubeposition = Vec3d(0, 0, 0);
+        Vec3d maxCubePosition = Vec3d(1, 1, 1);
 
         const(BlockData)* blockDataNeighbor;
 
@@ -433,8 +457,10 @@ private:
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.front = true;
-                                        faceGen.lightLevelFront = blockDataNeighbor
-                                            .artificialLightBank;
+
+                                        faceGen.lightLevelFront = mixLight(
+                                            blockDataNeighbor.artificialLightBank,
+                                            blockDataNeighbor.naturalLightBank);
                                     }
                                 }
                             } else {
@@ -446,8 +472,9 @@ private:
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.front = true;
-                                    faceGen.lightLevelFront = blockDataNeighbor
-                                        .artificialLightBank;
+                                    faceGen.lightLevelFront = mixLight(
+                                        blockDataNeighbor.artificialLightBank,
+                                        blockDataNeighbor.naturalLightBank);
                                 }
                             }
 
@@ -462,8 +489,9 @@ private:
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.back = true;
-                                        faceGen.lightLevelBack = blockDataNeighbor
-                                            .artificialLightBank;
+                                        faceGen.lightLevelBack = mixLight(
+                                            blockDataNeighbor.artificialLightBank,
+                                            blockDataNeighbor.naturalLightBank);
                                     }
                                 }
                             } else {
@@ -475,8 +503,9 @@ private:
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.back = true;
-                                    faceGen.lightLevelBack = blockDataNeighbor
-                                        .artificialLightBank;
+                                    faceGen.lightLevelBack = mixLight(
+                                        blockDataNeighbor.artificialLightBank,
+                                        blockDataNeighbor.naturalLightBank);
                                 }
                             }
 
@@ -491,8 +520,9 @@ private:
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.left = true;
-                                        faceGen.lightLevelLeft = blockDataNeighbor
-                                            .artificialLightBank;
+                                        faceGen.lightLevelLeft = mixLight(
+                                            blockDataNeighbor.artificialLightBank,
+                                            blockDataNeighbor.naturalLightBank);
                                     }
                                 }
                             } else {
@@ -504,8 +534,9 @@ private:
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.left = true;
-                                    faceGen.lightLevelLeft = blockDataNeighbor
-                                        .artificialLightBank;
+                                    faceGen.lightLevelLeft = mixLight(
+                                        blockDataNeighbor.artificialLightBank,
+                                        blockDataNeighbor.naturalLightBank);
                                 }
                             }
 
@@ -519,8 +550,9 @@ private:
 
                                     if (neighborDefinition.drawtype != Drawtype.Normal) {
                                         faceGen.right = true;
-                                        faceGen.lightLevelRight = blockDataNeighbor
-                                            .artificialLightBank;
+                                        faceGen.lightLevelRight = mixLight(
+                                            blockDataNeighbor.artificialLightBank,
+                                            blockDataNeighbor.naturalLightBank);
                                     }
                                 }
                             } else {
@@ -532,8 +564,9 @@ private:
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.right = true;
-                                    faceGen.lightLevelRight = blockDataNeighbor
-                                        .artificialLightBank;
+                                    faceGen.lightLevelRight = mixLight(
+                                        blockDataNeighbor.artificialLightBank,
+                                        blockDataNeighbor.naturalLightBank);
                                 }
                             }
 
@@ -548,8 +581,9 @@ private:
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.top = true;
-                                    faceGen.lightLevelTop = blockDataNeighbor
-                                        .artificialLightBank;
+                                    faceGen.lightLevelTop = mixLight(
+                                        blockDataNeighbor.artificialLightBank,
+                                        blockDataNeighbor.naturalLightBank);
                                 }
                             }
 
@@ -566,8 +600,9 @@ private:
 
                                 if (neighborDefinition.drawtype != Drawtype.Normal) {
                                     faceGen.bottom = true;
-                                    faceGen.lightLevelBottom = blockDataNeighbor
-                                        .artificialLightBank;
+                                    faceGen.lightLevelBottom = mixLight(
+                                        blockDataNeighbor.artificialLightBank,
+                                        blockDataNeighbor.naturalLightBank);
                                 }
                             }
 
@@ -582,7 +617,7 @@ private:
                             pos.z = z;
 
                             makeCube(vertIndex, textIndex, colorIndex, vertices, textureCoordinates, normals,
-                                colors, pos, min, max, &faceGen, &faceTextures);
+                                colors, pos, minCubeposition, maxCubePosition, &faceGen, &faceTextures);
 
                         }
                         break;

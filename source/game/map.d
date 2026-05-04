@@ -434,6 +434,13 @@ public:
         loadChunk(Vec2i(x, z));
     }
 
+    void regenerateWorld() {
+        writeln("Regenerating world.");
+        foreach (Vec2i key; database.byKey()) {
+            MapGraphics.generate(key);
+        }
+    }
+
 private:
 
     void unloadOldChunks(Vec2i currentPlayerChunk) {
