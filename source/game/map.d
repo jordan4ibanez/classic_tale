@@ -23,8 +23,6 @@ import std.math.rounding;
 import std.random;
 import std.stdio;
 import utility.circular_buffer;
-import utility.flat_container_2d;
-import utility.flat_container_3d;
 import utility.window;
 
 // Width is for X and Z.
@@ -36,6 +34,27 @@ immutable public int CHUNK_STRIDE = CHUNK_WIDTH * CHUNK_HEIGHT;
 pragma(inline, true)
 private string generateKey(const ref Vec2i input) {
     return "Chunk:" ~ to!string(input.x) ~ "|" ~ to!string(input.y);
+}
+
+/// Get a position from an index in a chunk.
+public Vec3i indexToPosition(int index) {
+    return Vec3i(
+        index / CHUNK_STRIDE,
+        (index % CHUNK_HEIGHT),
+        (index % CHUNK_STRIDE) / CHUNK_HEIGHT
+    );
+}
+
+/// Get an index from a position within a chunk.
+pragma(inline, true)
+public int positionToIndex(Vec3i position) {
+    return (position.x * CHUNK_STRIDE) + (position.z * CHUNK_HEIGHT) + position.y;
+}
+
+/// Get an index from a position within a chunk.
+pragma(inline, true)
+public int positionToIndex(int positionX, int positionY, int positionZ) {
+    return (positionX * CHUNK_STRIDE) + (positionZ * CHUNK_HEIGHT) + positionY;
 }
 
 struct BlockData {
@@ -52,10 +71,12 @@ struct BlockData {
 struct Chunk {
     ulong modelKey = 0;
 
-    FlatContainer3D!(BlockData, CHUNK_WIDTH, CHUNK_HEIGHT, CHUNK_WIDTH) data;
+    // todo: these need to be 1D.
+
+    // Y, Z, X
+    BlockData[CHUNK_HEIGHT * CHUNK_WIDTH * CHUNK_WIDTH] data;
     // Z, X
-    FlatContainer2D!(int, CHUNK_WIDTH, CHUNK_WIDTH) heightmap;
-    // int[CHUNK_WIDTH][CHUNK_WIDTH] heightmap;
+    int[CHUNK_WIDTH][CHUNK_WIDTH] heightmap;
 
 }
 
@@ -128,7 +149,7 @@ public:
         if (thisChunk is null) {
             return 0;
         }
-        return thisChunk.heightmap.get(posInChunk.x, posInChunk.y);
+        return thisChunk.heightmap[posInChunk.x][posInChunk.y];
     }
 
     int getTopAt(int x, int z) {
@@ -138,7 +159,7 @@ public:
         if (thisChunk is null) {
             return 0;
         }
-        return thisChunk.heightmap.get(posInChunk.x, posInChunk.y);
+        return thisChunk.heightmap[posInChunk.x][posInChunk.y];
     }
 
     Vec2i calculateChunkAtWorldPosition(Vec3d position) {
@@ -211,7 +232,7 @@ public:
             return BlockData();
         }
 
-        return thisChunk.data.get(xzPosInChunk.x, y, xzPosInChunk.y);
+        return thisChunk.data[positionToIndex(xzPosInChunk.x, y, xzPosInChunk.y)];
     }
 
     BlockData* getBlockPointerAtWorldPosition(int x, int y, int z) {
@@ -231,7 +252,7 @@ public:
             return null;
         }
 
-        return thisChunk.data.getRef(xzPosInChunk.x, y, xzPosInChunk.y);
+        return &thisChunk.data[positionToIndex(xzPosInChunk.x, y, xzPosInChunk.y)];
     }
 
     BlockData* getBlockPointerAtWorldPosition(Vec3i position) {
@@ -251,7 +272,7 @@ public:
             return null;
         }
 
-        return thisChunk.data.getRef(xzPosInChunk.x, position.y, xzPosInChunk.y);
+        return &thisChunk.data[positionToIndex(xzPosInChunk.x, position.y, xzPosInChunk.y)];
     }
 
     void setBlockAtWorldPositionByID(Vec3d position, uint blockID) {
@@ -281,7 +302,7 @@ public:
             return;
         }
 
-        thisChunk.data.getRef(xzPosInChunk.x, yPosInChunk, xzPosInChunk.y).blockID = blockID;
+        thisChunk.data[positionToIndex(xzPosInChunk.x, yPosInChunk, xzPosInChunk.y)].blockID = blockID;
 
         updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, blockID,
             cast(int) position.x, cast(int) position.z);
@@ -319,7 +340,7 @@ public:
             return;
         }
 
-        thisChunk.data.getRef(xzPosInChunk.x, y, xzPosInChunk.y).blockID = blockID;
+        thisChunk.data[positionToIndex(xzPosInChunk.x, y, xzPosInChunk.y)].blockID = blockID;
 
         updateHeightMap(thisChunk, xzPosInChunk.x, y, xzPosInChunk.y, blockID, x, z);
 
@@ -359,8 +380,7 @@ public:
             throw new Error("Cannot set to block " ~ name ~ ", does not exist.");
         }
 
-        thisChunk.data.getRef(xzPosInChunk.x, yPosInChunk, xzPosInChunk.y)
-            .blockID = thisBlock
+        thisChunk.data[positionToIndex(xzPosInChunk.x, yPosInChunk, xzPosInChunk.y)].blockID = thisBlock
             .blockID;
 
         updateHeightMap(thisChunk, xzPosInChunk.x, yPosInChunk, xzPosInChunk.y, thisBlock.blockID,
@@ -380,7 +400,7 @@ public:
 
         const(BlockDefinition*) ultraFastBlockDatabaseAccess = BlockDatabase.getUltraFastAccess();
 
-        const int height = thisChunk.heightmap.get(xInChunk, zInChunk);
+        const int height = thisChunk.heightmap[xInChunk][zInChunk];
         // ID was set to air. (removed/dug)
         if (newID == 0) {
             // If it was the top, have to scan down.
@@ -390,11 +410,11 @@ public:
                 bool found = false;
                 foreach_reverse (yScan; 0 .. yInChunk + 1) {
 
-                    BlockData* thisBlock = thisChunk.data.getRef(xInChunk, yScan, zInChunk);
+                    BlockData* thisBlock = &thisChunk.data[positionToIndex(xInChunk, yScan, zInChunk)];
 
                     // Mark new heightmap height.
                     if (!found && thisBlock.blockID != 0) {
-                        thisChunk.heightmap.set(xInChunk, zInChunk, yScan);
+                        thisChunk.heightmap[xInChunk][zInChunk] = yScan;
                         found = true;
                     }
 
@@ -419,14 +439,14 @@ public:
             //? Note: Additive update.
             if (yInChunk > height) {
 
-                thisChunk.heightmap.set(xInChunk, zInChunk, yInChunk);
+                thisChunk.heightmap[xInChunk][zInChunk] = yInChunk;
 
-                const BlockData* thisBlock = thisChunk.data.getRef(xInChunk, yInChunk, zInChunk);
+                const BlockData* thisBlock = &thisChunk.data[positionToIndex(xInChunk, yInChunk, zInChunk)];
 
                 // If light propagates, the blocks below are still under sunlight.
                 if (!(ultraFastBlockDatabaseAccess + thisBlock.blockID).lightPropagates) {
                     foreach (yScan; height .. yInChunk) {
-                        thisChunk.data.getRef(xInChunk, yScan, zInChunk).isSunlight = false;
+                        thisChunk.data[positionToIndex(xInChunk, yScan, zInChunk)].isSunlight = false;
                     }
                 }
             }
@@ -466,12 +486,9 @@ public:
         ));
     }
 
-    // todo: fixthis
-    // todo: Make this 1D so it's not a mess!
-
     // Y Z X
-    private static FlatContainer3D!(MazeElement, BOUNDARY_BOX_MAX, CHUNK_HEIGHT, BOUNDARY_BOX_MAX) lightPool;
-    private static FlatContainer2D!(Chunk*, 3, 3) chunkPointers;
+    private static MazeElement[CHUNK_HEIGHT][BOUNDARY_BOX_MAX][BOUNDARY_BOX_MAX] lightPool;
+    private static Chunk*[3][3] chunkPointers;
     private static CircularBuffer!Vec3i sourceQueue;
     private static CircularBuffer!LightTraversalNode cascadeQueue;
     private static int[BOUNDARY_BOX_MAX][BOUNDARY_BOX_MAX] cacheHeightMap;
@@ -520,7 +537,7 @@ public:
                 foreach (z; minChunkZ .. maxChunkZ + 1) {
                     cacheKey.x = x;
                     cacheKey.y = z;
-                    chunkPointers.set(x - minChunkX, z - minChunkZ, cacheKey in database);
+                    chunkPointers[x - minChunkX][z - minChunkZ] = cacheKey in database;
                 }
             }
         }
@@ -566,6 +583,7 @@ public:
         // This is shifting the whole world position into the box position.
         // Accumulating the light data so that the world does not need the be checked again.
         Vec3i cacheVec3i;
+        BlockData* currentBlockPointer;
         foreach (const xRaw; minW .. maxW + 1) {
             const int xInBox = xRaw + LIGHT_LEVEL_MAX + 1;
             const int xWorldLocal = xInWorld + xRaw;
@@ -597,7 +615,7 @@ public:
                 // auto cz = getXZInChunk(xWorldLocal, zWorldLocal);
                 // assert(xInChunkPointer == cz.x && zInChunkPointer == cz.y);
 
-                const(Chunk)* thisChunk = chunkPointers.get(chunkXInCache, chunkZInCache);
+                Chunk* thisChunk = chunkPointers[chunkXInCache][chunkZInCache];
 
                 // Find the highest point on this X and Z position that touches a neighbor block.
                 //? This is an extreme and aggressive optimization that will have less of an effect if you
@@ -644,8 +662,7 @@ public:
                     const int thisZInsideChunkLocal = (__tempZ < 0) ? (
                         __tempZ + CHUNK_WIDTH) : __tempZ;
 
-                    const(Chunk)* neighborBlockChunk =
-                        chunkPointers.get(xChunkInCacheHeightmap, zChunkInCacheHeightmap);
+                    const Chunk* neighborBlockChunk = chunkPointers[xChunkInCacheHeightmap][zChunkInCacheHeightmap];
 
                     // Can't get data that does not exist.
                     if (neighborBlockChunk is null) {
@@ -655,7 +672,7 @@ public:
                     // +1 to allow the light to flow over the block. Basically, make it so you can see the top of blocks.
                     // The other +1 is because the foreach is exclusive. (subtracts 1)
                     const int neighborTop = neighborBlockChunk
-                        .heightmap.get(thisXInsideChunkLocal, thisZInsideChunkLocal) + 2;
+                        .heightmap[thisXInsideChunkLocal][thisZInsideChunkLocal] + 2;
 
                     if (neighborTop > highPoint) {
                         highPoint = neighborTop;
@@ -666,8 +683,7 @@ public:
 
                 foreach (const yRaw; 0 .. highPoint) {
 
-                    //? Note: This gets mutated.
-                    MazeElement* elementPointer = lightPool.getRef(xInBox, yRaw, zInBox);
+                    MazeElement* elementPointer = &lightPool[xInBox][zInBox][yRaw];
 
                     // Do not do corners.
                     // if ((xRaw == minW || xRaw == maxW - 1) &&
@@ -685,8 +701,8 @@ public:
                     //     continue;
                     // }
 
-                    const(BlockData)* currentBlockPointer = thisChunk
-                        .data.getRef(xInChunkPointer, yRaw, zInChunkPointer);
+                    currentBlockPointer = &thisChunk
+                        .data[positionToIndex(xInChunkPointer, yRaw, zInChunkPointer)];
 
                     const BlockDefinition* thisDefinition = ultraFastBlockDatabaseAccess + currentBlockPointer
                         .blockID;
@@ -777,11 +793,11 @@ public:
             cacheTraversalNode.x = thisSource.x;
             cacheTraversalNode.y = thisSource.y;
             cacheTraversalNode.z = thisSource.z;
-            cacheTraversalNode.naturalLightLevel = lightPool.get(thisSource.x, thisSource.y, thisSource
-                    .z).naturalLightLevel;
+            cacheTraversalNode.naturalLightLevel = lightPool[thisSource.x][thisSource.z][thisSource
+                    .y].naturalLightLevel;
 
-            cacheTraversalNode.artificialLightLevel = lightPool.get(thisSource.x, thisSource.y, thisSource
-                    .z).artificialLightLevel;
+            cacheTraversalNode.artificialLightLevel = lightPool[thisSource.x][thisSource.z][thisSource
+                    .y].artificialLightLevel;
 
             cascadeQueue.put(cacheTraversalNode);
 
@@ -811,7 +827,6 @@ public:
 
                 // writeln(downStreamArtificialLightLevel);
 
-                //? Note: This gets mutated.
                 MazeElement* lookingAtNeighbor;
 
                 DIRECTION_LOOP: foreach (dir; DIRECTIONS) {
@@ -828,7 +843,7 @@ public:
                         continue DIRECTION_LOOP;
                     }
 
-                    lookingAtNeighbor = lightPool.getRef(newPosX, newPosY, newPosZ);
+                    lookingAtNeighbor = &lightPool[newPosX][newPosZ][newPosY];
 
                     // In non-air. Which light cannot spread to.
                     if (!lookingAtNeighbor.isAir) {
@@ -902,13 +917,13 @@ public:
 
                 const int highPoint = cacheHeightMap[xInBox][zInBox];
 
-                Chunk* thisChunk = chunkPointers.get(chunkXInCache, chunkZInCache);
+                Chunk* thisChunk = chunkPointers[chunkXInCache][chunkZInCache];
 
                 foreach (yRaw; 0 .. highPoint) {
-                    BlockData* thisBlockData = thisChunk
-                        .data.getRef(xInChunkPointer, yRaw, zInChunkPointer);
+                    BlockData* thisBlockData = &thisChunk
+                        .data[positionToIndex(xInChunkPointer, yRaw, zInChunkPointer)];
 
-                    MazeElement* thisMazeElement = lightPool.getRef(xInBox, yRaw, zInBox);
+                    MazeElement* thisMazeElement = &lightPool[xInBox][zInBox][yRaw];
 
                     thisBlockData.naturalLightBank = thisMazeElement.naturalLightLevel;
 
@@ -966,10 +981,9 @@ private:
             return;
         }
         // todo: try to read from mongoDB.
-        Chunk* newChunk = new Chunk();
+        Chunk newChunk = Chunk();
         generateChunkData(chunkPosition, newChunk);
-        // This should be a memcpy. (I hope)
-        database[chunkPosition] = *newChunk;
+        database[chunkPosition] = newChunk;
         MapGraphics.generate(
             chunkPosition);
         updateAllNeighbors(chunkPosition);
@@ -1024,7 +1038,7 @@ private:
         }
     }
 
-    void generateChunkData(Vec2i chunkPosition, Chunk* thisChunk) {
+    void generateChunkData(Vec2i chunkPosition, ref Chunk thisChunk) {
 
         // todo: the chunk should have a biome.
         const(BiomeDefinition*) thisBiome = BiomeDatabase.getBiomeByID(
@@ -1096,35 +1110,35 @@ private:
                     int) round(
                     abs(bedRockNoise));
 
-                thisChunk.heightmap.set(x, z, grassLayer);
+                thisChunk.heightmap[x][z] = grassLayer;
 
                 foreach (y; 0 .. CHUNK_HEIGHT) {
 
                     if (
                         y > selectedHeight) {
-                        thisChunk.data.getRef(x, y, z)
+                        thisChunk.data[positionToIndex(x, y, z)]
                             .naturalLightBank = 15;
-                        thisChunk.data.getRef(x, y, z).isSunlight = true;
+                        thisChunk.data[positionToIndex(x, y, z)].isSunlight = true;
                     } else {
                         if (y == 0) {
-                            thisChunk.data.getRef(x, y, z).blockID = bedrock.blockID;
+                            thisChunk.data[positionToIndex(x, y, z)].blockID = bedrock.blockID;
                         } else if (
                             y <= 2) {
                             if (
                                 y <= bedRockSelectedHeight) {
-                                thisChunk.data.getRef(x, y, z).blockID = bedrock.blockID;
+                                thisChunk.data[positionToIndex(x, y, z)].blockID = bedrock.blockID;
                             } else {
-                                thisChunk.data.getRef(x, y, z).blockID = stone.blockID;
+                                thisChunk.data[positionToIndex(x, y, z)].blockID = stone.blockID;
                             }
                         } else if (
                             y < dirtLayer) {
-                            thisChunk.data.getRef(x, y, z).blockID = stone.blockID;
+                            thisChunk.data[positionToIndex(x, y, z)].blockID = stone.blockID;
                         } else if (
                             y < grassLayer) {
-                            thisChunk.data.getRef(x, y, z).blockID = dirt.blockID;
+                            thisChunk.data[positionToIndex(x, y, z)].blockID = dirt.blockID;
                         } else if (
                             y == grassLayer) {
-                            thisChunk.data.getRef(x, y, z).blockID = grass.blockID;
+                            thisChunk.data[positionToIndex(x, y, z)].blockID = grass.blockID;
                         }
                     }
                 }
@@ -1290,73 +1304,72 @@ private:
 }
 
 // Testing 3D -> 1D packing calculation.
-// // unittest {
-
-//     int[CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_WIDTH] database;
-//     int realIndex = 0;
-//     auto rng = Random(unpredictableSeed());
-//     foreach (x; 0 .. CHUNK_WIDTH) {
-//         foreach (z; 0 .. CHUNK_WIDTH) {
-//             foreach (y; 0 .. CHUNK_HEIGHT) {
-//                 const Vec3i realPosition = Vec3i(x, y, z);
-//                 const int calculatedIndex = positionToIndex(realPosition);
-//                 const int calculatedIndexLiteral = positionToIndex(realPosition);
-//                 assert(realIndex == calculatedIndex, i"Index not correct. Real: $(
-//                         realIndex) vs $(
-//                         calculatedIndex)".text);
-//                 assert(realIndex == calculatedIndexLiteral);
-//                 const Vec3i calculatedPosition = indexToPosition(realIndex);
-//                 assert(realPosition == calculatedPosition, i"Position not correct. real $(
-//                         realPosition) vs $(calculatedPosition) ".text);
-//                 // Triple check.
-//                 assert(realIndex == positionToIndex(calculatedPosition));
-//                 // Quadruple check. (Dumb)
-//                 assert(indexToPosition(calculatedIndex) ==
-//                         indexToPosition(
-//                             positionToIndex(calculatedPosition)));
-//                 // And I have no idea why I even added this one at this point.
-//                 assert(positionToIndex(indexToPosition(
-//                         calculatedIndex)) == positionToIndex(calculatedPosition));
-//                 //! Now, to calculate some data.
-//                 const testData = uniform(0, 1_000_000, rng);
-//                 database[realIndex] = testData;
-//                 assert(database[realIndex] == testData);
-//                 assert(database[calculatedIndex] == testData);
-//                 assert(database[positionToIndex(indexToPosition(realIndex))] == testData);
-//                 assert(database[positionToIndex(realPosition)] == testData);
-//                 assert(database[positionToIndex(calculatedPosition)] == testData);
-//                 realIndex++;
-//             }
-//         }
-//     }
-//     // Next step is randomized position as a baseline.
-//     immutable int sampleSize = 10_000_000;
-//     foreach (_; 0 .. sampleSize) {
-//         const Vec3i realPosition = Vec3i(
-//             uniform(0, CHUNK_WIDTH, rng),
-//             uniform(0, CHUNK_HEIGHT, rng),
-//             uniform(0, CHUNK_WIDTH, rng),
-//         );
-//         const calculatedIndex = positionToIndex(realPosition);
-//         const calculatedIndexRaw = positionToIndex(realPosition.x, realPosition.y, realPosition.z);
-//         const calculatedPosition = indexToPosition(calculatedIndex);
-//         assert(realPosition == calculatedPosition);
-//         const reverseCalculatedIndex = positionToIndex(calculatedPosition);
-//         assert(reverseCalculatedIndex == calculatedIndex);
-//         assert(calculatedIndex == calculatedIndexRaw);
-//         const testData = uniform(0, 1_000_000, rng);
-//         database[calculatedIndex] = testData;
-//         assert(database[calculatedIndex] == testData);
-//         assert(database[reverseCalculatedIndex] == testData);
-//         assert(positionToIndex(
-//                 indexToPosition(
-//                 reverseCalculatedIndex)) == positionToIndex(realPosition));
-//         assert(reverseCalculatedIndex == positionToIndex(
-//                 indexToPosition(reverseCalculatedIndex)));
-//         assert(calculatedIndex == positionToIndex(
-//                 indexToPosition(reverseCalculatedIndex)));
-//         assert(positionToIndex(
-//                 indexToPosition(reverseCalculatedIndex)) == positionToIndex(realPosition.x, realPosition.y, realPosition
-//                 .z));
-//     }
-// }
+unittest {
+    int[CHUNK_WIDTH * CHUNK_HEIGHT * CHUNK_WIDTH] database;
+    int realIndex = 0;
+    auto rng = Random(unpredictableSeed());
+    foreach (x; 0 .. CHUNK_WIDTH) {
+        foreach (z; 0 .. CHUNK_WIDTH) {
+            foreach (y; 0 .. CHUNK_HEIGHT) {
+                const Vec3i realPosition = Vec3i(x, y, z);
+                const int calculatedIndex = positionToIndex(realPosition);
+                const int calculatedIndexLiteral = positionToIndex(realPosition);
+                assert(realIndex == calculatedIndex, i"Index not correct. Real: $(
+                        realIndex) vs $(
+                        calculatedIndex)".text);
+                assert(realIndex == calculatedIndexLiteral);
+                const Vec3i calculatedPosition = indexToPosition(realIndex);
+                assert(realPosition == calculatedPosition, i"Position not correct. real $(
+                        realPosition) vs $(calculatedPosition) ".text);
+                // Triple check.
+                assert(realIndex == positionToIndex(calculatedPosition));
+                // Quadruple check. (Dumb)
+                assert(indexToPosition(calculatedIndex) ==
+                        indexToPosition(
+                            positionToIndex(calculatedPosition)));
+                // And I have no idea why I even added this one at this point.
+                assert(positionToIndex(indexToPosition(
+                        calculatedIndex)) == positionToIndex(calculatedPosition));
+                //! Now, to calculate some data.
+                const testData = uniform(0, 1_000_000, rng);
+                database[realIndex] = testData;
+                assert(database[realIndex] == testData);
+                assert(database[calculatedIndex] == testData);
+                assert(database[positionToIndex(indexToPosition(realIndex))] == testData);
+                assert(database[positionToIndex(realPosition)] == testData);
+                assert(database[positionToIndex(calculatedPosition)] == testData);
+                realIndex++;
+            }
+        }
+    }
+    // Next step is randomized position as a baseline.
+    immutable int sampleSize = 10_000_000;
+    foreach (_; 0 .. sampleSize) {
+        const Vec3i realPosition = Vec3i(
+            uniform(0, CHUNK_WIDTH, rng),
+            uniform(0, CHUNK_HEIGHT, rng),
+            uniform(0, CHUNK_WIDTH, rng),
+        );
+        const calculatedIndex = positionToIndex(realPosition);
+        const calculatedIndexRaw = positionToIndex(realPosition.x, realPosition.y, realPosition.z);
+        const calculatedPosition = indexToPosition(calculatedIndex);
+        assert(realPosition == calculatedPosition);
+        const reverseCalculatedIndex = positionToIndex(calculatedPosition);
+        assert(reverseCalculatedIndex == calculatedIndex);
+        assert(calculatedIndex == calculatedIndexRaw);
+        const testData = uniform(0, 1_000_000, rng);
+        database[calculatedIndex] = testData;
+        assert(database[calculatedIndex] == testData);
+        assert(database[reverseCalculatedIndex] == testData);
+        assert(positionToIndex(
+                indexToPosition(
+                reverseCalculatedIndex)) == positionToIndex(realPosition));
+        assert(reverseCalculatedIndex == positionToIndex(
+                indexToPosition(reverseCalculatedIndex)));
+        assert(calculatedIndex == positionToIndex(
+                indexToPosition(reverseCalculatedIndex)));
+        assert(positionToIndex(
+                indexToPosition(reverseCalculatedIndex)) == positionToIndex(realPosition.x, realPosition.y, realPosition
+                .z));
+    }
+}
