@@ -207,16 +207,15 @@ void main() {
 
 			if (brighter) {
 				float level = Light.getCurrentLightLevel();
-				level += delta * 0.25;
+				level += delta * 0.05;
 				if (level >= Light.GLOBAL_LIGHT_MAX) {
 					level = Light.GLOBAL_LIGHT_MAX;
 					brighter = false;
 				}
 				Light.setCurrentLightLevel(level);
-				writeln(level);
 			} else {
 				float level = Light.getCurrentLightLevel();
-				level -= delta * 0.25;
+				level -= delta * 0.05;
 				if (level <= Light.GLOBAL_LIGHT_MIN) {
 					level = Light.GLOBAL_LIGHT_MIN;
 					brighter = true;
