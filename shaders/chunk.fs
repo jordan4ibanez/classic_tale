@@ -8,6 +8,7 @@ out vec4 finalColor;
 uniform sampler2D texture0; 
 uniform vec4 colDiffuse;
 uniform float globalLightLevel;
+uniform float torchFlicker;
 
 
 // const int LIGHT_LEVEL_CHART[16] = int[16](
@@ -29,8 +30,6 @@ uniform float globalLightLevel;
 //     255 // 15
 // );
 
-
-
 void main() { 
     vec4 texelColor = texture(texture0, fragTexCoord);
 
@@ -39,15 +38,14 @@ void main() {
     // When this drops below 0.03 artificial light will take over even in pure darkness.
     float NATURAL_LIGHT = fragColor.x * globalLightLevel;
 
+    float ARTIFICIAL_LIGHT = fragColor.y + torchFlicker;
 
-    if (NATURAL_LIGHT >= fragColor.y) {
+    if (NATURAL_LIGHT >= ARTIFICIAL_LIGHT) {
         texelColor.rgb *= NATURAL_LIGHT;
     } else {
-        texelColor.rgb *= fragColor.y;
+        texelColor.rgb *= ARTIFICIAL_LIGHT;
     }
     
-    
-
     // texelColor.g *= fragColor.y;
     finalColor = texelColor * colDiffuse; 
 } 

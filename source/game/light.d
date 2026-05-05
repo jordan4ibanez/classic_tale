@@ -48,7 +48,9 @@ private:
     immutable maxW = LIGHT_LEVEL_MAX + 1;
 
     float globalAmbientLightLevel = 1.0;
-    int ambientLightLevelUniformLocation = -1000;
+    int ambientLightLevelUniformLocation = -1;
+    float torchFlicker = 0.0;
+    int torchFlickerUniformLocation = -1;
 
     immutable Vec2i[4] CHUNK_DIRECTIONS = [
         Vec2i(-1, 0),
@@ -83,6 +85,7 @@ public:
         import graphics.shader_handler;
 
         ambientLightLevelUniformLocation = ShaderHandler.getUniformLocation("chunk", "globalLightLevel");
+        torchFlickerUniformLocation = ShaderHandler.getUniformLocation("chunk", "torchFlicker");
     }
 
     float getCurrentLightLevel() {
@@ -96,6 +99,18 @@ public:
         globalAmbientLightLevel = clamp(newValue, GLOBAL_LIGHT_MIN, GLOBAL_LIGHT_MAX);
 
         ShaderHandler.setUniformFloat("chunk", ambientLightLevelUniformLocation, globalAmbientLightLevel);
+    }
+
+    void update() {
+        import graphics.shader_handler;
+        import std.math;
+        import std.random;
+        import utility.delta;
+
+        const float acceleration = uniform(0.05, 0.1);
+        torchFlicker += Delta.getDelta() * acceleration;
+        const output = cos(torchFlicker) * 0.1;
+        ShaderHandler.setUniformFloat("chunk", torchFlickerUniformLocation, output);
     }
 
     void cascadeNaturalLight(int xInWorld, int zInWorld) {

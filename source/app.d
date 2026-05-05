@@ -224,6 +224,8 @@ void main() {
 			}
 		}
 
+		Light.update();
+
 		//! End debug daylight cycle.
 
 		// if (Keyboard.isPressed(KeyboardKey.KEY_E)) {
