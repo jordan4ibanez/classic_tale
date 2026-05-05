@@ -36,6 +36,7 @@ void main() {
 
     // Calculate global light level dimming here.
 
+    // When this drops below 0.03 artificial light will take over even in pure darkness.
     float NATURAL_LIGHT = fragColor.x * globalLightLevel;
 
 
