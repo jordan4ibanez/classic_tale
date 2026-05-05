@@ -356,6 +356,11 @@ void main() {
 			DrawText(toStringz("Artificial Light:" ~ to!string(artificialLightLevel)), 11, 191, 30, Colors
 					.BLUE);
 
+			DrawText(toStringz("Ambient Light:" ~ to!string(Light.getCurrentLightLevel())), 10, 220, 30, Colors
+					.BLACK);
+			DrawText(toStringz("Ambient Light:" ~ to!string(Light.getCurrentLightLevel())), 11, 221, 30, Colors
+					.BLUE);
+
 		}
 
 		Crosshair.draw();
