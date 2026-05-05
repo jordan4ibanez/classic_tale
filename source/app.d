@@ -205,9 +205,11 @@ void main() {
 
 			double delta = Delta.getDelta();
 
+			const timeSpeed = 0.01;
+
 			if (brighter) {
 				float level = Light.getCurrentLightLevel();
-				level += delta * 0.05;
+				level += delta * timeSpeed;
 				if (level >= Light.GLOBAL_LIGHT_MAX) {
 					level = Light.GLOBAL_LIGHT_MAX;
 					brighter = false;
@@ -215,7 +217,7 @@ void main() {
 				Light.setCurrentLightLevel(level);
 			} else {
 				float level = Light.getCurrentLightLevel();
-				level -= delta * 0.05;
+				level -= delta * timeSpeed;
 				if (level <= Light.GLOBAL_LIGHT_MIN) {
 					level = Light.GLOBAL_LIGHT_MIN;
 					brighter = true;
