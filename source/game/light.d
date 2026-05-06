@@ -110,10 +110,16 @@ public:
     FNLState torchNoise;
     double position = 0;
 
+    bool torchFlickerEnabled = true;
+
     /// This makes artificial light sources flicker.
     void updateArtificialLightSourceFlicker() {
         import graphics.shader_handler;
         import utility.delta;
+
+        if (!torchFlickerEnabled) {
+            return;
+        }
 
         const float rawNoise = fnlGetNoise2D(&torchNoise, position, 0.1413);
         const float shifted = rawNoise + 1.0;
