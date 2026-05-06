@@ -21,3 +21,12 @@ make fast
 # Does a debug compilation and run.
 make debug
 ```
+
+
+## todo list:
+
+- Day/Night cycle with matching skybox and time.
+
+- Entity class. The client player should probably extend from it.
+
+- Better modding API through something. Javascript or Luajit. Anything but having to recompile the game.
