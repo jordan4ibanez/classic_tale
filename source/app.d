@@ -226,7 +226,7 @@ void main() {
 			}
 		}
 
-		Light.update();
+		Light.updateArtificialLightSourceFlicker();
 
 		//! End debug daylight cycle.
 

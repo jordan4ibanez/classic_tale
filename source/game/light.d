@@ -1,5 +1,6 @@
 module game.light;
 
+import fast_noise;
 import game.block_database;
 import game.chunk;
 import game.map;
@@ -8,6 +9,7 @@ import math.vec2i;
 import math.vec3i;
 import std.bitmanip;
 import std.stdio;
+import utility.averaging_buffer;
 import utility.circular_buffer;
 
 private struct MazeElement {
@@ -49,7 +51,6 @@ private:
 
     float globalAmbientLightLevel = 1.0;
     int ambientLightLevelUniformLocation = -1;
-    float torchFlicker = 0.0;
     int torchFlickerUniformLocation = -1;
 
     immutable Vec2i[4] CHUNK_DIRECTIONS = [
@@ -72,6 +73,8 @@ private:
         // ~2.1 MB.
         sourceQueue = CircularBuffer!(Vec3i)(10_000);
         cascadeQueue = CircularBuffer!(LightTraversalNode)(150_000);
+
+        torchNoise.frequency = torchFlickerScale;
     }
 
 public:
@@ -101,16 +104,28 @@ public:
         ShaderHandler.setUniformFloat("chunk", ambientLightLevelUniformLocation, globalAmbientLightLevel);
     }
 
-    void update() {
+    immutable float torchFlickerColorAmount = 0.01;
+    immutable float torchBaselineColorBoost = 0.0;
+    immutable float torchFlickerScale = 0.85;
+    FNLState torchNoise;
+    double position = 0;
+
+    /// This makes artificial light sources flicker.
+    void updateArtificialLightSourceFlicker() {
         import graphics.shader_handler;
-        import std.math;
-        import std.random;
         import utility.delta;
 
-        const float acceleration = uniform(0.05, 0.1);
-        torchFlicker += Delta.getDelta() * acceleration;
-        const output = cos(torchFlicker) * 0.1;
-        ShaderHandler.setUniformFloat("chunk", torchFlickerUniformLocation, output);
+        const float rawNoise = fnlGetNoise2D(&torchNoise, position, 0.1413);
+        const float shifted = rawNoise + 1.0;
+        const float scaled = shifted * 0.5;
+        const float colorProcessed = scaled * torchFlickerColorAmount;
+        const float boosted = colorProcessed + torchBaselineColorBoost;
+
+        position += Delta.getDelta();
+
+        // writeln(boosted);
+
+        ShaderHandler.setUniformFloat("chunk", torchFlickerUniformLocation, boosted);
     }
 
     void cascadeNaturalLight(int xInWorld, int zInWorld) {

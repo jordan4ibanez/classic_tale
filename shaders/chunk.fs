@@ -30,6 +30,14 @@ uniform float torchFlicker;
 //     255 // 15
 // );
 
+// 1 ubyte above the threshold of 0.
+// This is so caves do not flicker in pure darkness. (light level 0)
+const float flickerThreshold = 9.0 / 255.0;
+
+// This is the tint of the torch light.
+// It is orange.
+const vec3 torchLightColor = vec3(1.0, 0.64, 0.0);
+
 void main() { 
     vec4 texelColor = texture(texture0, fragTexCoord);
 
@@ -38,12 +46,16 @@ void main() {
     // When this drops below 0.03 artificial light will take over even in pure darkness.
     float NATURAL_LIGHT = fragColor.x * globalLightLevel;
 
-    float ARTIFICIAL_LIGHT = fragColor.y + torchFlicker;
+    float ARTIFICIAL_LIGHT = fragColor.y;
 
     if (NATURAL_LIGHT >= ARTIFICIAL_LIGHT) {
         texelColor.rgb *= NATURAL_LIGHT;
     } else {
         texelColor.rgb *= ARTIFICIAL_LIGHT;
+
+        if (ARTIFICIAL_LIGHT > flickerThreshold) {
+            texelColor.rgb = mix(texelColor.rgb, torchLightColor, torchFlicker);
+        }
     }
     
     // texelColor.g *= fragColor.y;
