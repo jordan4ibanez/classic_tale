@@ -30,3 +30,7 @@ make debug
 - Entity class. The client player should probably extend from it.
 
 - Better modding API through something. Javascript or Luajit. Anything but having to recompile the game.
+
+- Make torches not walkable.
+
+- Add wall mounted torches.
