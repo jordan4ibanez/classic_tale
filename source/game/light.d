@@ -81,8 +81,8 @@ public:
 
     immutable ubyte LIGHT_LEVEL_MAX = 15;
 
-    immutable float GLOBAL_LIGHT_MIN = 0.0;
-    immutable float GLOBAL_LIGHT_MAX = 1.0;
+    immutable float GLOBAL_AMBIENT_LIGHT_MIN = 0.0;
+    immutable float GLOBAL_AMBIENT_LIGHT_MAX = 1.0;
 
     void initialize() {
         import graphics.shader_handler;
@@ -99,7 +99,7 @@ public:
         import graphics.shader_handler;
         import std.algorithm;
 
-        globalAmbientLightLevel = clamp(newValue, GLOBAL_LIGHT_MIN, GLOBAL_LIGHT_MAX);
+        globalAmbientLightLevel = clamp(newValue, GLOBAL_AMBIENT_LIGHT_MIN, GLOBAL_AMBIENT_LIGHT_MAX);
 
         ShaderHandler.setUniformFloat("chunk", ambientLightLevelUniformLocation, globalAmbientLightLevel);
     }

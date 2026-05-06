@@ -6,6 +6,7 @@ import game.light;
 import game.map;
 import game.map_graphics;
 import game.player;
+import game.time;
 import graphics.camera_handler;
 import graphics.crosshair;
 import graphics.gui;
@@ -179,9 +180,6 @@ void main() {
 
 	bool drawWorld = true;
 
-	bool brighter = true;
-	float debugTimer = 0;
-
 	while (Window.shouldStayOpen()) {
 
 		if (Keyboard.isPressed(KeyboardKey.KEY_F1)) {
@@ -197,38 +195,9 @@ void main() {
 
 		Screenshot.listen();
 
-		//! Debug daylight cycle.
-
-		{
-			import game.light;
-			import utility.delta;
-
-			double delta = Delta.getDelta();
-
-			const timeSpeed = 0.01;
-
-			if (brighter) {
-				float level = Light.getCurrentLightLevel();
-				level += delta * timeSpeed;
-				if (level >= Light.GLOBAL_LIGHT_MAX) {
-					level = Light.GLOBAL_LIGHT_MAX;
-					brighter = false;
-				}
-				Light.setCurrentLightLevel(level);
-			} else {
-				float level = Light.getCurrentLightLevel();
-				level -= delta * timeSpeed;
-				if (level <= Light.GLOBAL_LIGHT_MIN) {
-					level = Light.GLOBAL_LIGHT_MIN;
-					brighter = true;
-				}
-				Light.setCurrentLightLevel(level);
-			}
-		}
-
 		Light.updateArtificialLightSourceFlicker();
 
-		//! End debug daylight cycle.
+		Time.update();
 
 		// if (Keyboard.isPressed(KeyboardKey.KEY_E)) {
 		// 	resetDebug();
@@ -333,6 +302,11 @@ void main() {
 		DrawText(toStringz("Z:" ~ format("%.2f", pos.z)), 10, 130, 30, Colors.BLACK);
 		DrawText(toStringz("Z:" ~ format("%.2f", pos.z)), 11, 131, 30, Colors.BLUE);
 
+		DrawText(toStringz("Time: " ~ Time.getTimeOfDayString()), 10, 160, 30, Colors
+				.BLACK);
+		DrawText(toStringz("Time: " ~ Time.getTimeOfDayString()), 11, 161, 30, Colors
+				.BLUE);
+
 		ubyte naturalLightLevel = 0;
 		ubyte artificialLightLevel = 0;
 		Vec3i blockSelection = Player.getBlockSelectionAbove();
@@ -346,19 +320,19 @@ void main() {
 				artificialLightLevel = thisBlock.artificialLightBank;
 			}
 
-			DrawText(toStringz("Natural Light:" ~ to!string(naturalLightLevel)), 10, 160, 30, Colors
+			DrawText(toStringz("Natural Light:" ~ to!string(naturalLightLevel)), 10, 190, 30, Colors
 					.BLACK);
-			DrawText(toStringz("Natural Light:" ~ to!string(naturalLightLevel)), 11, 161, 30, Colors
+			DrawText(toStringz("Natural Light:" ~ to!string(naturalLightLevel)), 11, 191, 30, Colors
 					.BLUE);
 
-			DrawText(toStringz("Artificial Light:" ~ to!string(artificialLightLevel)), 10, 190, 30, Colors
+			DrawText(toStringz("Artificial Light:" ~ to!string(artificialLightLevel)), 10, 220, 30, Colors
 					.BLACK);
-			DrawText(toStringz("Artificial Light:" ~ to!string(artificialLightLevel)), 11, 191, 30, Colors
+			DrawText(toStringz("Artificial Light:" ~ to!string(artificialLightLevel)), 11, 221, 30, Colors
 					.BLUE);
 
-			DrawText(toStringz("Ambient Light:" ~ to!string(Light.getCurrentLightLevel())), 10, 220, 30, Colors
+			DrawText(toStringz("Ambient Light:" ~ to!string(Light.getCurrentLightLevel())), 10, 250, 30, Colors
 					.BLACK);
-			DrawText(toStringz("Ambient Light:" ~ to!string(Light.getCurrentLightLevel())), 11, 221, 30, Colors
+			DrawText(toStringz("Ambient Light:" ~ to!string(Light.getCurrentLightLevel())), 11, 251, 30, Colors
 					.BLUE);
 
 		}
