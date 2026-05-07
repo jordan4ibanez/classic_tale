@@ -5,7 +5,9 @@ import game.block_database;
 import game.chunk;
 import game.map;
 import game.map_graphics;
+import math.floating;
 import math.vec2i;
+import math.vec3d;
 import math.vec3i;
 import std.bitmanip;
 import std.stdio;
@@ -41,6 +43,12 @@ private struct LightTraversalNode {
     ));
 }
 
+private struct DayLightTimeStamp {
+    double time;
+    double lightLevel;
+    Vec3d skyColor;
+}
+
 static final const class Light {
 static:
 private:
@@ -68,6 +76,50 @@ private:
     int[BOUNDARY_BOX_MAX][BOUNDARY_BOX_MAX] cacheHeightMap;
 
     // todo: ?MAYBE? accumulate the x and z min and max and reallocate this to utilize the box of that + max light level to do it in one shot.
+
+    immutable Vec3d NIGHT_COLOR = Vec3d(0, 1, 25);
+    immutable Vec3d DAY_COLOR = Vec3d(120, 166, 255);
+
+    immutable DayLightTimeStamp[] dayLightStamps = [
+        DayLightTimeStamp(0, 0.0, NIGHT_COLOR), // Midnight. Sun is completely down.
+        DayLightTimeStamp(4500, 0.0, NIGHT_COLOR), // Sunrise. Sun appears.
+        DayLightTimeStamp(6500, 1.0, DAY_COLOR), // Sun is at full brightness.
+        DayLightTimeStamp(12_000, 1.0, DAY_COLOR), // Noon. Sun is directly overhead.
+        DayLightTimeStamp(18_500, 1.0, DAY_COLOR), // Sunset. Sun starts to go down. // todo: this is a total guess. See where the sun actually is.
+        DayLightTimeStamp(20_500, 0.0, NIGHT_COLOR), // Sun is completely gone. // todo: this is a total guess.
+        // DayLightTimeStamp(0, 0.0),
+        // Sun goes completely down somewhere at this point but I have no idea where yet.
+        // This should be 0.0.
+    ];
+
+    // immutable string[] timeOfDayNames = [
+    //     "midnight",
+    //     "sunrise",
+    //     "noon",
+    //     "sunset",
+    //     // Sun down somewhere here.
+    // ];
+
+    int dayTimeStage = 0;
+    double lightLevel = 0;
+    double prevTime = 0;
+    Vec3d skyColor = Vec3d(120, 166, 255);
+
+    // This is optimized for time moving forward.
+    int hitTimestamp(double prev, double curr) {
+        foreach (ulong i, DayLightTimeStamp timeStamp; dayLightStamps) {
+
+            if (prev < timeStamp.time && curr >= timeStamp.time) {
+                return cast(int) i;
+            }
+        }
+        // Catch for midnight.
+        if (prev > curr) {
+            return 0;
+        }
+
+        return -1;
+    }
 
     static this() {
         // ~2.1 MB.
@@ -104,6 +156,16 @@ public:
         ShaderHandler.setUniformFloat("chunk", ambientLightLevelUniformLocation, globalAmbientLightLevel);
     }
 
+    void clearToSkyColor() {
+        import raylib : ClearBackground, Color;
+
+        ClearBackground(Color(
+                cast(ubyte) skyColor.x,
+                cast(ubyte) skyColor.y,
+                cast(ubyte) skyColor.z,
+                255));
+    }
+
     immutable float torchFlickerColorAmount = 0.01;
     immutable float torchBaselineColorBoost = 0.0;
     immutable float torchFlickerScale = 0.85;
@@ -132,6 +194,50 @@ public:
         // writeln(boosted);
 
         ShaderHandler.setUniformFloat("chunk", torchFlickerUniformLocation, boosted);
+    }
+
+    void updateDaylight() {
+        import game.time;
+
+        const double currentTime = Time.getTimeOfDay();
+
+        const int hitter = hitTimestamp(prevTime, currentTime);
+        if (hitter >= 0) {
+            // writeln("Hit: ", timeOfDayNames[hitter]);
+            dayTimeStage = hitter;
+        }
+
+        // Time calculation.
+        const double currentStage = dayLightStamps[dayTimeStage].time;
+
+        const double nextStage = dayTimeStage + 1 >= dayLightStamps.length ? Time.END_OF_DAY
+            : dayLightStamps[dayTimeStage + 1].time;
+
+        const double amount = inverseLerp(currentTime, currentStage, nextStage);
+
+        // Light calculation.
+
+        const double startLight = dayLightStamps[dayTimeStage].lightLevel;
+
+        const double endLight = dayTimeStage + 1 >= dayLightStamps.length ? GLOBAL_AMBIENT_LIGHT_MIN
+            : dayLightStamps[dayTimeStage + 1].lightLevel;
+
+        lightLevel = lerp(startLight, endLight, amount);
+
+        Light.setCurrentLightLevel(lightLevel);
+
+        // writeln(lightLevel);
+
+        // Sky color calculation.
+
+        const Vec3d startSkyColor = dayLightStamps[dayTimeStage].skyColor;
+
+        const Vec3d endSkyColor = dayTimeStage + 1 >= dayLightStamps.length ? NIGHT_COLOR
+            : dayLightStamps[dayTimeStage + 1].skyColor;
+
+        skyColor = vec3dLerp(startSkyColor, endSkyColor, amount);
+
+        prevTime = currentTime;
     }
 
     void cascadeNaturalLight(int xInWorld, int zInWorld) {

@@ -195,9 +195,11 @@ void main() {
 
 		Screenshot.listen();
 
+		Time.update();
+
 		Light.updateArtificialLightSourceFlicker();
 
-		Time.update();
+		Light.updateDaylight();
 
 		// if (Keyboard.isPressed(KeyboardKey.KEY_E)) {
 		// 	resetDebug();
@@ -269,7 +271,9 @@ void main() {
 		BeginDrawing();
 
 		// ClearBackground(Color(120, 166, 255, 255));
-		ClearBackground(Color(0, 1, 25, 255));
+		// ClearBackground(Color(0, 1, 25, 255));
+
+		Light.clearToSkyColor();
 
 		CameraHandler.begin();
 		{

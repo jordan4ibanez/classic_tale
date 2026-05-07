@@ -10,12 +10,6 @@ static final const class Time {
 static:
 private:
 
-    // Represents a virtual 24 hour clock.
-    // These are basically both midnight.
-    // But one is yesterday, and the other is today.
-    immutable double endOfDay = 24_000;
-    immutable double startOfDay = 0;
-
     // Time Expansion Metric.
     // Converts (24_000 24 hour time virtual) to (86_400 real seconds, so time speed 1 is 24 hours).
     immutable double TEM = 3.6;
@@ -33,70 +27,26 @@ private:
     // But it is just double floating point precision loss.
     double timeSpeed = 8_640;
 
-    // todo: this should probably be in the Light module.
-    immutable double[] timeOfDayStamps = [
-        0, // Midnight. Sun is completely down.
-        4500, // Sunrise. Sun appears.
-        12_000, // Noon. Sun is directly overhead.
-        18_000, // Sunset. Sun starts to go down.
-        // Sun goes completely down somewhere at this point but I have no idea where yet.
-    ];
-
-    immutable string[] timeOfDayNames = [
-        "midnight",
-        "sunrise",
-        "noon",
-        "sunset",
-        // Sun down somewhere here.
-    ];
-
-    double lightLevel = 0;
-
-    // This is optimized for time moving forward.
-    int hitTimestamp(double prev, double curr) {
-        foreach (ulong i, double timeStamp; timeOfDayStamps) {
-
-            if (prev < timeStamp && curr >= timeStamp) {
-                return cast(int) i;
-            }
-        }
-        // Catch for midnight.
-        if (prev > curr) {
-            return 0;
-        }
-
-        return -1;
-    }
-
     void timeCalculation() {
         const double delta = Delta.getDelta();
 
-        const double prevTime = currentTime;
-
         currentTime += (delta * timeSpeed) * __convertTOD;
 
-        if (currentTime >= endOfDay) {
-            writeln("loop");
-
-            currentTime -= endOfDay;
+        if (currentTime >= END_OF_DAY) {
+            currentTime -= END_OF_DAY;
         }
 
         // writeln(currentTime, " | ", testTime);
 
-        const int hitter = hitTimestamp(prevTime, currentTime);
-        if (hitter >= 0) {
-            writeln("Hit: ", timeOfDayNames[hitter]);
-        }
-
-        getTimeOfDayString(true);
-
-    }
-
-    void lightLevelCalculation() {
-        Light.setCurrentLightLevel(lightLevel);
     }
 
 public:
+
+    // Represents a virtual 24 hour clock.
+    // These are basically both midnight.
+    // But one is yesterday, and the other is today.
+    immutable double END_OF_DAY = 24_000;
+    immutable double START_OF_DAY = 0;
 
     double getTimeOfDay() {
         return currentTime;
@@ -143,7 +93,6 @@ public:
     void update() {
 
         timeCalculation();
-        lightLevelCalculation();
 
         //! Debug daylight cycle.
 
