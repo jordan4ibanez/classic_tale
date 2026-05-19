@@ -32,61 +32,6 @@ import std.string;
 import utility.garbage_collector;
 import utility.window;
 
-// void main() {
-// 	immutable int sampleSize = 50;
-// 	immutable int accessCount = 10_000_000;
-// 	// Predictions/Result:
-// 	auto sw = StopWatch(AutoStart.yes);
-// 	// slow / slowest, easiest.
-// 	int[sampleSize][sampleSize][sampleSize] d3Test;
-// 	writeln("slow allocation took: ", sw.peek().total!"usecs", "us");
-// 	sw = StopWatch(AutoStart.yes);
-// 	// medium / safety to speed ratio highest.
-// 	int[sampleSize * sampleSize * sampleSize] d1Test;
-// 	writeln("medium allocation took: ", sw.peek().total!"usecs", "us");
-// 	sw = StopWatch(AutoStart.yes);
-// 	// fastest / unsafe and technically fastest over the long run.
-// 	int* rawTest = cast(int*) GC.malloc(int.sizeof * sampleSize * sampleSize * sampleSize);
-// 	writeln("fast allocation took: ", sw.peek().total!"usecs", "us");
-// 	// Todo: test 3d arrays, vs 1d arrays, vs raw heap data.
-// 	ulong total = 0;
-// 	{ //? 3D.
-// 		sw = StopWatch(AutoStart.yes);
-// 		foreach (i; 0 .. accessCount) {
-// 			const int x = i % sampleSize;
-// 			const int y = (i + 8) % sampleSize;
-// 			const int z = (i + 16) % sampleSize;
-// 			d3Test[x][y][z] = i;
-// 			total += d3Test[x][y][z];
-// 		}
-// 		writeln("3D took: ", sw.peek().total!"usecs", "us");
-// 	}
-// 	writeln("total: ", total);
-// 	total = 0;
-// 	{ //? 1D.
-// 		sw = StopWatch(AutoStart.yes);
-// 		const maxLength = sampleSize * sampleSize * sampleSize;
-// 		foreach (i; 0 .. accessCount) {
-// 			const int x = i % maxLength;
-// 			d1Test[x] = i;
-// 			total += d1Test[x];
-// 		}
-// 		writeln("1D took: ", sw.peek().total!"usecs", "us");
-// 	}
-// 	writeln("total: ", total);
-// 	total = 0;
-// 	{ //? Raw.
-// 		sw = StopWatch(AutoStart.yes);
-// 		const maxLength = sampleSize * sampleSize * sampleSize;
-// 		foreach (i; 0 .. accessCount) {
-// 			const int x = i % maxLength;
-// 			*(rawTest + x) = i;
-// 			total += *(rawTest + x);
-// 		}
-// 		writeln("Raw took: ", sw.peek().total!"usecs", "us");
-// 	}
-// 	writeln("total: ", total);
-// }
 
 void main() {
 

@@ -18,9 +18,9 @@
 	"dependencies": {
 		"raylib-d": "~>6.0.1",
 		"linked_hash_queue": "~>1.0.3",
-		"optibrev": "~>0.0.3",
 		"fast_pack": "~>5.0.1",
 		"fast_noise": "~>1.0.5",
+		"optibrev": "~>0.0.3",
 		"hashset": "~>1.1.0"
 	},
 	"targetType": "executable",
