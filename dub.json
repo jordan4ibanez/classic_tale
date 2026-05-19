@@ -2,30 +2,30 @@
 	"authors": [
 		"jordan4ibanez"
 	],
-	"targetType": "executable",
-	"copyright": "Copyright © 2026, jordan4ibanez",
-	"dependencies": {
-		"fast_noise": "~>1.0.5",
-		"fast_pack": "~>5.0.1",
-		"hashset": "~>1.1.0",
-		"linked_hash_queue": "~>1.0.3",
-		"optibrev": "~>0.0.3",
-		"raylib-d": "~>6.0.1"
-	},
-	"description": "Block game 17.",
 	"lflags-linux": [
 		"-rpath=$$ORIGIN"
 	],
-	"lflags-osx": [
-		"-rpath",
-		"@executable_path/"
+	"license": "GPL-3.0-or-later",
+	"copyright": "Copyright © 2026, jordan4ibanez",
+	"name": "classic_tale",
+	"libs": [
+		"raylib"
 	],
 	"lflags-posix": [
 		"-L."
 	],
-	"libs": [
-		"raylib"
-	],
-	"license": "GPL-3.0-or-later",
-	"name": "classic_tale"
+	"description": "Block game 17.",
+	"dependencies": {
+		"raylib-d": "~>6.0.1",
+		"linked_hash_queue": "~>1.0.3",
+		"optibrev": "~>0.0.3",
+		"fast_pack": "~>5.0.1",
+		"fast_noise": "~>1.0.5",
+		"hashset": "~>1.1.0"
+	},
+	"targetType": "executable",
+	"lflags-osx": [
+		"-rpath",
+		"@executable_path/"
+	]
 }
