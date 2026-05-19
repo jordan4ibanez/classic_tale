@@ -90,6 +90,10 @@ import utility.window;
 
 void main() {
 
+}
+
+void realmain() {
+
 	SetTraceLogLevel(TraceLogLevel.LOG_WARNING);
 
 	Window.initialize();
