@@ -1,6 +1,7 @@
-module game.player;
+module game.entity.local_player;
 
 import controls.keyboard;
+import game.entity.mob;
 import game.map;
 import graphics.camera_handler;
 import graphics.colors;
@@ -22,77 +23,25 @@ import std.stdio;
 import utility.delta;
 import utility.drawing_functions;
 
-static final const class Player {
-static:
+final class LocalPlayer : Mob {
 private:
 
-    //? Note: Entities position is at the bottom center of the collision box.
+    static LocalPlayer _instance;
 
-    /*
-    |------------|
-    |            |
-    |            |
-    |            |
-    |            |
-    |            |
-    |            |
-    |            |
-    |            |
-    |------X-----|
-           ^
-           |-------- Actual position
-    */
-
-    Vec2d size = Vec2d(0.6, 1.8);
-    Vec3d position = Vec3d(0, 161, 0);
-    Vec3d velocity = Vec3d(0, 0, 0);
     Vec3i blockSelection = Vec3i(0, -1, 0);
     Vec3i blockSelectionAbove = Vec3i(0, -1, 0);
-    double eyeHeight = 1.625;
-    int inChunk = int.max;
-    bool firstGen = true;
-
-    // Jump logic.
-    bool jumpQueued = false;
-    double jumpQueueTimeout = 0.0;
-
-    double rotation = 0;
-    bool moving = false;
-    bool skidding = false;
-    bool onGround = false;
 
 public:
 
-    Vec2d getSize() {
-        return size;
+    static LocalPlayer getInstance() {
+        if (_instance is null) {
+            _instance = new LocalPlayer();
+        }
+        return _instance;
     }
 
-    Vec3d getPosition() {
-        return position;
-    }
-
-    double getWidth() {
-        return size.y;
-    }
-
-    double getHalfWidth() {
-        return size.x * 0.5;
-    }
-
-    double getEyeHeight() {
-        return eyeHeight;
-    }
-
-    Vec3d getVelocity() {
-        return velocity;
-    }
-
-    void setPosition(const ref Vec3d newPosition) {
-        position = newPosition;
-    }
-
-    void setVelocity(const ref Vec3d newVelocity) {
-        velocity = newVelocity;
+    static void terminateInstance() {
+        writeln("Terminating the local player.");
     }
 
     void draw() {
@@ -320,113 +269,6 @@ public:
 
         position.y += velocity.y * delta;
         onGround = Map.collideEntityToWorld(position, size, velocity, CollisionAxis.Y);
-    }
-
-    // Rect getRectangle() {
-    //     Vec2d centeredPosition = centerCollisionboxBottom(position, size);
-    //     return Rect(centeredPosition.x, centeredPosition.y, size.x, size.y);
-    // }
-
-    // void move() {
-    //     double delta = Delta.getDelta();
-
-    //     immutable double acceleration = 20;
-    //     immutable double deceleration = 25;
-
-    //     // writeln(velocity.x);
-
-    //     moving = false;
-    //     // Skidding is the player trying to slow down.
-    //     skidding = false;
-
-    //     //? Controls first.
-    //     if (Keyboard.isDown(KeyboardKey.KEY_D)) {
-    //         direction = Direction.Right;
-    //         moving = true;
-    //         if (sgn(velocity.x) < 0) {
-    //             skidding = true;
-    //             velocity.x += delta * deceleration;
-    //         } else {
-    //             velocity.x += delta * acceleration;
-    //         }
-    //     } else if (Keyboard.isDown(KeyboardKey.KEY_A)) {
-    //         direction = Direction.Left;
-    //         moving = true;
-    //         if (sgn(velocity.x) > 0) {
-    //             skidding = true;
-    //             velocity.x -= delta * deceleration;
-    //         } else {
-    //             velocity.x -= delta * acceleration;
-    //         }
-    //     } else {
-    //         if (abs(velocity.x) > delta * deceleration) {
-    //             double valSign = sgn(velocity.x);
-    //             velocity.x = (abs(velocity.x) - (delta * deceleration)) * valSign;
-    //         } else {
-    //             velocity.x = 0;
-    //         }
-    //     }
-
-    //     // Speed limiter. 
-    //     if (abs(velocity.x) > 5) {
-    //         double valSign = sgn(velocity.x);
-    //         velocity.x = valSign * 5;
-    //     }
-
-    //     velocity.y -= delta * Map.getGravity();
-
-    //     if (!inJump && Keyboard.isDown(KeyboardKey.KEY_SPACE)) {
-    //         jumpQueued = true;
-    //     }
-
-    //     //? Then apply Y axis.
-    //     position.y += velocity.y * delta;
-
-    //     bool hitGround = Map.collideEntityToWorld(position, size, velocity, CollisionAxis.Y);
-
-    //     if (inJump && hitGround) {
-    //         inJump = false;
-    //     } else if (jumpQueued && hitGround) {
-    //         velocity.y = 7;
-    //         jumpQueued = false;
-    //         inJump = true;
-    //     }
-
-    //     //? Finally apply X axis.
-    //     position.x += velocity.x * delta;
-
-    //     Map.collideEntityToWorld(position, size, velocity, CollisionAxis.X);
-
-    //     if (velocity.x == 0) {
-    //         moving = false;
-    //     }
-
-    //     // todo: the void.
-    //     // if (position.y <= 0) {
-    //     //     position.y = 0;
-    //     // }
-
-    //     int oldChunk = inChunk;
-    //     int newChunk = Map.calculateChunkAtWorldPosition(position.x);
-
-    //     if (oldChunk != newChunk) {
-    //         inChunk = newChunk;
-    //         Map.worldLoad(inChunk);
-
-    //         // Move the player to the ground level.
-    //         // todo: when mongoDB added, restore old position.
-    //         if (firstGen) {
-    //             position.y = Map.getTop(position.x);
-    //             firstGen = false;
-
-    //             Map.setBlockAtWorldPositionByName(Vec2d(position.x, position.y + 3), "dirt");
-    //             Map.setBlockAtWorldPositionByName(Vec2d(position.x + 1, position.y + 3), "dirt");
-    //         }
-    //     }
-    // }
-
-    int inWhichChunk() {
-        return inChunk;
     }
 
 private:

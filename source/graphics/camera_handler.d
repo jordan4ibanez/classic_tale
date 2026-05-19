@@ -1,7 +1,7 @@
 module graphics.camera_handler;
 
 import controls.mouse;
-import game.player;
+import game.entity.local_player;
 import graphics.frustum_culling;
 import graphics.gui;
 import math.constants;
@@ -72,7 +72,7 @@ public:
 
         const Vec2d mouseDelta = Mouse.getDelta();
 
-        camera.position = Player.getPosition().toRaylib();
+        camera.position = LocalPlayer.getInstance().getPosition().toRaylib();
 
         yaw += mouseDelta.x / (750.0 / cameraSensitivity);
         pitch -= mouseDelta.y / (750.0 / cameraSensitivity);
@@ -95,8 +95,8 @@ public:
     }
 
     void updateToPlayerPosition() {
-        immutable Vec3d playerPosition = Player.getPosition();
-        immutable double eyeHeight = Player.getEyeHeight();
+        immutable Vec3d playerPosition = LocalPlayer.getInstance().getPosition();
+        immutable double eyeHeight = LocalPlayer.getInstance().getEyeHeight();
 
         camera.position.x = playerPosition.x;
         camera.position.y = playerPosition.y + eyeHeight;

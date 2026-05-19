@@ -2,10 +2,10 @@ import controls.keyboard;
 import controls.mouse;
 import core.memory;
 import game.block_database;
+import game.entity.local_player;
 import game.light;
 import game.map;
 import game.map_graphics;
-import game.player;
 import game.time;
 import graphics.camera_handler;
 import graphics.crosshair;
@@ -127,6 +127,12 @@ void main() {
 	// This needs the chunk shader.
 	Light.initialize();
 
+	// todo: decide if this is bad practice.
+	LocalPlayer localPlayer = LocalPlayer.getInstance();
+	scope (exit) {
+		LocalPlayer.terminateInstance();
+	}
+
 	immutable int renderDistance = 16;
 	foreach (immutable x; -renderDistance .. renderDistance) {
 		foreach (immutable z; -renderDistance .. renderDistance) {
@@ -180,6 +186,8 @@ void main() {
 
 	bool drawWorld = true;
 
+	bool drawLocalPlayerCollisionBox = false;
+
 	while (Window.shouldStayOpen()) {
 
 		if (Keyboard.isPressed(KeyboardKey.KEY_F1)) {
@@ -191,6 +199,10 @@ void main() {
 
 		if (Keyboard.isPressed(KeyboardKey.KEY_F3)) {
 			drawWorld = !drawWorld;
+		}
+
+		if (Keyboard.isPressed(KeyboardKey.KEY_F4)) {
+			drawLocalPlayerCollisionBox = !drawLocalPlayerCollisionBox;
 		}
 
 		Screenshot.listen();
@@ -220,11 +232,11 @@ void main() {
 			CameraHandler.firstPersonControls();
 		}
 
-		Player.doControls();
+		localPlayer.doControls();
 		CameraHandler.updateToPlayerPosition();
-		Player.move();
+		localPlayer.move();
 
-		const Vec3i playerBlockSelection = Player.getBlockSelection();
+		const Vec3i playerBlockSelection = localPlayer.getBlockSelection();
 
 		// Primitive digging prototype.
 		if (playerBlockSelection.y != -1) {
@@ -236,7 +248,7 @@ void main() {
 
 		// Primitive placing prototype.
 		if (Mouse.isButtonPressed(MouseButton.MOUSE_BUTTON_RIGHT)) {
-			const Vec3i playerBlockSelectionAbove = Player.getBlockSelectionAbove();
+			const Vec3i playerBlockSelectionAbove = localPlayer.getBlockSelectionAbove();
 			if (playerBlockSelectionAbove.y != -1) {
 
 				Vec3d blockSelectionABove = Vec3d(playerBlockSelectionAbove.x, playerBlockSelectionAbove.y,
@@ -248,7 +260,7 @@ void main() {
 					AABB possiblePositionBox = AABB(blockSelectionABove.x, blockSelectionABove.y, blockSelectionABove
 							.z, blockSelectionABove.x + 1.0, blockSelectionABove.y + 1.0, blockSelectionABove
 							.z + 1.0);
-					AABB playerCollisionBox = AABB(Player.getPosition, Player.getSize);
+					AABB playerCollisionBox = AABB(localPlayer.getPosition, localPlayer.getSize);
 					DrawCubeWires(blockSelectionABove.toRaylib(), 0.05, 0.05, 0.05, Colors.RED);
 					if (!aabbCollision(possiblePositionBox, playerCollisionBox)) {
 
@@ -266,7 +278,7 @@ void main() {
 
 		//! Raycast after everything or the selectionbox will be outdated by 1 frame.
 		//? Keep this last.
-		Player.raycast();
+		localPlayer.raycast();
 
 		BeginDrawing();
 
@@ -280,7 +292,10 @@ void main() {
 			if (drawWorld) {
 				Map.draw();
 			}
-			// Player.draw();
+
+			if (drawLocalPlayerCollisionBox) {
+				localPlayer.draw();
+			}
 
 			// debugDraw();
 
@@ -298,7 +313,7 @@ void main() {
 		const double gcHeapTotal = GarbageCollector.getHeapInfo();
 		DrawText(toStringz("Heap:" ~ format("%.2f", gcHeapTotal) ~ "mb"), 10, 40, 30, Colors.BLACK);
 		DrawText(toStringz("Heap:" ~ format("%.2f", gcHeapTotal) ~ "mb"), 11, 41, 30, Colors.BLUE);
-		Vec3d pos = Player.getPosition();
+		Vec3d pos = localPlayer.getPosition();
 		DrawText(toStringz("X:" ~ format("%.2f", pos.x)), 10, 70, 30, Colors.BLACK);
 		DrawText(toStringz("X:" ~ format("%.2f", pos.x)), 11, 71, 30, Colors.BLUE);
 		DrawText(toStringz("Y:" ~ format("%.2f", pos.y)), 10, 100, 30, Colors.BLACK);
@@ -313,7 +328,7 @@ void main() {
 
 		ubyte naturalLightLevel = 0;
 		ubyte artificialLightLevel = 0;
-		Vec3i blockSelection = Player.getBlockSelectionAbove();
+		Vec3i blockSelection = localPlayer.getBlockSelectionAbove();
 
 		if (blockSelection.y != -1) {
 			const(const BlockData*) thisBlock = Map.getBlockPointerAtWorldPosition(
